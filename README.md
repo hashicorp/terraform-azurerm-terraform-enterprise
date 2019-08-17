@@ -73,6 +73,7 @@ Please see the examples directory for more extensive examples.
 | admin\_console\_password | Generated password to unlock the admin console. |
 | application\_endpoint | The URI for accessing the application. |
 | console\_endpoint | The URI for accessing the backend console. |
+| health\_check\_endpoint | The URI for the application health checks. |
 | install\_id | The string prefix for resources. |
 | primary\_public\_ip | The public IP address of the first primary node created. |
 | ssh\_config\_file | Path to ssh_config file for command: `ssh -F $(terraform state show <terraform_parent_modules>.module.<module_name>.module.primaries.local_file.ssh_config | grep filename | awk '{print $3}') default` |

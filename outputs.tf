@@ -32,3 +32,8 @@ output "application_endpoint" {
   value       = "https://${module.cluster_lb.app_endpoint_dns}"
   description = "The URI for accessing the application."
 }
+
+output "health_check_endpoint" {
+  value       = "http://${module.cluster_lb.app_endpoint_dns}/_health_check"
+  description = "The URI for the application health checks."
+}

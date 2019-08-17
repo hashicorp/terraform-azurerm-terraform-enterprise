@@ -14,7 +14,7 @@ provider "azurerm" {
 }
 
 module "tfe_cluster" {
-  source = "hashicorp/tfe-ha/azure"
+  source  = "hashicorp/tfe-ha/azure"
   version = "0.0.1-beta"
 
   license_file                 = "${local.license_file}"
@@ -40,5 +40,6 @@ output "tfe_cluster" {
     primary_public_ip      = "${module.tfe_cluster.primary_public_ip}"
     console_endpoint       = "${module.tfe_cluster.console_endpoint}"
     application_endpoint   = "${module.tfe_cluster.application_endpoint}"
+    health_check_endpoint  = "${module.tfe_cluster.health_check_endpoint}"
   }
 }
