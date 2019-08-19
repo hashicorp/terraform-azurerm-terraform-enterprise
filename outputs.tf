@@ -15,7 +15,7 @@ output "ssh_private_key" {
 
 output "installer_dashboard_password" {
   value       = "${module.configs.console_password}"
-  description = "Generated password to unlock the admin console."
+  description = "Generated password to unlock the installer dashboard."
 }
 
 output "primary_public_ip" {
@@ -25,7 +25,7 @@ output "primary_public_ip" {
 
 output "installer_dashboard_Url" {
   value       = "https://${module.cluster_lb.app_endpoint_dns}:8800"
-  description = "The URI for accessing the backend console."
+  description = "The URI for accessing the installer dashboard."
 }
 
 output "application_endpoint" {
