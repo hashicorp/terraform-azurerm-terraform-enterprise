@@ -13,7 +13,7 @@ output "ssh_private_key" {
   description = "Path to the private key used for ssh authorization."
 }
 
-output "admin_console_password" {
+output "installer_dashboard_password" {
   value       = "${module.configs.console_password}"
   description = "Generated password to unlock the admin console."
 }
@@ -23,7 +23,7 @@ output "primary_public_ip" {
   description = "The public IP address of the first primary node created."
 }
 
-output "console_endpoint" {
+output "installer_dashboard_Url" {
   value       = "https://${module.cluster_lb.app_endpoint_dns}:8800"
   description = "The URI for accessing the backend console."
 }
