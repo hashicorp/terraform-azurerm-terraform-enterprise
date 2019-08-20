@@ -1,6 +1,31 @@
+output "application_endpoint" {
+  value       = "https://${module.cluster_lb.app_endpoint_dns}"
+  description = "The URI for accessing the application."
+}
+
+output "application_health_check" {
+  value       = "http://${module.cluster_lb.app_endpoint_dns}/_health_check"
+  description = "The URI for the application health checks."
+}
+
 output "install_id" {
   value       = "${random_string.install_id.result}"
   description = "The string prefix for resources."
+}
+
+output "installer_dashboard_endpoint" {
+  value       = "https://${module.cluster_lb.app_endpoint_dns}:8800"
+  description = "The URI for accessing the backend console."
+}
+
+output "installer_dashboard_password" {
+  value       = "${module.configs.console_password}"
+  description = "Generated password to unlock the admin console."
+}
+
+output "primary_public_ip" {
+  value       = "${element(module.primaries.public_ips, 0)}"
+  description = "The public IP address of the first primary node created."
 }
 
 output "ssh_config_file" {
@@ -11,29 +36,4 @@ output "ssh_config_file" {
 output "ssh_private_key" {
   value       = "${module.common.ssh_private_key_path}"
   description = "Path to the private key used for ssh authorization."
-}
-
-output "admin_console_password" {
-  value       = "${module.configs.console_password}"
-  description = "Generated password to unlock the admin console."
-}
-
-output "primary_public_ip" {
-  value       = "${element(module.primaries.public_ips, 0)}"
-  description = "The public IP address of the first primary node created."
-}
-
-output "console_endpoint" {
-  value       = "https://${module.cluster_lb.app_endpoint_dns}:8800"
-  description = "The URI for accessing the backend console."
-}
-
-output "application_endpoint" {
-  value       = "https://${module.cluster_lb.app_endpoint_dns}"
-  description = "The URI for accessing the application."
-}
-
-output "health_check_endpoint" {
-  value       = "http://${module.cluster_lb.app_endpoint_dns}/_health_check"
-  description = "The URI for the application health checks."
 }

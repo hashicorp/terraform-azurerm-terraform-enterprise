@@ -1,35 +1,8 @@
 # ============================================================ REQUIRED
-variable "license_file" {
+
+variable "domain" {
   type        = "string"
-  description = "Path to the Replicated license file."
-}
-
-variable "primary_count" {
-  description = "The number of primary virtual machines to create."
-}
-
-variable "secondary_count" {
-  description = "The number of secondary virtual machines to create."
-}
-
-variable "distribution" {
-  type        = "string"
-  description = "Type of linux distribution to use. (ubuntu or rhel)"
-}
-
-variable "resource_group_name" {
-  type        = "string"
-  description = "An existing Azure Resource Group to deploy into."
-}
-
-variable "virtual_network_name" {
-  type        = "string"
-  description = "An existing Azure Virtual Network to deploy into"
-}
-
-variable "application_subnet_name" {
-  type        = "string"
-  description = "An existing Azure Subnet to deploy into"
+  description = "An Azure hosted DNS domain to use for DNS records"
 }
 
 variable "key_vault_name" {
@@ -37,9 +10,19 @@ variable "key_vault_name" {
   description = "The name of an existing key vault to use for certificate generation."
 }
 
-variable "domain" {
+variable "license_file" {
   type        = "string"
-  description = "An Azure hosted DNS domain to use for DNS records"
+  description = "Path to the Replicated license file."
+}
+
+variable "resource_group_name" {
+  type        = "string"
+  description = "An existing Azure Resource Group to deploy into."
+}
+
+variable "subnet" {
+  type        = "string"
+  description = "An existing Azure Subnet to deploy into"
 }
 
 variable "tls_pfx_certificate" {
@@ -52,24 +35,23 @@ variable "tls_pfx_certificate_password" {
   description = "The password for the associated SSL certificate."
 }
 
+variable "virtual_network_name" {
+  type        = "string"
+  description = "An existing Azure Virtual Network to deploy into"
+}
+
 # ============================================================ OPTIONAL
 
-variable "key_vault_resource_group_name" {
+variable "airgap_installer_url" {
   type        = "string"
-  description = "The existing Azure Resource Group where the key vault is stored, defaults to the main resource group if not set."
-  default     = ""
+  description = "URL to replicated's airgap installer package"
+  default     = "https://install.terraform.io/installer/replicated-v5.tar.gz"
 }
 
 variable "airgap_mode_enable" {
   type        = "string"
   description = "install in airgap mode"
   default     = "False"
-}
-
-variable "airgap_installer_url" {
-  type        = "string"
-  description = "URL to replicated's airgap installer package"
-  default     = "https://install.terraform.io/installer/replicated-v5.tar.gz"
 }
 
 variable "airgap_package_url" {
@@ -96,9 +78,9 @@ variable "azure_es_container" {
   default     = ""
 }
 
-variable "default_username" {
+variable "distribution" {
   type        = "string"
-  description = "The default user to use"
+  description = "Type of linux distribution to use. (ubuntu or rhel)"
   default     = "ubuntu"
 }
 
@@ -122,7 +104,7 @@ variable "encryption_password" {
 
 variable "external_services" {
   type        = "string"
-  description = "mode to install ('True' or 'False')"
+  description = "mode to install ('True' or 'False') False will put the cluster in a Demo mode."
   default     = "False"
 }
 
@@ -150,22 +132,22 @@ variable "import_key" {
   default     = ""
 }
 
+variable "installer_url" {
+  type        = "string"
+  description = "URL to the cluster setup tool"
+  default     = "https://install.terraform.io/installer/ptfe.zip"
+}
+
+variable "key_vault_resource_group_name" {
+  type        = "string"
+  description = "The existing Azure Resource Group where the key vault is stored, defaults to the main resource group if not set."
+  default     = ""
+}
+
 variable "os_disk_size" {
   type        = "string"
   description = "The size in Gb for the OS disk of the primary seed virtual machine"
   default     = "100"
-}
-
-variable "postgresql_user" {
-  type        = "string"
-  description = "user to connect to external postgresql database as"
-  default     = ""
-}
-
-variable "postgresql_password" {
-  type        = "string"
-  description = "password to connect to external postgresql database as"
-  default     = ""
 }
 
 variable "postgresql_address" {
@@ -186,22 +168,44 @@ variable "postgresql_extra_params" {
   default     = ""
 }
 
+variable "postgresql_password" {
+  type        = "string"
+  description = "password to connect to external postgresql database as"
+  default     = ""
+}
+
+variable "postgresql_user" {
+  type        = "string"
+  description = "user to connect to external postgresql database as"
+  default     = ""
+}
+
+variable "primary_count" {
+  description = "The number of primary virtual machines to create."
+  default     = 3
+}
+
 variable "primary_vm_size" {
   type        = "string"
   description = "The Azure VM Size to use."
   default     = "Standard_D4s_v3"
 }
 
-variable "installer_tool_url" {
-  type        = "string"
-  description = "URL to the cluster installer tool"
-  default     = "https://install.terraform.io/installer/ptfe.zip"
+variable "secondary_count" {
+  description = "The number of secondary virtual machines to create."
+  default     = 5
 }
 
 variable "secondary_vm_size" {
   type        = "string"
   description = "The Azure VM Size to use (will use primary_vm_size if not set)."
   default     = ""
+}
+
+variable "ssh_user" {
+  type        = "string"
+  description = "The ssh user to create"
+  default     = "ubuntu"
 }
 
 variable "storage_image" {
