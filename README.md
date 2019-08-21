@@ -1,6 +1,6 @@
 # Terraform Enterprise: High Availability - Azure Module
 
-![Terraform Enterprise Logo](assets/Terraform_Enterprise_PrimaryLogo.png)
+![Terraform Enterprise Logo](https://github.com/hashicorp/terraform-azurerm-terraform-enterprise/blob/master/assets/Terraform_Enterprise_PrimaryLogo.png?raw=true)
 
 ## Description
 
@@ -14,7 +14,7 @@ Please contact your Technical Account Manager for more information, and support 
 ---
 
 <p align="center">
-  <img src="assets/azure_diagram.png" alt="Diagram of 3 tier clustered application with a loadbalancer, 3 primary vms, and a scaleset of secondary vms, with adjacent key vault for tls">
+  <img src="https://github.com/hashicorp/terraform-azurerm-terraform-enterprise/blob/master/assets/azure_diagram.png?raw=true" alt="Diagram of 3 tier clustered application with a loadbalancer, 3 primary vms, and a scaleset of secondary vms, with adjacent key vault for tls">
 </p>
 
 ---
