@@ -3,7 +3,7 @@ module "common" {
   install_id  = "${random_string.install_id.result}"
   rg_name     = "${var.resource_group_name}"
   vnet_name   = "${var.virtual_network_name}"
-  subnet_name = "${var.application_subnet_name}"
+  subnet_name = "${var.subnet}"
 
   dns = {
     rg_name = "${var.domain_resource_group_name}"
@@ -41,18 +41,18 @@ module "cluster_lb" {
 }
 
 module "configs" {
-  source              = "./modules/configs"
-  primary_count       = "${var.primary_count}"
-  license_file        = "${var.license_file}"
-  cluster_endpoint    = "${module.cluster_lb.app_endpoint_dns}"
+  source               = "./modules/configs"
+  primary_count        = "${var.primary_count}"
+  license_file         = "${var.license_file}"
+  cluster_endpoint     = "${module.cluster_lb.app_endpoint_dns}"
   cluster_api_endpoint = "${module.cluster_lb.lb_endpoint_dns}"
-  distribution        = "${var.distribution}"
-  encryption_password = "${var.encryption_password}"
-  cert_thumbprint     = "${module.common.cert_thumbprint}"
-  assistant_port      = "${local.assistant_port}"
-  http_proxy_url      = "${var.http_proxy_url}"
-  installer_url       = "${var.installer_tool_url}"
-  import_key          = "${var.import_key}"
+  distribution         = "${var.distribution}"
+  encryption_password  = "${var.encryption_password}"
+  cert_thumbprint      = "${module.common.cert_thumbprint}"
+  assistant_port       = "${local.assistant_port}"
+  http_proxy_url       = "${var.http_proxy_url}"
+  installer_url        = "${var.installer_url}"
+  import_key           = "${var.import_key}"
 
   iact = {
     subnet_list       = "${var.iact_subnet_list}"
@@ -88,7 +88,7 @@ module "primaries" {
   location   = "${module.common.rg_location}"
   subnet_id  = "${module.common.app_subnet_id}"
 
-  username                = "${var.default_username}"
+  username                = "${var.ssh_user}"
   os_disk_size            = "${var.os_disk_size}"
   cluster_backend_pool_id = "${module.cluster_lb.backend_pool_id}"
   storage_image           = "${var.storage_image}"
@@ -119,7 +119,7 @@ module "secondaries" {
   storage_image   = "${var.storage_image}"
   ssh_public_key  = "${module.common.ssh_public_key}"
   cloud_init_data = "${module.configs.secondary_cloud_init}"
-  username        = "${var.default_username}"
+  username        = "${var.ssh_user}"
 
   vm = {
     size      = "${local.rendered_secondary_vm_size}"
