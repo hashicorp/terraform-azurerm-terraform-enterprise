@@ -20,7 +20,7 @@ output "installer_dashboard_endpoint" {
 
 output "installer_dashboard_password" {
   value       = "${module.configs.console_password}"
-  description = "Generated password to unlock the admin console."
+  description = "Generated password to unlock the installer dashboard."
 }
 
 output "primary_public_ip" {
