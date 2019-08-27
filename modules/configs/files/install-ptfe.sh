@@ -31,6 +31,14 @@ else
   SERVICE=chrony
 fi
 
+# From the Azure documentation on time sync
+# https://docs.microsoft.com/en-us/azure/virtual-machines/linux/time-sync
+echo "Enable NTP support..."
+echo "refclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0" > /tmp/chrony.conf
+cat "${CONF}" >> /tmp/chrony.conf
+cp /tmp/chrony.conf "${CONF}"
+systemctl restart "${SERVICE}"
+
 pushd /tmp
   wget -O ptfe.zip "$(cat /etc/ptfe/ptfe_url)"
   unzip ptfe.zip
