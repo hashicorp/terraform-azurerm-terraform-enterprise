@@ -49,7 +49,7 @@ if [ "x${role}x" == "xmainx" ]; then
 fi
 
 private_ip=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/network?api-version=2017-08-01" | jq -r .interface[0].ipv4.ipAddress[0].privateIpAddress)
-public_ip=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/network/?api-version=2017-08-01" | jq -r .interface[0].ipv4.ipAddress[0].publicIpAddress)}
+public_ip=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/network/?api-version=2017-08-01" | jq -r .interface[0].ipv4.ipAddress[0].publicIpAddress)
 
 airgap_url_path="/etc/ptfe/airgap-package-url"
 airgap_installer_url_path="/etc/ptfe/airgap-installer-url"
@@ -73,7 +73,7 @@ if [ "x${role}x" == "xmainx" ]; then
         "--additional-no-proxy=$no_proxy"
     )
 
-    # 
+    #
     # If we are airgapping, then set the arguments needed for Replicated.
     # We also setup the replicated.conf.tmpl to include the path to the downloaded
     # airgap file.
