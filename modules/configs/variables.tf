@@ -15,7 +15,7 @@ variable cluster_endpoint {
 }
 
 variable "cluster_api_endpoint" {
-   type        = "string"
+  type        = "string"
   description = "URI to the cluster api"
 }
 
