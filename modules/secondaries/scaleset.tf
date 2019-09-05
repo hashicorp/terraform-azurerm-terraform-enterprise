@@ -49,4 +49,8 @@ resource "azurerm_virtual_machine_scale_set" "secondary" {
     os_type           = "Linux"
     managed_disk_type = "StandardSSD_LRS"
   }
+
+  tags = {
+    "Name" = "${local.prefix}"
+  }
 }
