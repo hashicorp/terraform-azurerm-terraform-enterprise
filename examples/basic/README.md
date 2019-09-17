@@ -1,3 +1,25 @@
+# Terraform Enterprise: High Availability - Basic example
+
+This is a basic example of how to set up the configurations to use this module. Please see the [inputs page](https://registry.terraform.io/modules/terraform-enterprise/azurerm/0.0.2-beta?tab=inputs) for more details on usage.
+
+## Resources
+
+This example assumes you have an existing
+
+* Resource Group
+* Virtual Network
+* Subnet with attached Network Security Group
+* Azure Hosted Domain within the Resource Group
+  * PKCS12 Certificate for the domain
+* Azure Key Vault within the Resource Group
+
+## Usage
+
+To use this example, copy the configs to a `main.tf` file in an empty directory on a computer that has API access to Azure (Local computer or server with access), fill in the local variables as well as the `existing-` prefixed parameters and any optional parameters to the module with your configurations and run terraform init, plan, and apply, once the apply has completed, wait for the application to load as the installer dashboard url will be included in the `tfe_cluster` output map.
+
+## Example
+
+```hcl
 locals {
   license_file = "/path/to/licence/file.rli"
   cert_file    = "/path/to/domain/certificate.pfx"
@@ -39,3 +61,4 @@ output "tfe_cluster" {
     ssh_private_key              = "${module.tfe_cluster.ssh_private_key}"
   }
 }
+```
