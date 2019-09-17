@@ -36,6 +36,7 @@ Please see the examples directory for more extensive examples.
 | tls\_pfx\_certificate\_password | The password for the associated SSL certificate. | string | n/a | yes |
 | virtual\_network\_name | An existing Azure Virtual Network to deploy into | string | n/a | yes |
 | resource\_prefix | Prefix name for resources created by this module | string| tfe | no |
+| ca_cert_url | URL to CA certificate file used for the internal `ptfe-proxy` used for outgoing connections| string | `"none"` | no |
 | airgap\_installer\_url | URL to replicated's airgap installer package | string | `"https://install.terraform.io/installer/replicated-v5.tar.gz"` | no |
 | airgap\_mode\_enable | install in airgap mode | string | `"False"` | no |
 | airgap\_package\_url | Signed URL to download the package | string | `""` | no |

@@ -55,6 +55,7 @@ module "configs" {
   http_proxy_url       = "${var.http_proxy_url}"
   installer_url        = "${var.installer_url}"
   import_key           = "${var.import_key}"
+  ca_cert_url          = "${var.ca_cert_url}"
 
   iact = {
     subnet_list       = "${var.iact_subnet_list}"

@@ -19,6 +19,7 @@
 | license\_file | Path to license file for the application | string | n/a | yes |
 | postgresql | Expects keys: [user, password, address, database, extra_params] | map | n/a | yes |
 | primary\_count | The count of primary instances being created. | string | n/a | yes |
+| ca_cert_url | URL to CA certificate file used for the internal `ptfe-proxy` used for outgoing connections| string | `"none"` | no |
 
 ## Outputs
 
