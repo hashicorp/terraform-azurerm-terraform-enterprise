@@ -76,6 +76,7 @@ data "template_file" "cloud_config" {
     primary_pki_url      = "http://${var.cluster_api_endpoint}:${var.assistant_port}/api/v1/pki-download?token=${random_string.setup_token.result}"
     health_url           = "http://${var.cluster_api_endpoint}:${var.assistant_port}/healthz"
     cert_thumbprint      = "${var.cert_thumbprint}"
+    ca_cert_url          = "${var.ca_cert_url}"
   }
 }
 
