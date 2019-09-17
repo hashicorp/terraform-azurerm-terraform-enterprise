@@ -68,7 +68,7 @@ write_files:
   permissions: "0755"
   encoding: b64
   content: ${proxy_b64}
-    
+
 %{~ endif ~}
 
 %{~ if role == "main" ~}
@@ -116,7 +116,7 @@ write_files:
   permissions: "0400"
   encoding: b64
   content: ${aaa_proxy_b64}
-    
+
 %{ endif ~}
 
 %{ if distro == "ubuntu" ~}
