@@ -60,10 +60,15 @@ variable "key_vault" {
   description = "Expects keys: [id, cert_uri]"
 }
 
+variable "resource_prefix" {
+  type        = "string"
+  description = "Prefix name for resources"
+}
+
 # ============================================================ MISC
 
 locals {
-  prefix = "tfe-${var.install_id}-primary"
+  prefix = "${var.resource_prefix}-${var.install_id}-primary"
 
   ip_conf_name = "${local.prefix}-ip-conf"
 

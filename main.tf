@@ -4,6 +4,7 @@ module "common" {
   rg_name     = "${var.resource_group_name}"
   vnet_name   = "${var.virtual_network_name}"
   subnet_name = "${var.subnet}"
+  resource_prefix = "${var.resource_prefix}"
 
   dns = {
     rg_name = "${var.domain_resource_group_name}"
@@ -25,6 +26,7 @@ module "cluster_lb" {
   install_id = "${random_string.install_id.result}"
   rg_name    = "${module.common.rg_name}"
   location   = "${module.common.rg_location}"
+  resource_prefix = "${var.resource_prefix}"
 
   dns = {
     domain  = "${var.domain}"
@@ -87,6 +89,7 @@ module "primaries" {
   rg_name    = "${module.common.rg_name}"
   location   = "${module.common.rg_location}"
   subnet_id  = "${module.common.app_subnet_id}"
+  resource_prefix = "${var.resource_prefix}"
 
   username                = "${var.ssh_user}"
   os_disk_size            = "${var.os_disk_size}"
@@ -120,6 +123,7 @@ module "secondaries" {
   ssh_public_key  = "${module.common.ssh_public_key}"
   cloud_init_data = "${module.configs.secondary_cloud_init}"
   username        = "${var.ssh_user}"
+  resource_prefix = "${var.resource_prefix}"
 
   vm = {
     size      = "${local.rendered_secondary_vm_size}"
