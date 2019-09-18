@@ -45,8 +45,13 @@ variable "vm" {
   description = "Expects keys: [size, count, size_tier]"
 }
 
+variable "resource_prefix" {
+  type        = "string"
+  description = "Prefix name for resources"
+}
+
 # === Misc
 
 locals {
-  prefix = "tfe-${var.install_id}"
+  prefix = "${var.resource_prefix}-${var.install_id}"
 }

@@ -42,6 +42,12 @@ variable "virtual_network_name" {
 
 # ============================================================ OPTIONAL
 
+variable "resource_prefix" {
+  type        = "string"
+  description = "Prefix name for resources created by this module"
+  default     = "tfe"
+}
+
 variable "airgap_installer_url" {
   type        = "string"
   description = "URL to replicated's airgap installer package"

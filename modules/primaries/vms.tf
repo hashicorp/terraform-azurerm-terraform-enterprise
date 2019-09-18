@@ -46,4 +46,8 @@ resource "azurerm_virtual_machine" "primary" {
     sku       = "${var.storage_image["sku"]}"
     version   = "${var.storage_image["version"]}"
   }
+
+  tags = {
+    "Name" = "${local.prefix}"
+  }
 }

@@ -25,6 +25,11 @@ variable "lb_port" {
   description = "Expects map with format `name: [frontend_port, protocol, backend_port]` for all routes."
 }
 
+variable "resource_prefix" {
+  type        = "string"
+  description = "Prefix name for resources"
+}
+
 # ============================================================ OPTIONAL
 variable "lb_probe_interval" {
   default     = 10
@@ -41,6 +46,6 @@ variable "lb_probe_unhealthy_threshold" {
 # LB resource names
 
 locals {
-  prefix   = "tfe-${var.install_id}"
+  prefix   = "${var.resource_prefix}-${var.install_id}"
   frontend = "${local.prefix}-fe"
 }

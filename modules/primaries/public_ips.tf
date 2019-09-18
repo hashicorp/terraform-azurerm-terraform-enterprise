@@ -11,4 +11,8 @@ resource "azurerm_public_ip" "primary" {
   lifecycle {
     create_before_destroy = true
   }
+
+  tags = {
+    "Name" = "${local.prefix}"
+  }
 }

@@ -35,16 +35,21 @@ variable "tls" {
   description = "Expects keys: [pfx_cert, pfx_cert_pw] (the path to a pfx certificate for the dns zone, the password for that certificate)"
 }
 
+variable "resource_prefix" {
+  type        = "string"
+  description = "Prefix name for resources"
+}
+
 # ============================================================ MISC
 
 locals {
   # path.root for remote modules to work properly.
 
   ssh_public_key_path     = "${path.root}/work"
-  key_name                = "tfe-${var.install_id}"
+  key_name                = "${var.resource_prefix}-${var.install_id}"
   public_key_filename     = "${local.ssh_public_key_path}/${local.key_name}.pub"
   private_key_filename    = "${local.ssh_public_key_path}/${local.key_name}.priv"
-  prefix                  = "tfe-${var.install_id}"
+  prefix                  = "${var.resource_prefix}-${var.install_id}"
   rendered_kv_rg_name     = "${coalesce(var.key_vault["name"], var.rg_name)}"
   rendered_domain_rg_name = "${coalesce(var.dns["rg_name"], var.rg_name)}"
 }

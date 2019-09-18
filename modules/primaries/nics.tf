@@ -11,6 +11,10 @@ resource "azurerm_network_interface" "primary" {
     private_ip_address_allocation = "Dynamic"
     primary                       = true
   }
+
+  tags = {
+    "Name" = "${local.prefix}"
+  }
 }
 
 resource "azurerm_network_interface_backend_address_pool_association" "ptfe_api" {
