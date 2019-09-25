@@ -1,5 +1,5 @@
 resource "azurerm_virtual_machine" "primary" {
-  count                        = "${var.vm["count"]}"
+  count                        = "${var.install_type == "ipm" ? 3 : var.vm["count"]}"
   name                         = "${local.prefix}-${count.index}"
   resource_group_name          = "${var.rg_name}"
   location                     = "${var.location}"
