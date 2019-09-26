@@ -106,6 +106,7 @@ data "template_file" "cloud_config_secondary" {
     distro               = "${var.distribution}"
     aaa_proxy_b64        = "${base64encode(data.template_file.aaa_proxy_b64.rendered)}"
     proxy_b64            = "${base64encode(data.template_file.proxy_sh.rendered)}"
+    ca_cert_url          = "${var.ca_cert_url}"
   }
 }
 
