@@ -42,6 +42,11 @@ write_files:
   permissions: "0400"
   content: "${proxy_url}"
 
+- path: /etc/ptfe/custom-ca-cert-url
+  owner: root:root
+  permissions: "0400"
+  content: "${ca_cert_url}"
+
 %{~ if role != "secondary" ~}
 - path: /etc/ptfe/setup-token
   owner: root:root
@@ -63,7 +68,7 @@ write_files:
   permissions: "0755"
   encoding: b64
   content: ${proxy_b64}
-    
+
 %{~ endif ~}
 
 %{~ if role == "main" ~}
@@ -111,7 +116,7 @@ write_files:
   permissions: "0400"
   encoding: b64
   content: ${aaa_proxy_b64}
-    
+
 %{ endif ~}
 
 %{ if distro == "ubuntu" ~}
