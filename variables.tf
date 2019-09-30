@@ -187,7 +187,7 @@ variable "postgresql_user" {
 }
 
 variable "primary_count" {
-  description = "The number of primary virtual machines to create."
+  description = "The number of primary virtual machines to create, should be set to 3 or 5."
   default     = 3
 }
 
