@@ -85,12 +85,13 @@ module "configs" {
 }
 
 module "primaries" {
-  source          = "./modules/primaries"
-  install_id      = "${random_string.install_id.result}"
-  rg_name         = "${module.common.rg_name}"
-  location        = "${module.common.rg_location}"
-  subnet_id       = "${module.common.app_subnet_id}"
-  resource_prefix = "${var.resource_prefix}"
+  source            = "./modules/primaries"
+  install_id        = "${random_string.install_id.result}"
+  rg_name           = "${module.common.rg_name}"
+  location          = "${module.common.rg_location}"
+  subnet_id         = "${module.common.app_subnet_id}"
+  resource_prefix   = "${var.resource_prefix}"
+  external_services = "${var.external_services}"
 
   username                = "${var.ssh_user}"
   os_disk_size            = "${var.os_disk_size}"
