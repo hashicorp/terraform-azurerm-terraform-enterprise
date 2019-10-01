@@ -1,8 +1,8 @@
-locals {
-  license_file = "/path/to/licence/file.rli"
-  cert_file    = "/path/to/domain/certificate.pfx"
-  domain       = "dns.domain.example.com"
-}
+variable "cert_file" {}
+
+variable "domain" {}
+
+variable "license_file_path" {}
 
 variable "cert_pw" {
   type        = "string"
@@ -14,16 +14,16 @@ provider "azurerm" {
 }
 
 module "tfe_cluster" {
-  source  = "hashicorp/tfe-ha/azure"
-  version = "0.0.2-beta"
+  source  = "hashicorp/terraform-enterproze/azurerm"
+  version = "0.0.3-beta"
 
-  license_file                 = "${local.license_file}"
+  license_file                 = "${var.license_file}"
   resource_group_name          = "existing-rg-name"
   virtual_network_name         = "existing-vnet-name"
   subnet                       = "existing-subnet-within-vnet-name"
   key_vault_name               = "existing-key-vault-in-rg-name"
-  domain                       = "${local.domain}"
-  tls_pfx_certificate          = "${local.cert_file}"
+  domain                       = "${var.domain}"
+  tls_pfx_certificate          = "${var.cert_file}"
   tls_pfx_certificate_password = "${var.cert_pw}"
 }
 
