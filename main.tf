@@ -1,9 +1,9 @@
 module "common" {
-  source      = "./modules/common"
-  install_id  = "${random_string.install_id.result}"
-  rg_name     = "${var.resource_group_name}"
-  vnet_name   = "${var.virtual_network_name}"
-  subnet_name = "${var.subnet}"
+  source          = "./modules/common"
+  install_id      = "${random_string.install_id.result}"
+  rg_name         = "${var.resource_group_name}"
+  vnet_name       = "${var.virtual_network_name}"
+  subnet_name     = "${var.subnet}"
   resource_prefix = "${var.resource_prefix}"
 
   dns = {
@@ -22,10 +22,10 @@ module "common" {
 }
 
 module "cluster_lb" {
-  source     = "./modules/cluster_lb"
-  install_id = "${random_string.install_id.result}"
-  rg_name    = "${module.common.rg_name}"
-  location   = "${module.common.rg_location}"
+  source          = "./modules/cluster_lb"
+  install_id      = "${random_string.install_id.result}"
+  rg_name         = "${module.common.rg_name}"
+  location        = "${module.common.rg_location}"
   resource_prefix = "${var.resource_prefix}"
 
   dns = {
@@ -85,12 +85,13 @@ module "configs" {
 }
 
 module "primaries" {
-  source     = "./modules/primaries"
-  install_id = "${random_string.install_id.result}"
-  rg_name    = "${module.common.rg_name}"
-  location   = "${module.common.rg_location}"
-  subnet_id  = "${module.common.app_subnet_id}"
-  resource_prefix = "${var.resource_prefix}"
+  source            = "./modules/primaries"
+  install_id        = "${random_string.install_id.result}"
+  rg_name           = "${module.common.rg_name}"
+  location          = "${module.common.rg_location}"
+  subnet_id         = "${module.common.app_subnet_id}"
+  resource_prefix   = "${var.resource_prefix}"
+  external_services = "${var.external_services}"
 
   username                = "${var.ssh_user}"
   os_disk_size            = "${var.os_disk_size}"

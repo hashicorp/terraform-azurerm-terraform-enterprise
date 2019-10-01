@@ -65,6 +65,11 @@ variable "resource_prefix" {
   description = "Prefix name for resources"
 }
 
+variable "external_services" {
+  type        = "string"
+  description = "Boolean string for whether or not to install in Internal Production Mode or External Services Mode"
+}
+
 # ============================================================ MISC
 
 locals {
@@ -73,4 +78,6 @@ locals {
   ip_conf_name = "${local.prefix}-ip-conf"
 
   ssh_config_path = "${path.root}/work/ssh_config"
+
+  install_type = "${var.external_services == "True" ? "es" : "ipm"}"
 }
