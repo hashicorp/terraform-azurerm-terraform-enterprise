@@ -73,6 +73,16 @@ variable "airgap" {
   description = "Expects keys: [enable, package_url, installer_url]"
 }
 
+variable "weave_cidr" {
+  type        = "string"
+  description = "custom weave CIDR range"
+}
+
+variable "repl_cidr" {
+  type        = "string"
+  description = "custom replicated service CIDR range"
+}
+
 # === Optional
 
 variable "ca_cert_url" {
