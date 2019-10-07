@@ -77,6 +77,8 @@ data "template_file" "cloud_config" {
     health_url           = "http://${var.cluster_api_endpoint}:${var.assistant_port}/healthz"
     cert_thumbprint      = "${var.cert_thumbprint}"
     ca_cert_url          = "${var.ca_cert_url}"
+    weave_cidr           = "${var.weave_cidr}"
+    repl_cidr            = "${var.repl_cidr}"
   }
 }
 

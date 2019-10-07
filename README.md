@@ -62,11 +62,13 @@ Please see the examples directory for more extensive examples.
 | postgresql\_user | user to connect to external postgresql database as | string | `""` | no |
 | primary\_count | The number of primary virtual machines to create. | string | `"3"` | no |
 | primary\_vm\_size | The Azure VM Size to use. | string | `"Standard_D4s_v3"` | no |
+| repl\_cidr | Specify a non-standard CIDR range for the replicated services. The default is `10.96.0.0/12` | string | `""` | no |
 | secondary\_count | The number of secondary virtual machines to create. | string | `"5"` | no |
 | secondary\_vm\_size | The Azure VM Size to use (will use primary_vm_size if not set). | string | `""` | no |
 | ssh\_user | The ssh user to create | string | `"ubuntu"` | no |
 | storage\_image | A list of the data to define the os version image to build from | map | `{ "offer": "UbuntuServer", "publisher": "Canonical", "sku": "18.04-LTS", "version": "latest" }` | no |
 | vm\_size\_tier | The tier for the vms (must be 'Standard' or 'Basic') and must match with vm_size | string | `"Standard"` | no |
+| weave\_cidr | Specify a non-standard CIDR range for weave. The default is `172.18.0.0/16` | string | `""` | no |
 
 ## Outputs
 

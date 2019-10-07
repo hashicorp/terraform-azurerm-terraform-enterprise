@@ -56,6 +56,8 @@ module "configs" {
   installer_url        = "${var.installer_url}"
   import_key           = "${var.import_key}"
   ca_cert_url          = "${var.ca_cert_url}"
+  weave_cidr           = "${var.weave_cidr}"
+  repl_cidr            = "${var.repl_cidr}"
 
   iact = {
     subnet_list       = "${var.iact_subnet_list}"
