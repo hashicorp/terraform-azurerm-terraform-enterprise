@@ -240,7 +240,7 @@ variable "vm_size_tier" {
 
 variable "weave_cidr" {
   type        = "string"
-  description = "Specify a non-standard CIDR range for weave. The default is 172.18.0.0/16"
+  description = "Specify a non-standard CIDR range for weave. The default is 10.32.0.0/12"
   default     = ""
 }
 
