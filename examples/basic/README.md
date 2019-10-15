@@ -1,21 +1,41 @@
-# Terraform Enterprise: High Availability - Basic example
+# Terraform Enterprise with Clustering - Basic example
 
-This is a basic example of how to set up the configurations to use this module. Please see the [inputs page](https://registry.terraform.io/modules/terraform-enterprise/azurerm/0.0.2-beta?tab=inputs) for more details on usage.
+This is a basic example of how to set up the configurations to use this module. Please see the [inputs page](https://registry.terraform.io/modules/terraform-enterprise/azurerm/0.0.4-beta?tab=inputs) for more details on usage.
 
-## Resources
+## Prerequisites
 
-This example assumes you have an existing
+* A computer with:
+  * API access to Azure Cloud.
+  * The ability to perform terraform runs.
+* The pre-existing Azure resources as listed in the next section.
+
+### Pre-Existing Resources
+
+The following resources are assumed to already exist within your Azure subscription.
 
 * Resource Group
 * Virtual Network
 * Subnet with attached Network Security Group
-* Azure Hosted Domain within the Resource Group
-  * PKCS12 Certificate for the domain
-* Azure Key Vault within the Resource Group
+* Azure Hosted DNS Domain within the Resource Group
+* Key Vault within the Resource Group
+
+In addition, a PKCS12 wildcard certificate for the dns domain specified above is required.
 
 ## Usage
 
-To use this example, copy the configs to their respective files in an empty directory on a computer that has API access to Azure (Local computer or server with access), fill in the local variables in a terraform.tfvars file and add any optional parameters to the module with your configurations and run terraform init, plan, and apply, once the apply has completed, wait for the application to load as the installer dashboard url will be included in the `tfe_cluster` output map.
+There are two easy ways to use this example.
+
+1. In an empty directory
+    1. Copy the configs detailed below to respectively named files.
+    1. Either through environment variables, or with a terraform.tfvars file, fill in the variable parameters.
+    1. Add any additional, or optional parameters to the module configuration in the main.tf file as needed.
+    1. Perform the `terraform init`, `terraform plan`, and `terraform apply`
+        1. Once the apply has completed, wait for the application to load, the installer dashboard url will be included in the `tfe_cluster` output map.
+1. After cloning the source repository for this module
+    1. Either through environment variables, or with a terraform.tfvars file, fill in the variable parameters.
+    1. Add any additional, or optional parameters to the module configuration in the main.tf file as needed.
+    1. Perform the `terraform init`, `terraform plan`, and `terraform apply`
+        1. Once the apply has completed, wait for the application to load, the installer dashboard url will be included in the `tfe_cluster` output map.
 
 ## Example
 
@@ -83,10 +103,10 @@ module "tfe_cluster" {
 output "tfe_cluster" {
   value = {
     application_endpoint         = "${module.tfe_cluster.application_endpoint}"
-    application_health_check     = "${module.tfe_cluster.health_check_endpoint}"
+    application_health_check     = "${module.tfe_cluster.application_health_check}"
     install_id                   = "${module.tfe_cluster.install_id}"
-    installer_dashboard_endpoint = "${module.tfe_cluster.console_endpoint}"
-    installer_dashboard_password = "${module.tfe_cluster.admin_console_password}"
+    installer_dashboard_endpoint = "${module.tfe_cluster.installer_dashboard_endpoint}"
+    installer_dashboard_password = "${module.tfe_cluster.installer_dashboard_password}"
     primary_public_ip            = "${module.tfe_cluster.primary_public_ip}"
     ssh_config_file              = "${module.tfe_cluster.ssh_config_file}"
     ssh_private_key              = "${module.tfe_cluster.ssh_private_key}"
