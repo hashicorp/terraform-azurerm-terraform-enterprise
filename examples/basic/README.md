@@ -36,8 +36,8 @@ provider "azurerm" {
 }
 
 module "tfe_cluster" {
-  source  = "hashicorp/tfe-ha/azure"
-  version = "0.0.2-beta"
+  source  = "hashicorp/terraform-enterprise/azurerm"
+  version = "0.0.4-beta"
 
   license_file                 = "${local.license_file}"
   resource_group_name          = "existing-rg-name"
