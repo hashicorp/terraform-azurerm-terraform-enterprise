@@ -15,22 +15,49 @@ This example assumes you have an existing
 
 ## Usage
 
-To use this example, copy the configs to a `main.tf` file in an empty directory on a computer that has API access to Azure (Local computer or server with access), fill in the local variables as well as the `existing-` prefixed parameters and any optional parameters to the module with your configurations and run terraform init, plan, and apply, once the apply has completed, wait for the application to load as the installer dashboard url will be included in the `tfe_cluster` output map.
+To use this example, copy the configs to their respective files in an empty directory on a computer that has API access to Azure (Local computer or server with access), fill in the local variables in a terraform.tfvars file and add any optional parameters to the module with your configurations and run terraform init, plan, and apply, once the apply has completed, wait for the application to load as the installer dashboard url will be included in the `tfe_cluster` output map.
 
 ## Example
 
+### variables.tf
+
 ```hcl
-locals {
-  license_file = "/path/to/licence/file.rli"
-  cert_file    = "/path/to/domain/certificate.pfx"
-  domain       = "dns.domain.example.com"
+variable "resource_group" {
+  description = "Azure resource group the vnet, key vault, and dns domain exist in."
 }
 
-variable "cert_pw" {
-  type        = "string"
-  description = "The Password for the PFX Certificate."
+variable "vnet_name" {
+  description = "Azure virtual network name to deploy in."
 }
 
+variable "subnet_name" {
+  description = "Azure subnet within the virtual network to deploy in."
+}
+
+variable "dns_domain" {
+  description = "Azure hosted DNS domain"
+}
+
+variable "key_vault_name" {
+  description = "Azure hosted Key Vault resource."
+}
+
+variable "certificate_path" {
+  description = "Path to a TLS wildcard certificate for the domain in PKCS12 format."
+}
+
+variable "certificate_pass" {
+  description = "The Password for the PKCS12 Certificate."
+}
+
+variable "license_path" {
+  description = "Path to the RLI lisence file for Terraform Enterprise."
+}
+```
+
+### main.tf
+
+```hcl
 provider "azurerm" {
   version = "~>1.32.1"
 }
@@ -39,16 +66,20 @@ module "tfe_cluster" {
   source  = "hashicorp/terraform-enterprise/azurerm"
   version = "0.0.4-beta"
 
-  license_file                 = "${local.license_file}"
-  resource_group_name          = "existing-rg-name"
-  virtual_network_name         = "existing-vnet-name"
-  subnet                       = "existing-subnet-within-vnet-name"
-  key_vault_name               = "existing-key-vault-in-rg-name"
-  domain                       = "${local.domain}"
-  tls_pfx_certificate          = "${local.cert_file}"
-  tls_pfx_certificate_password = "${var.cert_pw}"
+  license_file                 = "${var.license_path}"
+  resource_group_name          = "${var.resource_group}"
+  virtual_network_name         = "${var.vnet_name}"
+  subnet                       = "${var.subnet_name}"
+  key_vault_name               = "${var.key_vault_name}"
+  domain                       = "${var.dns_domain}"
+  tls_pfx_certificate          = "${var.certificate_path}"
+  tls_pfx_certificate_password = "${var.certificate_pass}"
 }
+```
 
+### outputs.tf
+
+```hcl
 output "tfe_cluster" {
   value = {
     application_endpoint         = "${module.tfe_cluster.application_endpoint}"
