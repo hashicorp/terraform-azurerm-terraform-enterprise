@@ -64,8 +64,8 @@ public_ip=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/netw
 
 airgap_url_path="/etc/ptfe/airgap-package-url"
 airgap_installer_url_path="/etc/ptfe/airgap-installer-url"
-weave_cidr="/etc/ptfe/weave_cidr"
-repl_cidr="/etc/ptfe/repl_cidr"
+weave_cidr="/etc/ptfe/weave-cidr"
+repl_cidr="/etc/ptfe/repl-cidr"
 
 # ------------------------------------------------------------------------------
 # Custom CA certificate download and configuration block
@@ -155,13 +155,13 @@ if [ "x${role}x" == "xmainx" ]; then
 
     if test -e "$weave_cidr"; then
       ptfe_install_args+=(
-          "--weaveCIDR=$(cat /etc/ptfe/weave_cidr)"
+          "--ip-alloc-range=$(cat /etc/ptfe/weave-cidr)"
       )
     fi
 
     if test -e "$repl_cidr"; then
       ptfe_install_args+=(
-          "--replCIDR=$(cat /etc/ptfe/repl_cidr)"
+          "--service-cidr=$(cat /etc/ptfe/repl-cidr)"
       )
     fi
 fi
