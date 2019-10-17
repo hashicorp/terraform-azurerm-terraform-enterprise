@@ -227,7 +227,7 @@ variable "storage_image" {
   default = {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
+    sku       = "16.04-LTS"
     version   = "latest"
   }
 }
