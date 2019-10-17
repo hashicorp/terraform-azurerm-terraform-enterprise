@@ -68,7 +68,7 @@ Please see the examples directory for more extensive examples.
 | ssh\_user | The ssh user to create | string | `"ubuntu"` | no |
 | storage\_image | A list of the data to define the os version image to build from | map | `{ "offer": "UbuntuServer", "publisher": "Canonical", "sku": "18.04-LTS", "version": "latest" }` | no |
 | vm\_size\_tier | The tier for the vms (must be 'Standard' or 'Basic') and must match with vm_size | string | `"Standard"` | no |
-| weave\_cidr | Specify a non-standard CIDR range for weave. The default is `172.18.0.0/16` | string | `""` | no |
+| weave\_cidr | Specify a non-standard CIDR range for weave. The default is `10.32.0.0/12` | string | `""` | no |
 
 ## Outputs
 
