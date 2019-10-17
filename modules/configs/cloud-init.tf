@@ -11,6 +11,7 @@ data "template_file" "replicated_config" {
     proxy_url         = "${var.http_proxy_url}"
     console_password  = "${random_pet.console_password.id}"
     app_endpoint      = "${var.cluster_endpoint}"
+    release_sequence  = "${var.release_sequence}"
   }
 }
 

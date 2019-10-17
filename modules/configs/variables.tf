@@ -83,6 +83,11 @@ variable "repl_cidr" {
   description = "custom replicated service CIDR range"
 }
 
+variable "release_sequence" {
+  type        = "string"
+  description = "The sequence ID for the Terraform Enterprise version to pin the cluster to."
+}
+
 # === Optional
 
 variable "ca_cert_url" {

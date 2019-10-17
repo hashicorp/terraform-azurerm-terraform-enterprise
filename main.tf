@@ -59,6 +59,7 @@ module "configs" {
   ca_cert_url          = "${var.ca_cert_url}"
   weave_cidr           = "${var.weave_cidr}"
   repl_cidr            = "${var.repl_cidr}"
+  release_sequence     = "${var.release_sequence}"
 
   iact = {
     subnet_list       = "${var.iact_subnet_list}"

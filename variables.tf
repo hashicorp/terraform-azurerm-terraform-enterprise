@@ -42,6 +42,12 @@ variable "virtual_network_name" {
 
 # ============================================================ OPTIONAL
 
+variable "release_sequence" {
+  type        = "string"
+  description = "The sequence ID for the Terraform Enterprise version to pin the cluster to."
+  default     = "latest"
+}
+
 variable "resource_prefix" {
   type        = "string"
   description = "Prefix name for resources created by this module"
