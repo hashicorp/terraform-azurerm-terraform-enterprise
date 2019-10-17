@@ -42,9 +42,10 @@ module "cluster_lb" {
   }
 }
 
+# We are hardcoding the primary count to 3 for the initial release for stability.
 module "configs" {
   source               = "./modules/configs"
-  primary_count        = "${var.primary_count}"
+  primary_count        = "3"
   license_file         = "${var.license_file}"
   cluster_endpoint     = "${module.cluster_lb.app_endpoint_dns}"
   cluster_api_endpoint = "${module.cluster_lb.lb_endpoint_dns}"
@@ -111,8 +112,9 @@ module "primaries" {
     private_key_path = "${module.common.ssh_private_key_path}"
   }
 
+  # We are hardcoding the primary count to 3 for the initial release for stability.
   vm = {
-    count = "${var.primary_count}"
+    count = "3"
     size  = "${var.primary_vm_size}"
   }
 }

@@ -192,10 +192,11 @@ variable "postgresql_user" {
   default     = ""
 }
 
-variable "primary_count" {
-  description = "The number of primary virtual machines to create, should be set to 3 or 5."
-  default     = 3
-}
+# We are hardcoding the primary count to 3 for the initial release for stability.
+# variable "primary_count" {
+#   description = "The number of primary virtual machines to create, should be set to 3 or 5."
+#   default     = 3
+# }
 
 variable "primary_vm_size" {
   type        = "string"
