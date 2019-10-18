@@ -75,7 +75,7 @@ variable "airgap_package_url" {
 variable "ca_cert_url" {
   type        = "string"
   description = "URL to CA certificate file used for the internal `ptfe-proxy` used for outgoing connections"
-  default     = "none"
+  default     = ""
 }
 
 variable "azure_es_account_key" {
