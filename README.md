@@ -1,4 +1,4 @@
-# Terraform Enterprise: High Availability - Azure Module
+# Terraform Enterprise: Clustering - Azure Module
 
 ![Terraform Enterprise Logo](https://github.com/hashicorp/terraform-azurerm-terraform-enterprise/blob/master/assets/Terraform_Enterprise_PrimaryLogo.png?raw=true)
 
