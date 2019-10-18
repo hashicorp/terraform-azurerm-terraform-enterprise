@@ -21,7 +21,7 @@ Please contact your Technical Account Manager for more information, and support 
 
 ## Examples
 
-Please see the examples directory for more extensive examples.
+Please see the [examples directory](https://github.com/hashicorp/terraform-azurerm-terraform-enterprise/tree/master/examples/) for more extensive examples.
 
 ## Inputs
 
