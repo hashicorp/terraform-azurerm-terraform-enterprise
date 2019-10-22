@@ -3,6 +3,9 @@
 set -e -u -o pipefail
 
 
+echo "Starting cluster install setup"
+
+
 ### Set proxy variables, if needed.
 if [ -s /etc/ptfe/proxy-url ]; then
   http_proxy=$(cat /etc/ptfe/proxy-url)
@@ -14,6 +17,8 @@ else
   no_proxy=""
 fi
 
+
+echo "Installing prerequisite packages"
 ### Decide on distribution specific things
 if [ -f /etc/redhat-release ]; then
   CONF=/etc/chrony.conf
@@ -67,11 +72,14 @@ airgap_installer_url_path="/etc/ptfe/airgap-installer-url"
 weave_cidr="/etc/ptfe/weave-cidr"
 repl_cidr="/etc/ptfe/repl-cidr"
 
+
 # ------------------------------------------------------------------------------
 # Custom CA certificate download and configuration block
 # ------------------------------------------------------------------------------
+
 if [[ -n $(< /etc/ptfe/custom-ca-cert-url) && \
       $(< /etc/ptfe/custom-ca-cert-url) != "" ]]; then
+  echo "Setting up custom CA"
   custom_ca_cert_url=$(cat /etc/ptfe/custom-ca-cert-url)
   custom_ca_cert_file_name=$(echo "${custom_ca_cert_url}" | awk -F '/' '{ print $NF }')
   ca_tmp_dir="/tmp/ptfe/customer-certs"
@@ -142,6 +150,7 @@ if [ "x${role}x" == "xmainx" ]; then
     # We also setup the replicated.conf.tmpl to include the path to the downloaded
     # airgap file.
     if test -e "$airgap_url_path"; then
+        echo "Setting up configs for airgap configurations"
         mkdir -p /var/lib/ptfe
         pushd /var/lib/ptfe
         curl -sfSL -o /var/lib/ptfe/ptfe.airgap "$(< "$airgap_url_path")"
@@ -186,6 +195,6 @@ if [ "x${role}x" == "xsecondaryx" ]; then
     export verb
 fi
 
-
+echo "Running ptfe binary for cluster node setup."
 
 ptfe install $verb "${ptfe_install_args[@]}"
