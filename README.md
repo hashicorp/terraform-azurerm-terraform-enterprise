@@ -36,13 +36,13 @@ Please see the examples directory for more extensive examples.
 | tls\_pfx\_certificate\_password | The password for the associated SSL certificate. | string | n/a | yes |
 | virtual\_network\_name | An existing Azure Virtual Network to deploy into | string | n/a | yes |
 | resource\_prefix | Prefix name for resources created by this module | string| tfe | no |
-| ca_cert_url | URL to CA certificate file used for the internal `ptfe-proxy` used for outgoing connections| string | `"none"` | no |
 | airgap\_installer\_url | URL to replicated's airgap installer package | string | `"https://install.terraform.io/installer/replicated-v5.tar.gz"` | no |
 | airgap\_mode\_enable | install in airgap mode | string | `"False"` | no |
 | airgap\_package\_url | Signed URL to download the package | string | `""` | no |
 | azure\_es\_account\_key | The Azure account key for external services | string | `""` | no |
 | azure\_es\_account\_name | The Azure account name for external services | string | `""` | no |
 | azure\_es\_container | The Azure container for external services | string | `""` | no |
+| ca_bundle_url | URL to Custom CA bundle used for outgoing connections | string | `"none"` | no |
 | distribution | Type of linux distribution to use. (ubuntu or rhel) | string | `"ubuntu"` | no |
 | dns\_ttl | The TTL for dns records. | string | `"120"` | no |
 | domain\_resource\_group\_name | The name of the resource group where the domain name resides, if not set the main resource group will be used. | string | `""` | no |
