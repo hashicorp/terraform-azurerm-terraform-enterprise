@@ -45,9 +45,9 @@ write_files:
 - path: /etc/ptfe/custom-ca-cert-url
   owner: root:root
   permissions: "0400"
-  content: "${ca_cert_url}"
+ content: "${ca_bundle_url}"
 %{~ endif }
-%{~ if role != "secondary" }
+%{~ if role != "secondary" ~}
 - path: /etc/ptfe/setup-token
   owner: root:root
   permissions: "0400"

@@ -77,7 +77,7 @@ data "template_file" "cloud_config" {
     primary_pki_url      = "http://${var.cluster_api_endpoint}:${var.assistant_port}/api/v1/pki-download?token=${random_string.setup_token.result}"
     health_url           = "http://${var.cluster_api_endpoint}:${var.assistant_port}/healthz"
     cert_thumbprint      = "${var.cert_thumbprint}"
-    ca_cert_url          = "${var.ca_cert_url}"
+    ca_bundle_url        = "${var.ca_bundle_url}"
     weave_cidr           = "${var.weave_cidr}"
     repl_cidr            = "${var.repl_cidr}"
   }
@@ -109,7 +109,7 @@ data "template_file" "cloud_config_secondary" {
     distro               = "${var.distribution}"
     aaa_proxy_b64        = "${base64encode(data.template_file.aaa_proxy_b64.rendered)}"
     proxy_b64            = "${base64encode(data.template_file.proxy_sh.rendered)}"
-    ca_cert_url          = "${var.ca_cert_url}"
+    ca_bundle_url        = "${var.ca_bundle_url}"
   }
 }
 

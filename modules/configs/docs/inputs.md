@@ -23,4 +23,12 @@
 | release\_sequence | The sequence ID for the Terraform Enterprise version to pin the cluster to. | string | n/a | yes |
 | repl\_cidr | custom replicated service CIDR range | string | n/a | yes |
 | weave\_cidr | custom weave CIDR range | string | n/a | yes |
+| ca_bundle_url | URL to CA certificate file used for the internal `ptfe-proxy` used for outgoing connections| string | `"none"` | no |
 
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| console\_password | The generated password for the admin console. |
+| primary\_cloud\_init\_list | List of rendered cloud-init templates to pass to primary instances. |
+| secondary\_cloud\_init | Rendered cloud-init template to pass to secondary scaling-set. |

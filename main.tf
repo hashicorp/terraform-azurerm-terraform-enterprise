@@ -56,7 +56,7 @@ module "configs" {
   http_proxy_url       = "${var.http_proxy_url}"
   installer_url        = "${var.installer_url}"
   import_key           = "${var.import_key}"
-  ca_cert_url          = "${var.ca_cert_url}"
+  ca_bundle_url        = "${var.ca_bundle_url}"
   weave_cidr           = "${var.weave_cidr}"
   repl_cidr            = "${var.repl_cidr}"
   release_sequence     = "${var.release_sequence}"
