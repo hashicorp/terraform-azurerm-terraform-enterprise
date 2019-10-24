@@ -41,7 +41,7 @@ write_files:
   owner: root:root
   permissions: "0400"
   content: "${proxy_url}"
-%{~ if ca_cert_url != "" }
+%{~ if ca_bundle_url != "" }
 - path: /etc/ptfe/custom-ca-cert-url
   owner: root:root
   permissions: "0400"

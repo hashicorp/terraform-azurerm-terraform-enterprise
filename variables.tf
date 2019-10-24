@@ -75,7 +75,7 @@ variable "airgap_package_url" {
 variable "ca_bundle_url" {
   type        = "string"
   description = "URL to Custom CA bundle used for outgoing connections"
-  default     = "none"
+  default     = ""
 }
 
 variable "azure_es_account_key" {
