@@ -41,13 +41,15 @@ write_files:
   owner: root:root
   permissions: "0400"
   content: "${proxy_url}"
+
 %{~ if ca_bundle_url != "" }
 - path: /etc/ptfe/custom-ca-cert-url
   owner: root:root
   permissions: "0400"
  content: "${ca_bundle_url}"
 %{~ endif }
-%{~ if role != "secondary" ~}
+
+%{ if role != "secondary" }
 - path: /etc/ptfe/setup-token
   owner: root:root
   permissions: "0400"
@@ -68,7 +70,6 @@ write_files:
   permissions: "0755"
   encoding: b64
   content: ${proxy_b64}
-
 %{~ endif ~}
 
 %{~ if role == "main" ~}
@@ -113,14 +114,14 @@ write_files:
   owner: root:root
   permissions: "0644"
   content: ${weave_cidr}
-%{ endif }
+  %{ endif }
 
-%{ if repl_cidr != "" }
+  %{ if repl_cidr != "" }
 - path: /etc/ptfe/repl-cidr
   owner: root:root
   permissions: "0644"
   content: ${repl_cidr}
-%{ endif }
+  %{ endif }
 %{ endif ~}
 
 %{ if role == "secondary" ~}
@@ -129,7 +130,6 @@ write_files:
   permissions: "0400"
   encoding: b64
   content: ${aaa_proxy_b64}
-
 %{ endif ~}
 
 %{ if distro == "ubuntu" ~}
