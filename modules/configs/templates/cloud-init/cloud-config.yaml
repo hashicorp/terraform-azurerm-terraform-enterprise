@@ -2,8 +2,7 @@
 %{ if import_key != "" ~}
 ssh_import_id:
 - "${import_key}"
-%{ endif ~}
-
+%{ endif }
 write_files:
 
 - path: /etc/ptfe/role
@@ -41,14 +40,12 @@ write_files:
   owner: root:root
   permissions: "0400"
   content: "${proxy_url}"
-
-%{~ if ca_bundle_url != "" }
+%{ if ca_bundle_url != "" }
 - path: /etc/ptfe/custom-ca-cert-url
   owner: root:root
   permissions: "0400"
  content: "${ca_bundle_url}"
-%{~ endif }
-
+%{ endif ~}
 %{ if role != "secondary" }
 - path: /etc/ptfe/setup-token
   owner: root:root
@@ -70,9 +67,8 @@ write_files:
   permissions: "0755"
   encoding: b64
   content: ${proxy_b64}
-%{~ endif ~}
-
-%{~ if role == "main" ~}
+%{ endif ~}
+%{ if role == "main" }
 - path: /etc/replicated.rli
   owner: root:root
   permissions: "0444"
@@ -96,8 +92,7 @@ write_files:
   owner: root:root
   permissions: "0444"
   content: ${cert_thumbprint}
-
-%{~ if airgap_package_url != "" }
+%{ if airgap_package_url != "" }
 - path: /etc/ptfe/airgap-package-url
   owner: root:root
   permissions: "0644"
@@ -108,31 +103,27 @@ write_files:
   permissions: "0644"
   content: ${airgap_installer_url}
 %{ endif ~}
-
 %{ if weave_cidr != "" }
 - path: /etc/ptfe/weave-cidr
   owner: root:root
   permissions: "0644"
   content: ${weave_cidr}
-  %{ endif }
-
-  %{ if repl_cidr != "" }
+%{ endif ~}
+%{ if repl_cidr != "" }
 - path: /etc/ptfe/repl-cidr
   owner: root:root
   permissions: "0644"
   content: ${repl_cidr}
   %{ endif }
 %{ endif ~}
-
-%{ if role == "secondary" ~}
+%{ if role == "secondary" }
 - path: /etc/apt/apt.conf.d/00aaa_proxy
   owner: root:root
   permissions: "0400"
   encoding: b64
   content: ${aaa_proxy_b64}
 %{ endif ~}
-
-%{ if distro == "ubuntu" ~}
+%{ if distro == "ubuntu" }
 - path: /etc/apt/apt.conf.d/00_aaa_proxy.conf
   owner: root:root
   permissions: "0400"
@@ -146,4 +137,3 @@ packages:
 - unzip
 - wget
 %{ endif ~}
-
