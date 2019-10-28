@@ -6,6 +6,9 @@ module "common" {
   subnet_name     = "${var.subnet}"
   resource_prefix = "${var.resource_prefix}"
 
+  key_type = "${var.tls_pfx_certificate_key_type}"
+  key_size = "${var.tls_pfx_certificate_key_size}"
+
   dns = {
     rg_name = "${var.domain_resource_group_name}"
   }

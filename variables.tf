@@ -239,6 +239,17 @@ variable "storage_image" {
   }
 }
 
+variable "tls_pfx_certificate_key_size" {
+  description = "The size of the Key used in the Certificate. Possible values include 2048 and 4096."
+  default     = 2048
+}
+
+variable "tls_pfx_certificate_key_type" {
+  type        = "string"
+  description = "Specifies the Type of Key, such as RSA."
+  default     = "RSA"
+}
+
 variable "vm_size_tier" {
   type        = "string"
   description = "The tier for the vms (must be 'Standard' or 'Basic') and must match with vm_size"

@@ -18,8 +18,8 @@ resource "azurerm_key_vault_certificate" "ptfe" {
 
     key_properties {
       exportable = true
-      key_size   = 2048
-      key_type   = "RSA"
+      key_size   = "${var.key_size}"
+      key_type   = "${var.key_type}"
       reuse_key  = false
     }
 
