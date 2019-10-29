@@ -28,7 +28,17 @@ write_files:
 - path: /etc/ptfe/health-url
   owner: root:root
   permissions: "0400"
-  content: "${health_url}"
+  content: "${assistant_host}/healthz"
+
+- path: /etc/ptfe/assistant-host
+  owner: root:root
+  permissions: "0400"
+  content: "${assistant_host}"
+
+- path: /etc/ptfe/assistant-token
+  owner: root:root
+  permissions: "0400"
+  content: "${setup_token}"
 
 - path: /var/lib/cloud/scripts/per-once/install-ptfe.sh
   owner: root:root
@@ -40,11 +50,12 @@ write_files:
   owner: root:root
   permissions: "0400"
   content: "${proxy_url}"
+
 %{ if ca_bundle_url != "" }
 - path: /etc/ptfe/custom-ca-cert-url
   owner: root:root
   permissions: "0400"
- content: "${ca_bundle_url}"
+  content: "${ca_bundle_url}"
 %{ endif ~}
 %{ if role != "secondary" }
 - path: /etc/ptfe/setup-token
@@ -55,7 +66,7 @@ write_files:
 - path: /etc/ptfe/primary-pki-url
   owner: root:root
   permissions: "0400"
-  content: "${primary_pki_url}"
+  content: "${assistant_host}/api/v1/pki-download?token=${setup_token}"
 
 - path: /etc/ptfe/role-id
   owner: root:root
