@@ -59,6 +59,18 @@ if [ "x${role}x" == "xmainx" ]; then
   ln -s "/var/lib/waagent/${cert_thumbprint}.prv" /etc/ptfe/tls.key
 fi
 
+private_ip=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/network?api-version=2017-08-01" | jq -r .interface[0].ipv4.ipAddress[0].privateIpAddress)
+public_ip=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/network/?api-version=2017-08-01" | jq -r .interface[0].ipv4.ipAddress[0].publicIpAddress)
+
+airgap_url_path="/etc/ptfe/airgap-package-url"
+airgap_installer_url_path="/etc/ptfe/airgap-installer-url"
+weave_cidr="/etc/ptfe/weave-cidr"
+repl_cidr="/etc/ptfe/repl-cidr"
+
+
+
+
+
 health_url="$(cat /etc/ptfe/health-url)"
 
 ptfe_install_args=(
@@ -79,24 +91,17 @@ if test -e /etc/ptfe/role-id; then
     )
 fi
 
-
 if [ "x${role}x" == "xmainx" ]; then
-
-airgap_url_path="/etc/ptfe/airgap-package-url"
-airgap_installer_url_path="/etc/ptfe/airgap-installer-url"
-weave_cidr="/etc/ptfe/weave-cidr"
-repl_cidr="/etc/ptfe/repl-cidr"
-
-
-
     verb="setup"
     export verb
     # main
     ptfe_install_args+=(
-        "--private-address=$(curl -sfSL http://169.254.169.254/latest/meta-data/local-ipv4)"
+        "--private-address=${private_ip}"
+        "--public-address=${public_ip}"
         --cluster
         "--auth-token=@/etc/ptfe/setup-token"
     )
+
     if [ -s /etc/ptfe/proxy-url ]; then
         ptfe_install_args+=(
             "--additional-no-proxy=$no_proxy"
