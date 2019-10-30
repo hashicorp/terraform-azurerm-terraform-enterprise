@@ -7,7 +7,7 @@
 | airgap | Expects keys: [enable, package_url, installer_url] | map | n/a | yes |
 | assistant\_port | Port the assitant sidecar-like node service is running on. | string | n/a | yes |
 | azure\_es | Expects keys: [enable, account_name, account_key, container] | map | n/a | yes |
-| ca\_cert\_url | URL to CA certificate file used for the internal `ptfe-proxy` used for outgoing connections | string | n/a | yes |
+| ca\_bundle\_url | URL to CA certificate file used for the internal `ptfe-proxy` used for outgoing connections | string | n/a | yes |
 | cert\_thumbprint | The thumbprint for the Azure Key Vault Certificate object generated from the provided PFX certificate. | string | n/a | yes |
 | cluster\_api\_endpoint | URI to the cluster api | string | n/a | yes |
 | cluster\_endpoint | URI to the cluster | string | n/a | yes |
@@ -23,12 +23,4 @@
 | release\_sequence | The sequence ID for the Terraform Enterprise version to pin the cluster to. | string | n/a | yes |
 | repl\_cidr | custom replicated service CIDR range | string | n/a | yes |
 | weave\_cidr | custom weave CIDR range | string | n/a | yes |
-| ca_bundle_url | URL to CA certificate file used for the internal `ptfe-proxy` used for outgoing connections| string | `"none"` | no |
 
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| console\_password | The generated password for the admin console. |
-| primary\_cloud\_init\_list | List of rendered cloud-init templates to pass to primary instances. |
-| secondary\_cloud\_init | Rendered cloud-init template to pass to secondary scaling-set. |

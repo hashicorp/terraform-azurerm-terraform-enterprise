@@ -6,6 +6,8 @@
 |------|-------------|:----:|:-----:|:-----:|
 | dns | Expects key: [rg_name] | map | n/a | yes |
 | install\_id | A prefix to use for resource names | string | n/a | yes |
+| key\_size | Byte size for the key-pair used to generate the provided certificate | string | n/a | yes |
+| key\_type | Type of key-pair used to generate the provided certificate | string | n/a | yes |
 | key\_vault | Expects keys: [name, rg_name] (key_vault name and Azure resource group that key vault resides in.) | map | n/a | yes |
 | resource\_prefix | Prefix name for resources | string | n/a | yes |
 | rg\_name | The Azure Resource Group to build into | string | n/a | yes |
