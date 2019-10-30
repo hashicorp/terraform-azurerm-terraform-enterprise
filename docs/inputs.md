@@ -28,7 +28,7 @@
 | iact\_subnet\_list | IP Cidr Mask to allow to access Initial Admin Creation Token (IACT) API. [Terraform Docs](https://www.terraform.io/docs/enterprise/private/automating-initial-user.html) | string | `""` | no |
 | iact\_subnet\_time\_limit | Amount of time to allow access to IACT API after initial boot | string | `""` | no |
 | import\_key | An additional ssh pub key to import to all machines | string | `""` | no |
-| installer\_url | URL to the cluster setup tool | string | `"https://install.terraform.io/installer/ptfe.zip"` | no |
+| installer\_url | URL to the cluster setup tool | string | `"https://install.terraform.io/installer/ptfe-0.1.zip"` | no |
 | key\_vault\_resource\_group\_name | The existing Azure Resource Group where the key vault is stored, defaults to the main resource group if not set. | string | `""` | no |
 | os\_disk\_size | The size in Gb for the OS disk of the primary seed virtual machine | string | `"100"` | no |
 | postgresql\_address | address to connect to external postgresql database at | string | `""` | no |
