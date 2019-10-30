@@ -1,6 +1,6 @@
 # Terraform Enterprise with Clustering - Basic example
 
-This is a basic example of how to set up the configurations to use this module. Please see the [inputs page](https://registry.terraform.io/modules/terraform-enterprise/azurerm/0.0.4-beta?tab=inputs) for more details on usage.
+This is a basic example of how to set up the configurations to use this module. Please see the [inputs page](https://registry.terraform.io/modules/terraform-enterprise/azurerm/?tab=inputs) for more details on usage.
 
 ## Prerequisites
 
@@ -84,7 +84,7 @@ provider "azurerm" {
 
 module "tfe_cluster" {
   source  = "hashicorp/terraform-enterprise/azurerm"
-  version = "0.0.4-beta"
+  version = "0.1.0"
 
   license_file                 = "${var.license_path}"
   resource_group_name          = "${var.resource_group}"

@@ -1,6 +1,6 @@
 module "tfe_cluster" {
   source  = "hashicorp/terraform-enterprise/azurerm"
-  version = "0.0.4-beta"
+  version = "0.1.0"
 
   license_file                 = "${var.license_path}"
   resource_group_name          = "${var.resource_group}"
