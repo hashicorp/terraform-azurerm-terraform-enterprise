@@ -40,6 +40,16 @@ variable "resource_prefix" {
   description = "Prefix name for resources"
 }
 
+variable "key_type" {
+  type        = "string"
+  description = "Type of key-pair used to generate the provided certificate"
+}
+
+variable "key_size" {
+  type        = "string"
+  description = "Byte size for the key-pair used to generate the provided certificate"
+}
+
 # ============================================================ MISC
 
 locals {

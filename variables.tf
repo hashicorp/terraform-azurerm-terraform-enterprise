@@ -42,6 +42,12 @@ variable "virtual_network_name" {
 
 # ============================================================ OPTIONAL
 
+variable "release_sequence" {
+  type        = "string"
+  description = "The sequence ID for the Terraform Enterprise version to pin the cluster to."
+  default     = "latest"
+}
+
 variable "resource_prefix" {
   type        = "string"
   description = "Prefix name for resources created by this module"
@@ -69,7 +75,7 @@ variable "airgap_package_url" {
 variable "ca_bundle_url" {
   type        = "string"
   description = "URL to Custom CA bundle used for outgoing connections"
-  default     = "none"
+  default     = ""
 }
 
 variable "azure_es_account_key" {
@@ -192,10 +198,11 @@ variable "postgresql_user" {
   default     = ""
 }
 
-variable "primary_count" {
-  description = "The number of primary virtual machines to create, should be set to 3 or 5."
-  default     = 3
-}
+# We are hardcoding the primary count to 3 for the initial release for stability.
+# variable "primary_count" {
+#   description = "The number of primary virtual machines to create, should be set to 3 or 5."
+#   default     = 3
+# }
 
 variable "primary_vm_size" {
   type        = "string"
@@ -232,6 +239,17 @@ variable "storage_image" {
   }
 }
 
+variable "tls_pfx_certificate_key_size" {
+  description = "The size of the Key used in the Certificate. Possible values include 2048 and 4096."
+  default     = 2048
+}
+
+variable "tls_pfx_certificate_key_type" {
+  type        = "string"
+  description = "Specifies the Type of Key, such as RSA."
+  default     = "RSA"
+}
+
 variable "vm_size_tier" {
   type        = "string"
   description = "The tier for the vms (must be 'Standard' or 'Basic') and must match with vm_size"
@@ -248,17 +266,4 @@ variable "repl_cidr" {
   type        = "string"
   description = "Specify a non-standard CIDR range for the replicated services. The default is 10.96.0.0/12"
   default     = ""
-}
-
-# ============================================================ MISC
-
-locals {
-  assistant_port             = 23010
-  rendered_secondary_vm_size = "${coalesce(var.secondary_vm_size, var.primary_vm_size)}"
-}
-
-resource "random_string" "install_id" {
-  length  = 8
-  special = false
-  upper   = false
 }

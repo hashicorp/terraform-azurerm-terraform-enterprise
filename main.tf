@@ -6,6 +6,9 @@ module "common" {
   subnet_name     = "${var.subnet}"
   resource_prefix = "${var.resource_prefix}"
 
+  key_type = "${var.tls_pfx_certificate_key_type}"
+  key_size = "${var.tls_pfx_certificate_key_size}"
+
   dns = {
     rg_name = "${var.domain_resource_group_name}"
   }
@@ -42,9 +45,10 @@ module "cluster_lb" {
   }
 }
 
+# We are hardcoding the primary count to 3 for the initial release for stability.
 module "configs" {
   source               = "./modules/configs"
-  primary_count        = "${var.primary_count}"
+  primary_count        = "3"
   license_file         = "${var.license_file}"
   cluster_endpoint     = "${module.cluster_lb.app_endpoint_dns}"
   cluster_api_endpoint = "${module.cluster_lb.lb_endpoint_dns}"
@@ -58,6 +62,7 @@ module "configs" {
   ca_bundle_url        = "${var.ca_bundle_url}"
   weave_cidr           = "${var.weave_cidr}"
   repl_cidr            = "${var.repl_cidr}"
+  release_sequence     = "${var.release_sequence}"
 
   iact = {
     subnet_list       = "${var.iact_subnet_list}"
@@ -111,8 +116,9 @@ module "primaries" {
     private_key_path = "${module.common.ssh_private_key_path}"
   }
 
+  # We are hardcoding the primary count to 3 for the initial release for stability.
   vm = {
-    count = "${var.primary_count}"
+    count = "3"
     size  = "${var.primary_vm_size}"
   }
 }

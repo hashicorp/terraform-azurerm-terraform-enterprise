@@ -1,61 +1,112 @@
-# Terraform Enterprise: High Availability - Basic example
+# Terraform Enterprise with Clustering - Basic example
 
-This is a basic example of how to set up the configurations to use this module. Please see the [inputs page](https://registry.terraform.io/modules/terraform-enterprise/azurerm/0.0.2-beta?tab=inputs) for more details on usage.
+This is a basic example of how to set up the configurations to use this module. Please see the [inputs page](https://registry.terraform.io/modules/terraform-enterprise/azurerm/?tab=inputs) for more details on usage.
 
-## Resources
+## Prerequisites
 
-This example assumes you have an existing
+* A computer with:
+  * API access to Azure Cloud.
+  * The ability to perform terraform runs.
+* The pre-existing Azure resources as listed in the next section.
+
+### Pre-Existing Resources
+
+The following resources are assumed to already exist within your Azure subscription.
 
 * Resource Group
 * Virtual Network
 * Subnet with attached Network Security Group
-* Azure Hosted Domain within the Resource Group
-  * PKCS12 Certificate for the domain
-* Azure Key Vault within the Resource Group
+* Azure Hosted DNS Domain within the Resource Group
+* Key Vault within the Resource Group
+
+In addition, a PKCS12 wildcard certificate for the dns domain specified above is required.
 
 ## Usage
 
-To use this example, copy the configs to a `main.tf` file in an empty directory on a computer that has API access to Azure (Local computer or server with access), fill in the local variables as well as the `existing-` prefixed parameters and any optional parameters to the module with your configurations and run terraform init, plan, and apply, once the apply has completed, wait for the application to load as the installer dashboard url will be included in the `tfe_cluster` output map.
+There are two easy ways to use this example.
+
+1. In an empty directory
+    1. Copy the configs detailed below to respectively named files.
+    1. Either through environment variables, or with a terraform.tfvars file, fill in the variable parameters.
+    1. Add any additional, or optional parameters to the module configuration in the main.tf file as needed.
+    1. Perform the `terraform init`, `terraform plan`, and `terraform apply`
+        1. Once the apply has completed, wait for the application to load, the installer dashboard url will be included in the `tfe_cluster` output map.
+1. After cloning the source repository for this module
+    1. Either through environment variables, or with a terraform.tfvars file, fill in the variable parameters.
+    1. Add any additional, or optional parameters to the module configuration in the main.tf file as needed.
+    1. Perform the `terraform init`, `terraform plan`, and `terraform apply`
+        1. Once the apply has completed, wait for the application to load, the installer dashboard url will be included in the `tfe_cluster` output map.
 
 ## Example
 
+### variables.tf
+
 ```hcl
-locals {
-  license_file = "/path/to/licence/file.rli"
-  cert_file    = "/path/to/domain/certificate.pfx"
-  domain       = "dns.domain.example.com"
+variable "resource_group" {
+  description = "Azure resource group the vnet, key vault, and dns domain exist in."
 }
 
-variable "cert_pw" {
-  type        = "string"
-  description = "The Password for the PFX Certificate."
+variable "vnet_name" {
+  description = "Azure virtual network name to deploy in."
 }
 
+variable "subnet_name" {
+  description = "Azure subnet within the virtual network to deploy in."
+}
+
+variable "dns_domain" {
+  description = "Azure hosted DNS domain"
+}
+
+variable "key_vault_name" {
+  description = "Azure hosted Key Vault resource."
+}
+
+variable "certificate_path" {
+  description = "Path to a TLS wildcard certificate for the domain in PKCS12 format."
+}
+
+variable "certificate_pass" {
+  description = "The Password for the PKCS12 Certificate."
+}
+
+variable "license_path" {
+  description = "Path to the RLI lisence file for Terraform Enterprise."
+}
+```
+
+### main.tf
+
+```hcl
 provider "azurerm" {
   version = "~>1.32.1"
 }
 
 module "tfe_cluster" {
-  source  = "hashicorp/tfe-ha/azure"
-  version = "0.0.2-beta"
+  source  = "hashicorp/terraform-enterprise/azurerm"
+  version = "0.1.0"
 
-  license_file                 = "${local.license_file}"
-  resource_group_name          = "existing-rg-name"
-  virtual_network_name         = "existing-vnet-name"
-  subnet                       = "existing-subnet-within-vnet-name"
-  key_vault_name               = "existing-key-vault-in-rg-name"
-  domain                       = "${local.domain}"
-  tls_pfx_certificate          = "${local.cert_file}"
-  tls_pfx_certificate_password = "${var.cert_pw}"
+  license_file                 = "${var.license_path}"
+  resource_group_name          = "${var.resource_group}"
+  virtual_network_name         = "${var.vnet_name}"
+  subnet                       = "${var.subnet_name}"
+  key_vault_name               = "${var.key_vault_name}"
+  domain                       = "${var.dns_domain}"
+  tls_pfx_certificate          = "${var.certificate_path}"
+  tls_pfx_certificate_password = "${var.certificate_pass}"
 }
+```
 
+### outputs.tf
+
+```hcl
 output "tfe_cluster" {
   value = {
     application_endpoint         = "${module.tfe_cluster.application_endpoint}"
-    application_health_check     = "${module.tfe_cluster.health_check_endpoint}"
+    application_health_check     = "${module.tfe_cluster.application_health_check}"
     install_id                   = "${module.tfe_cluster.install_id}"
-    installer_dashboard_endpoint = "${module.tfe_cluster.console_endpoint}"
-    installer_dashboard_password = "${module.tfe_cluster.admin_console_password}"
+    installer_dashboard_endpoint = "${module.tfe_cluster.installer_dashboard_endpoint}"
+    installer_dashboard_password = "${module.tfe_cluster.installer_dashboard_password}"
     primary_public_ip            = "${module.tfe_cluster.primary_public_ip}"
     ssh_config_file              = "${module.tfe_cluster.ssh_config_file}"
     ssh_private_key              = "${module.tfe_cluster.ssh_private_key}"

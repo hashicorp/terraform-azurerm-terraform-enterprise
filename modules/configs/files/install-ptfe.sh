@@ -2,7 +2,6 @@
 
 set -e -u -o pipefail
 
-
 ### Set proxy variables, if needed.
 if [ -s /etc/ptfe/proxy-url ]; then
   http_proxy=$(cat /etc/ptfe/proxy-url)
@@ -10,8 +9,6 @@ if [ -s /etc/ptfe/proxy-url ]; then
   export http_proxy
   export https_proxy
   export no_proxy=10.0.0.0/8,127.0.0.1,169.254.169.254
-else
-  no_proxy=""
 fi
 
 ### Decide on distribution specific things
@@ -22,9 +19,11 @@ if [ -f /etc/redhat-release ]; then
   mkdir -p /lib/tc
   mount --bind /usr/lib64/tc/ /lib/tc/
   sed -i -e 's/^SELINUX=enforcing/SELINUX=permissive/' /etc/sysconfig/selinux
-  yum -y install docker wget chrony ipvsadm unzip
-  curl -sfSL -o /usr/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
-  chmod +x /usr/bin/jq
+  sed -i -e '/rhui-REGION-rhel-server-extras/,/^$/s/enabled=0/enabled=1/g'  /etc/yum.repos.d/redhat-rhui.repo
+  yum -y install docker wget jq chrony ipvsadm unzip
+  # remove after testing rhui?
+  # curl -sfSL -o /usr/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+  # chmod +x /usr/bin/jq
   systemctl enable docker
   systemctl start docker
 else
@@ -52,6 +51,7 @@ popd
 role="$(cat /etc/ptfe/role)"
 export role
 
+
 if [ "x${role}x" == "xmainx" ]; then
   # Get the tls certs set up.
   cert_thumbprint=$(cat /etc/ptfe/cert_thumbprint)
@@ -67,12 +67,29 @@ airgap_installer_url_path="/etc/ptfe/airgap-installer-url"
 weave_cidr="/etc/ptfe/weave-cidr"
 repl_cidr="/etc/ptfe/repl-cidr"
 
+
+
+
+
+health_url="$(cat /etc/ptfe/health-url)"
+
 ptfe_install_args=(
     -DD
     "--bootstrap-token=$(cat /etc/ptfe/bootstrap-token)" \
     "--cluster-api-endpoint=$(cat /etc/ptfe/cluster-api-endpoint)" \
-    --health-url "$(cat /etc/ptfe/health-url)"
+    --health-url "$health_url"
+    --assistant-host "$(cat /etc/ptfe/assistant-host)"
+    --assistant-token "$(cat /etc/ptfe/assistant-token)"
 )
+
+role_id=0
+
+if test -e /etc/ptfe/role-id; then
+    role_id="$(cat /etc/ptfe/role-id)"
+    ptfe_install_args+=(
+        --role-id "$role_id"
+    )
+fi
 
 if [ "x${role}x" == "xmainx" ]; then
     verb="setup"
@@ -83,23 +100,23 @@ if [ "x${role}x" == "xmainx" ]; then
         "--public-address=${public_ip}"
         --cluster
         "--auth-token=@/etc/ptfe/setup-token"
-        "--additional-no-proxy=$no_proxy"
     )
 
-    #
+    if [ -s /etc/ptfe/proxy-url ]; then
+        ptfe_install_args+=(
+            "--additional-no-proxy=$no_proxy"
+        )
+    fi
     # If we are airgapping, then set the arguments needed for Replicated.
     # We also setup the replicated.conf.tmpl to include the path to the downloaded
     # airgap file.
     if test -e "$airgap_url_path"; then
         mkdir -p /var/lib/ptfe
         pushd /var/lib/ptfe
-        curl -sfSL -o /var/lib/ptfe/ptfe.airgap "$(< "$airgap_url_path")"
-        curl -sfSL -o /var/lib/ptfe/replicated.tar.gz "$(< "$airgap_installer_url_path")"
+        airgap_url="$(< "$airgap_url_path")"
+        echo "Downloading airgap package from $airgap_url"
+        ptfe util download "$airgap_url" /var/lib/ptfe/ptfe.airgap
         popd
-
-        ptfe_install_args+=(
-            --airgap-installer /var/lib/ptfe/replicated.tar.gz
-        )
     fi
 
     if test -e "$weave_cidr"; then
@@ -124,9 +141,9 @@ if [ "x${role}x" == "xmainx" ]; then
       ca_tmp_dir="/tmp/ptfe-customer-certs"
       replicated_conf_file="replicated-ptfe.conf"
       local_messages_file="local_messages.log"
-      # Setting up a tmp directory to do this `jq` transform to leave artifacts if anything goes "boom".
+      # Setting up a tmp directory to do this `jq` transform to leave artifacts if anything goes "boom",
       # since we're trusting user input to be both a working URL and a valid certificate.
-      # These artifacts will live in /tmp/ptfe-customer-certs/{local_messages.log,wget_output.log} files.
+      # These artifacts will live in /tmp/ptfe/customer-certs/{local_messages.log,wget_output.log} files.
       mkdir -p "${ca_tmp_dir}"
       pushd "${ca_tmp_dir}"
       touch ${local_messages_file}
@@ -164,12 +181,16 @@ if [ "x${role}x" == "xmainx" ]; then
 
       popd
     fi
+else
+    # We do this before continuing so that the airgap_installer_url can reference
+    # the internal load balancer and retrieve files from the primary
+    echo "Waiting for cluster to start before continuing..."
+    ptfe install join --role-id "$role_id" --health-url "$health_url" --wait-for-cluster
 fi
 
 if [ "x${role}x" != "xsecondaryx" ]; then
     ptfe_install_args+=(
         --primary-pki-url "$(cat /etc/ptfe/primary-pki-url)"
-        --role-id "$(cat /etc/ptfe/role-id)"
     )
 fi
 
@@ -186,6 +207,18 @@ if [ "x${role}x" == "xsecondaryx" ]; then
     export verb
 fi
 
+if test -e "$airgap_installer_url_path"; then
+    mkdir -p /var/lib/ptfe
+    pushd /var/lib/ptfe
+    airgap_installer_url="$(< "$airgap_installer_url_path")"
+    echo "Downloading airgap installer from $airgap_installer_url"
+    ptfe util download "$airgap_installer_url" /var/lib/ptfe/replicated.tar.gz
+    popd
 
+    ptfe_install_args+=(
+        --airgap-installer /var/lib/ptfe/replicated.tar.gz
+    )
+fi
 
+echo "Running 'ptfe install $verb"  "${ptfe_install_args[@]}" "''"
 ptfe install $verb "${ptfe_install_args[@]}"
