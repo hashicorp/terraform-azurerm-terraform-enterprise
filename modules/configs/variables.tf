@@ -100,8 +100,6 @@ variable "ca_bundle_url" {
 locals {
   install_mode = "${var.azure_es["enable"] == "True" ? "es" : ""}"
   is_airgap    = "${var.airgap["enable"] == "True" ? "True" : "False"}"
-
-  app_hostname = ""
 }
 
 resource "random_pet" "console_password" {
