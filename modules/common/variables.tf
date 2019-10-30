@@ -57,7 +57,6 @@ locals {
 
   ssh_public_key_path     = "${path.root}/work"
   key_name                = "${var.resource_prefix}-${var.install_id}"
-  public_key_filename     = "${local.ssh_public_key_path}/${local.key_name}.pub"
   private_key_filename    = "${local.ssh_public_key_path}/${local.key_name}.priv"
   prefix                  = "${var.resource_prefix}-${var.install_id}"
   rendered_kv_rg_name     = "${coalesce(var.key_vault["rg_name"], var.rg_name)}"
