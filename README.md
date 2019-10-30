@@ -19,6 +19,15 @@ Please contact your Technical Account Manager for more information, and support 
 
 ---
 
+## Network Configuration
+
+These modules presume there is an existing Virtual Network and Network Security Group to use. The Network Security Group must have at a minimum the following configuration:
+
+* Allow inbound port 6443 between all nodes of the TFE cluster and the load balancer
+* Allow inbound port 23010 between all nodes of the TFE cluster and the load balancer
+* Allow inbound port 8800 from your operator network (could be the public internet) to allow for access to the operator dashboard
+* Allow inbound port 443 to access the TFE application itself
+
 ## Examples
 
 Please see the [examples directory](https://github.com/hashicorp/terraform-azurerm-terraform-enterprise/tree/master/examples/) for more extensive examples.
