@@ -10,11 +10,12 @@ jobs:
   docgen:
     name: DocGen
     runs-on: ubuntu-latest
-
+  
     steps:
-    - name: Build new docs
-      run: make docs
-    - name: Push docs to PR
-      run: make push-docs
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v1
+      - name: Build new docs
+        run: make docs
+      - name: Push docs to PR
+        run: make push-docs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
