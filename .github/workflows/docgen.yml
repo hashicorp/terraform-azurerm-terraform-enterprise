@@ -16,3 +16,5 @@ jobs:
       run: make docs
     - name: Push docs to PR
       run: make push-docs
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -37,3 +37,5 @@ jobs:
       - run:
           name: init configs and check if valid
           command: terraform init && terraform validate
+          
+    
