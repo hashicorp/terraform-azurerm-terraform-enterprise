@@ -1,0 +1,15 @@
+name: DocGen
+on:
+  pull_request:
+    paths:
+      - **/variables.tf
+      - **/outputs.tf
+jobs:
+  docgen:
+    name: DocGen
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Docs
+        run: make docs
+      - name: Push Docs
+        run: make push-docs
