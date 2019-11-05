@@ -120,12 +120,6 @@ variable "encryption_password" {
   default     = ""
 }
 
-variable "external_services" {
-  type        = "string"
-  description = "mode to install ('True' or 'False') False will put the cluster in a Demo mode."
-  default     = "False"
-}
-
 variable "http_proxy_url" {
   type        = "string"
   description = "HTTP(S) Proxy URL"
