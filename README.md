@@ -33,7 +33,7 @@ Please see the [examples directory](https://github.com/hashicorp/terraform-azure
 
 ## Inputs
 
-Please see the [inputs documentation](https://registry.terraform.io/modules/hashicorp/terraform-enterprise/azurerm?tab=inputs)
+Please see the [inputs documentation](https://registry.terraform.io/modules/hashicorp/terraform-enterprise/azurerm/?tab=inputs)
 
 Repository versions of the inputs documentation can be found in [docs/inputs.md](docs/inputs.md)
 
