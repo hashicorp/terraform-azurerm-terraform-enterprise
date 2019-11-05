@@ -78,7 +78,7 @@ module "configs" {
   }
 
   azure_es = {
-    enable       = "${var.external_services}"
+    enable       = "${var.postgresql_database == "" ? False : True}"
     account_name = "${var.azure_es_account_name}"
     account_key  = "${var.azure_es_account_key}"
     container    = "${var.azure_es_container}"
@@ -98,7 +98,7 @@ module "primaries" {
   location          = "${module.common.rg_location}"
   subnet_id         = "${module.common.app_subnet_id}"
   resource_prefix   = "${var.resource_prefix}"
-  external_services = "${var.external_services}"
+  external_services = "${var.postgresql_database == "" ? False : True}"
 
   username                = "${var.ssh_user}"
   os_disk_size            = "${var.os_disk_size}"
