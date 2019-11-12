@@ -5,6 +5,7 @@ module "common" {
   vnet_name       = "${var.virtual_network_name}"
   subnet_name     = "${var.subnet}"
   resource_prefix = "${var.resource_prefix}"
+  additional_tags = "${var.additional_tags}"
 
   key_type = "${var.tls_pfx_certificate_key_type}"
   key_size = "${var.tls_pfx_certificate_key_size}"
@@ -30,6 +31,7 @@ module "cluster_lb" {
   rg_name         = "${module.common.rg_name}"
   location        = "${module.common.rg_location}"
   resource_prefix = "${var.resource_prefix}"
+  additional_tags = "${var.additional_tags}"
 
   dns = {
     domain  = "${var.domain}"
@@ -63,6 +65,7 @@ module "configs" {
   weave_cidr           = "${var.weave_cidr}"
   repl_cidr            = "${var.repl_cidr}"
   release_sequence     = "${var.release_sequence}"
+  additional_tags      = "${var.additional_tags}"
 
   iact = {
     subnet_list       = "${var.iact_subnet_list}"
@@ -99,6 +102,7 @@ module "primaries" {
   subnet_id         = "${module.common.app_subnet_id}"
   resource_prefix   = "${var.resource_prefix}"
   external_services = "${var.postgresql_database == "" ? "False" : "True"}"
+  additional_tags              = "${var.additional_tags}"
 
   username                = "${var.ssh_user}"
   os_disk_size            = "${var.os_disk_size}"
@@ -134,6 +138,7 @@ module "secondaries" {
   cloud_init_data = "${module.configs.secondary_cloud_init}"
   username        = "${var.ssh_user}"
   resource_prefix = "${var.resource_prefix}"
+  additional_tags            = "${var.additional_tags}"
 
   vm = {
     size      = "${local.rendered_secondary_vm_size}"

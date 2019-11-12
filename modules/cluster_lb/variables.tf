@@ -41,11 +41,22 @@ variable "lb_probe_unhealthy_threshold" {
   description = "The amount of unhealthy checks before marking a node unhealthy."
 }
 
+variable "additional_tags" {
+  type        = "map"
+  description = "A map of additional tags to attach to all resources created."
+  default     = {}
+}
+
 # ============================================================ MISC
 
 # LB resource names
 
 locals {
-  prefix   = "${var.resource_prefix}-${var.install_id}"
-  frontend = "${local.prefix}-fe"
+  prefix        = "${var.resource_prefix}-${var.install_id}"
+  frontend      = "${local.prefix}-fe"
+  default_tags  = {
+    Application = "Terraform Enterprise"
+  }
+  tags          = "${merge(local.default_tags, var.additional_tags)}"
 }
+

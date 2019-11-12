@@ -261,3 +261,9 @@ variable "repl_cidr" {
   description = "Specify a non-standard CIDR range for the replicated services. The default is 10.96.0.0/12"
   default     = ""
 }
+
+variable "additional_tags" {
+  type        = "map"
+  description = "A map of additional tags to attach to all resources created."
+  default     = {}
+}

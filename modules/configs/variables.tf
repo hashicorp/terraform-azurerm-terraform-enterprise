@@ -95,6 +95,12 @@ variable "ca_bundle_url" {
   description = "URL to CA certificate file used for the internal `ptfe-proxy` used for outgoing connections"
 }
 
+variable "additional_tags" {
+  type        = "map"
+  description = "A map of additional tags to attach to all resources created."
+  default     = {}
+}
+
 # === Misc
 
 locals {
