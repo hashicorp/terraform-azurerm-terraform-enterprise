@@ -20,18 +20,25 @@ variable "subnet_name" {
   description = "The Azure Virtual Network Subnet to build into"
 }
 
-variable "dns" {
-  type        = map(string)
-  description = "Expects key: [rg_name]"
+variable "domain_rg_name" {
+  type        = string
+  description = "Resource group of the DNS zone"
+  default     = ""
 }
 
 variable "key_vault" {
-  type        = map(string)
+  type = object({
+    name    = string
+    rg_name = string
+  })
   description = "Expects keys: [name, rg_name] (key_vault name and Azure resource group that key vault resides in.)"
 }
 
 variable "tls" {
-  type        = map(string)
+  type = object({
+    pfx_cert    = string
+    pfx_cert_pw = string
+  })
   description = "Expects keys: [pfx_cert, pfx_cert_pw] (the path to a pfx certificate for the dns zone, the password for that certificate)"
 }
 
@@ -60,6 +67,6 @@ locals {
   private_key_filename    = "${local.ssh_public_key_path}/${local.key_name}.priv"
   prefix                  = "${var.resource_prefix}-${var.install_id}"
   rendered_kv_rg_name     = coalesce(var.key_vault["rg_name"], var.rg_name)
-  rendered_domain_rg_name = coalesce(var.dns["rg_name"], var.rg_name)
+  rendered_domain_rg_name = coalesce(var.domain_rg_name, var.rg_name)
 }
 

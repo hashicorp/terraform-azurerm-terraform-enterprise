@@ -41,22 +41,36 @@ variable "cloud_init_data_list" {
 }
 
 variable "storage_image" {
-  type        = map(string)
+  type = object({
+    publisher = string
+    offer     = string
+    sku       = string
+    version   = string
+  })
   description = "Expects keys: [publisher, offer, sku, version]"
 }
 
 variable "vm" {
-  type        = map(string)
+  type = object({
+    count = number
+    size  = string
+  })
   description = "Expects keys: [count, size]"
 }
 
 variable "ssh" {
-  type        = map(string)
+  type = object({
+    public_key       = string
+    private_key_path = string
+  })
   description = "Expects keys: [public_key, private_key_path]"
 }
 
 variable "key_vault" {
-  type        = map(string)
+  type = object({
+    id       = string
+    cert_uri = string
+  })
   description = "Expects keys: [id, cert_uri]"
 }
 

@@ -26,7 +26,7 @@ data "template_file" "replicated_ptfe_config" {
     installation_mode      = local.install_mode
     app_endpoint           = var.cluster_endpoint
     enc_password           = local.encryption_password
-    iact_subnet_list       = var.iact["subnet_list"]
+    iact_subnet_list       = join(",", var.iact["subnet_list"])
     iact_subnet_time_limit = var.iact["subnet_time_limit"]
     pg_user                = var.postgresql["user"]
     pg_password            = var.postgresql["password"]

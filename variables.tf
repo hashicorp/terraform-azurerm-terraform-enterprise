@@ -61,9 +61,9 @@ variable "airgap_installer_url" {
 }
 
 variable "airgap_mode_enable" {
-  type        = string
+  type        = bool
   description = "install in airgap mode"
-  default     = "False"
+  default     = false
 }
 
 variable "airgap_package_url" {
@@ -127,9 +127,9 @@ variable "http_proxy_url" {
 }
 
 variable "iact_subnet_list" {
-  type        = string
-  description = "IP Cidr Mask to allow to access Initial Admin Creation Token (IACT) API. [Terraform Docs](https://www.terraform.io/docs/enterprise/private/automating-initial-user.html)"
-  default     = ""
+  type        = list(string)
+  description = "List of IP Cidr Mask to allow to access Initial Admin Creation Token (IACT) API. [Terraform Docs](https://www.terraform.io/docs/enterprise/private/automating-initial-user.html)"
+  default     = []
 }
 
 variable "iact_subnet_time_limit" {
@@ -223,7 +223,12 @@ variable "ssh_user" {
 }
 
 variable "storage_image" {
-  type        = map(string)
+  type = object({
+    publisher = string
+    offer     = string
+    sku       = string
+    version   = string
+  })
   description = "A list of the data to define the os version image to build from"
 
   default = {

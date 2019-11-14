@@ -36,12 +36,20 @@ variable "cloud_init_data" {
 }
 
 variable "storage_image" {
-  type        = map(string)
+  type = object({
+    publisher = string
+    offer     = string
+    sku       = string
+    version   = string
+  })
   description = "Expects keys: [publisher, offer, sku, version]"
 }
 
 variable "vm" {
-  type        = map(string)
+  type = object({
+    count = number
+    size  = string
+  })
   description = "Expects keys: [size, count, size_tier]"
 }
 

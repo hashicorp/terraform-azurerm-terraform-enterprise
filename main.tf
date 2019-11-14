@@ -9,9 +9,7 @@ module "common" {
   key_type = var.tls_pfx_certificate_key_type
   key_size = var.tls_pfx_certificate_key_size
 
-  dns = {
-    rg_name = var.domain_resource_group_name
-  }
+  domain_rg_name = var.domain_resource_group_name
 
   key_vault = {
     name    = var.key_vault_name
@@ -78,7 +76,7 @@ module "configs" {
   }
 
   azure_es = {
-    enable       = var.postgresql_database == "" ? "False" : "True"
+    enable       = var.postgresql_database == "" ? true : false
     account_name = var.azure_es_account_name
     account_key  = var.azure_es_account_key
     container    = var.azure_es_container
@@ -118,7 +116,7 @@ module "primaries" {
 
   # We are hardcoding the primary count to 3 for the initial release for stability.
   vm = {
-    count = "3"
+    count = 3
     size  = var.primary_vm_size
   }
 }

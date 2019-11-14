@@ -16,7 +16,11 @@ variable "rg_name" {
 }
 
 variable "dns" {
-  type        = map(string)
+  type = object({
+    domain  = string
+    rg_name = string
+    ttl     = number
+  })
   description = "Expects keys: [domain, rg_name, ttl]"
 }
 

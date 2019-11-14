@@ -55,22 +55,40 @@ variable "import_key" {
 }
 
 variable "iact" {
-  type        = map(string)
+  type = object({
+    subnet_list       = list(string)
+    subnet_time_limit = string
+  })
   description = "Expects keys: [subnet_list, subnet_time_limit]"
 }
 
 variable "postgresql" {
-  type        = map(string)
+  type = object({
+    user         = string
+    password     = string
+    address      = string
+    database     = string
+    extra_params = string
+  })
   description = "Expects keys: [user, password, address, database, extra_params]"
 }
 
 variable "azure_es" {
-  type        = map(string)
+  type = object({
+    enable       = bool
+    account_name = string
+    account_key  = string
+    container    = string
+  })
   description = "Expects keys: [enable, account_name, account_key, container]"
 }
 
 variable "airgap" {
-  type        = map(string)
+  type = object({
+    enable        = bool
+    package_url   = string
+    installer_url = string
+  })
   description = "Expects keys: [enable, package_url, installer_url]"
 }
 
