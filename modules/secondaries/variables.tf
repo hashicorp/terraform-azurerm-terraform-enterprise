@@ -47,8 +47,9 @@ variable "storage_image" {
 
 variable "vm" {
   type = object({
-    count = number
-    size  = string
+    count     = number
+    size      = string
+    size_tier = string
   })
   description = "Expects keys: [size, count, size_tier]"
 }
