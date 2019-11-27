@@ -23,7 +23,6 @@
 | dns\_ttl | The TTL for dns records. | string | `"120"` | no |
 | domain\_resource\_group\_name | The name of the resource group where the domain name resides, if not set the main resource group will be used. | string | `""` | no |
 | encryption\_password | The password for data encryption in non-external services modes. | string | `""` | no |
-| external\_services | mode to install ('True' or 'False') False will put the cluster in a Demo mode. | string | `"False"` | no |
 | http\_proxy\_url | HTTP(S) Proxy URL | string | `""` | no |
 | iact\_subnet\_list | IP Cidr Mask to allow to access Initial Admin Creation Token (IACT) API. [Terraform Docs](https://www.terraform.io/docs/enterprise/private/automating-initial-user.html) | string | `""` | no |
 | iact\_subnet\_time\_limit | Amount of time to allow access to IACT API after initial boot | string | `""` | no |
