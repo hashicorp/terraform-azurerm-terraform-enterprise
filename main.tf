@@ -102,7 +102,7 @@ module "primaries" {
   subnet_id         = "${module.common.app_subnet_id}"
   resource_prefix   = "${var.resource_prefix}"
   external_services = "${var.postgresql_database == "" ? "False" : "True"}"
-  additional_tags              = "${var.additional_tags}"
+  additional_tags   = "${var.additional_tags}"
 
   username                = "${var.ssh_user}"
   os_disk_size            = "${var.os_disk_size}"
@@ -138,7 +138,7 @@ module "secondaries" {
   cloud_init_data = "${module.configs.secondary_cloud_init}"
   username        = "${var.ssh_user}"
   resource_prefix = "${var.resource_prefix}"
-  additional_tags            = "${var.additional_tags}"
+  additional_tags = "${var.additional_tags}"
 
   vm = {
     size      = "${local.rendered_secondary_vm_size}"
