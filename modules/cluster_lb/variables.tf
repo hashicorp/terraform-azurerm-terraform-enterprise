@@ -52,11 +52,12 @@ variable "additional_tags" {
 # LB resource names
 
 locals {
-  prefix        = "${var.resource_prefix}-${var.install_id}"
-  frontend      = "${local.prefix}-fe"
-  default_tags  = {
+  prefix   = "${var.resource_prefix}-${var.install_id}"
+  frontend = "${local.prefix}-fe"
+
+  default_tags = {
     Application = "Terraform Enterprise"
   }
-  tags          = "${merge(local.default_tags, var.additional_tags)}"
-}
 
+  tags = "${merge(local.default_tags, var.additional_tags)}"
+}

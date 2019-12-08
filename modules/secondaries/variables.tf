@@ -62,8 +62,10 @@ variable "additional_tags" {
 
 locals {
   prefix = "${var.resource_prefix}-${var.install_id}"
+
   default_tags = {
     Application = "Terraform Enterprise"
   }
+
   tags = "${merge(local.default_tags, var.additional_tags)}"
 }
