@@ -20,3 +20,4 @@ resource "azurerm_dns_a_record" "application" {
   records             = ["${azurerm_public_ip.azlb.ip_address}"]
   tags                = "${local.tags}"
 }
+
