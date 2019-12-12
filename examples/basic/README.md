@@ -1,6 +1,6 @@
 # Terraform Enterprise with Clustering - Basic example
 
-This is a basic example of how to set up the configurations to use this module. Please see the [inputs page](https://registry.terraform.io/modules/terraform-enterprise/azurerm/?tab=inputs) for more details on usage.
+This is a basic example of how to set up the configurations to use this module. Please see the [inputs page](https://registry.terraform.io/modules/hashicorp/terraform-enterprise/azurerm?tab=inputs) for more details on usage.
 
 ## Prerequisites
 
