@@ -47,14 +47,20 @@ variable "additional_tags" {
   default     = {}
 }
 
+variable "hostname" {
+  default     = ""
+  description = "hostname for loadbalancer front end to use"
+}
+
 # ============================================================ MISC
 
 # LB resource names
 
 locals {
-  prefix   = "${var.resource_prefix}-${var.install_id}"
-  frontend = "${local.prefix}-fe"
-
+  prefix             = "${var.resource_prefix}-${var.install_id}"
+  frontend           = "${local.prefix}-fe"
+  frontened_hostname = "${var.hostname != "" ? var.hostname : local.prefix }"
+  
   default_tags = {
     Application = "Terraform Enterprise"
   }

@@ -120,6 +120,11 @@ variable "encryption_password" {
   default     = ""
 }
 
+variable "hostname" {
+  description = "Hostname for loadbalancer frontend to use, otherwise will default to 'tfe-$install_id.domain.com'"
+  default     = ""
+}
+
 variable "http_proxy_url" {
   type        = "string"
   description = "HTTP(S) Proxy URL"

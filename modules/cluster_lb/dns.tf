@@ -13,7 +13,7 @@ resource "azurerm_dns_a_record" "api" {
 }
 
 resource "azurerm_dns_a_record" "application" {
-  name                = "${local.prefix}"
+  name                = "${local.frontened_hostname}"
   zone_name           = "${data.azurerm_dns_zone.selected.name}"
   resource_group_name = "${var.dns["rg_name"]}"
   ttl                 = "${var.dns["ttl"]}"
