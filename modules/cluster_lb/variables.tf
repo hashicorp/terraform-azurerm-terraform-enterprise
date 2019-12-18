@@ -60,7 +60,7 @@ locals {
   prefix             = "${var.resource_prefix}-${var.install_id}"
   frontend           = "${local.prefix}-fe"
   frontened_hostname = "${var.hostname != "" ? var.hostname : local.prefix }"
-  
+
   default_tags = {
     Application = "Terraform Enterprise"
   }
