@@ -20,7 +20,7 @@ variable "cluster_api_endpoint" {
 }
 
 variable "cluster_hostname" {
-  type        = string
+  type        = "string"
   description = "The hostname of the TFE application. Example: tfe.company.com"
 }
 
