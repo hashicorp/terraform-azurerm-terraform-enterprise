@@ -9,6 +9,7 @@ resource "azurerm_dns_a_record" "api" {
   resource_group_name = "${var.dns["rg_name"]}"
   ttl                 = "${var.dns["ttl"]}"
   records             = ["${azurerm_public_ip.azlb.ip_address}"]
+  tags                = "${local.tags}"
 }
 
 resource "azurerm_dns_a_record" "application" {
@@ -17,4 +18,5 @@ resource "azurerm_dns_a_record" "application" {
   resource_group_name = "${var.dns["rg_name"]}"
   ttl                 = "${var.dns["ttl"]}"
   records             = ["${azurerm_public_ip.azlb.ip_address}"]
+  tags                = "${local.tags}"
 }
