@@ -7,12 +7,9 @@ resource "azurerm_public_ip" "primary" {
   resource_group_name = "${var.rg_name}"
   allocation_method   = "Static"
   sku                 = "Standard"
+  tags                = "${local.tags}"
 
   lifecycle {
     create_before_destroy = true
-  }
-
-  tags = {
-    "Name" = "${local.prefix}"
   }
 }

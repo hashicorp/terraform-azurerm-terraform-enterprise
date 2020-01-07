@@ -41,6 +41,12 @@ variable "lb_probe_unhealthy_threshold" {
   description = "The amount of unhealthy checks before marking a node unhealthy."
 }
 
+variable "additional_tags" {
+  type        = "map"
+  description = "A map of additional tags to attach to all resources created."
+  default     = {}
+}
+
 variable "hostname" {
   default     = ""
   description = "hostname for loadbalancer front end to use"
@@ -54,4 +60,10 @@ locals {
   prefix             = "${var.resource_prefix}-${var.install_id}"
   frontend           = "${local.prefix}-fe"
   frontened_hostname = "${var.hostname != "" ? var.hostname : local.prefix }"
+
+  default_tags = {
+    Application = "Terraform Enterprise"
+  }
+
+  tags = "${merge(local.default_tags, var.additional_tags)}"
 }
