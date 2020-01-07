@@ -55,7 +55,7 @@ module "configs" {
   license_file         = "${var.license_file}"
   cluster_endpoint     = "${module.cluster_lb.public_ip_address}"
   cluster_api_endpoint = "${module.cluster_lb.public_ip_address}"
-  cluster_hostname     = "${var.resource_prefix}-${random_string.install_id.result}.${var.domain}"
+  cluster_hostname     = "${local.cluster_hostname}"
   distribution         = "${var.distribution}"
   encryption_password  = "${var.encryption_password}"
   cert_thumbprint      = "${module.common.cert_thumbprint}"
