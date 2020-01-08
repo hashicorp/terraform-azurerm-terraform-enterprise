@@ -272,3 +272,8 @@ variable "additional_tags" {
   description = "A map of additional tags to attach to all resources created."
   default     = {}
 }
+
+locals {
+  prefix           = "${var.resource_prefix}-${random_string.install_id.result}"
+  cluster_hostname = "${coalesce(var.hostname, local.prefix)}.${var.domain}"
+}

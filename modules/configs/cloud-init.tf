@@ -10,7 +10,7 @@ data "template_file" "replicated_config" {
     airgap            = "${local.is_airgap}"
     proxy_url         = "${var.http_proxy_url}"
     console_password  = "${random_pet.console_password.id}"
-    app_endpoint      = "${var.cluster_endpoint}"
+    app_endpoint      = "${var.cluster_hostname}"
     release_sequence  = "${var.release_sequence}"
   }
 }
@@ -21,7 +21,7 @@ data "template_file" "replicated_ptfe_config" {
   vars = {
     airgap                 = "${local.is_airgap}"
     installation_mode      = "${local.install_mode}"
-    app_endpoint           = "${var.cluster_endpoint}"
+    app_endpoint           = "${var.cluster_hostname}"
     enc_password           = "${local.encryption_password}"
     iact_subnet_list       = "${var.iact["subnet_list"]}"
     iact_subnet_time_limit = "${var.iact["subnet_time_limit"]}"
@@ -72,7 +72,7 @@ data "template_file" "cloud_config" {
     rptfeconf            = "${base64encode(data.template_file.replicated_ptfe_config.rendered)}"
     replconf             = "${base64encode(data.template_file.replicated_config.rendered)}"
     install_ptfe_sh      = "${base64encode(file("${path.module}/files/install-ptfe.sh"))}"
-    role                 = "${ count.index == 0 ? "main" : "primary" }"
+    role                 = "${count.index == 0 ? "main" : "primary"}"
     cluster_api_endpoint = "${var.cluster_api_endpoint}:6443"
     assistant_host       = "http://${var.cluster_api_endpoint}:${var.assistant_port}"
     cert_thumbprint      = "${var.cert_thumbprint}"

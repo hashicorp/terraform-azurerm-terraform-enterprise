@@ -19,6 +19,11 @@ variable "cluster_api_endpoint" {
   description = "URI to the cluster api"
 }
 
+variable "cluster_hostname" {
+  type        = "string"
+  description = "The hostname of the TFE application. Example: tfe.company.com"
+}
+
 variable "distribution" {
   type        = "string"
   description = "Type of linux distribution to use. (ubuntu or rhel)"
