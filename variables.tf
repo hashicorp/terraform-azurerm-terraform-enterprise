@@ -274,6 +274,6 @@ variable "additional_tags" {
 }
 
 locals {
-  prefix           = "${var.resource_prefix}-${var.install_id}"
+  prefix           = "${var.resource_prefix}-${random_string.install_id.result}"
   cluster_hostname = "${coalesce(var.hostname, local.prefix)}.${var.domain}"
 }
