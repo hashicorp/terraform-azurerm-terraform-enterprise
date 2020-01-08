@@ -1,6 +1,5 @@
 module "common" {
   source          = "./modules/common"
-  
   install_id      = random_string.install_id.result
   rg_name         = var.resource_group_name
   vnet_name       = var.virtual_network_name
@@ -26,7 +25,6 @@ module "common" {
 
 module "cluster_lb" {
   source          = "./modules/cluster_lb"
-
   install_id      = random_string.install_id.result
   rg_name         = module.common.rg_name
   location        = module.common.rg_location
@@ -98,7 +96,6 @@ module "configs" {
 
 module "primaries" {
   source            = "./modules/primaries"
-
   install_id        = random_string.install_id.result
   rg_name           = module.common.rg_name
   location          = module.common.rg_location
@@ -132,7 +129,6 @@ module "primaries" {
 
 module "secondaries" {
   source          = "./modules/secondaries"
-
   install_id      = random_string.install_id.result
   rg_name         = module.common.rg_name
   location        = module.common.rg_location
