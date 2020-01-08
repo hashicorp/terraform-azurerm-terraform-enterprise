@@ -84,15 +84,26 @@ variable "external_services" {
   description = "Boolean string for whether or not to install in Internal Production Mode or External Services Mode"
 }
 
+# ============================================================ OPTIONAL
+
+variable "additional_tags" {
+  type        = "map"
+  description = "A map of additional tags to attach to all resources created."
+  default     = {}
+}
+
 # ============================================================ MISC
 
 locals {
-  prefix = "${var.resource_prefix}-${var.install_id}-primary"
-
-  ip_conf_name = "${local.prefix}-ip-conf"
-
+  prefix          = "${var.resource_prefix}-${var.install_id}-primary"
+  ip_conf_name    = "${local.prefix}-ip-conf"
   ssh_config_path = "${path.root}/work/ssh_config"
+  install_type    = var.external_services == "True" ? "es" : "ipm"
+  
+  default_tags = {
+    Application = "Terraform Enterprise"
+  }
 
-  install_type = var.external_services == "True" ? "es" : "ipm"
+  tags = merge(local.default_tags, var.additional_tags)
 }
 

@@ -9,6 +9,7 @@ resource "azurerm_virtual_machine" "primary" {
   location                     = var.location
   vm_size                      = var.vm["size"]
   primary_network_interface_id = azurerm_network_interface.primary[count.index].id
+  tags                         = local.tags
 
   network_interface_ids         = [azurerm_network_interface.primary[count.index].id]
   delete_os_disk_on_termination = true
@@ -49,10 +50,6 @@ resource "azurerm_virtual_machine" "primary" {
     offer     = var.storage_image["offer"]
     sku       = var.storage_image["sku"]
     version   = var.storage_image["version"]
-  }
-
-  tags = {
-    "Name" = local.prefix
   }
 }
 

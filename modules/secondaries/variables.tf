@@ -59,9 +59,23 @@ variable "resource_prefix" {
   description = "Prefix name for resources"
 }
 
+#  ============================================================ OPTIONAL
+
+variable "additional_tags" {
+  type        = "map"
+  description = "A map of additional tags to attach to all resources created."
+  default     = {}
+}
+
 # === Misc
 
 locals {
   prefix = "${var.resource_prefix}-${var.install_id}"
+
+  default_tags = {
+    Application = "Terraform Enterprise"
+  }
+
+  tags = "${merge(local.default_tags, var.additional_tags)}"
 }
 

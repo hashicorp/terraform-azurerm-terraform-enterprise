@@ -20,6 +20,11 @@ variable "cluster_api_endpoint" {
   description = "URI to the cluster api"
 }
 
+variable "cluster_hostname" {
+  type        = "string"
+  description = "The hostname of the TFE application. Example: tfe.company.com"
+}
+
 variable "distribution" {
   type        = string
   description = "Type of linux distribution to use. (ubuntu or rhel)"
@@ -112,6 +117,12 @@ variable "release_sequence" {
 variable "ca_bundle_url" {
   type        = string
   description = "URL to CA certificate file used for the internal `ptfe-proxy` used for outgoing connections"
+}
+
+variable "additional_tags" {
+  type        = "map"
+  description = "A map of additional tags to attach to all resources created."
+  default     = {}
 }
 
 # === Misc

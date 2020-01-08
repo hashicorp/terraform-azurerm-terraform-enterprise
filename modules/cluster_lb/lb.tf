@@ -4,6 +4,7 @@ resource "azurerm_public_ip" "azlb" {
   resource_group_name = var.rg_name
   allocation_method   = "Static"
   sku                 = "Standard"
+  tags                = "${local.tags}"
 }
 
 resource "azurerm_lb" "azlb" {
@@ -11,6 +12,7 @@ resource "azurerm_lb" "azlb" {
   resource_group_name = var.rg_name
   location            = var.location
   sku                 = "Standard"
+  tags                = "${local.tags}"
 
   frontend_ip_configuration {
     name                          = local.frontend

@@ -120,6 +120,11 @@ variable "encryption_password" {
   default     = ""
 }
 
+variable "hostname" {
+  description = "Hostname for loadbalancer frontend to use, otherwise will default to 'tfe-$install_id.domain.com'"
+  default     = ""
+}
+
 variable "http_proxy_url" {
   type        = string
   description = "HTTP(S) Proxy URL"
@@ -269,3 +274,13 @@ variable "repl_cidr" {
   default     = ""
 }
 
+variable "additional_tags" {
+  type        = "map"
+  description = "A map of additional tags to attach to all resources created."
+  default     = {}
+}
+
+locals {
+  prefix           = "${var.resource_prefix}-${random_string.install_id.result}"
+  cluster_hostname = "${coalesce(var.hostname, local.prefix)}.${var.domain}"
+}

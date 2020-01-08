@@ -3,6 +3,7 @@ resource "azurerm_network_interface" "primary" {
   name                = "${local.prefix}-${count.index}"
   resource_group_name = var.rg_name
   location            = var.location
+  tags                = local.tags
 
   ip_configuration {
     name                          = local.ip_conf_name
@@ -10,10 +11,6 @@ resource "azurerm_network_interface" "primary" {
     public_ip_address_id          = element(azurerm_public_ip.primary.*.id, count.index)
     private_ip_address_allocation = "Dynamic"
     primary                       = true
-  }
-
-  tags = {
-    "Name" = local.prefix
   }
 }
 

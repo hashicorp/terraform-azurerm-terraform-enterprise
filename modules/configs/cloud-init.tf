@@ -13,7 +13,7 @@ data "template_file" "replicated_config" {
     airgap            = local.is_airgap
     proxy_url         = var.http_proxy_url
     console_password  = random_pet.console_password.id
-    app_endpoint      = var.cluster_endpoint
+    app_endpoint      = var.cluster_hostname
     release_sequence  = var.release_sequence
   }
 }
@@ -24,7 +24,7 @@ data "template_file" "replicated_ptfe_config" {
   vars = {
     airgap                 = local.is_airgap
     installation_mode      = local.install_mode
-    app_endpoint           = var.cluster_endpoint
+    app_endpoint           = var.cluster_hostname
     enc_password           = local.encryption_password
     iact_subnet_list       = join(",", var.iact["subnet_list"])
     iact_subnet_time_limit = var.iact["subnet_time_limit"]

@@ -4,6 +4,7 @@ resource "azurerm_virtual_machine_scale_set" "secondary" {
   resource_group_name = var.rg_name
   location            = var.location
   upgrade_policy_mode = "Manual"
+  tags                = "${local.tags}"
 
   storage_profile_image_reference {
     publisher = var.storage_image["publisher"]
@@ -48,10 +49,6 @@ resource "azurerm_virtual_machine_scale_set" "secondary" {
     create_option     = "FromImage"
     os_type           = "Linux"
     managed_disk_type = "StandardSSD_LRS"
-  }
-
-  tags = {
-    "Name" = local.prefix
   }
 }
 
