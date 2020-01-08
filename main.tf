@@ -51,8 +51,8 @@ module "configs" {
   source               = "./modules/configs"
   primary_count        = "3"
   license_file         = var.license_file
-  cluster_endpoint     = module.cluster_lb.app_endpoint_dns
-  cluster_api_endpoint = module.cluster_lb.lb_endpoint_dns
+  cluster_endpoint     = module.cluster_lb.public_ip_address
+  cluster_api_endpoint = module.cluster_lb.public_ip_address
   cluster_hostname     = local.cluster_hostname
   distribution         = var.distribution
   encryption_password  = var.encryption_password
