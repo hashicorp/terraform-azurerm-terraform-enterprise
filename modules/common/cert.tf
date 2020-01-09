@@ -1,16 +1,15 @@
 resource "azurerm_key_vault_certificate" "ptfe" {
   name         = "${local.prefix}-ssl-cert"
-  key_vault_id = "${data.azurerm_key_vault.selected.id}"
+  key_vault_id = data.azurerm_key_vault.selected.id
 
   certificate {
-    contents = "${base64encode(file(var.tls["pfx_cert"])) }"
-    password = "${var.tls["pfx_cert_pw"]}"
+    contents = filebase64(var.tls["pfx_cert"])
+    password = var.tls["pfx_cert_pw"]
   }
 
   certificate_policy {
     issuer_parameters {
       name = "Self"
-
       # ^ This is only cuz it's a self imported cert
       # It can be signed by a CA, it's just not integrated
       # into the key vault signing process.
@@ -18,8 +17,8 @@ resource "azurerm_key_vault_certificate" "ptfe" {
 
     key_properties {
       exportable = true
-      key_size   = "${var.key_size}"
-      key_type   = "${var.key_type}"
+      key_size   = var.key_size
+      key_type   = var.key_type
       reuse_key  = false
     }
 
@@ -28,3 +27,4 @@ resource "azurerm_key_vault_certificate" "ptfe" {
     }
   }
 }
+
