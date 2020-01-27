@@ -1,8 +1,11 @@
 module "common" {
-  source          = "./modules/common"
-  install_id      = random_string.install_id.result
-  rg_name         = var.resource_group_name
-  vnet_name       = var.virtual_network_name
+  source     = "./modules/common"
+  install_id = random_string.install_id.result
+  rg_name    = var.resource_group_name
+  vnet = {
+    name    = var.virtual_network_name
+    rg_name = var.virtual_network_resource_group_name
+  }
   subnet_name     = var.subnet
   resource_prefix = var.resource_prefix
   additional_tags = var.additional_tags

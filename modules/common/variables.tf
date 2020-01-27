@@ -10,9 +10,12 @@ variable "rg_name" {
   description = "The Azure Resource Group to build into"
 }
 
-variable "vnet_name" {
-  type        = string
-  description = "The Azure Virtual Network to build into"
+variable "vnet" {
+  type = object({
+    name    = string
+    rg_name = string
+  })
+  description = "Expects keys: [name, rg_name] (The Azure Virtual Network to build into and the resource group of the Virtual Network"
 }
 
 variable "subnet_name" {
@@ -75,6 +78,7 @@ locals {
   prefix                  = "${var.resource_prefix}-${var.install_id}"
   rendered_kv_rg_name     = coalesce(var.key_vault["rg_name"], var.rg_name)
   rendered_domain_rg_name = coalesce(var.domain_rg_name, var.rg_name)
+  rendered_vnet_rg_name   = coalesce(var.vnet["rg_name"], var.rg_name)
   
   default_tags = {
     Application = "Terraform Enterprise"
