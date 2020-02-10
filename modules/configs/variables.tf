@@ -84,8 +84,9 @@ variable "azure_es" {
     account_name = string
     account_key  = string
     container    = string
+    endpoint     = string
   })
-  description = "Expects keys: [enable, account_name, account_key, container]"
+  description = "Expects keys: [enable, account_name, account_key, container, endpoint]"
 }
 
 variable "airgap" {

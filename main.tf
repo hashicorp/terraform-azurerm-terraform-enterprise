@@ -88,6 +88,7 @@ module "configs" {
     account_name = var.azure_es_account_name
     account_key  = var.azure_es_account_key
     container    = var.azure_es_container
+    endpoint     = var.azure_es_endpoint
   }
 
   airgap = {

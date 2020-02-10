@@ -18,6 +18,7 @@
 | azure\_es\_account\_key | The Azure account key for external services | string | `""` | no |
 | azure\_es\_account\_name | The Azure account name for external services | string | `""` | no |
 | azure\_es\_container | The Azure container for external services | string | `""` | no |
+| azure\_es\_endpoint | The Azure endpoint for external services | string | `"core.windows.net"` | no |
 | ca\_bundle\_url | URL to Custom CA bundle used for outgoing connections | string | `""` | no |
 | distribution | Type of linux distribution to use. (ubuntu or rhel) | string | `"ubuntu"` | no |
 | dns\_ttl | The TTL for dns records. | string | `"120"` | no |

@@ -6,7 +6,7 @@
 |------|-------------|:----:|:-----:|:-----:|
 | airgap | Expects keys: [enable, package_url, installer_url] | map | n/a | yes |
 | assistant\_port | Port the assitant sidecar-like node service is running on. | string | n/a | yes |
-| azure\_es | Expects keys: [enable, account_name, account_key, container] | map | n/a | yes |
+| azure\_es | Expects keys: [enable, account_name, account_key, container, endpoint] | map | n/a | yes |
 | ca\_bundle\_url | URL to CA certificate file used for the internal `ptfe-proxy` used for outgoing connections | string | n/a | yes |
 | cert\_thumbprint | The thumbprint for the Azure Key Vault Certificate object generated from the provided PFX certificate. | string | n/a | yes |
 | cluster\_api\_endpoint | URI to the cluster api | string | n/a | yes |
