@@ -87,7 +87,7 @@ variable "external_services" {
 # ============================================================ OPTIONAL
 
 variable "additional_tags" {
-  type        = "map"
+  type        = map
   description = "A map of additional tags to attach to all resources created."
   default     = {}
 }
@@ -99,7 +99,7 @@ locals {
   ip_conf_name    = "${local.prefix}-ip-conf"
   ssh_config_path = "${path.root}/work/ssh_config"
   install_type    = var.external_services == "True" ? "es" : "ipm"
-  
+
   default_tags = {
     Application = "Terraform Enterprise"
   }
