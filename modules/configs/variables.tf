@@ -21,7 +21,7 @@ variable "cluster_api_endpoint" {
 }
 
 variable "cluster_hostname" {
-  type        = "string"
+  type        = string
   description = "The hostname of the TFE application. Example: tfe.company.com"
 }
 
@@ -120,7 +120,7 @@ variable "ca_bundle_url" {
 }
 
 variable "additional_tags" {
-  type        = "map"
+  type        = map
   description = "A map of additional tags to attach to all resources created."
   default     = {}
 }
