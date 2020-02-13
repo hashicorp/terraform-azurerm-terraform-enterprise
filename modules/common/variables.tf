@@ -63,7 +63,7 @@ variable "key_size" {
 # ============================================================ OPTIONAL
 
 variable "additional_tags" {
-  type        = "map"
+  type        = map
   description = "A map of additional tags to attach to all resources created."
   default     = {}
 }
@@ -79,7 +79,7 @@ locals {
   rendered_kv_rg_name     = coalesce(var.key_vault["rg_name"], var.rg_name)
   rendered_domain_rg_name = coalesce(var.domain_rg_name, var.rg_name)
   rendered_vnet_rg_name   = coalesce(var.vnet["rg_name"], var.rg_name)
-  
+
   default_tags = {
     Application = "Terraform Enterprise"
   }
