@@ -23,12 +23,11 @@ if [ -f /etc/redhat-release ]; then
   setenforce 0
   mkdir -p /lib/tc
   mount --bind /usr/lib64/tc/ /lib/tc/
-  sed -i -e 's/^SELINUX=enforcing/SELINUX=permissive/' /etc/sysconfig/selinux
-  sed -i -e '/rhui-REGION-rhel-server-extras/,/^$/s/enabled=0/enabled=1/g'  /etc/yum.repos.d/redhat-rhui.repo
-  yum -y install docker wget jq chrony ipvsadm unzip
-  # remove after testing rhui?
-  # curl -sfSL -o /usr/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
-  # chmod +x /usr/bin/jq
+  sed -i --follow-symlinks -e 's/^SELINUX=enforcing/SELINUX=permissive/' /etc/sysconfig/selinux
+  #sed -i -e '/rhui-REGION-rhel-server-extras/,/^$/s/enabled=0/enabled=1/g'  /etc/yum.repos.d/redhat-rhui.repo
+  yum -y install docker wget chrony ipvsadm unzip
+  curl -sfSL -o /usr/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+  chmod +x /usr/bin/jq
   systemctl enable docker
   systemctl start docker
 else
