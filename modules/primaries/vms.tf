@@ -1,6 +1,6 @@
 resource "azurerm_virtual_machine" "primary" {
   # The number of primaries must be hard coded to 3 when Internal Production Mode
-  # is selected. Currently, that mode does not support scaling. In other modes, the 
+  # is selected. Currently, that mode does not support scaling. In other modes, the
   # cluster can be scaled according the primary_count variable.
   count = local.install_type == "ipm" ? 3 : var.vm["count"]
 
@@ -13,6 +13,8 @@ resource "azurerm_virtual_machine" "primary" {
 
   network_interface_ids         = [azurerm_network_interface.primary[count.index].id]
   delete_os_disk_on_termination = true
+
+  depends_on = [azurerm_network_interface_backend_address_pool_association.ptfe_api]
 
   os_profile_linux_config {
     disable_password_authentication = true
