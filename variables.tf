@@ -54,6 +54,12 @@ variable "resource_prefix" {
   default     = "tfe"
 }
 
+variable "additional_no_proxy" {
+  type        = string
+  description = "Comma delimitted list of addresses (no spaces) to not use the proxy for"
+  default     = ""
+}
+
 variable "airgap_installer_url" {
   type        = string
   description = "URL to replicated's airgap installer package"
