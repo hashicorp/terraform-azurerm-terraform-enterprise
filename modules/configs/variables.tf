@@ -49,6 +49,12 @@ variable "http_proxy_url" {
   description = "HTTP(S) Proxy URL"
 }
 
+variable "additional_no_proxy" {
+  type        = string
+  description = "Comma delimitted list of addresses (no spaces) to not use the proxy for"
+  default     = ""
+}
+
 variable "installer_url" {
   type        = string
   description = "URL to the cluster installer tool"

@@ -51,6 +51,11 @@ write_files:
   permissions: "0400"
   content: "${proxy_url}"
 
+- path: /etc/ptfe/additional-no-proxy
+  owner: root:root
+  permissions: "0400"
+  content: "${additional_no_proxy}"
+
 %{ if ca_bundle_url != "" }
 - path: /etc/ptfe/custom-ca-cert-url
   owner: root:root
@@ -73,22 +78,21 @@ write_files:
   permissions: "0444"
   content: "${role_id}"
 
-- path: /etc/profile.d/proxy.sh
-  owner: root:root
-  permissions: "0755"
-  encoding: b64
-  content: ${proxy_b64}
 
-%{ if repl_cidr != "" }
 - path: /etc/profile.d/proxy.sh
   owner: root:root
   permissions: "0755"
   content: |
     export http_proxy="${proxy_url}"
     export https_proxy="${proxy_url}"
-    export no_proxy=10.0.0.0/8,127.0.0.1,169.254.169.254,${repl_cidr}
+    export no_proxy=10.0.0.0/8,127.0.0.1,169.254.169.254,${cluster_api_lb}
+%{ if additional_no_proxy != "" }
+    export no_proxy=$no_proxy,${additional_no_proxy}
 %{ endif }
-  
+%{ if repl_cidr != "" }
+    export no_proxy=$no_proxy,${repl_cidr}
+%{ endif }
+
 %{ endif ~}
 %{ if role == "main" }
 - path: /etc/replicated.rli

@@ -62,6 +62,7 @@ module "configs" {
   cert_thumbprint      = module.common.cert_thumbprint
   assistant_port       = local.assistant_port
   http_proxy_url       = var.http_proxy_url
+  additional_no_proxy  = var.additional_no_proxy
   installer_url        = var.installer_url
   import_key           = var.import_key
   ca_bundle_url        = var.ca_bundle_url
