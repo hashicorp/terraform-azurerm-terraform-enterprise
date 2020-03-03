@@ -42,7 +42,7 @@
 | secondary\_count | The number of secondary virtual machines to create. | string | `"5"` | no |
 | secondary\_vm\_size | The Azure VM Size to use (will use primary_vm_size if not set). | string | `""` | no |
 | ssh\_user | The ssh user to create | string | `"ubuntu"` | no |
-| storage\_image | A list of the data to define the os version image to build from | map | `{ "offer": "UbuntuServer", "publisher": "Canonical", "sku": "16.04-LTS", "version": "latest" }` | no |
+| storage\_image | A list of the data to define the os version image to build from | map | `{ "offer": "UbuntuServer", "publisher": "Canonical", "sku": "18.04-LTS", "version": "latest" }` | no |
 | tls\_pfx\_certificate\_key\_size | The size of the Key used in the Certificate. Possible values include 2048 and 4096. | string | `"2048"` | no |
 | tls\_pfx\_certificate\_key\_type | Specifies the Type of Key, such as RSA. | string | `"RSA"` | no |
 | vm\_size\_tier | The tier for the vms (must be 'Standard' or 'Basic') and must match with vm_size | string | `"Standard"` | no |
