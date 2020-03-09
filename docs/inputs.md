@@ -20,6 +20,7 @@
 | azure\_es\_account\_key | The Azure account key for external services | `string` | `""` | no |
 | azure\_es\_account\_name | The Azure account name for external services | `string` | `""` | no |
 | azure\_es\_container | The Azure container for external services | `string` | `""` | no |
+| azure\_es\_endpoint | The Azure endpoint for external services | string | `"core.windows.net"` | no |
 | ca\_bundle\_url | URL to Custom CA bundle used for outgoing connections | `string` | `""` | no |
 | distribution | Type of linux distribution to use. (ubuntu or rhel) | `string` | `"ubuntu"` | no |
 | dns\_ttl | The TTL for dns records. | `string` | `"120"` | no |
@@ -51,4 +52,3 @@
 | virtual\_network\_resource\_group\_name | The existing Azure Resource Group where the virtual network resides, defaults to the main resource group if not set. | `string` | `""` | no |
 | vm\_size\_tier | The tier for the vms (must be 'Standard' or 'Basic') and must match with vm\_size | `string` | `"Standard"` | no |
 | weave\_cidr | Specify a non-standard CIDR range for weave. The default is 10.32.0.0/12 | `string` | `""` | no |
-

@@ -102,6 +102,12 @@ variable "azure_es_container" {
   default     = ""
 }
 
+variable "azure_es_endpoint" {
+  type        = string
+  description = "The Azure endpoint for external services"
+  default     = "core.windows.net"
+}
+
 variable "distribution" {
   type        = string
   description = "Type of linux distribution to use. (ubuntu or rhel)"

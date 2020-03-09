@@ -6,7 +6,7 @@
 |------|-------------|------|---------|:-----:|
 | airgap | Expects keys: [enable, package\_url, installer\_url] | <pre>object({<br>    enable        = bool<br>    package_url   = string<br>    installer_url = string<br>  })</pre> | n/a | yes |
 | assistant\_port | Port the assitant sidecar-like node service is running on. | `any` | n/a | yes |
-| azure\_es | Expects keys: [enable, account\_name, account\_key, container] | <pre>object({<br>    enable       = bool<br>    account_name = string<br>    account_key  = string<br>    container    = string<br>  })</pre> | n/a | yes |
+| azure\_es | Expects keys: [enable, account\_name, account\_key, container, endpoint] | <pre>object({<br>    enable       = bool<br>    account_name = string<br>    account_key  = string<br>    container    = string<br>    endpoint     = string<br>  })</pre> | n/a | yes |
 | ca\_bundle\_url | URL to CA certificate file used for the internal `ptfe-proxy` used for outgoing connections | `string` | n/a | yes |
 | cert\_thumbprint | The thumbprint for the Azure Key Vault Certificate object generated from the provided PFX certificate. | `string` | n/a | yes |
 | cluster\_api\_endpoint | URI to the cluster api | `string` | n/a | yes |
@@ -26,4 +26,3 @@
 | weave\_cidr | custom weave CIDR range | `string` | n/a | yes |
 | additional\_no\_proxy | Comma delimitted list of addresses (no spaces) to not use the proxy for | `string` | `""` | no |
 | additional\_tags | A map of additional tags to attach to all resources created. | `map` | `{}` | no |
-

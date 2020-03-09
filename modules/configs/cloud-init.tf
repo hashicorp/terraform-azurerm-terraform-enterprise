@@ -36,6 +36,7 @@ data "template_file" "replicated_ptfe_config" {
     azure_account_name     = var.azure_es["account_name"]
     azure_account_key      = var.azure_es["account_key"]
     azure_container        = var.azure_es["container"]
+    azure_endpoint         = var.azure_es["endpoint"]
   }
 }
 
