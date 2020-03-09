@@ -40,13 +40,6 @@ data "template_file" "replicated_ptfe_config" {
   }
 }
 
-data "template_file" "proxy_sh" {
-  template = file("${path.module}/templates/cloud-init/proxy.sh")
-
-  vars = {
-    proxy_url = var.http_proxy_url
-  }
-}
 
 data "template_file" "aaa_proxy_b64" {
   template = file("${path.module}/templates/cloud-init/00aaa_proxy")
@@ -65,18 +58,19 @@ data "template_file" "cloud_config" {
     airgap_installer_url = var.airgap["installer_url"]
     setup_token          = random_string.setup_token.result
     proxy_url            = var.http_proxy_url
+    additional_no_proxy  = var.additional_no_proxy
     ptfe_url             = var.installer_url
     role_id              = count.index
     import_key           = var.import_key
     distro               = var.distribution
     aaa_proxy_b64        = base64encode(data.template_file.aaa_proxy_b64.rendered)
-    proxy_b64            = base64encode(data.template_file.proxy_sh.rendered)
     bootstrap_token      = "${random_string.bootstrap_token_id.result}.${random_string.bootstrap_token_suffix.result}"
     license_b64          = filebase64(var.license_file)
     rptfeconf            = base64encode(data.template_file.replicated_ptfe_config.rendered)
     replconf             = base64encode(data.template_file.replicated_config.rendered)
     install_ptfe_sh      = filebase64("${path.module}/files/install-ptfe.sh")
     role                 = count.index == 0 ? "main" : "primary"
+    cluster_api_lb       = "${var.cluster_api_endpoint}"
     cluster_api_endpoint = "${var.cluster_api_endpoint}:6443"
     assistant_host       = "http://${var.cluster_api_endpoint}:${var.assistant_port}"
     cert_thumbprint      = var.cert_thumbprint
@@ -102,17 +96,18 @@ data "template_file" "cloud_config_secondary" {
 
   vars = {
     proxy_url            = var.http_proxy_url
+    additional_no_proxy  = var.additional_no_proxy
     ptfe_url             = var.installer_url
     import_key           = var.import_key
     bootstrap_token      = "${random_string.bootstrap_token_id.result}.${random_string.bootstrap_token_suffix.result}"
     cluster_api_endpoint = "${var.cluster_api_endpoint}:6443"
+    cluster_api_lb       = "${var.cluster_api_endpoint}"
     assistant_host       = "http://${var.cluster_api_endpoint}:${var.assistant_port}"
     setup_token          = random_string.setup_token.result
     install_ptfe_sh      = filebase64("${path.module}/files/install-ptfe.sh")
     role                 = "secondary"
     distro               = var.distribution
     aaa_proxy_b64        = base64encode(data.template_file.aaa_proxy_b64.rendered)
-    proxy_b64            = base64encode(data.template_file.proxy_sh.rendered)
     ca_bundle_url        = var.ca_bundle_url
   }
 }

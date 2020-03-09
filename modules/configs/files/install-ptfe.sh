@@ -6,13 +6,23 @@ set -e -u -o pipefail
 if [ -s /etc/ptfe/proxy-url ]; then
   http_proxy=$(cat /etc/ptfe/proxy-url)
   https_proxy=$(cat /etc/ptfe/proxy-url)
+  api_load_balancer_without_port=$(cat /etc/ptfe/cluster-api-endpoint | awk -F ":" '/1/ {print $1}')
   export http_proxy
   export https_proxy
-  export no_proxy=10.0.0.0/8,127.0.0.1,169.254.169.254
+  export no_proxy=10.0.0.0/8,127.0.0.1,169.254.169.254,"$api_load_balancer_without_port"
+
+  # Add custom CIDR range for Replicated to no_proxy if set
   if [[ $(< /etc/ptfe/repl-cidr) != "" ]]; then
       repl_cidr=$(cat /etc/ptfe/repl-cidr)
       export repl_cidr
       export no_proxy=$no_proxy,$repl_cidr
+  fi
+
+  # Add additional_no_proxy items to no_proxy if set
+  if [[ $(< /etc/ptfe/additional-no-proxy) != "" ]]; then
+      additional_no_proxy=$(cat /etc/ptfe/additional-no-proxy)
+      export additional_no_proxy
+      export no_proxy=$no_proxy,$additional_no_proxy
   fi
 fi
 
@@ -23,7 +33,7 @@ if [ -f /etc/redhat-release ]; then
   setenforce 0
   mkdir -p /lib/tc
   mount --bind /usr/lib64/tc/ /lib/tc/
-  sed -i -e 's/^SELINUX=enforcing/SELINUX=permissive/' /etc/sysconfig/selinux
+  sed -i --follow-symlinks -e 's/^SELINUX=enforcing/SELINUX=permissive/' /etc/sysconfig/selinux
   #sed -i -e '/rhui-REGION-rhel-server-extras/,/^$/s/enabled=0/enabled=1/g'  /etc/yum.repos.d/redhat-rhui.repo
   yum -y install docker wget chrony ipvsadm unzip
   curl -sfSL -o /usr/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
@@ -70,11 +80,6 @@ airgap_url_path="/etc/ptfe/airgap-package-url"
 airgap_installer_url_path="/etc/ptfe/airgap-installer-url"
 weave_cidr="/etc/ptfe/weave-cidr"
 repl_cidr="/etc/ptfe/repl-cidr"
-
-
-
-
-
 health_url="$(cat /etc/ptfe/health-url)"
 
 ptfe_install_args=(
@@ -95,6 +100,13 @@ if test -e /etc/ptfe/role-id; then
     )
 fi
 
+if [ -s /etc/ptfe/proxy-url ]; then
+    ptfe_install_args+=(
+        "--additional-no-proxy=$no_proxy"
+        "--http-proxy=$http_proxy"
+    )
+fi
+
 if [ "x${role}x" == "xmainx" ]; then
     verb="setup"
     export verb
@@ -106,11 +118,6 @@ if [ "x${role}x" == "xmainx" ]; then
         "--auth-token=@/etc/ptfe/setup-token"
     )
 
-    if [ -s /etc/ptfe/proxy-url ]; then
-        ptfe_install_args+=(
-            "--additional-no-proxy=$no_proxy"
-        )
-    fi
     # If we are airgapping, then set the arguments needed for Replicated.
     # We also setup the replicated.conf.tmpl to include the path to the downloaded
     # airgap file.

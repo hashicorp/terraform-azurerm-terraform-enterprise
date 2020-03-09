@@ -21,7 +21,7 @@ variable "cluster_api_endpoint" {
 }
 
 variable "cluster_hostname" {
-  type        = "string"
+  type        = string
   description = "The hostname of the TFE application. Example: tfe.company.com"
 }
 
@@ -47,6 +47,12 @@ variable "assistant_port" {
 variable "http_proxy_url" {
   type        = string
   description = "HTTP(S) Proxy URL"
+}
+
+variable "additional_no_proxy" {
+  type        = string
+  description = "Comma delimitted list of addresses (no spaces) to not use the proxy for"
+  default     = ""
 }
 
 variable "installer_url" {
@@ -121,7 +127,7 @@ variable "ca_bundle_url" {
 }
 
 variable "additional_tags" {
-  type        = "map"
+  type        = map
   description = "A map of additional tags to attach to all resources created."
   default     = {}
 }

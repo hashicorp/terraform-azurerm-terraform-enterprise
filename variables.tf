@@ -54,6 +54,12 @@ variable "resource_prefix" {
   default     = "tfe"
 }
 
+variable "additional_no_proxy" {
+  type        = string
+  description = "Comma delimitted list of addresses (no spaces) to not use the proxy for"
+  default     = ""
+}
+
 variable "airgap_installer_url" {
   type        = string
   description = "URL to replicated's airgap installer package"
@@ -245,7 +251,7 @@ variable "storage_image" {
   default = {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "16.04-LTS"
+    sku       = "18.04-LTS"
     version   = "latest"
   }
 }
@@ -287,7 +293,7 @@ variable "repl_cidr" {
 }
 
 variable "additional_tags" {
-  type        = "map"
+  type        = map
   description = "A map of additional tags to attach to all resources created."
   default     = {}
 }

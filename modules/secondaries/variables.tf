@@ -62,7 +62,7 @@ variable "resource_prefix" {
 #  ============================================================ OPTIONAL
 
 variable "additional_tags" {
-  type        = "map"
+  type        = map
   description = "A map of additional tags to attach to all resources created."
   default     = {}
 }
