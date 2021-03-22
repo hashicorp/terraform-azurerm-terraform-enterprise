@@ -1,3 +1,22 @@
-work/
-.idea
-.terraform
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# .tfvars files
+*.tfvars
+
+# Examples
+examples/*/*.tfstate
+examples/*/*.tfstate.*
+examples/*/*.tfvars
+examples/*/*.lock*
+
+.DS_Store
+*ptfe-license*
+*.pem*
+*.cer*
+*.key*
+work
