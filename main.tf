@@ -214,17 +214,16 @@ module "redis" {
   resource_group_name  = module.resource_groups.resource_group_name
   location             = var.location
 
-  redis_family                          = var.redis_family
-  redis_sku_name                        = var.redis_sku_name
-  redis_size                            = var.redis_size
-  redis_subnet_id                       = local.network_redis_subnet_id
-  redis_enable_authentication           = var.redis_enable_authentication
-  redis_enable_non_ssl_port             = var.redis_enable_non_ssl_port
-  redis_rdb_backup_enabled              = var.redis_rdb_backup_enabled
-  redis_rdb_backup_frequency            = var.redis_rdb_backup_frequency
-  redis_rdb_backup_max_snapshot_count   = var.redis_rdb_backup_max_snapshot_count
-  redis_rdb_existing_storage_account    = var.redis_rdb_existing_storage_account
-  redis_rdb_existing_storage_account_rg = var.redis_rdb_existing_storage_account_rg
+  redis_family                        = var.redis_family
+  redis_sku_name                      = var.redis_sku_name
+  redis_size                          = var.redis_size
+  redis_subnet_id                     = local.network_redis_subnet_id
+  redis_enable_authentication         = var.redis_enable_authentication
+  redis_enable_non_ssl_port           = var.redis_enable_non_ssl_port
+  redis_rdb_backup_enabled            = var.redis_rdb_backup_enabled
+  redis_rdb_backup_frequency          = var.redis_rdb_backup_frequency
+  redis_rdb_backup_max_snapshot_count = var.redis_rdb_backup_max_snapshot_count
+  redis_rdb_existing_storage_account  = var.redis_rdb_existing_storage_account != "" ? data.azurerm_storage_account.tfe_redis_existing_storage_account[0].primary_blob_connection_string : ""
 
   tags = var.tags
 

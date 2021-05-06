@@ -76,13 +76,7 @@ variable "redis_rdb_backup_max_snapshot_count" {
 variable "redis_rdb_existing_storage_account" {
   default     = ""
   type        = string
-  description = "(Optional) Name of an existing Premium Storage Account for data encryption at rest. If empty string is given, a new, Premium storage account will be created."
-}
-
-variable "redis_rdb_existing_storage_account_rg" {
-  default     = ""
-  type        = string
-  description = "(Optional) Name of the resource group that contains the existing Premium Storage Account for data encryption at rest."
+  description = "(Optional) Existing Premium Storage Account for data encryption at rest. If empty string is given and backup is true, a new, Premium storage account will be created."
 }
 
 variable "redis_minimum_tls_version" {
