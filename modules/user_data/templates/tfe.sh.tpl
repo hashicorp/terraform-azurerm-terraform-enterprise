@@ -107,8 +107,19 @@ retrieve_tfe_license() {
 	# Obtain access token for Azure Storage
 	access_token=$(sudo curl --noproxy '*' 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fstorage.azure.com%2F' -H Metadata:true | jq -r .access_token)
 
+	# Cloud Init will start before the VM has access to the storage account
+	# So attempt to get license for 10 minutes, otherwise exit with an error.
+	attempt_counter=0
+	max_attempts=120
 	# Use access token to obtain license file
-	sudo curl https://${bootstrap_storage_account_name}.blob.core.windows.net/${bootstrap_storage_account_container_name}/${tfe_license_name} -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" --output /etc/${tfe_license_name}
+	while ! sudo curl -ksfS --connect-timeout 5 https://${bootstrap_storage_account_name}.blob.core.windows.net/${bootstrap_storage_account_container_name}/${tfe_license_name} -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" --output /etc/${tfe_license_name}; do
+    	if [ $attempt_counter -eq $max_attempts ];then
+			echo "Error: Reached max attempts to download TFE license"
+			exit 1
+		fi
+		sleep 5
+		attempt_counter=$(($attempt_counter+1))
+	done
 }
 
 install_tfe() {
