@@ -16,7 +16,9 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
   custom_data = var.vm_userdata_script
 
   identity {
-    type = "SystemAssigned"
+    type = "UserAssigned"
+
+    identity_ids = [var.vm_user_assigned_identity_id]
   }
 
   # Source image id will be used if vm_image_id anything other than 'ubuntu' or 'rhel'
@@ -72,7 +74,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
 resource "azurerm_role_assignment" "tfe_vmss_role_assignment" {
   scope                = var.resource_group_id_bootstrap
   role_definition_name = "Storage Blob Data Reader"
-  principal_id         = azurerm_linux_virtual_machine_scale_set.tfe_vmss.identity[0].principal_id
+  principal_id         = var.vm_user_assigned_identity_principal_id
 }
 
 resource "azurerm_virtual_machine_scale_set_extension" "main" {

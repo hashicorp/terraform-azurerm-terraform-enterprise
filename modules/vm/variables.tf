@@ -101,6 +101,18 @@ variable "vm_image_id" {
   }
 }
 
+variable "vm_user_assigned_identity_id" {
+  description = "The identity of the user assigned identity to be assigned to the virtual machine scale set."
+  type        = string
+}
+
+variable "vm_user_assigned_identity_principal_id" {
+  description = <<EOD
+  The Service Principal identity of the user assigned identity to be assigned to the virtual machine scale set.
+  EOD
+  type        = string
+}
+
 # Optional variables not currently specified in root module
 variable "vm_overprovision" {
   default = false

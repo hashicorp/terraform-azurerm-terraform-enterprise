@@ -44,3 +44,11 @@ resource "azurerm_storage_account" "bootstrap_storage_account" {
 
   tags = var.tags
 }
+
+resource "azurerm_user_assigned_identity" "vmss" {
+  location            = var.location
+  name                = "${var.friendly_name_prefix}-vmss"
+  resource_group_name = var.resource_group_name
+
+  tags = var.tags
+}
