@@ -91,56 +91,59 @@ resource "azurerm_key_vault" "kv" {
   enabled_for_deployment      = var.enabled_for_deployment
   enabled_for_disk_encryption = var.enabled_for_disk_encryption
 
-  access_policy {
-    tenant_id = var.tenant_id
-    object_id = var.object_id
-
-    certificate_permissions = [
-      "create",
-      "delete",
-      "get",
-      "import",
-      "list",
-      "listissuers",
-      "managecontacts",
-      "manageissuers",
-      "purge",
-      "setissuers",
-      "update",
-    ]
-
-    key_permissions = [
-      "backup",
-      "create",
-      "decrypt",
-      "delete",
-      "encrypt",
-      "get",
-      "import",
-      "list",
-      "purge",
-      "recover",
-      "restore",
-      "sign",
-      "unwrapKey",
-      "update",
-      "verify",
-      "wrapKey",
-    ]
-
-    secret_permissions = [
-      "backup",
-      "delete",
-      "get",
-      "list",
-      "purge",
-      "recover",
-      "restore",
-      "set",
-    ]
-  }
-
   tags = var.tags
+}
+
+resource "azurerm_key_vault_access_policy" "tfe_kv_acl" {
+  count = var.key_vault_name == "" && var.load_balancer_type == "application_gateway" ? 1 : 0
+
+  key_vault_id = azurerm_key_vault.kv[0].id
+  tenant_id    = var.tenant_id
+  object_id    = var.object_id
+
+  certificate_permissions = [
+    "create",
+    "delete",
+    "get",
+    "import",
+    "list",
+    "listissuers",
+    "managecontacts",
+    "manageissuers",
+    "purge",
+    "setissuers",
+    "update",
+  ]
+
+  key_permissions = [
+    "backup",
+    "create",
+    "decrypt",
+    "delete",
+    "encrypt",
+    "get",
+    "import",
+    "list",
+    "purge",
+    "recover",
+    "restore",
+    "sign",
+    "unwrapKey",
+    "update",
+    "verify",
+    "wrapKey",
+  ]
+
+  secret_permissions = [
+    "backup",
+    "delete",
+    "get",
+    "list",
+    "purge",
+    "recover",
+    "restore",
+    "set",
+  ]
 }
 
 # Azure Key Vault Certificate
