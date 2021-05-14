@@ -33,6 +33,11 @@ variable "user_data_pg_password" {
   description = "Postgres database password"
 }
 
+variable "user_data_pg_extra_params" {
+  type        = string
+  description = "Postgres database extra parameters"
+}
+
 # Redis
 # -----
 variable "redis_enable_authentication" {
@@ -108,6 +113,25 @@ variable "user_data_ca" {
   default     = ""
   type        = string
   description = "(optional) Value to be provided for TFE ca_cert setting"
+}
+
+variable "user_data_tfe_tls_vers" {
+  type        = string
+  description = "The TFE TLS Version."
+}
+
+variable "user_data_tfe_hairpin_addressing" {
+  type        = bool
+  description = "Use hairpinning on active active deployment."
+}
+variable "user_data_tfe_capacity_memory" {
+  type        = string
+  description = "The allocated memory for the terraform runtime container."
+}
+
+variable "user_data_tfe_tbw_image" {
+  type        = string
+  description = "The terraform runtime container."
 }
 
 variable "user_data_cert" {

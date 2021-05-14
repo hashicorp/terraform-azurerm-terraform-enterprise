@@ -164,6 +164,22 @@ locals {
     user_token = {
       value = random_id.user_token.hex
     }
+
+    tls_vers = {
+      value = var.user_data_tfe_tls_vers
+    }
+
+    hairpin_addressing = {
+      value = var.active_active && var.user_data_tfe_hairpin_addressing ? "1" : "0"
+    }
+
+    capacity_memory = {
+      value = var.user_data_tfe_capacity_memory
+    }
+
+    tbw_image = {
+      value = var.user_data_tfe_tbw_image
+    }
   }
 
   base_external_configs = {
@@ -185,6 +201,10 @@ locals {
 
     pg_user = {
       value = var.user_data_pg_user
+    }
+
+    pg_extra_params = {
+      value = var.user_data_pg_extra_params
     }
   }
 

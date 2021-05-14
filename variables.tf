@@ -480,6 +480,36 @@ variable "user_data_redis_use_tls" {
   type    = bool
 }
 
+variable "user_data_tfe_tls_vers" {
+  default     = "tls_1_2_tls_1_3"
+  type        = string
+  description = "The TFE TLS Version."
+}
+
+variable "user_data_tfe_hairpin_addressing" {
+  default     = true
+  type        = bool
+  description = "Use hairpinning on active active deployment."
+}
+
+variable "user_data_tfe_capacity_memory" {
+  default     = "512"
+  type        = string
+  description = "The allocated memory for the terraform runtime container."
+}
+
+variable "user_data_tfe_tbw_image" {
+  default     = "default_image"
+  type        = string
+  description = "The terraform runtime container image."
+}
+
+variable "user_data_pg_extra_params" {
+  type        = string
+  description = "Postgres database extra parameters"
+  default     = "sslmode=require"
+}
+
 # Proxy
 # -----
 variable "proxy_ip" {

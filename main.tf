@@ -266,10 +266,11 @@ module "user_data" {
   active_active = local.active_active
 
   # Database
-  user_data_pg_dbname   = module.database.database_name
-  user_data_pg_netloc   = "${module.database.database_server_fqdn}:5432"
-  user_data_pg_user     = "${module.database.database_user}@${module.database.database_server_name}"
-  user_data_pg_password = module.database.database_password
+  user_data_pg_dbname       = module.database.database_name
+  user_data_pg_netloc       = "${module.database.database_server_fqdn}:5432"
+  user_data_pg_user         = "${module.database.database_user}@${module.database.database_server_name}"
+  user_data_pg_password     = module.database.database_password
+  user_data_pg_extra_params = var.user_data_pg_extra_params
 
   # Redis
   user_data_redis_host        = local.active_active == true ? module.redis[0].redis_hostname : ""
@@ -288,6 +289,11 @@ module "user_data" {
   # TFE
   user_data_tfe_license_name = var.tfe_license_name
   user_data_release_sequence = var.user_data_release_sequence
+
+  user_data_tfe_tls_vers           = var.user_data_tfe_tls_vers
+  user_data_tfe_hairpin_addressing = var.user_data_tfe_hairpin_addressing
+  user_data_tfe_capacity_memory    = var.user_data_tfe_capacity_memory
+  user_data_tfe_tbw_image          = var.user_data_tfe_tbw_image
 
   # Certificates
   user_data_ca       = var.user_data_ca == "" ? replace(module.certificates.tls_ca_cert, "\n", "\n") : replace(var.user_data_ca, "\n", "\n")
