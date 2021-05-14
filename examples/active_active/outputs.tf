@@ -17,5 +17,11 @@ output "instance_user_name" {
 }
 
 output "instance_private_key" {
-  value = module.tfe.instance_private_key
+  value     = module.tfe.instance_private_key
+  sensitive = true
+}
+
+output "tfe_console_url" {
+  value     = module.tfe.tfe_console_url
+  sensitive = true
 }

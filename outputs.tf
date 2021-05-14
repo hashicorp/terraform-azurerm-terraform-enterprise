@@ -100,7 +100,8 @@ output "database_name" {
 # SSH
 # ---
 output "instance_private_key" {
-  value = var.vm_public_key == "" ? tls_private_key.tfe_ssh[0].private_key_pem : "An existing 'vm_public_key' was provided"
+  value     = var.vm_public_key == "" ? tls_private_key.tfe_ssh[0].private_key_pem : "An existing 'vm_public_key' was provided"
+  sensitive = true
 }
 
 # Bastion
@@ -116,7 +117,8 @@ output "bastion_host_dns_name" {
 # User_data
 # ---------
 output "tfe_userdata_base64_encoded" {
-  value = module.user_data.tfe_userdata_base64_encoded
+  value     = module.user_data.tfe_userdata_base64_encoded
+  sensitive = true
 }
 
 output "tfe_console_password" {
@@ -134,7 +136,8 @@ output "redis_ssl_port" {
 }
 
 output "redis_pass" {
-  value = local.active_active == true ? module.redis[0].redis_pass : null
+  value     = local.active_active == true ? module.redis[0].redis_pass : null
+  sensitive = true
 }
 
 # Load balancer

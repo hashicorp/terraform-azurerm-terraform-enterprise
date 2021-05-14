@@ -3,11 +3,13 @@ output "storage_account_name" {
 }
 
 output "storage_account_key" {
-  value = local.storage_account_key
+  value     = local.storage_account_key
+  sensitive = true
 }
 
 output "storage_account_primary_blob_connection_string" {
-  value = local.storage_account_primary_blob_connection_string
+  value     = local.storage_account_primary_blob_connection_string
+  sensitive = true
 }
 
 output "bootstrap_storage_account_name" {
