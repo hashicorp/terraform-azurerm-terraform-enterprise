@@ -1,0 +1,24 @@
+%{ if is_airgapped ~}
+function download_airgap {
+  echo "[$(date +"%FT%T")]  Logging into the az cli using MSI"
+  az login --identity
+
+  mkdir -p /tmp/tfe
+  echo "[$(date +"%FT%T")]  Downloading replicated tar from storage"
+  az storage blob download --auth-mode login \
+    --account-name "${bootstrap_storage_account_name}" \
+    --container-name "${bootstrap_storage_account_container_name}" \
+    --name "${replicated_blob_name}" \
+    --file /tmp/tfe/replicated.tar.gz
+  tar xzf /tmp/tfe/replicated.tar.gz -C /tmp/tfe
+
+  echo "[$(date +"%FT%T")]  Downloading airgap from storage"
+  az storage blob download --auth-mode login \
+    --account-name "${bootstrap_storage_account_name}" \
+    --container-name "${bootstrap_storage_account_container_name}" \
+    --name "${tfe_blob_name}" \
+    --file /tmp/tfe/latest.airgap
+
+  echo "[$(date +"%FT%T")]  Downloading - Complete"
+}
+%{ endif ~}

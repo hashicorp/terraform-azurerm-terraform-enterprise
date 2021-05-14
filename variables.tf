@@ -207,6 +207,12 @@ variable "bootstrap_storage_account_container_name" {
   description = "Bootstrap storage account container name"
 }
 
+variable "installation_mode" {
+  default     = "online"
+  type        = string
+  description = "TFE installation mode, must be one of the following ['online', 'airgap']"
+}
+
 # Service Accounts
 # ----------------
 variable "storage_account_tier" {
@@ -510,6 +516,13 @@ variable "user_data_pg_extra_params" {
   default     = "sslmode=require"
 }
 
+variable "user_data_distribution" {
+  type        = string
+  description = "Type of linux distribution to use. (ubuntu or rhel)."
+  default     = "ubuntu"
+}
+
+
 # Proxy
 # -----
 variable "proxy_ip" {
@@ -541,4 +554,12 @@ variable "tags" {
   default     = {}
   type        = map(string)
   description = "Map of tags for resource"
+}
+
+variable "tfe_airgap_file_paths" {
+  type = object({
+    replicated_blob = string
+    tfe_blob        = string
+  })
+  default = null
 }

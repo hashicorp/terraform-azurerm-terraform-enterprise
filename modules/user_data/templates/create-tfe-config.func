@@ -1,0 +1,12 @@
+create_tfe_config() {
+	echo "[$(date +"%FT%T")] [Terraform Enterprise] Create configuration files" | sudo tee -a /var/log/ptfe.log
+
+	echo "${settings}" | base64 -d | sudo tee /etc/ptfe-settings.json > /dev/null
+	echo "${replicated}" | base64 -d | sudo tee /etc/replicated.conf > /dev/null
+
+	sudo mkdir -p /etc/tfe/	
+	echo ${user_data_cert} | base64 -d | sudo tee /etc/tfe/tls.pem > /dev/null
+	echo ${user_data_key} | base64 -d | sudo tee /etc/tfe/tls.key > /dev/null
+
+	echo "[$(date +"%FT%T")] [Terraform Enterprise] Completed - configuration files" | sudo tee -a /var/log/ptfe.log
+}

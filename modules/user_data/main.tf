@@ -11,9 +11,31 @@ locals {
     TlsBootstrapType             = "server-path"
   }
 
+  replicated_airgap_settings = var.installation_mode == "airgap" ? {
+    LicenseBootstrapAirgapPackagePath = "/tmp/tfe/latest.airgap"
+  } : {}
+
   user_data_release_sequence = {
     ReleaseSequence = var.user_data_release_sequence
   }
+
+  no_proxy = join(
+    ",",
+    concat(
+      [
+        "127.0.0.1",
+        "169.254.169.254",
+        ".azure.com",
+        ".windows.net",
+        ".microsoft.com",
+      ],
+      var.no_proxy
+    )
+  )
+
+  # if the installation mode is airpap, default to installing docker and azure-cli
+  # note: online install installs docker
+  install_prereq_software = coalesce(var.install_prereq_software, var.installation_mode == "airgap")
 }
 
 locals {
@@ -22,7 +44,7 @@ locals {
 
   redis_configuration      = var.active_active ? local.redis_configs : {}
   tfe_configuration        = jsonencode(merge(local.base_configs, local.base_external_configs, local.external_azure_configs, local.redis_configuration))
-  replicated_configuration = jsonencode(merge(local.replicated_base_config, local.release_sequence))
+  replicated_configuration = jsonencode(merge(local.replicated_base_config, local.release_sequence, local.replicated_airgap_settings))
 }
 
 locals {
@@ -30,38 +52,17 @@ locals {
   tfe_user_data = templatefile(
     "${path.module}/templates/tfe.sh.tpl",
     {
-      # Configuration data
-      replicated    = base64encode(local.replicated_configuration)
-      settings      = base64encode(local.tfe_configuration)
-      active_active = var.active_active
-      fqdn          = var.fqdn
+      is_airgapped            = var.installation_mode == "airgap"
+      install_prereq_software = local.install_prereq_software
 
-      # Storage account info for access to license and config files
-      bootstrap_storage_account_container_name = var.user_data_bootstrap_storage_container_name
-      bootstrap_storage_account_name           = var.user_data_bootstrap_storage_account_name
-      tfe_license_name                         = var.user_data_tfe_license_name
-
-      # Certificate information
-      user_data_cert = base64encode(var.user_data_cert)
-      user_data_key  = base64encode(var.user_data_cert_key)
-
-      # Proxy information
-      proxy_ip   = var.proxy_ip
-      proxy_port = var.proxy_port
-      proxy_cert = var.proxy_cert_name
-      no_proxy = join(
-        ",",
-        concat(
-          [
-            "127.0.0.1",
-            "169.254.169.254",
-            ".azure.com",
-            ".windows.net",
-            ".microsoft.com",
-          ],
-          var.no_proxy
-        )
-      )
+      function-create-tfe-config    = data.template_file.create-tfe-config.rendered
+      function-proxy-config         = data.template_file.proxy-config.rendered
+      function-install-software     = data.template_file.install-software.rendered
+      function-install-os-packages  = data.template_file.install-os-packages.rendered
+      function-retrieve-tfe-license = data.template_file.retrieve-tfe-license.rendered
+      function-install-tfe          = data.template_file.install-tfe.rendered
+      function-wait-tfe-ready       = data.template_file.wait-tfe-ready.rendered
+      function-download-airgap      = data.template_file.download-airgap.rendered
     }
   )
 }
@@ -246,5 +247,95 @@ locals {
     placement = {
       value = "placement_azure"
     }
+  }
+}
+
+data "template_file" "create-tfe-config" {
+  template = file("${path.module}/templates/create-tfe-config.func")
+
+  vars = {
+    replicated = base64encode(local.replicated_configuration)
+    settings   = base64encode(local.tfe_configuration)
+
+    user_data_cert = base64encode(var.user_data_cert)
+    user_data_key  = base64encode(var.user_data_cert_key)
+  }
+}
+
+data "template_file" "proxy-config" {
+  template = file("${path.module}/templates/proxy-config.func")
+
+  vars = {
+    distribution = var.distribution
+
+    proxy_ip   = var.proxy_ip
+    proxy_port = var.proxy_port
+    proxy_cert = var.proxy_cert_name
+    no_proxy   = local.no_proxy
+
+    bootstrap_storage_account_name           = var.user_data_bootstrap_storage_account_name
+    bootstrap_storage_account_container_name = var.user_data_bootstrap_storage_container_name
+  }
+}
+
+data "template_file" "install-os-packages" {
+  template = file("${path.module}/templates/install-os-packages.func")
+
+  vars = {
+    distribution = var.distribution
+  }
+}
+
+data "template_file" "retrieve-tfe-license" {
+  template = file("${path.module}/templates/retrieve-tfe-license.func")
+
+  vars = {
+    bootstrap_storage_account_container_name = var.user_data_bootstrap_storage_container_name
+    bootstrap_storage_account_name           = var.user_data_bootstrap_storage_account_name
+    tfe_license_name                         = var.user_data_tfe_license_name
+  }
+}
+
+data "template_file" "install-tfe" {
+  template = file("${path.module}/templates/install-tfe.func")
+
+  vars = {
+    distribution  = var.distribution
+    active_active = var.active_active
+    is_airgapped  = var.installation_mode == "airgap"
+
+    proxy_ip   = var.proxy_ip
+    proxy_port = var.proxy_port
+    no_proxy   = local.no_proxy
+  }
+}
+
+data "template_file" "wait-tfe-ready" {
+  template = file("${path.module}/templates/wait-tfe-ready.func")
+
+  vars = {
+    fqdn = var.fqdn
+  }
+}
+
+data "template_file" "download-airgap" {
+  template = file("${path.module}/templates/download-airgap.func")
+
+  vars = {
+    is_airgapped                             = var.installation_mode == "airgap"
+    bootstrap_storage_account_container_name = var.user_data_bootstrap_storage_container_name
+    bootstrap_storage_account_name           = var.user_data_bootstrap_storage_account_name
+
+    replicated_blob_name = var.user_data_bootstrap_replicated_blob_name
+    tfe_blob_name        = var.user_data_bootstrap_tfe_blob_name
+  }
+}
+
+data "template_file" "install-software" {
+  template = file("${path.module}/templates/install-software.func")
+
+  vars = {
+    distribution            = var.distribution
+    install_prereq_software = local.install_prereq_software
   }
 }

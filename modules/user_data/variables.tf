@@ -176,3 +176,30 @@ variable "no_proxy" {
   type        = list(string)
   description = "Addresses which should not be accessed through the proxy server located at proxy_ip. This list will be combined with internal GCP addresses."
 }
+
+variable "installation_mode" {
+  default     = "online"
+  type        = string
+  description = "TFE installation mode, must be one of the following ['online', 'airgap']"
+}
+
+variable "distribution" {
+  type        = string
+  description = "Type of linux distribution to use. (ubuntu or rhel)."
+}
+
+variable "user_data_bootstrap_replicated_blob_name" {
+  type        = string
+  description = "The filename of the replicated archive file"
+}
+
+variable "user_data_bootstrap_tfe_blob_name" {
+  type        = string
+  description = "The filename of the tfe archive file"
+}
+
+variable "install_prereq_software" {
+  default     = null
+  type        = bool
+  description = "Should docker and az client be installed. Defaults to true if airgap."
+}

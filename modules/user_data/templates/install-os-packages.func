@@ -1,0 +1,28 @@
+%{ if distribution == "ubuntu" ~}
+install_os_packages() {
+	echo "[$(date +"%FT%T")] [Terraform Enterprise] Install Ubuntu packages" | sudo tee -a /var/log/ptfe.log
+
+	sudo apt-get update -y
+	sudo apt-get install unzip -y
+
+	install_jq
+}
+%{ endif ~}
+%{ if distribution == "rhel" ~}
+install_os_packages() {
+	echo "[$(date +"%FT%T")] [Terraform Enterprise] Install RHEL packages" | sudo tee -a /var/log/ptfe.log
+
+	sudo yum update -y
+	sudo yum install unzip -y
+	sudo lvresize -r -L +20G /dev/mapper/rootvg-varlv
+
+	install_jq
+}
+%{ endif ~}
+
+install_jq() {
+	echo "[$(date +"%FT%T")] [Terraform Enterprise] Install JQ" | sudo tee -a /var/log/ptfe.log
+
+	sudo curl --noproxy '*' -Lo /bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+	sudo chmod +x /bin/jq
+}

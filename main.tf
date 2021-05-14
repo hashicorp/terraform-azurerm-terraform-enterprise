@@ -44,6 +44,9 @@ locals {
   # Redis
   # -----
   redis_port = var.redis_enable_non_ssl_port == true ? "6379" : "6380"
+
+  bootstrap_replicated_blob_name = var.tfe_airgap_file_paths != null ? basename(var.tfe_airgap_file_paths.replicated_blob) : ""
+  bootstrap_tfe_blob_name        = var.tfe_airgap_file_paths != null ? basename(var.tfe_airgap_file_paths.tfe_blob) : ""
 }
 
 # Azure resource groups
@@ -156,6 +159,8 @@ module "object_storage" {
   # TFE License
   tfe_license_name     = var.tfe_license_name
   tfe_license_filepath = var.tfe_license_filepath
+
+  tfe_airgap_file_paths = var.tfe_airgap_file_paths
 
   # Proxy
   proxy_cert_name = var.proxy_cert_name
@@ -289,6 +294,11 @@ module "user_data" {
   # TFE
   user_data_tfe_license_name = var.tfe_license_name
   user_data_release_sequence = var.user_data_release_sequence
+
+  installation_mode                        = var.installation_mode
+  distribution                             = var.user_data_distribution
+  user_data_bootstrap_replicated_blob_name = local.bootstrap_replicated_blob_name
+  user_data_bootstrap_tfe_blob_name        = local.bootstrap_tfe_blob_name
 
   user_data_tfe_tls_vers           = var.user_data_tfe_tls_vers
   user_data_tfe_hairpin_addressing = var.user_data_tfe_hairpin_addressing
