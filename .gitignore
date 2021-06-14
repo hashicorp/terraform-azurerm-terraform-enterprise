@@ -20,3 +20,6 @@ examples/*/*.lock*
 *.cer*
 *.key*
 work
+
+*.tar.gz
+*.airgap

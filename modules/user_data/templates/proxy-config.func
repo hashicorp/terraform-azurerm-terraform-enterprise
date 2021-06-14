@@ -1,0 +1,63 @@
+proxy_config() {
+	echo "[$(date +"%FT%T")] [Terraform Enterprise] Configure proxy" | sudo tee -a /var/log/ptfe.log
+
+	proxy_ip="${proxy_ip}"
+	proxy_port="${proxy_port}"
+	proxy_cert="${proxy_cert}"
+	if [[ $proxy_ip != "" ]]
+	then
+		sudo /bin/cat <<EOF >>/etc/environment
+http_proxy="${proxy_ip}:${proxy_port}"
+https_proxy="${proxy_ip}:${proxy_port}"
+no_proxy="${no_proxy}"
+EOF
+
+		sudo /bin/cat <<EOF >/etc/profile.d/proxy.sh
+http_proxy="${proxy_ip}:${proxy_port}"
+https_proxy="${proxy_ip}:${proxy_port}"
+no_proxy="${no_proxy}"
+EOF
+
+		export http_proxy="${proxy_ip}:${proxy_port}"
+		export https_proxy="${proxy_ip}:${proxy_port}"
+		export no_proxy="${no_proxy}"
+	
+		if [[ $proxy_cert != "" ]]
+		then
+		%{ if distribution == "rhel" ~}
+			sudo mkdir -p /usr/share/pki/ca-trust-source/anchors
+			# Obtain access token for Azure Storage
+			access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fstorage.azure.com%2F' -H Metadata:true | jq -r .access_token)
+			# Use access token to obtain cert file
+			sudo curl https://${bootstrap_storage_account_name}.blob.core.windows.net/${bootstrap_storage_account_container_name}/${proxy_cert} -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" --output /usr/share/pki/ca-trust-source/anchors/${proxy_cert}.crt
+			sudo update-ca-trust
+		%{ else }
+			sudo mkdir -p /usr/local/share/ca-certificates/extra
+			# Obtain access token for Azure Storage
+			access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fstorage.azure.com%2F' -H Metadata:true | jq -r .access_token)
+			# Use access token to obtain cert file
+			sudo curl https://${bootstrap_storage_account_name}.blob.core.windows.net/${bootstrap_storage_account_container_name}/${proxy_cert} -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" --output /usr/local/share/ca-certificates/extra/${proxy_cert}.crt
+			sudo update-ca-certificates
+		%{ endif }
+		fi
+	fi
+
+	proxy_cert
+}
+
+proxy_cert() {
+	echo "[$(date +"%FT%T")] [Terraform Enterprise] Configure proxy cert" | sudo tee -a /var/log/ptfe.log
+
+	proxy_cert="${proxy_cert}"
+
+	if [[ $proxy_cert != "" ]]
+	then
+	%{ if distribution == "rhel" ~}
+		jq ". + { ca_certs: { value: \"$(cat /usr/share/pki/ca-trust-source/anchors/${proxy_cert}.crt)\" } }" -- /etc/ptfe-settings.json > ptfe-settings.json.updated
+	%{ else }
+		jq ". + { ca_certs: { value: \"$(cat /usr/local/share/ca-certificates/extra/${proxy_cert}.crt)\" } }" -- /etc/ptfe-settings.json > ptfe-settings.json.updated
+	%{ endif }
+
+		sudo cp ./ptfe-settings.json.updated /etc/ptfe-settings.json
+	fi
+}

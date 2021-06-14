@@ -7,7 +7,8 @@ output "tls_cert" {
 }
 
 output "tls_key" {
-  value = var.user_data_cert == "" ? tls_private_key.cert[0].private_key_pem : var.user_data_cert_key
+  value     = var.user_data_cert == "" ? tls_private_key.cert[0].private_key_pem : var.user_data_cert_key
+  sensitive = true
 }
 
 output "key_vault_id" {

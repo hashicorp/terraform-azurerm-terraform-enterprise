@@ -33,6 +33,11 @@ variable "user_data_pg_password" {
   description = "Postgres database password"
 }
 
+variable "user_data_pg_extra_params" {
+  type        = string
+  description = "Postgres database extra parameters"
+}
+
 # Redis
 # -----
 variable "redis_enable_authentication" {
@@ -110,6 +115,25 @@ variable "user_data_ca" {
   description = "(optional) Value to be provided for TFE ca_cert setting"
 }
 
+variable "user_data_tfe_tls_vers" {
+  type        = string
+  description = "The TFE TLS Version."
+}
+
+variable "user_data_tfe_hairpin_addressing" {
+  type        = bool
+  description = "Use hairpinning on active active deployment."
+}
+variable "user_data_tfe_capacity_memory" {
+  type        = string
+  description = "The allocated memory for the terraform runtime container."
+}
+
+variable "user_data_tfe_tbw_image" {
+  type        = string
+  description = "The terraform runtime container."
+}
+
 variable "user_data_cert" {
   default     = ""
   type        = string
@@ -151,4 +175,31 @@ variable "no_proxy" {
   default     = []
   type        = list(string)
   description = "Addresses which should not be accessed through the proxy server located at proxy_ip. This list will be combined with internal GCP addresses."
+}
+
+variable "installation_mode" {
+  default     = "online"
+  type        = string
+  description = "TFE installation mode, must be one of the following ['online', 'airgap']"
+}
+
+variable "distribution" {
+  type        = string
+  description = "Type of linux distribution to use. (ubuntu or rhel)."
+}
+
+variable "user_data_bootstrap_replicated_blob_name" {
+  type        = string
+  description = "The filename of the replicated archive file"
+}
+
+variable "user_data_bootstrap_tfe_blob_name" {
+  type        = string
+  description = "The filename of the tfe archive file"
+}
+
+variable "install_prereq_software" {
+  default     = null
+  type        = bool
+  description = "Should docker and az client be installed. Defaults to true if airgap."
 }

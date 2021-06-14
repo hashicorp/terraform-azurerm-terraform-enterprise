@@ -4,6 +4,10 @@
 
 [Active/Active](https://www.terraform.io/docs/enterprise/before-installing/reference-architecture/azure.html#active-active-implementation-mode) implementation mode is an extension of the Standalone implementation mode that increases the scalability and load capacity of the Terraform Enterprise platform. The same application runs on multiple Terraform Enterprise instances utilizing the same external services in a shared model.
 
+## Online Installation Method
+
+This example downloads the binaries directly from the internet.
+
 ## How To Use This Module
 
 To run this module with an Active/Active configuration:

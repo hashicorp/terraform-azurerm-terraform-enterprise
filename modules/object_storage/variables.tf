@@ -43,6 +43,12 @@ variable "bootstrap_storage_account_container_name" {
   description = "Bootstrap storage account container name"
 }
 
+variable "tfe_airgap_file_paths" {
+  default     = {}
+  type        = map(string)
+  description = "List of airgap files to upload to the bootstrap storage acccount"
+}
+
 # Proxy
 # -----
 variable "proxy_cert_name" {

@@ -1,0 +1,50 @@
+%{ if install_prereq_software }
+%{ if distribution == "ubuntu" ~}
+function install_software {
+  echo "[$(date +"%FT%T")]  Adding az cli packages"
+  curl -sL https://packages.microsoft.com/keys/microsoft.asc | \
+    gpg --dearmor | \
+    sudo tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
+  AZ_REPO=$(lsb_release -cs)
+  echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | \
+    sudo tee /etc/apt/sources.list.d/azure-cli.list
+  
+  echo "[$(date +"%FT%T")]  Updating apt-get and installing"
+  sudo apt-get -y update
+  sudo apt-get install -y docker.io azure-cli
+
+  sudo systemctl enable docker
+  sudo systemctl start docker
+  echo "[$(date +"%FT%T")]  Updating apt-get and installing - Complete"
+}
+%{ endif ~}
+%{ if distribution == "rhel" ~}
+function install_software {
+  echo "[$(date +"%FT%T")]  Installing and Configuring Docker"
+  sudo yum-config-manager --enable rhel-7-server-extras-rpms #not explicitly needed
+  sudo yum install -y docker
+  sudo systemctl enable docker
+  sudo systemctl start docker
+
+  echo "[$(date +"%FT%T")]  Disable SELinux (temporary)"
+  setenforce 0
+  echo "[$(date +"%FT%T")]  Add docker0 to firewalld"
+  firewall-cmd --permanent --zone=trusted --change-interface=docker0
+  firewall-cmd --reload
+  echo "[$(date +"%FT%T")]  Enable SELinux"
+  setenforce 1
+  echo "[$(date +"%FT%T")]  Installing and Configuring Docker - Complete"
+
+  echo "[$(date +"%FT%T")]  Installing Azure CLI"
+  rpm --import https://packages.microsoft.com/keys/microsoft.asc
+  sh -c 'echo -e "[azure-cli]
+name=Azure CLI
+baseurl=https://packages.microsoft.com/yumrepos/azure-cli
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/azure-cli.repo'
+  yum install -y azure-cli
+  echo "[$(date +"%FT%T")]  Installing Azure CLI - Complete"
+}
+%{ endif ~}
+%{ endif ~}

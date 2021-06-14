@@ -1,0 +1,7 @@
+wait_tfe_ready() {
+	echo "[$(date +"%FT%T")] [Terraform Enterprise] Wait for application" | sudo tee -a /var/log/ptfe.log
+
+	while ! curl -ksfS --connect-timeout 5 https://${fqdn}/_health_check; do
+    	sleep 5
+	done
+}

@@ -1,0 +1,54 @@
+install_tfe() {
+	echo "[$(date +"%FT%T")] [Terraform Enterprise] Install TFE" | sudo tee -a /var/log/ptfe.log
+
+	instance_ip=$(sudo curl --noproxy '*' -H Metadata:true "http://169.254.169.254/metadata/instance?api-version=2020-09-01" | jq -r .network.interface[0].ipv4.ipAddress[0].privateIpAddress)
+
+	%{ if is_airgapped ~}
+	cd /tmp/tfe
+	sudo ./install.sh \
+		no-proxy \
+		no-docker \
+		bypass-firewalld-warning \
+		ignore-preflights \
+		airgap \
+		%{ if proxy_ip != "" ~}
+		http-proxy="${proxy_ip}:${proxy_port}" \
+		additional-no-proxy="${no_proxy}" \
+		%{ else ~}
+		no-proxy \
+		%{ endif ~}
+		%{if active_active ~}
+		disable-replicated-ui \
+		%{ endif ~}
+		private-address=$instance_ip \
+		public-address=$instance_ip
+	%{ else }
+	curl -o /tmp/install.sh https://get.replicated.com/docker/terraformenterprise/active-active
+	chmod +x /tmp/install.sh
+	sudo /tmp/install.sh \
+		bypass-firewalld-warning \
+		ignore-preflights \
+		%{ if proxy_ip != "" ~}
+		http-proxy="${proxy_ip}:${proxy_port}" \
+		additional-no-proxy="${no_proxy}" \
+		%{ else ~}
+		no-proxy \
+		%{ endif ~}
+		%{if active_active ~}
+		disable-replicated-ui \
+		%{ endif ~}
+		private-address=$instance_ip \
+		public-address=$instance_ip \
+		| tee -a /var/log/ptfe.log
+	%{ endif ~}
+
+	%{ if distribution == "rhel" ~}
+		echo "[$(date +"%FT%T")] [Terraform Enterprise] Disable SELinux (temporary)" | sudo tee -a /var/log/ptfe.log
+		setenforce 0
+		echo "[$(date +"%FT%T")] [Terraform Enterprise] Add docker0 to firewalld" | sudo tee -a /var/log/ptfe.log
+		firewall-cmd --permanent --zone=trusted --change-interface=docker0
+		firewall-cmd --reload
+		echo "[$(date +"%FT%T")] [Terraform Enterprise] Enable SELinux" | sudo tee -a /var/log/ptfe.log
+		setenforce 1
+	%{ endif }
+}
