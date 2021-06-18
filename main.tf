@@ -162,10 +162,12 @@ module "object_storage" {
   proxy_cert_path = var.proxy_cert_path
 
   # Application storage
-  storage_account_name = module.service_accounts.storage_account_name
+  storage_account_name           = module.service_accounts.storage_account_name
+  storage_account_container_name = var.storage_account_container_name
 
   # Bootstrap storage
-  bootstrap_storage_account_name = module.service_accounts.bootstrap_storage_account_name
+  bootstrap_storage_account_name           = module.service_accounts.bootstrap_storage_account_name
+  bootstrap_storage_account_container_name = var.bootstrap_storage_account_container_name
 
   depends_on = [
     module.resource_groups,

@@ -8,6 +8,9 @@
 # .tfvars files
 *.tfvars
 
+# terraform lock files
+.terraform.lock*
+
 # Examples
 examples/*/*.tfstate
 examples/*/*.tfstate.*
