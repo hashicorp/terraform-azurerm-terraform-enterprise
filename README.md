@@ -30,7 +30,7 @@ This module is intended to run in an Azure account with minimal preparation, how
 
 - Resource groups
 
-  - An existing resource group should be supplied for `resource_group_name`. This existing resource group should also contain an existing DNS zone, Key Vault, and Key Vault Certificate unless stated in an example or otherwise required for a particular scenario.
+  - An existing resource group can be supplied for `resource_group_name`, but it is not necessary. This existing resource group should also contain an existing DNS zone, Key Vault, and Key Vault Certificate unless stated in an example or otherwise required for a particular scenario.
 
 - DNS
 
