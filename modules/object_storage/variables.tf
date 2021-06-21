@@ -46,11 +46,9 @@ variable "bootstrap_storage_account_container_name" {
 # Proxy
 # -----
 variable "proxy_cert_name" {
-  default     = ""
   description = "Name for the stored proxy certificate bundle"
 }
 
 variable "proxy_cert_path" {
-  default     = ""
   description = "Local path to the proxy certificate bundle"
 }

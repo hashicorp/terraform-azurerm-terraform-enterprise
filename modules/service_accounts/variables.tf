@@ -37,25 +37,21 @@ variable "storage_account_replication_type" {
 }
 
 variable "storage_account_name" {
-  default     = ""
   type        = string
   description = "Storage account name"
 }
 
 variable "storage_account_key" {
-  default     = ""
   type        = string
   description = "Storage account key"
 }
 
 variable "storage_account_primary_blob_connection_string" {
-  default     = ""
   type        = string
   description = "Storage account primary blob endpoint"
 }
 
 variable "bootstrap_storage_account_name" {
-  default     = ""
   type        = string
   description = "Bootstrap storage account name"
 }

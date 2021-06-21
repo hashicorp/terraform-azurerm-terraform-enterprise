@@ -7,8 +7,8 @@ locals {
   resource_group_name           = var.resource_group_name == "" ? azurerm_resource_group.tfe_resource_group[0].name : var.resource_group_name
   resource_group_name_dns       = var.resource_group_name_dns == "" ? local.resource_group_name : var.resource_group_name_dns
   resource_group_name_kv        = var.resource_group_name_kv == "" ? local.resource_group_name : var.resource_group_name_kv
-  resource_group_name_bootstrap = var.resource_group_name_bootstrap == "" ? azurerm_resource_group.tfe_resource_group_bootstrap[0].name : var.resource_group_name_bootstrap
-  resource_group_id_bootstrap   = var.resource_group_name_bootstrap == "" ? azurerm_resource_group.tfe_resource_group_bootstrap[0].id : data.azurerm_resource_group.bootstrap_resource_group[0].id
+  resource_group_name_bootstrap = var.resource_group_name_bootstrap == null ? azurerm_resource_group.tfe_resource_group_bootstrap[0].name : var.resource_group_name_bootstrap
+  resource_group_id_bootstrap   = var.resource_group_name_bootstrap == null ? azurerm_resource_group.tfe_resource_group_bootstrap[0].id : data.azurerm_resource_group.bootstrap_resource_group[0].id
 }
 
 resource "azurerm_resource_group" "tfe_resource_group" {
@@ -21,7 +21,7 @@ resource "azurerm_resource_group" "tfe_resource_group" {
 }
 
 resource "azurerm_resource_group" "tfe_resource_group_bootstrap" {
-  count = var.resource_group_name_bootstrap == "" ? 1 : 0
+  count = var.resource_group_name_bootstrap == null ? 1 : 0
 
   name     = "${var.friendly_name_prefix}-bootstrap-rg"
   location = var.location
@@ -30,7 +30,7 @@ resource "azurerm_resource_group" "tfe_resource_group_bootstrap" {
 }
 
 data "azurerm_resource_group" "bootstrap_resource_group" {
-  count = var.resource_group_name_bootstrap == "" ? 0 : 1
+  count = var.resource_group_name_bootstrap == null ? 0 : 1
 
   name = var.resource_group_name_bootstrap
 }

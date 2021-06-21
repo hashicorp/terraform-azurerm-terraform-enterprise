@@ -64,7 +64,7 @@ variable "resource_group_name_kv" {
 }
 
 variable "resource_group_name_bootstrap" {
-  default     = ""
+  default     = null
   type        = string
   description = "Azure resource group name for bootstrap"
 }

@@ -12,7 +12,7 @@ resource "azurerm_storage_container" "storage_account_container" {
 }
 
 resource "azurerm_storage_container" "bootstrap_storage_account_container" {
-  count = var.bootstrap_storage_account_container_name == "" ? 1 : 0
+  count = var.bootstrap_storage_account_container_name == null ? 1 : 0
 
   name                  = var.bootstrap_storage_account_name
   storage_account_name  = var.bootstrap_storage_account_name
@@ -20,7 +20,7 @@ resource "azurerm_storage_container" "bootstrap_storage_account_container" {
 }
 
 resource "azurerm_storage_blob" "bootstrap_license" {
-  count = var.bootstrap_storage_account_container_name == "" ? 1 : 0
+  count = var.bootstrap_storage_account_container_name == null ? 1 : 0
 
   source                 = var.tfe_license_filepath
   name                   = var.tfe_license_name
@@ -30,7 +30,7 @@ resource "azurerm_storage_blob" "bootstrap_license" {
 }
 
 resource "azurerm_storage_blob" "proxy_cert" {
-  count = var.proxy_cert_name != "" && var.bootstrap_storage_account_container_name == "" ? 1 : 0
+  count = var.proxy_cert_name != null && var.bootstrap_storage_account_container_name == null ? 1 : 0
 
   source                 = var.proxy_cert_path
   name                   = var.proxy_cert_name
