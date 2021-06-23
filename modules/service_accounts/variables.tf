@@ -22,6 +22,11 @@ variable "resource_group_name_bootstrap" {
   description = "Azure resource group name for bootstrap"
 }
 
+variable "resource_group_id_bootstrap" {
+  type        = string
+  description = "Azure resource group ID for bootstrap"
+}
+
 # Service Accounts
 # ----------------
 variable "storage_account_tier" {

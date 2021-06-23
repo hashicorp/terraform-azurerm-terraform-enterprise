@@ -138,6 +138,7 @@ module "service_accounts" {
 
   # Bootstrap storage
   bootstrap_storage_account_name = var.bootstrap_storage_account_name
+  resource_group_id_bootstrap    = module.resource_groups.resource_group_id_bootstrap
 
   tags = var.tags
 
@@ -387,7 +388,6 @@ module "vm" {
 
   friendly_name_prefix        = var.friendly_name_prefix
   resource_group_name         = module.resource_groups.resource_group_name
-  resource_group_id_bootstrap = module.resource_groups.resource_group_id_bootstrap
   location                    = var.location
 
   # VM
@@ -413,6 +413,7 @@ module "vm" {
     module.resource_groups,
     module.network,
     module.load_balancer,
-    module.user_data
+    module.user_data,
+    module.service_accounts
   ]
 }

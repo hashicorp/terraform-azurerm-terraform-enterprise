@@ -23,11 +23,6 @@ variable "resource_group_name" {
   description = "Azure resource group name"
 }
 
-variable "resource_group_id_bootstrap" {
-  type        = string
-  description = "Azure resource group ID for bootstrap"
-}
-
 variable "load_balancer_type" {
   default     = "application_gateway"
   type        = string

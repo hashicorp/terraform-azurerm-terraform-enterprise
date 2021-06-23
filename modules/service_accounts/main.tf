@@ -52,3 +52,9 @@ resource "azurerm_user_assigned_identity" "vmss" {
 
   tags = var.tags
 }
+
+resource "azurerm_role_assignment" "tfe_vmss_role_assignment" {
+  scope                = var.resource_group_id_bootstrap
+  role_definition_name = "Storage Blob Data Reader"
+  principal_id         = azurerm_user_assigned_identity.vmss.principal_id
+}
