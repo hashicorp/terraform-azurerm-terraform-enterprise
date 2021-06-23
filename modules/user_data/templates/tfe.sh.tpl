@@ -47,6 +47,9 @@ EOF
 		if [[ $proxy_cert != "" ]]
 		then
 
+			# Wait for VM to be assigned the Azure User Assigned Identity to read storage account
+			sleep 1m
+
 			if [[ $DISTRO_NAME == *"Red Hat"* ]]
 				then
 					sudo mkdir -p /usr/share/pki/ca-trust-source/anchors
@@ -103,6 +106,12 @@ yum_packages() {
 
 retrieve_tfe_license() {
 	echo "[$(date +"%FT%T")] [Terraform Enterprise] Retrieve TFE license" | tee -a /var/log/ptfe.log
+
+	# Wait for VM to be assigned the Azure User Assigned Identity to read storage account
+	if [[ $proxy_cert == "" ]]
+	then
+        sleep 1m
+    fi
 
 	# Obtain access token for Azure Storage
 	access_token=$(sudo curl --noproxy '*' 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fstorage.azure.com%2F' -H Metadata:true | jq -r .access_token)
