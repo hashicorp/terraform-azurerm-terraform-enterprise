@@ -138,6 +138,7 @@ module "service_accounts" {
 
   # Bootstrap storage
   bootstrap_storage_account_name = var.bootstrap_storage_account_name
+  resource_group_id_bootstrap    = module.resource_groups.resource_group_id_bootstrap
 
   tags = var.tags
 
@@ -162,10 +163,12 @@ module "object_storage" {
   proxy_cert_path = var.proxy_cert_path
 
   # Application storage
-  storage_account_name = module.service_accounts.storage_account_name
+  storage_account_name           = module.service_accounts.storage_account_name
+  storage_account_container_name = var.storage_account_container_name
 
   # Bootstrap storage
-  bootstrap_storage_account_name = module.service_accounts.bootstrap_storage_account_name
+  bootstrap_storage_account_name           = module.service_accounts.bootstrap_storage_account_name
+  bootstrap_storage_account_container_name = var.bootstrap_storage_account_container_name
 
   depends_on = [
     module.resource_groups,
@@ -385,7 +388,6 @@ module "vm" {
 
   friendly_name_prefix        = var.friendly_name_prefix
   resource_group_name         = module.resource_groups.resource_group_name
-  resource_group_id_bootstrap = module.resource_groups.resource_group_id_bootstrap
   location                    = var.location
 
   # VM
@@ -411,6 +413,7 @@ module "vm" {
     module.resource_groups,
     module.network,
     module.load_balancer,
-    module.user_data
+    module.user_data,
+    module.service_accounts
   ]
 }

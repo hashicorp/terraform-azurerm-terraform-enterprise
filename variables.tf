@@ -64,7 +64,7 @@ variable "resource_group_name_kv" {
 }
 
 variable "resource_group_name_bootstrap" {
-  default     = ""
+  default     = null
   type        = string
   description = "Azure resource group name for bootstrap"
 }
@@ -172,37 +172,37 @@ variable "tfe_license_filepath" {
 }
 
 variable "storage_account_name" {
-  default     = ""
+  default     = null
   type        = string
   description = "Storage account name"
 }
 
 variable "storage_account_key" {
-  default     = ""
+  default     = null
   type        = string
   description = "Storage account key"
 }
 
 variable "storage_account_container_name" {
-  default     = ""
+  default     = null
   type        = string
   description = "Storage account container name"
 }
 
 variable "storage_account_primary_blob_connection_string" {
-  default     = ""
+  default     = null
   type        = string
   description = "Storage account primary blob endpoint"
 }
 
 variable "bootstrap_storage_account_name" {
-  default     = ""
+  default     = null
   type        = string
   description = "Bootstrap storage account name"
 }
 
 variable "bootstrap_storage_account_container_name" {
-  default     = ""
+  default     = null
   type        = string
   description = "Bootstrap storage account container name"
 }

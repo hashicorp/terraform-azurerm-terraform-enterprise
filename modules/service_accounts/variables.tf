@@ -22,6 +22,11 @@ variable "resource_group_name_bootstrap" {
   description = "Azure resource group name for bootstrap"
 }
 
+variable "resource_group_id_bootstrap" {
+  type        = string
+  description = "Azure resource group ID for bootstrap"
+}
+
 # Service Accounts
 # ----------------
 variable "storage_account_tier" {
@@ -37,25 +42,21 @@ variable "storage_account_replication_type" {
 }
 
 variable "storage_account_name" {
-  default     = ""
   type        = string
   description = "Storage account name"
 }
 
 variable "storage_account_key" {
-  default     = ""
   type        = string
   description = "Storage account key"
 }
 
 variable "storage_account_primary_blob_connection_string" {
-  default     = ""
   type        = string
   description = "Storage account primary blob endpoint"
 }
 
 variable "bootstrap_storage_account_name" {
-  default     = ""
   type        = string
   description = "Bootstrap storage account name"
 }

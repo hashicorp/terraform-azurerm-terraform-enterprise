@@ -71,12 +71,6 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
   tags = var.tags
 }
 
-resource "azurerm_role_assignment" "tfe_vmss_role_assignment" {
-  scope                = var.resource_group_id_bootstrap
-  role_definition_name = "Storage Blob Data Reader"
-  principal_id         = var.vm_user_assigned_identity_principal_id
-}
-
 resource "azurerm_virtual_machine_scale_set_extension" "main" {
   name                         = "${var.friendly_name_prefix}-vmss-ext"
   virtual_machine_scale_set_id = azurerm_linux_virtual_machine_scale_set.tfe_vmss.id

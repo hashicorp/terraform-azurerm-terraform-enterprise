@@ -20,25 +20,25 @@ variable "tfe_license_filepath" {
 }
 
 variable "storage_account_name" {
-  default     = ""
+  default     = null
   type        = string
   description = "Storage account name"
 }
 
 variable "storage_account_container_name" {
-  default     = ""
+  default     = null
   type        = string
   description = "Storage account container name"
 }
 
 variable "bootstrap_storage_account_name" {
-  default     = ""
+  default     = null
   type        = string
   description = "Bootstrap storage account name"
 }
 
 variable "bootstrap_storage_account_container_name" {
-  default     = ""
+  default     = null
   type        = string
   description = "Bootstrap storage account container name"
 }
@@ -46,11 +46,9 @@ variable "bootstrap_storage_account_container_name" {
 # Proxy
 # -----
 variable "proxy_cert_name" {
-  default     = ""
   description = "Name for the stored proxy certificate bundle"
 }
 
 variable "proxy_cert_path" {
-  default     = ""
   description = "Local path to the proxy certificate bundle"
 }
