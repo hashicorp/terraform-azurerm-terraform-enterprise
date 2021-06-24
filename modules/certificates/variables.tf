@@ -20,7 +20,6 @@ variable "resource_group_name" {
 }
 
 variable "resource_group_name_kv" {
-  default     = ""
   type        = string
   description = "Name of resource group which contains desired key vault"
 }
@@ -65,32 +64,27 @@ variable "organization_name" {
 }
 
 variable "certificate_name" {
-  default     = ""
   type        = string
   description = "(recommended) Azure Key Vault Certificate name for Application Gateway"
 }
 
 variable "user_data_ca" {
-  default     = ""
   type        = string
   description = "(optional) Value to be provided for TFE ca_cert setting"
 }
 
 variable "user_data_cert" {
-  default     = ""
   type        = string
   description = "(optional) Value to be provided for Replicated TlsBootstrapCert setting"
 }
 
 variable "user_data_cert_key" {
-  default     = ""
   type        = string
   description = "(optional) Value to be provided for Replicated TlsBootstrapKey setting"
 }
 
 # Key Vault
 variable "key_vault_name" {
-  default     = ""
   type        = string
   description = "(recommended) Azure Key Vault name containing required certificate"
 }

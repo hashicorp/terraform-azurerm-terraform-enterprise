@@ -1,13 +1,13 @@
 output "tls_ca_cert" {
-  value = var.user_data_cert == "" ? tls_self_signed_cert.ca[0].cert_pem : var.user_data_ca
+  value = var.user_data_cert == null ? tls_self_signed_cert.ca[0].cert_pem : var.user_data_ca
 }
 
 output "tls_cert" {
-  value = var.user_data_cert == "" ? tls_locally_signed_cert.cert[0].cert_pem : var.user_data_cert
+  value = var.user_data_cert == null ? tls_locally_signed_cert.cert[0].cert_pem : var.user_data_cert
 }
 
 output "tls_key" {
-  value = var.user_data_cert == "" ? tls_private_key.cert[0].private_key_pem : var.user_data_cert_key
+  value = var.user_data_cert == null ? tls_private_key.cert[0].private_key_pem : var.user_data_cert_key
 }
 
 output "key_vault_id" {

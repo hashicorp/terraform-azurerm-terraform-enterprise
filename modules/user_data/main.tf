@@ -11,6 +11,7 @@ locals {
     TlsBootstrapType             = "server-path"
   }
 
+  proxy_cert_name = var.proxy_cert_name == null ? "" : var.proxy_cert_name
   user_data_release_sequence = {
     ReleaseSequence = var.user_data_release_sequence
   }
@@ -18,7 +19,7 @@ locals {
 
 locals {
   # Build TFE configuration in JSON format by merging partial config local variables
-  release_sequence = var.user_data_release_sequence != "" ? local.user_data_release_sequence : {}
+  release_sequence = var.user_data_release_sequence != null ? local.user_data_release_sequence : {}
 
   redis_configuration      = var.active_active ? local.redis_configs : {}
   tfe_configuration        = jsonencode(merge(local.base_configs, local.base_external_configs, local.external_azure_configs, local.redis_configuration))
@@ -48,7 +49,7 @@ locals {
       # Proxy information
       proxy_ip   = var.proxy_ip
       proxy_port = var.proxy_port
-      proxy_cert = var.proxy_cert_name
+      proxy_cert = local.proxy_cert_name
       no_proxy = join(
         ",",
         concat(

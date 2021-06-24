@@ -40,11 +40,11 @@ output "network_frontend_subnet_id" {
 }
 
 output "network_bastion_subnet_id" {
-  value = var.network_id != "" && var.create_bastion == true ? module.network.*.network_bastion_subnet_id : []
+  value = var.network_id != null && var.create_bastion == true ? module.network.*.network_bastion_subnet_id : []
 }
 
 output "network_redis_subnet_id" {
-  value = var.network_id != "" && local.active_active == true ? module.network.*.network_redis_subnet_id : []
+  value = var.network_id != null && local.active_active == true ? module.network.*.network_redis_subnet_id : []
 }
 
 # Service Accounts
@@ -100,7 +100,7 @@ output "database_name" {
 # SSH
 # ---
 output "instance_private_key" {
-  value = var.vm_public_key == "" ? tls_private_key.tfe_ssh[0].private_key_pem : "An existing 'vm_public_key' was provided"
+  value = var.vm_public_key == null ? tls_private_key.tfe_ssh[0].private_key_pem : "An existing 'vm_public_key' was provided"
 }
 
 # Bastion

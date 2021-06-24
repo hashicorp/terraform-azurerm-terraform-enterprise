@@ -29,17 +29,17 @@ locals {
 
   # DNS
   # ---
-  tfe_subdomain     = var.tfe_subdomain == "" ? substr(random_pet.tfe_subdomain[0].id, 0, 24) : var.tfe_subdomain
-  dns_internal_fqdn = var.domain_name == "" ? azurerm_public_ip.tfe_pip.fqdn : "${local.tfe_subdomain}.${var.domain_name}"
+  tfe_subdomain     = var.tfe_subdomain == null ? substr(random_pet.tfe_subdomain[0].id, 0, 24) : var.tfe_subdomain
+  dns_internal_fqdn = var.domain_name == null ? azurerm_public_ip.tfe_pip.fqdn : "${local.tfe_subdomain}.${var.domain_name}"
   fqdn              = var.dns_external_fqdn == "" ? local.dns_internal_fqdn : var.dns_external_fqdn
 
   # Network
   # -------
-  network_id                 = var.network_id == "" ? module.network[0].network_id : var.network_id
-  network_private_subnet_id  = var.network_private_subnet_id == "" ? module.network[0].network_private_subnet_id : var.network_private_subnet_id
-  network_frontend_subnet_id = var.network_frontend_subnet_id == "" ? module.network[0].network_frontend_subnet_id : var.network_frontend_subnet_id
-  network_bastion_subnet_id  = var.network_bastion_subnet_id == "" && var.create_bastion == true ? module.network[0].network_bastion_subnet_id : var.network_bastion_subnet_id
-  network_redis_subnet_id    = var.network_redis_subnet_id == "" && local.active_active == true ? module.network[0].network_redis_subnet_id : var.network_redis_subnet_id
+  network_id                 = var.network_id == null ? module.network[0].network_id : var.network_id
+  network_private_subnet_id  = var.network_private_subnet_id == null ? module.network[0].network_private_subnet_id : var.network_private_subnet_id
+  network_frontend_subnet_id = var.network_frontend_subnet_id == null ? module.network[0].network_frontend_subnet_id : var.network_frontend_subnet_id
+  network_bastion_subnet_id  = var.network_bastion_subnet_id == null && var.create_bastion == true ? module.network[0].network_bastion_subnet_id : var.network_bastion_subnet_id
+  network_redis_subnet_id    = var.network_redis_subnet_id == null && local.active_active == true ? module.network[0].network_redis_subnet_id : var.network_redis_subnet_id
 
   # Redis
   # -----
@@ -65,7 +65,7 @@ module "resource_groups" {
 # Subdomain
 # ---------
 resource "random_pet" "tfe_subdomain" {
-  count = var.tfe_subdomain == "" ? 1 : 0
+  count = var.tfe_subdomain == null ? 1 : 0
 
   length    = 3
   separator = ""
@@ -80,7 +80,7 @@ resource "azurerm_public_ip" "tfe_pip" {
 
   sku               = "Standard"
   allocation_method = "Static"
-  domain_name_label = var.domain_name == "" ? local.tfe_subdomain : null
+  domain_name_label = var.domain_name == null ? local.tfe_subdomain : null
 
   tags = var.tags
 }
@@ -88,7 +88,7 @@ resource "azurerm_public_ip" "tfe_pip" {
 # SSH for instances
 # -----------------
 resource "tls_private_key" "tfe_ssh" {
-  count = var.vm_public_key == "" ? 1 : 0
+  count = var.vm_public_key == null ? 1 : 0
 
   algorithm = "RSA"
   rsa_bits  = 4096
@@ -180,7 +180,7 @@ module "object_storage" {
 # -------------------------------------------------
 module "network" {
   source = "./modules/network"
-  count  = var.network_id == "" ? 1 : 0
+  count  = var.network_id == null ? 1 : 0
 
   friendly_name_prefix = var.friendly_name_prefix
   resource_group_name  = module.resource_groups.resource_group_name
@@ -293,9 +293,9 @@ module "user_data" {
   user_data_release_sequence = var.user_data_release_sequence
 
   # Certificates
-  user_data_ca       = var.user_data_ca == "" ? replace(module.certificates.tls_ca_cert, "\n", "\n") : replace(var.user_data_ca, "\n", "\n")
-  user_data_cert     = var.user_data_cert == "" ? module.certificates.tls_cert : var.user_data_cert
-  user_data_cert_key = var.user_data_cert_key == "" ? module.certificates.tls_key : var.user_data_cert_key
+  user_data_ca       = var.user_data_ca == null ? replace(module.certificates.tls_ca_cert, "\n", "\n") : replace(var.user_data_ca, "\n", "\n")
+  user_data_cert     = var.user_data_cert == null ? module.certificates.tls_cert : var.user_data_cert
+  user_data_cert_key = var.user_data_cert_key == null ? module.certificates.tls_key : var.user_data_cert_key
 
   # Proxy
   proxy_ip        = var.proxy_ip
@@ -357,7 +357,7 @@ module "load_balancer" {
   key_vault_id                    = var.load_balancer_type == "application_gateway" ? module.certificates.key_vault_id : ""
   certificate_name                = var.load_balancer_type == "application_gateway" ? module.certificates.certificate_name : ""
   certificate_key_vault_secret_id = var.load_balancer_type == "application_gateway" ? module.certificates.certificate_key_vault_secret_id : ""
-  trusted_root_certificate        = var.load_balancer_type == "application_gateway" && var.user_data_ca == "" ? module.certificates.tls_ca_cert : var.user_data_ca
+  trusted_root_certificate        = var.load_balancer_type == "application_gateway" && var.user_data_ca == null ? module.certificates.tls_ca_cert : var.user_data_ca
 
   # Network
   network_frontend_subnet_id = local.network_frontend_subnet_id
@@ -396,7 +396,7 @@ module "vm" {
   vm_os_disk_disk_size_gb                = var.vm_os_disk_disk_size_gb
   vm_subnet_id                           = local.network_private_subnet_id
   vm_user                                = var.vm_user
-  vm_public_key                          = var.vm_public_key == "" ? tls_private_key.tfe_ssh[0].public_key_openssh : var.vm_public_key
+  vm_public_key                          = var.vm_public_key == null ? tls_private_key.tfe_ssh[0].public_key_openssh : var.vm_public_key
   vm_userdata_script                     = module.user_data.tfe_userdata_base64_encoded
   vm_node_count                          = var.vm_node_count
   vm_user_assigned_identity_id           = module.service_accounts.vmss_user_assigned_identity.id

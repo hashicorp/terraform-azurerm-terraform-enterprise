@@ -1,17 +1,21 @@
+output "friendly_name_prefix" {
+  value = local.friendly_name_prefix
+}
+
+output "resource_group_name" {
+  value = azurerm_resource_group.main.name
+}
+
+output "location" {
+  value = azurerm_resource_group.main.location
+}
+
 output "host_id" {
-  value = azurerm_linux_virtual_machine.vm.id
-}
-
-output "host_public_ip" {
-  value = azurerm_public_ip.vm.*.ip_address
-}
-
-output "host_dns" {
-  value = azurerm_public_ip.vm.*.fqdn
+  value = azurerm_linux_virtual_machine.proxy.id
 }
 
 output "host_private_ip" {
-  value = azurerm_linux_virtual_machine.vm.private_ip_address
+  value = azurerm_linux_virtual_machine.proxy.private_ip_address
 }
 
 output "network_id" {

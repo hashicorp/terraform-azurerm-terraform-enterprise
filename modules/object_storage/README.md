@@ -12,7 +12,7 @@
 ```hcl
 module "object_storage" {
   source = "./modules/object_storage"
-  count  = var.storage_account_container_name == "" ? 1 : 0
+  count  = var.storage_account_container_name == null ? 1 : 0
 
   friendly_name_prefix = var.friendly_name_prefix
 

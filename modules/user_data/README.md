@@ -48,9 +48,9 @@ module "user_data" {
   user_data_release_sequence = var.user_data_release_sequence
 
   # Certificates
-  user_data_ca       = var.user_data_ca == "" ? replace(module.certificates.tls_ca_cert, "\n", "\n") : replace(var.user_data_ca, "\n", "\n")
-  user_data_cert     = var.user_data_cert == "" ? module.certificates.tls_cert : var.user_data_cert
-  user_data_cert_key = var.user_data_cert_key == "" ? module.certificates.tls_key : var.user_data_cert_key
+  user_data_ca       = var.user_data_ca == null ? replace(module.certificates.tls_ca_cert, "\n", "\n") : replace(var.user_data_ca, "\n", "\n")
+  user_data_cert     = var.user_data_cert == null ? module.certificates.tls_cert : var.user_data_cert
+  user_data_cert_key = var.user_data_cert_key == null ? module.certificates.tls_key : var.user_data_cert_key
 }
 ```
 

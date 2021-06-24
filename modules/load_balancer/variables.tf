@@ -6,31 +6,26 @@ variable "friendly_name_prefix" {
 }
 
 variable "domain_name" {
-  default     = ""
   type        = string
   description = "(Required) Domain to create Terraform Enterprise subdomain within"
 }
 
 variable "tfe_subdomain" {
-  default     = ""
   type        = string
   description = "Subdomain for TFE"
 }
 
 variable "fqdn" {
-  default     = ""
   type        = string
   description = "The fully qualified domain name for the TFE environment"
 }
 
 variable "tfe_pip_id" {
-  default     = ""
   type        = string
   description = "The TFE public ip resource ID"
 }
 
 variable "tfe_pip_ip_address" {
-  default     = ""
   type        = string
   description = "The TFE public ip address"
 }
@@ -74,7 +69,6 @@ variable "tenant_id" {
 }
 
 variable "resource_group_name_dns" {
-  default     = ""
   type        = string
   description = "Azure resource group name to use for DNS"
 }
@@ -85,19 +79,16 @@ variable "key_vault_id" {
 }
 
 variable "certificate_name" {
-  default     = ""
   type        = string
   description = "Name of Azure Key Vault Certificate for Application Gateway"
 }
 
 variable "certificate_key_vault_secret_id" {
-  default     = ""
   type        = string
   description = "Secret ID of Azure Key Vault Certificate for Application Gateway"
 }
 
 variable "trusted_root_certificate" {
-  default     = ""
   type        = string
   description = "Backend root certificate for Application Gateway to trust"
 }
@@ -200,7 +191,7 @@ variable "network_frontend_subnet_id" {
 }
 
 variable "network_private_ip" {
-  default     = ""
+  default     = null
   type        = string
   description = "(optional) Private IP address to use for LB/AG endpoint"
 }

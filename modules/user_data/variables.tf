@@ -93,31 +93,26 @@ variable "user_data_bootstrap_storage_container_name" {
 # TFE
 # ---
 variable "user_data_release_sequence" {
-  default     = ""
   type        = string
   description = "Terraform Enterprise version release sequence"
 }
 
 variable "user_data_tfe_license_name" {
-  default     = ""
   type        = string
   description = "Terraform Enterprise license file name"
 }
 
 variable "user_data_ca" {
-  default     = ""
   type        = string
   description = "(optional) Value to be provided for TFE ca_cert setting"
 }
 
 variable "user_data_cert" {
-  default     = ""
   type        = string
   description = "(optional) Value to be provided for Replicated TlsBootstrapCert setting"
 }
 
 variable "user_data_cert_key" {
-  default     = ""
   type        = string
   description = "(optional) Value to be provided for Replicated TlsBootstrapKey setting"
 }
@@ -125,7 +120,6 @@ variable "user_data_cert_key" {
 # Proxy
 # -----
 variable "proxy_ip" {
-  default     = ""
   type        = string
   description = "IP Address of the proxy server"
 }
@@ -136,13 +130,11 @@ variable "proxy_port" {
 }
 
 variable "proxy_cert_name" {
-  default     = ""
   type        = string
   description = "Name for the stored proxy certificate bundle"
 }
 
 variable "proxy_cert_path" {
-  default     = ""
   type        = string
   description = "Local path to the proxy certificate bundle"
 }
