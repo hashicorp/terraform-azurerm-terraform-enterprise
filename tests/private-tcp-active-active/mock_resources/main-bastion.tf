@@ -8,29 +8,29 @@ resource "tls_private_key" "bastion_ssh" {
 # Bastion Networking
 # ------------------
 resource "azurerm_subnet" "vm_bastion" {
-  name                = "${var.friendly_name_prefix}-vm-bastion-subnet"
-  resource_group_name = var.resource_group_name
+  name                = "${local.friendly_name_prefix}-vm-bastion-subnet"
+  resource_group_name = local.resource_group_name
 
-  address_prefixes     = [var.network_bastion_subnet_cidr]
-  virtual_network_name = "${var.friendly_name_prefix}-network"
+  address_prefixes     = ["10.0.16.0/20"]
+  virtual_network_name = "${local.friendly_name_prefix}-network"
 
   depends_on = [module.network]
 }
 
 resource "azurerm_public_ip" "vm_bastion" {
-  name                = format("%s-vm-bastion", var.friendly_name_prefix)
-  location            = var.location
-  resource_group_name = var.resource_group_name
+  name                = format("%s-vm-bastion", local.friendly_name_prefix)
+  location            = local.location
+  resource_group_name = local.resource_group_name
 
   allocation_method = "Dynamic"
-  domain_name_label = random_pet.vm.id
+  domain_name_label = "${local.friendly_name_prefix}-bastion"
   tags              = var.tags
 }
 
 resource "azurerm_network_interface" "vm_bastion" {
-  name                = format("%s-vm-bastion-nic", var.friendly_name_prefix)
-  location            = var.location
-  resource_group_name = var.resource_group_name
+  name                = format("%s-vm-bastion-nic", local.friendly_name_prefix)
+  location            = local.location
+  resource_group_name = local.resource_group_name
 
   ip_configuration {
     name                          = "ipconfig"
@@ -42,9 +42,9 @@ resource "azurerm_network_interface" "vm_bastion" {
 }
 
 resource "azurerm_network_security_group" "vm_bastion_nsg" {
-  name                = "${var.friendly_name_prefix}-vm-bastion-nsg"
-  location            = var.location
-  resource_group_name = var.resource_group_name
+  name                = "${local.friendly_name_prefix}-vm-bastion-nsg"
+  location            = local.location
+  resource_group_name = local.resource_group_name
 
   # Allow inbound SSH traffic to bastion
   # default value for network_allow_range is * so it is open to world if not supplied
@@ -55,11 +55,12 @@ resource "azurerm_network_security_group" "vm_bastion_nsg" {
     access    = "Allow"
     protocol  = "Tcp"
 
-    source_address_prefix = var.network_allow_range
+    # *********** THIS NEEDS TO CHANGE *********
+    source_address_prefix = "*"
     source_port_range     = "*"
 
     destination_port_range     = "22"
-    destination_address_prefix = var.network_bastion_subnet_cidr
+    destination_address_prefix = "10.0.16.0/20"
   }
 
   tags = var.tags
@@ -73,9 +74,9 @@ resource "azurerm_network_interface_security_group_association" "bastion" {
 # VM bastion
 # ----------
 resource "azurerm_linux_virtual_machine" "vm_bastion" {
-  name                = format("%s-bastion-vm", var.friendly_name_prefix)
-  location            = var.location
-  resource_group_name = var.resource_group_name
+  name                = format("%s-bastion-vm", local.friendly_name_prefix)
+  location            = local.location
+  resource_group_name = local.resource_group_name
 
   network_interface_ids = [azurerm_network_interface.vm_bastion.id]
   size                  = "Standard_D1_v2"
