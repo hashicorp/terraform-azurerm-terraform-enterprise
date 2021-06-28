@@ -34,6 +34,10 @@ output "network_frontend_subnet_id" {
   value = module.network.network_frontend_subnet_id
 }
 
+output "proxy_port" {
+  value = local.proxy_port
+}
+
 # private key local file excluded via gitignore
 resource "local_file" "proxy_key" {
   filename        = "${path.module}/proxy_key.pem"
