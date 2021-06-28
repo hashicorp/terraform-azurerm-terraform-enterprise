@@ -38,21 +38,7 @@ output "proxy_port" {
   value = local.proxy_port
 }
 
-# private key local file excluded via gitignore
-resource "local_file" "proxy_key" {
-  filename        = "${path.module}/proxy_key.pem"
-  file_permission = "0600"
-  content         = tls_private_key.proxy_ssh.private_key_pem
-}
-
 # bastion fqdn
 output "bastion_fqdn" {
   value = azurerm_public_ip.vm_bastion.fqdn
-}
-
-# private key local file excluded via gitignore
-resource "local_file" "bastion_key" {
-  filename        = "${path.module}/bastion_key.pem"
-  file_permission = "0600"
-  content         = tls_private_key.bastion_ssh.private_key_pem
 }

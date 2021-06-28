@@ -38,15 +38,21 @@ module "network" {
   create_bastion = false
 }
 
-# Create an SSH key for proxy instance
-# ------------------------------------
-resource "tls_private_key" "proxy_ssh" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
+# SSH keys
+# --------
+data "azurerm_key_vault" "kv" {
+  name                = var.key_vault_name
+  resource_group_name = var.resource_group_name_kv
 }
 
-resource "random_pet" "proxy" {
-  length = 2
+data "azurerm_key_vault_secret" "proxy_public_key" {
+  name         = "proxy-public-key"
+  key_vault_id = data.azurerm_key_vault.kv.id
+}
+
+data "azurerm_key_vault_secret" "bastion_public_key" {
+  name         = "bastion-public-key"
+  key_vault_id = data.azurerm_key_vault.kv.id
 }
 
 # Create a subnet for proxy
@@ -61,8 +67,8 @@ resource "azurerm_subnet" "proxy" {
   depends_on = [module.network]
 }
 
-# Create a security group for proxy, default access is currently wide open
-# ------------------------------------------------------------------------
+# Create a security group for proxy
+# ---------------------------------
 resource "azurerm_network_security_group" "proxy" {
   name                = "${local.friendly_name_prefix}-proxy-nsg"
   location            = local.location
@@ -140,7 +146,7 @@ resource "azurerm_linux_virtual_machine" "proxy" {
 
   admin_ssh_key {
     username   = local.proxy_user
-    public_key = tls_private_key.proxy_ssh.public_key_openssh
+    public_key = data.azurerm_key_vault_secret.proxy_public_key.value
   }
 
   tags = var.tags

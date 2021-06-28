@@ -5,9 +5,12 @@ provider "azurerm" {
 module "mock_resources" {
   source = "./mock_resources"
   tags   = local.common_tags
+
+  resource_group_name_kv = var.resource_group_name_kv
+  key_vault_name         = var.key_vault_name
 }
 
-module "tfe" {
+module "private_active_active" {
   source = "../../"
 
   location             = module.mock_resources.location
