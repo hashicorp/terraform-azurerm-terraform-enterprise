@@ -2,7 +2,7 @@
 # -----------------------
 # CA Key
 resource "tls_private_key" "ca" {
-  count = var.user_data_cert == "" ? 1 : 0
+  count = var.user_data_cert == null ? 1 : 0
 
   algorithm   = var.private_key_algorithm
   ecdsa_curve = var.private_key_ecdsa_curve
@@ -11,7 +11,7 @@ resource "tls_private_key" "ca" {
 
 # CA Cert
 resource "tls_self_signed_cert" "ca" {
-  count = var.user_data_cert == "" ? 1 : 0
+  count = var.user_data_cert == null ? 1 : 0
 
   is_ca_certificate = true
 
@@ -34,7 +34,7 @@ resource "tls_self_signed_cert" "ca" {
 
 # Cert Key
 resource "tls_private_key" "cert" {
-  count = var.user_data_cert == "" ? 1 : 0
+  count = var.user_data_cert == null ? 1 : 0
 
   algorithm   = var.private_key_algorithm
   ecdsa_curve = var.private_key_ecdsa_curve
@@ -43,7 +43,7 @@ resource "tls_private_key" "cert" {
 
 # Cert Request
 resource "tls_cert_request" "cert" {
-  count = var.user_data_cert == "" ? 1 : 0
+  count = var.user_data_cert == null ? 1 : 0
 
   key_algorithm   = tls_private_key.cert[0].algorithm
   private_key_pem = tls_private_key.cert[0].private_key_pem
@@ -58,7 +58,7 @@ resource "tls_cert_request" "cert" {
 
 # Cert
 resource "tls_locally_signed_cert" "cert" {
-  count = var.user_data_cert == "" ? 1 : 0
+  count = var.user_data_cert == null ? 1 : 0
 
   cert_request_pem = tls_cert_request.cert[0].cert_request_pem
 
@@ -79,7 +79,7 @@ resource "tls_locally_signed_cert" "cert" {
 # ---------------
 # Create a new Azure Key Vault if not supplied
 resource "azurerm_key_vault" "kv" {
-  count = var.key_vault_name == "" && var.load_balancer_type == "application_gateway" ? 1 : 0
+  count = var.key_vault_name == null && var.load_balancer_type == "application_gateway" ? 1 : 0
 
   name                = "${var.friendly_name_prefix}-kv"
   location            = var.location
@@ -95,7 +95,7 @@ resource "azurerm_key_vault" "kv" {
 }
 
 resource "azurerm_key_vault_access_policy" "tfe_kv_acl" {
-  count = var.key_vault_name == "" && var.load_balancer_type == "application_gateway" ? 1 : 0
+  count = var.key_vault_name == null && var.load_balancer_type == "application_gateway" ? 1 : 0
 
   key_vault_id = azurerm_key_vault.kv[0].id
   tenant_id    = var.tenant_id
@@ -149,7 +149,7 @@ resource "azurerm_key_vault_access_policy" "tfe_kv_acl" {
 # Azure Key Vault Certificate
 # ---------------------------
 resource "azurerm_key_vault_certificate" "cert" {
-  count = (var.certificate_name == "" || var.key_vault_name == "") && var.load_balancer_type == "application_gateway" ? 1 : 0
+  count = (var.certificate_name == null || var.key_vault_name == null) && var.load_balancer_type == "application_gateway" ? 1 : 0
 
   name         = "${var.friendly_name_prefix}cert"
   key_vault_id = azurerm_key_vault.kv[0].id

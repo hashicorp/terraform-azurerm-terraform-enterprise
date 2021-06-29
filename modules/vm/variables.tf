@@ -61,7 +61,6 @@ variable "vm_node_count" {
 }
 
 variable "vm_userdata_script" {
-  default = ""
   type    = string
 }
 

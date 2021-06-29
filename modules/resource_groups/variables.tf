@@ -14,19 +14,16 @@ variable "location" {
 }
 
 variable "resource_group_name" {
-  default     = ""
   type        = string
   description = "(Required) Azure resource group name"
 }
 
 variable "resource_group_name_dns" {
-  default     = ""
   type        = string
   description = "Name of resource group which contains desired DNS zone"
 }
 
 variable "resource_group_name_kv" {
-  default     = ""
   type        = string
   description = "Name of resource group which contains desired key vault"
 }

@@ -1,6 +1,6 @@
 locals {
   # Determine private IP address based on CIDR range if not already supplied and if load balancer public is false
-  private_ip_address = var.network_private_ip == "" && var.load_balancer_public == false ? cidrhost(var.network_frontend_subnet_cidr, 16) : var.network_private_ip
+  private_ip_address = var.network_private_ip == null && var.load_balancer_public == false ? cidrhost(var.network_frontend_subnet_cidr, 16) : var.network_private_ip
 
   # Determine the resulting TFE IP
   load_balancer_ip = var.load_balancer_public == true ? var.tfe_pip_ip_address : local.private_ip_address
@@ -30,7 +30,7 @@ locals {
 # New DNS Record
 # --------------
 resource "azurerm_dns_a_record" "tfe_pip_dns" {
-  count = var.domain_name != "" && var.dns_create_record == true ? 1 : 0
+  count = var.domain_name != null && var.dns_create_record == true ? 1 : 0
 
   name                = var.tfe_subdomain
   zone_name           = var.domain_name

@@ -2,15 +2,8 @@
 
 set -e -u -o pipefail
 
-DISTRO_NAME=$(grep "^NAME=" /etc/os-release | cut -d"\"" -f2)
-if [[ $DISTRO_NAME == *"Red Hat"* ]]
-then
-    sudo yum update -y
-    sudo yum install squid -y
-else
-    sudo apt-get update -y
-    sudo apt-get install apache2 squid -y
-fi
+sudo apt-get update -y
+sudo apt-get install apache2 squid -y
 
 sudo cat <<EOF > /etc/squid/squid.conf
 http_port ${http_proxy_port}
@@ -44,13 +37,4 @@ refresh_pattern -i (/cgi-bin/|\?) 0     0%      0
 refresh_pattern .               0       20%     4320
 EOF
 
-if [[ $DISTRO_NAME == *"Red Hat"* ]]
-then
-    sudo systemctl stop firewalld
-    sudo firewall-offline-cmd --add-port=${http_proxy_port}/tcp
-    sudo systemctl start firewalld
-    sudo systemctl restart squid
-    sudo systemctl enable squid
-else
-    sudo /etc/init.d/squid restart
-fi
+sudo /etc/init.d/squid restart

@@ -11,7 +11,7 @@
 ```hcl
 module "service_accounts" {
   source = "./modules/service_accounts"
-  count  = var.storage_account_name == "" ? 1 : 0
+  count  = var.storage_account_name == null ? 1 : 0
 
   friendly_name_prefix = var.friendly_name_prefix
   resource_group_name  = local.resource_group_name

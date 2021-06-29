@@ -6,13 +6,13 @@ variable "friendly_name_prefix" {
 }
 
 variable "domain_name" {
-  default     = ""
+  default     = null
   type        = string
   description = "(Required) Domain to create Terraform Enterprise subdomain within"
 }
 
 variable "tfe_subdomain" {
-  default     = ""
+  default     = null
   type        = string
   description = "Subdomain for TFE"
 }
@@ -46,19 +46,19 @@ variable "zones" {
 }
 
 variable "resource_group_name" {
-  default     = ""
+  default     = null
   type        = string
   description = "(Required) Azure resource group name"
 }
 
 variable "resource_group_name_dns" {
-  default     = ""
+  default     = null
   type        = string
   description = "Name of resource group which contains desired DNS zone"
 }
 
 variable "resource_group_name_kv" {
-  default     = ""
+  default     = null
   type        = string
   description = "Name of resource group which contains desired key vault"
 }
@@ -70,13 +70,13 @@ variable "resource_group_name_bootstrap" {
 }
 
 variable "key_vault_name" {
-  default     = ""
+  default     = null
   type        = string
   description = "(recommended) Azure Key Vault name containing required certificate"
 }
 
 variable "certificate_name" {
-  default     = ""
+  default     = null
   type        = string
   description = "(recommended) Azure Key Vault Certificate name for Application Gateway"
 }
@@ -92,31 +92,31 @@ variable "create_bastion" {
 # Network
 # -------
 variable "network_id" {
-  default     = ""
+  default     = null
   type        = string
   description = "(Optional) Existing network ID"
 }
 
 variable "network_private_subnet_id" {
-  default     = ""
+  default     = null
   type        = string
   description = "(Optional) Existing network private subnet ID"
 }
 
 variable "network_frontend_subnet_id" {
-  default     = ""
+  default     = null
   type        = string
   description = "(Optional) Existing network frontend subnet ID"
 }
 
 variable "network_bastion_subnet_id" {
-  default     = ""
+  default     = null
   type        = string
   description = "(Optional) Existing network Bastion subnet ID"
 }
 
 variable "network_redis_subnet_id" {
-  default     = ""
+  default     = null
   type        = string
   description = "(Optional) Existing network Redis subnet ID"
 }
@@ -411,7 +411,7 @@ variable "vm_user" {
 }
 
 variable "vm_public_key" {
-  default     = ""
+  default     = null
   type        = string
   description = "Virtual machine public key for authentication (2048-bit ssh-rsa)"
 }
@@ -458,19 +458,19 @@ variable "user_data_release_sequence" {
 }
 
 variable "user_data_ca" {
-  default     = ""
+  default     = null
   type        = string
   description = "(optional) Value to be provided for TFE ca_cert setting"
 }
 
 variable "user_data_cert" {
-  default     = ""
+  default     = null
   type        = string
   description = "(optional) Value to be provided for Replicated TlsBootstrapCert setting"
 }
 
 variable "user_data_cert_key" {
-  default     = ""
+  default     = null
   type        = string
   description = "(optional) Value to be provided for Replicated TlsBootstrapKey setting"
 }
@@ -483,7 +483,7 @@ variable "user_data_redis_use_tls" {
 # Proxy
 # -----
 variable "proxy_ip" {
-  default     = ""
+  default     = null
   type        = string
   description = "IP Address of the proxy server"
 }
@@ -494,13 +494,13 @@ variable "proxy_port" {
 }
 
 variable "proxy_cert_name" {
-  default     = ""
+  default     = null
   type        = string
   description = "Name for the stored proxy certificate bundle"
 }
 
 variable "proxy_cert_path" {
-  default     = ""
+  default     = null
   type        = string
   description = "Local path to the proxy certificate bundle"
 }
