@@ -16,8 +16,8 @@ resource "azurerm_resource_group" "main" {
   tags = var.tags
 }
 
-# Create a virtual network for proxy example
-# ------------------------------------------
+# Create a virtual network for proxy
+# ----------------------------------
 module "network" {
   source = "../../../modules/network"
 
