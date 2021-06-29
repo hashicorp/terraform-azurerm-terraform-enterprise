@@ -55,7 +55,6 @@ resource "azurerm_network_security_group" "vm_bastion_nsg" {
     access    = "Allow"
     protocol  = "Tcp"
 
-    # *********** THIS NEEDS TO CHANGE *********
     source_address_prefix = "*"
     source_port_range     = "*"
 
