@@ -16,8 +16,8 @@ resource "azurerm_resource_group" "main" {
   tags = var.tags
 }
 
-# Create a virtual network for proxy example
-# ------------------------------------------
+# Create a virtual network for proxy
+# ----------------------------------
 module "network" {
   source = "../../../modules/network"
 
@@ -38,47 +38,21 @@ module "network" {
   create_bastion = false
 }
 
-# Create an SSH key for proxy instance
-# ------------------------------------
-resource "tls_private_key" "proxy_ssh" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
+# SSH keys & Certs
+# ----------------
+data "azurerm_key_vault" "kv" {
+  name                = var.key_vault_name
+  resource_group_name = var.resource_group_name_kv
 }
 
-# Create a certificate for proxy instance
-# ---------------------------------------
-resource "tls_private_key" "ca" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
+data "azurerm_key_vault_secret" "proxy_public_key" {
+  name         = "private-tcp-active-active-proxy-public-key"
+  key_vault_id = data.azurerm_key_vault.kv.id
 }
 
-resource "tls_self_signed_cert" "ca" {
-  key_algorithm         = tls_private_key.ca.algorithm
-  private_key_pem       = tls_private_key.ca.private_key_pem
-  validity_period_hours = 24 * 30 * 6
-
-  subject {
-    organization = "HashiCorp (NonTrusted)"
-    common_name  = "HashiCorp (NonTrusted) Private Certificate Authority"
-    country      = "US"
-  }
-
-  is_ca_certificate = true
-
-  allowed_uses = [
-    "cert_signing",
-    "key_encipherment",
-    "digital_signature"
-  ]
-}
-
-resource "local_file" "ca" {
-  filename = "${path.module}/files/mitmproxy.pem"
-  content  = tls_self_signed_cert.ca.cert_pem
-}
-
-resource "random_pet" "proxy" {
-  length = 2
+data "azurerm_key_vault_secret" "bastion_public_key" {
+  name         = "private-tcp-active-active-bastion-public-key"
+  key_vault_id = data.azurerm_key_vault.kv.id
 }
 
 # Create a subnet for proxy
@@ -93,8 +67,8 @@ resource "azurerm_subnet" "proxy" {
   depends_on = [module.network]
 }
 
-# Create a security group for proxy, default access is currently wide open
-# ------------------------------------------------------------------------
+# Create a security group for proxy
+# ---------------------------------
 resource "azurerm_network_security_group" "proxy" {
   name                = "${local.friendly_name_prefix}-proxy-nsg"
   location            = local.location
@@ -145,6 +119,34 @@ resource "azurerm_network_interface_security_group_association" "proxy" {
   network_security_group_id = azurerm_network_security_group.proxy.id
 }
 
+# Managed Service Identity
+# ------------------------
+resource "azurerm_user_assigned_identity" "proxy" {
+  name                = "${var.friendly_name_prefix}-proxy-msi"
+  location            = local.location
+  resource_group_name = local.resource_group_name
+
+  tags = var.tags
+}
+
+# Key Vault Policy - allow 'get' permission for proxy's managed identity
+# ----------------
+resource "azurerm_key_vault_access_policy" "tfe_kv_acl" {
+  key_vault_id = data.azurerm_key_vault.kv.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = azurerm_user_assigned_identity.proxy.principal_id
+
+  certificate_permissions = [
+    "get",
+    "list"
+  ]
+
+  secret_permissions = [
+    "get",
+    "list"
+  ]
+}
+
 # Create the proxy virtual machine
 # --------------------------------
 resource "azurerm_linux_virtual_machine" "proxy" {
@@ -172,7 +174,13 @@ resource "azurerm_linux_virtual_machine" "proxy" {
 
   admin_ssh_key {
     username   = local.proxy_user
-    public_key = tls_private_key.proxy_ssh.public_key_openssh
+    public_key = data.azurerm_key_vault_secret.proxy_public_key.value
+  }
+
+  identity {
+    type = "UserAssigned"
+
+    identity_ids = [azurerm_user_assigned_identity.proxy.id]
   }
 
   tags = var.tags

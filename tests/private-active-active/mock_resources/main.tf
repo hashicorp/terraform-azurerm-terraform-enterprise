@@ -46,12 +46,12 @@ data "azurerm_key_vault" "kv" {
 }
 
 data "azurerm_key_vault_secret" "proxy_public_key" {
-  name         = "proxy-public-key"
+  name         = "private-active-active-proxy-public-key"
   key_vault_id = data.azurerm_key_vault.kv.id
 }
 
 data "azurerm_key_vault_secret" "bastion_public_key" {
-  name         = "bastion-public-key"
+  name         = "private-active-active-bastion-public-key"
   key_vault_id = data.azurerm_key_vault.kv.id
 }
 

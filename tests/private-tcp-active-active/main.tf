@@ -7,7 +7,7 @@ module "mock_resources" {
   tags   = local.common_tags
 }
 
-module "tfe" {
+module "private_tcp_active_active" {
   source = "../../"
 
   location             = module.mock_resources.location

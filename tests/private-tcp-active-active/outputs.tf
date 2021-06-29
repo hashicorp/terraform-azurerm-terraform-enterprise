@@ -1,21 +1,27 @@
-# Application
-# -----------
-output "tfe_application_url" {
-  value       = module.tfe.tfe_application_url
-  description = "Terraform Enterprise Application URL"
+output "private_tcp_active_active" {
+  value       = module.private_tcp_active_active
+  description = "The outputs of the private_tcp_active_active module."
+  
+  # This output is marked as sensitive to work around a bug in Terraform 0.14
+  sensitive = true
 }
 
-output "login_url" {
-  value       = module.tfe.login_url
-  description = "Login URL to setup the TFE instance once it is initialized"
+output "tfe_url" {
+  value       = module.private_tcp_active_active.tfe_application_url
+  description = "The URL to the TFE application."
 }
 
-# SSH
-# ---
-output "instance_user_name" {
-  value = module.tfe.instance_user_name
+output "health_check_url" {
+  value       = "${module.private_tcp_active_active.tfe_application_url}/_health_check"
+  description = "The URL with path to access the TFE instance health check."
 }
 
-output "instance_private_key" {
-  value = module.tfe.instance_private_key
+output "iact_url" {
+  value       = "${module.private_tcp_active_active.tfe_application_url}/admin/retrieve-iact"
+  description = "The URL with path to access the TFE instance Retrieve IACT."
+}
+
+output "initial_admin_user_url" {
+  value       = "${module.private_tcp_active_active.tfe_application_url}/admin/initial-admin-user"
+  description = "The URL with path to access the TFE instance Initial Admin User."
 }
