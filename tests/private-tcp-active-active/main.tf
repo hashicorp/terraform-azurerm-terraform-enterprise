@@ -4,7 +4,11 @@ provider "azurerm" {
 
 module "mock_resources" {
   source = "./mock_resources"
-  tags   = local.common_tags
+  
+  key_vault_name         = var.key_vault_name
+  resource_group_name_kv = var.resource_group_name_kv
+
+  tags = local.common_tags
 }
 
 module "private_tcp_active_active" {
@@ -32,7 +36,6 @@ module "private_tcp_active_active" {
   proxy_ip        = module.mock_resources.host_private_ip
   proxy_port      = module.mock_resources.proxy_port
   proxy_cert_name = var.proxy_cert_name
-  proxy_cert_path = var.proxy_cert_path
 
   # Existing network information
   network_id                 = module.mock_resources.network_id

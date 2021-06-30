@@ -3,9 +3,7 @@ locals {
     "${path.module}/files/mitm.sh.tpl",
     {
       http_proxy_port = local.proxy_port
-      # CHANGE THIS SO THAT IT GRABS THEM FROM KEY VAULT
-      // certificate     = tls_self_signed_cert.ca.cert_pem
-      // private_key     = tls_private_key.ca.private_key_pem
+      key_vault_name = var.key_vault_name
     }
   )
 

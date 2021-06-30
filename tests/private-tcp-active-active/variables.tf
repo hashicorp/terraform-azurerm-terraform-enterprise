@@ -10,6 +10,19 @@ variable "resource_group_name_dns" {
   description = "Name of resource group which contains desired DNS zone"
 }
 
+# Key Vault and Certificate
+# -------------------------
+
+variable "resource_group_name_kv" {
+  type        = string
+  description = "The resource group of the Azure Key Vault containing all required secrets and certificates."
+}
+
+variable "key_vault_name" {
+  type        = string
+  description = "Azure Key Vault name containing all required secrets and certificates."
+}
+
 # Storage
 # -------
 variable "resource_group_name_bootstrap" {
@@ -46,7 +59,3 @@ variable "proxy_cert_name" {
   type    = string
 }
 
-variable "proxy_cert_path" {
-  type        = string
-  description = "Local path to the proxy's CA cert pem"
-}

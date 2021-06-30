@@ -2,6 +2,8 @@ provider "azurerm" {
   features {}
 }
 
+data "azurerm_client_config" "current" {}
+
 resource "random_string" "friendly_name" {
   length  = 4
   upper   = false
@@ -122,7 +124,7 @@ resource "azurerm_network_interface_security_group_association" "proxy" {
 # Managed Service Identity
 # ------------------------
 resource "azurerm_user_assigned_identity" "proxy" {
-  name                = "${var.friendly_name_prefix}-proxy-msi"
+  name                = "${local.friendly_name_prefix}-proxy-msi"
   location            = local.location
   resource_group_name = local.resource_group_name
 
