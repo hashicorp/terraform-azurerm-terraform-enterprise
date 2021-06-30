@@ -24,18 +24,22 @@ module "private_tcp_active_active" {
   domain_name   = var.domain_name
   tfe_subdomain = local.friendly_name_prefix
 
+  # Bootstrapping resources
   bootstrap_storage_account_name           = var.bootstrap_storage_account_name
   bootstrap_storage_account_container_name = var.bootstrap_storage_account_container_name
   resource_group_name_bootstrap            = var.resource_group_name_bootstrap
+  resource_group_name_kv                   = var.resource_group_name_kv
+  key_vault_name                           = var.key_vault_name
 
   tags = local.common_tags
 
   vm_node_count = 2
 
   # Behind proxy information
-  proxy_ip        = module.mock_resources.host_private_ip
-  proxy_port      = module.mock_resources.proxy_port
-  proxy_cert_name = var.proxy_cert_name
+  proxy_ip               = module.mock_resources.host_private_ip
+  proxy_port             = module.mock_resources.proxy_port
+  proxy_cert_name        = var.proxy_cert_name
+  proxy_cert_secret_name = var.proxy_cert_secret_name
 
   # Existing network information
   network_id                 = module.mock_resources.network_id

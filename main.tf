@@ -131,6 +131,10 @@ module "service_accounts" {
   storage_account_tier             = var.storage_account_tier
   storage_account_replication_type = var.storage_account_replication_type
 
+  # Key Vault
+  resource_group_name_kv = module.resource_groups.resource_group_name_kv
+  key_vault_name         = var.key_vault_name
+
   # Application storage
   storage_account_name                           = var.storage_account_name
   storage_account_key                            = var.storage_account_key
@@ -157,10 +161,6 @@ module "object_storage" {
   # TFE License
   tfe_license_name     = var.tfe_license_name
   tfe_license_filepath = var.tfe_license_filepath
-
-  # Proxy
-  proxy_cert_name = var.proxy_cert_name
-  proxy_cert_path = var.proxy_cert_path
 
   # Application storage
   storage_account_name           = module.service_accounts.storage_account_name
@@ -298,11 +298,12 @@ module "user_data" {
   user_data_cert_key = var.user_data_cert_key == null ? module.certificates.tls_key : var.user_data_cert_key
 
   # Proxy
-  proxy_ip        = var.proxy_ip
-  proxy_port      = var.proxy_port
-  proxy_cert_name = var.proxy_cert_name
-  proxy_cert_path = var.proxy_cert_path
-  no_proxy        = [local.fqdn, var.network_cidr]
+  key_vault_name         = var.key_vault_name
+  proxy_ip               = var.proxy_ip
+  proxy_port             = var.proxy_port
+  proxy_cert_name        = var.proxy_cert_name
+  proxy_cert_secret_name = var.proxy_cert_secret_name
+  no_proxy               = [local.fqdn, var.network_cidr]
 
   depends_on = [
     module.service_accounts,

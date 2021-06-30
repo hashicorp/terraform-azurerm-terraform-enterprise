@@ -47,9 +47,11 @@ locals {
       user_data_key  = base64encode(var.user_data_cert_key)
 
       # Proxy information
-      proxy_ip   = var.proxy_ip
-      proxy_port = var.proxy_port
-      proxy_cert = local.proxy_cert_name
+      key_vault_name         = var.key_vault_name
+      proxy_ip               = var.proxy_ip
+      proxy_port             = var.proxy_port
+      proxy_cert_secret_name = var.proxy_cert_secret_name
+      proxy_cert             = local.proxy_cert_name
       no_proxy = join(
         ",",
         concat(

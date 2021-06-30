@@ -28,13 +28,3 @@ resource "azurerm_storage_blob" "bootstrap_license" {
   storage_container_name = azurerm_storage_container.bootstrap_storage_account_container[0].name
   type                   = "Page"
 }
-
-resource "azurerm_storage_blob" "proxy_cert" {
-  count = var.proxy_cert_name != null && var.bootstrap_storage_account_container_name == null ? 1 : 0
-
-  source                 = var.proxy_cert_path
-  name                   = var.proxy_cert_name
-  storage_account_name   = var.bootstrap_storage_account_name
-  storage_container_name = azurerm_storage_container.bootstrap_storage_account_container[0].name
-  type                   = "Block"
-}

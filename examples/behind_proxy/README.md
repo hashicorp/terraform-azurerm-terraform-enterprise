@@ -41,9 +41,9 @@ module "tfe" {
   vm_node_count = 2
 
   # Behind proxy information
-  proxy_ip        = "<IP address of the existing proxy>"
-  proxy_cert_name = "<Name of the proxy CA certificate bundle>"
-  proxy_cert_path = "<Local path to the CA certificate bundle>"
+  proxy_ip               = "<IP address of the existing proxy>"
+  proxy_cert_name        = "<Name of the proxy CA certificate bundle>"
+  proxy_cert_secret_name = "<Name of the secret under which the proxy cert is stored in Azure Key Vault>"
 
   # Existing network information
   network_id                = "<Virtual network resource id>"
@@ -77,7 +77,7 @@ With authentication configured, run `terraform init` and `terraform apply` to pr
 | `domain_name` | Name of existing DNS Zone in which a record set will be created | string | `example.com` |
 | `tfe_subdomain` | Desired DNS record subdomain | string | `tfe` |
 | `proxy_cert_name` | Name of the proxy CA certificate bundle | string | `examplecert` |
-| `proxy_cert_path` | Local path to the CA certificate bundle | string | `./files/examplecert.crt` |
+| `proxy_cert_secret_name` | Name of the secret under which the proxy cert is stored in the Azure Key Vault  | string | `ca-cert` |
 | `network_id` | Name of the proxy CA certificate bundle | string | `/subscription/resource/id` |
 | `network_private_subnet_id` | Azure resource ID for an existing private subnet | string | `/subscription/resource/id` |
 | `network_bastion` | Azure resource ID for an existing bastion subnet | string | `/subscription/resource/id` |

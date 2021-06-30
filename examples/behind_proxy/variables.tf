@@ -99,10 +99,10 @@ variable "proxy_port" {
 #   description = "Name for the stored proxy certificate bundle"
 # }
 
-# variable "proxy_cert_path" {
+# variable "proxy_cert_secret_name" {
 #   default     = ""
 #   type        = string
-#   description = "Local path to the proxy certificate bundle"
+#   description = "Name of the secret under which the proxy cert is stored in the Azure Key Vault"
 # }
 
 # Tagging

@@ -61,7 +61,21 @@ variable "bootstrap_storage_account_name" {
   description = "Bootstrap storage account name"
 }
 
+
+# Key Vault
+# ---------
+variable "resource_group_name_kv" {
+  type        = string
+  description = "The resource group of the Azure Key Vault containing all required secrets and certificates."
+}
+
+variable "key_vault_name" {
+  type        = string
+  description = "Azure Key Vault name containing all required secrets and certificates."
+}
+
 # Tagging
+# -------
 variable "tags" {
   default     = {}
   type        = map(string)
