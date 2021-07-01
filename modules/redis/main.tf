@@ -22,7 +22,7 @@ resource "azurerm_redis_cache" "tfe_redis" {
     rdb_backup_enabled            = var.redis_rdb_backup_enabled
     rdb_backup_frequency          = var.redis_rdb_backup_frequency
     rdb_backup_max_snapshot_count = var.redis_rdb_backup_max_snapshot_count
-    rdb_storage_connection_string = var.redis_rdb_backup_enabled == true && var.redis_rdb_existing_storage_account == "" ? azurerm_storage_account.tfe_redis_storage_account[0].primary_blob_connection_string : var.redis_rdb_existing_storage_account
+    rdb_storage_connection_string = var.redis_rdb_backup_enabled == true && var.redis_rdb_existing_storage_account == null ? azurerm_storage_account.tfe_redis_storage_account[0].primary_blob_connection_string : var.redis_rdb_existing_storage_account
   }
 
   lifecycle {

@@ -226,7 +226,7 @@ module "redis" {
   redis_rdb_backup_enabled            = var.redis_rdb_backup_enabled
   redis_rdb_backup_frequency          = var.redis_rdb_backup_frequency
   redis_rdb_backup_max_snapshot_count = var.redis_rdb_backup_max_snapshot_count
-  redis_rdb_existing_storage_account  = var.redis_rdb_existing_storage_account != "" ? data.azurerm_storage_account.tfe_redis_existing_storage_account[0].primary_blob_connection_string : ""
+  redis_rdb_existing_storage_account  = var.redis_rdb_existing_storage_account != null ? data.azurerm_storage_account.tfe_redis_existing_storage_account[0].primary_blob_connection_string : null
 
   tags = var.tags
 

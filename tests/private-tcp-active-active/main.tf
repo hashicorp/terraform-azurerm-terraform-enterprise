@@ -30,10 +30,9 @@ module "private_tcp_active_active" {
   resource_group_name_bootstrap            = var.resource_group_name_bootstrap
   resource_group_name_kv                   = var.resource_group_name_kv
   key_vault_name                           = var.key_vault_name
+  certificate_name                         = var.certificate_name
 
   tags = local.common_tags
-
-  vm_node_count = 2
 
   # Behind proxy information
   proxy_ip               = module.mock_resources.host_private_ip
@@ -47,20 +46,17 @@ module "private_tcp_active_active" {
   network_frontend_subnet_id = module.mock_resources.network_frontend_subnet_id
   network_redis_subnet_id    = module.mock_resources.network_redis_subnet_id
 
-  # Persona - Bank
-  vm_sku                                = "Standard_D32a_v4"
-  vm_image_id                           = "rhel"
-  load_balancer_public                  = false
-  load_balancer_type                    = "load_balancer"
-  redis_enable_non_ssl_port             = false
-  redis_enable_authentication           = true
-  user_data_redis_use_tls               = true
-  redis_rdb_backup_enabled              = true
-  redis_rdb_backup_frequency            = 60
-
-  # Change this logic so that it doesn't use an empty string
-  redis_rdb_existing_storage_account    = var.redis_rdb_existing_storage_account
-  redis_rdb_existing_storage_account_rg = var.redis_rdb_existing_storage_account_rg
+  # Private Active / Active Scenario
+  vm_node_count               = 2
+  vm_sku                      = "Standard_D32a_v4"
+  vm_image_id                 = "rhel"
+  load_balancer_public        = false
+  load_balancer_type          = "load_balancer"
+  redis_enable_non_ssl_port   = false
+  redis_enable_authentication = true
+  user_data_redis_use_tls     = true
+  redis_rdb_backup_enabled    = true
+  redis_rdb_backup_frequency  = 60
 
   create_bastion = false
 

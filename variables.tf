@@ -78,7 +78,7 @@ variable "key_vault_name" {
 variable "certificate_name" {
   default     = null
   type        = string
-  description = "(recommended) Azure Key Vault Certificate name for Application Gateway"
+  description = "(recommended) Azure Key Vault Certificate name for TLS certififate for DNS zone for Application Gateway or Load Balancer."
 }
 
 # Bastion
@@ -374,13 +374,13 @@ variable "redis_rdb_backup_max_snapshot_count" {
 }
 
 variable "redis_rdb_existing_storage_account" {
-  default     = ""
+  default     = null
   type        = string
-  description = "(Optional) Name of an existing Premium Storage Account for data encryption at rest. If empty string is given, a new, Premium storage account will be created."
+  description = "(Optional) Name of an existing Premium Storage Account for data encryption at rest. If value is null, a new, Premium storage account will be created."
 }
 
 variable "redis_rdb_existing_storage_account_rg" {
-  default     = ""
+  default     = null
   type        = string
   description = "(Optional) Name of the resource group that contains the existing Premium Storage Account for data encryption at rest."
 }
