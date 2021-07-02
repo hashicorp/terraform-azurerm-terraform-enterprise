@@ -121,8 +121,8 @@ resource "azurerm_network_interface_security_group_association" "proxy" {
   network_security_group_id = azurerm_network_security_group.proxy.id
 }
 
-# Managed Service Identity
-# ------------------------
+# Managed Service Identity to read from Storage Account
+# -----------------------------------------------------
 resource "azurerm_user_assigned_identity" "proxy" {
   name                = "${local.friendly_name_prefix}-proxy-msi"
   location            = local.location
@@ -131,23 +131,29 @@ resource "azurerm_user_assigned_identity" "proxy" {
   tags = var.tags
 }
 
-# Key Vault Policy - allow 'get' permission for proxy's managed identity
-# ----------------
-resource "azurerm_key_vault_access_policy" "tfe_kv_acl" {
-  key_vault_id = data.azurerm_key_vault.kv.id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = azurerm_user_assigned_identity.proxy.principal_id
-
-  certificate_permissions = [
-    "get",
-    "list"
-  ]
-
-  secret_permissions = [
-    "get",
-    "list"
-  ]
+resource "azurerm_role_assignment" "proxy_role_assignment" {
+  scope                = var.bootstrap_resource_group_id
+  role_definition_name = "Storage Blob Data Reader"
+  principal_id         = azurerm_user_assigned_identity.proxy.principal_id
 }
+// # Key Vault Policy - allow 'get' permission for proxy's managed identity
+// # ----------------
+// resource "azurerm_key_vault_access_policy" "tfe_kv_acl" {
+//   key_vault_id = data.azurerm_key_vault.kv.id
+//   tenant_id    = data.azurerm_client_config.current.tenant_id
+//   object_id    = azurerm_user_assigned_identity.proxy.principal_id
+
+//   certificate_permissions = [
+//     "get",
+//     "list"
+//   ]
+
+//   secret_permissions = [
+//     "get",
+//     "list"
+//   ]
+// }
+
 
 # Create the proxy virtual machine
 # --------------------------------

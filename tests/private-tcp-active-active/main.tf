@@ -5,11 +5,15 @@ provider "azurerm" {
 module "mock_resources" {
   source = "./mock_resources"
   
-  key_vault_name         = var.key_vault_name
+  key_vault_name      = local.key_vault_name
+  // mitmproxy_certs_url = var.mitmproxy_certs_url
+  bootstrap_resource_group_id = data.azurerm_resource_group.bootstrap.id
   resource_group_name_kv = var.resource_group_name_kv
-  proxy_key_secret_name  = var.proxy_key_secret_name
-  proxy_cert_secret_name = var.proxy_cert_secret_name
-
+  // proxy_key_secret_name  = var.proxy_key_secret_name
+  // proxy_cert_secret_name = var.proxy_cert_secret_name
+  bootstrap_storage_account_name = var.bootstrap_storage_account_name
+  bootstrap_storage_account_container_name = var.bootstrap_storage_account_container_name
+  proxy_cert_bundle_blob = var.proxy_cert_bundle_blob
   tags = local.common_tags
 }
 
@@ -31,7 +35,7 @@ module "private_tcp_active_active" {
   bootstrap_storage_account_container_name = var.bootstrap_storage_account_container_name
   resource_group_name_bootstrap            = var.resource_group_name_bootstrap
   resource_group_name_kv                   = var.resource_group_name_kv
-  key_vault_name                           = var.key_vault_name
+  key_vault_name                           = local.key_vault_name
   user_data_ca                             = local.user_data_ca
   user_data_cert                           = local.user_data_cert
   user_data_cert_key                       = local.user_data_cert_key

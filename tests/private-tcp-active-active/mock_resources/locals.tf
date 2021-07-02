@@ -3,9 +3,9 @@ locals {
     "${path.module}/files/mitm.sh.tpl",
     {
       http_proxy_port        = local.proxy_port
-      key_vault_name         = var.key_vault_name
-      proxy_key_secret_name  = var.proxy_key_secret_name
-      proxy_cert_secret_name = var.proxy_cert_secret_name
+      bootstrap_storage_account_name = var.bootstrap_storage_account_name
+      bootstrap_storage_account_container_name = var.bootstrap_storage_account_container_name
+      proxy_cert_bundle_blob = var.proxy_cert_bundle_blob
     }
   )
 
