@@ -27,6 +27,21 @@ variable "certificate_name" {
   description = "Azure Key Vault Certificate name for TLS certififate for DNS zone for Application Gateway or Load Balancer."
 }
 
+variable "ca_pem_key_secret_name" {
+  type        = string
+  description = "Name of the secret under which the DNS wildcard key is stored in the Azure Key Vault."
+}
+
+variable "ca_pem_certificate_secret_name" {
+  type        = string
+  description = "Name of the secret under which the DNS wildcard chained cert is stored in the Azure Key Vault."
+}
+
+variable "proxy_key_secret_name" {
+  type        = string
+  description = "Name of the secret under which the proxy cert key is stored in the Azure Key Vault."
+}
+
 variable "proxy_cert_secret_name" {
   type        = string
   description = "Name of the secret under which the proxy cert is stored in the Azure Key Vault."

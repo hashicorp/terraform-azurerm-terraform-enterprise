@@ -32,8 +32,8 @@ chmod +x /bin/jq
 
 echo "[$(date +"%FT%T")]  Downloading certificates for mitmproxy from Azure Key Vault" | tee -a /var/log/ptfe.log
 access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
-certificate=$(curl https://${key_vault_name}.vault.azure.net/secrets/private-tcp-active-active-ca-cert?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
-private_key=$(curl https://${key_vault_name}.vault.azure.net/secrets/private-tcp-active-active-ca-private-key?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
+certificate=$(curl https://${key_vault_name}.vault.azure.net/secrets/${proxy_cert_secret_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
+private_key=$(curl https://${key_vault_name}.vault.azure.net/secrets/${proxy_key_secret_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
 
 echo "[$(date +"%FT%T")]  Deploying certificates for mitmproxy" | tee -a /var/log/ptfe.log
 cat <<EOF >/etc/mitmproxy/mitmproxy-ca.pem

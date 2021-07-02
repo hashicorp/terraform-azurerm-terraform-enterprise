@@ -2,8 +2,10 @@ locals {
   proxy_script = templatefile(
     "${path.module}/files/mitm.sh.tpl",
     {
-      http_proxy_port = local.proxy_port
-      key_vault_name = var.key_vault_name
+      http_proxy_port        = local.proxy_port
+      key_vault_name         = var.key_vault_name
+      proxy_key_secret_name  = var.proxy_key_secret_name
+      proxy_cert_secret_name = var.proxy_cert_secret_name
     }
   )
 

@@ -7,6 +7,8 @@ module "mock_resources" {
   
   key_vault_name         = var.key_vault_name
   resource_group_name_kv = var.resource_group_name_kv
+  proxy_key_secret_name  = var.proxy_key_secret_name
+  proxy_cert_secret_name = var.proxy_cert_secret_name
 
   tags = local.common_tags
 }
@@ -30,7 +32,9 @@ module "private_tcp_active_active" {
   resource_group_name_bootstrap            = var.resource_group_name_bootstrap
   resource_group_name_kv                   = var.resource_group_name_kv
   key_vault_name                           = var.key_vault_name
-  certificate_name                         = var.certificate_name
+  user_data_ca                             = local.user_data_ca
+  user_data_cert                           = local.user_data_cert
+  user_data_cert_key                       = local.user_data_cert_key
 
   tags = local.common_tags
 
