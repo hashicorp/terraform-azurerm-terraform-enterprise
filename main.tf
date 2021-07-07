@@ -387,9 +387,9 @@ module "load_balancer" {
 module "vm" {
   source = "./modules/vm"
 
-  friendly_name_prefix        = var.friendly_name_prefix
-  resource_group_name         = module.resource_groups.resource_group_name
-  location                    = var.location
+  friendly_name_prefix = var.friendly_name_prefix
+  resource_group_name  = module.resource_groups.resource_group_name
+  location             = var.location
 
   # VM
   vm_sku                                 = var.vm_sku

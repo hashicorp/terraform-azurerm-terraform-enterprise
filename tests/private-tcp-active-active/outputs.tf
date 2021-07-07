@@ -1,7 +1,7 @@
 output "private_tcp_active_active" {
   value       = module.private_tcp_active_active
   description = "The outputs of the private_tcp_active_active module."
-  
+
   # This output is marked as sensitive to work around a bug in Terraform 0.14
   sensitive = true
 }
