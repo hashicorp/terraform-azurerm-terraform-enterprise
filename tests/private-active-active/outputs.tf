@@ -25,3 +25,7 @@ output "initial_admin_user_url" {
   value       = "${module.private_active_active.tfe_application_url}/admin/initial-admin-user"
   description = "The URL with path to access the TFE instance Initial Admin User."
 }
+
+output "bastion_fqdn" {
+  value = azurerm_public_ip.vm_bastion.fqdn
+}

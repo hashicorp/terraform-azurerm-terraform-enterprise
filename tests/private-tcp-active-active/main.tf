@@ -17,8 +17,7 @@ module "private_tcp_active_active" {
   tfe_license_name     = "terraform-azurerm-terraform-enterprise.rli"
 
   resource_group_name_dns = var.resource_group_name_dns
-
-  domain_name   = var.domain_name
+  domain_name             = var.domain_name
 
   # Bootstrapping resources
   bootstrap_storage_account_name           = var.bootstrap_storage_account_name
