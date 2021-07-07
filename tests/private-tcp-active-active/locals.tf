@@ -8,33 +8,22 @@ locals {
     OkToDelete  = "True"
   }
 
-  friendly_name_prefix = module.mock_resources.friendly_name_prefix
+  proxy_script = templatefile(
+    "${path.module}/files/mitm.sh.tpl",
+    {
+      http_proxy_port        = local.proxy_port
+      key_vault_name         = local.key_vault_name
+      proxy_key_secret_name  = var.proxy_key_secret_name
+      proxy_cert_secret_name = var.proxy_cert_secret_name
+    }
+  )
+
+  friendly_name_prefix = random_string.friendly_name.id
+  resource_group_name  = module.private_tcp_active_active.resource_group_name
+  proxy_user           = "proxyuser"
+  proxy_port           = "3128"
   key_vault_name       = data.azurerm_key_vault.kv.name
-  user_data_ca         = data.azurerm_key_vault_secret.ca_cert.value
-  user_data_cert       = data.azurerm_key_vault_secret.pem_key.value
-  user_data_cert_key   = data.azurerm_key_vault_secret.pem_certificate.value
-}
-
-data "azurerm_resource_group" "bootstrap" {
-  name = var.resource_group_name_bootstrap
-}
-
-data "azurerm_key_vault" "kv" {
-  name                = var.key_vault_name
-  resource_group_name = var.resource_group_name_kv
-}
-
-data "azurerm_key_vault_secret" "pem_key" {
-  name         = var.ca_pem_key_secret_name
-  key_vault_id = data.azurerm_key_vault.kv.id
-}
-
-data "azurerm_key_vault_secret" "pem_certificate" {
-  name         = var.ca_pem_certificate_secret_name
-  key_vault_id = data.azurerm_key_vault.kv.id
-}
-
-data "azurerm_key_vault_secret" "ca_cert" {
-  name         = var.proxy_cert_secret_name
-  key_vault_id = data.azurerm_key_vault.kv.id
+  user_data_ca         = data.azurerm_key_vault_secret.user_data_ca.value
+  user_data_cert       = data.azurerm_key_vault_secret.user_data_cert.value
+  user_data_cert_key   = data.azurerm_key_vault_secret.user_data_cert_key.value
 }

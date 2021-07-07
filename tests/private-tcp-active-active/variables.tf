@@ -1,3 +1,11 @@
+# General
+# -------
+variable "location" {
+  default     = "East US"
+  type        = string
+  description = "(Required) Azure location name e.g. East US"
+}
+
 # Domain
 # ------
 variable "domain_name" {
@@ -54,8 +62,8 @@ variable "bootstrap_storage_account_container_name" {
   description = "The name of the container that houses the TFE license"
 }
 
-# Proxy
-# -----
+# Proxy & Bastion
+# ---------------
 variable "proxy_cert_name" {
   default = "mitmproxy"
   type    = string
@@ -69,4 +77,14 @@ variable "proxy_key_secret_name" {
 variable "proxy_cert_secret_name" {
   type        = string
   description = "Name of the secret under which the proxy cert is stored in the Azure Key Vault."
+}
+
+variable "proxy_public_key_secret_name" {
+  type        = string
+  description = "Name of the secret under which the proxy public key is stored in the Azure Key Vault."
+}
+
+variable "bastion_public_key_secret_name" {
+  type        = string
+  description = "Name of the secret under which the bastion public key is stored in the Azure Key Vault."
 }

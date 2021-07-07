@@ -1,61 +1,4 @@
-provider "azurerm" {
-  features {}
-}
-
 data "azurerm_client_config" "current" {}
-
-resource "random_string" "friendly_name" {
-  length  = 4
-  upper   = false
-  number  = false
-  special = false
-}
-
-resource "azurerm_resource_group" "main" {
-  name     = "${local.friendly_name_prefix}-rg"
-  location = "East US"
-
-  tags = var.tags
-}
-
-# Create a virtual network for proxy
-# ----------------------------------
-module "network" {
-  source = "../../../modules/network"
-
-  friendly_name_prefix = local.friendly_name_prefix
-  location             = local.location
-  resource_group_name  = local.resource_group_name
-
-  network_cidr                 = "10.0.0.0/16"
-  network_frontend_subnet_cidr = "10.0.0.0/20"
-  network_bastion_subnet_cidr  = "10.0.16.0/20"
-  network_private_subnet_cidr  = "10.0.32.0/20"
-  network_redis_subnet_cidr    = "10.0.48.0/20"
-
-  load_balancer_type   = "load_balancer"
-  load_balancer_public = false
-
-  tags           = var.tags
-  create_bastion = false
-}
-
-# SSH keys & Certs
-# ----------------
-data "azurerm_key_vault" "kv" {
-  name                = var.key_vault_name
-  resource_group_name = var.resource_group_name_kv
-}
-
-data "azurerm_key_vault_secret" "proxy_public_key" {
-  name         = "private-tcp-active-active-proxy-public-key"
-  key_vault_id = data.azurerm_key_vault.kv.id
-}
-
-data "azurerm_key_vault_secret" "bastion_public_key" {
-  name         = "private-tcp-active-active-bastion-public-key"
-  key_vault_id = data.azurerm_key_vault.kv.id
-}
 
 # Create a subnet for proxy
 # -------------------------
@@ -64,16 +7,14 @@ resource "azurerm_subnet" "proxy" {
   resource_group_name = local.resource_group_name
 
   address_prefixes     = ["10.0.64.0/20"]
-  virtual_network_name = "${local.friendly_name_prefix}-network"
-
-  depends_on = [module.network]
+  virtual_network_name = module.private_tcp_active_active.network_name
 }
 
 # Create a security group for proxy
 # ---------------------------------
 resource "azurerm_network_security_group" "proxy" {
   name                = "${local.friendly_name_prefix}-proxy-nsg"
-  location            = local.location
+  location            = var.location
   resource_group_name = local.resource_group_name
 
   security_rule {
@@ -90,7 +31,7 @@ resource "azurerm_network_security_group" "proxy" {
     destination_address_prefix = "10.0.64.0/20"
   }
 
-  tags = var.tags
+  tags = local.common_tags
 }
 
 # Associate proxy subnet with nsg
@@ -104,7 +45,7 @@ resource "azurerm_subnet_network_security_group_association" "proxy_subnet_nsg_a
 # --------------------------------------------------------
 resource "azurerm_network_interface" "proxy" {
   name                = format("%s-proxy-nic", local.friendly_name_prefix)
-  location            = local.location
+  location            = var.location
   resource_group_name = local.resource_group_name
 
   ip_configuration {
@@ -113,7 +54,7 @@ resource "azurerm_network_interface" "proxy" {
     private_ip_address_allocation = "dynamic"
   }
 
-  tags = var.tags
+  tags = local.common_tags
 }
 
 resource "azurerm_network_interface_security_group_association" "proxy" {
@@ -125,10 +66,10 @@ resource "azurerm_network_interface_security_group_association" "proxy" {
 # -----------------------------------------------
 resource "azurerm_user_assigned_identity" "proxy" {
   name                = "${local.friendly_name_prefix}-proxy-msi"
-  location            = local.location
+  location            = var.location
   resource_group_name = local.resource_group_name
 
-  tags = var.tags
+  tags = local.common_tags
 }
 
 resource "azurerm_key_vault_access_policy" "tfe_kv_acl" {
@@ -151,7 +92,7 @@ resource "azurerm_key_vault_access_policy" "tfe_kv_acl" {
 # --------------------------------
 resource "azurerm_linux_virtual_machine" "proxy" {
   name                = format("%s-proxy", local.friendly_name_prefix)
-  location            = local.location
+  location            = var.location
   resource_group_name = local.resource_group_name
 
   network_interface_ids = [azurerm_network_interface.proxy.id]
@@ -183,5 +124,5 @@ resource "azurerm_linux_virtual_machine" "proxy" {
     identity_ids = [azurerm_user_assigned_identity.proxy.id]
   }
 
-  tags = var.tags
+  tags = local.common_tags
 }

@@ -27,6 +27,10 @@ output "resource_group_name_bootstrap" {
 
 # Network
 # -------
+output "network_name" {
+  value = local.network_name
+}
+
 output "network_id" {
   value = local.network_id
 }

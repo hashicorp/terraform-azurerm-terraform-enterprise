@@ -35,6 +35,7 @@ locals {
 
   # Network
   # -------
+  network_name               = var.network_name == null ? module.network[0].network_name : var.network_name
   network_id                 = var.network_id == null ? module.network[0].network_id : var.network_id
   network_private_subnet_id  = var.network_private_subnet_id == null ? module.network[0].network_private_subnet_id : var.network_private_subnet_id
   network_frontend_subnet_id = var.network_frontend_subnet_id == null ? module.network[0].network_frontend_subnet_id : var.network_frontend_subnet_id

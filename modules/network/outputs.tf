@@ -1,3 +1,7 @@
+output "network_name" {
+  value = azurerm_virtual_network.tfe_network.name
+}
+
 output "network_id" {
   value = azurerm_virtual_network.tfe_network.id
 }

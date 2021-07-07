@@ -46,21 +46,20 @@ EOF
 	
 		if [[ $proxy_cert != "" ]]
 		then
-			# Obtain access token for Azure Key Vault
+			# Obtain access token for Azure Key Vault to obtain cert secret
 			access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
+			certificate=$(curl --noproxy '*' https://${key_vault_name}.vault.azure.net/secrets/${proxy_cert_secret_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
 
 			if [[ $DISTRO_NAME == *"Red Hat"* ]]
 				then
-					sudo mkdir -p /usr/share/pki/ca-trust-source/anchors
-					# Use access token to obtain cert secret
-					certificate=$(curl --noproxy '*' https://${key_vault_name}.vault.azure.net/secrets/${proxy_cert_secret_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
-					echo $certificate > /usr/share/pki/ca-trust-source/anchors/${proxy_cert}.crt
+					rhel_cert_dir=/usr/share/pki/ca-trust-source/anchors
+					sudo mkdir -p $rhel_cert_dir
+					echo $certificate > $rhel_cert_dir/${proxy_cert}.crt
 					sudo update-ca-trust
 				else
-					sudo mkdir -p /usr/local/share/ca-certificates/extra
-					# Use access token to obtain cert secret
-					certificate=$(curl --noproxy '*' https://${key_vault_name}.vault.azure.net/secrets/${proxy_cert_secret_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
-					echo $certificate > /usr/local/share/ca-certificates/extra/${proxy_cert}.crt
+					ubuntu_cert_dir=/usr/local/share/ca-certificates/extra
+					sudo mkdir -p $ubuntu_cert_dir
+					echo $certificate > $ubuntu_cert_dir/${proxy_cert}.crt
 					sudo update-ca-certificates
 				fi
 			fi

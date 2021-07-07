@@ -2,28 +2,23 @@ provider "azurerm" {
   features {}
 }
 
-module "mock_resources" {
-  source = "./mock_resources"
-
-  key_vault_name         = local.key_vault_name
-  resource_group_name_kv = var.resource_group_name_kv
-  proxy_key_secret_name  = var.proxy_key_secret_name
-  proxy_cert_secret_name = var.proxy_cert_secret_name
-  tags                   = local.common_tags
+resource "random_string" "friendly_name" {
+  length  = 4
+  upper   = false
+  number  = false
+  special = false
 }
 
 module "private_tcp_active_active" {
   source = "../../"
 
-  location             = module.mock_resources.location
+  location             = var.location
   friendly_name_prefix = local.friendly_name_prefix
   tfe_license_name     = "terraform-azurerm-terraform-enterprise.rli"
 
-  resource_group_name     = module.mock_resources.resource_group_name
   resource_group_name_dns = var.resource_group_name_dns
 
   domain_name   = var.domain_name
-  tfe_subdomain = local.friendly_name_prefix
 
   # Bootstrapping resources
   bootstrap_storage_account_name           = var.bootstrap_storage_account_name
@@ -38,16 +33,10 @@ module "private_tcp_active_active" {
   tags = local.common_tags
 
   # Behind proxy information
-  proxy_ip               = module.mock_resources.host_private_ip
-  proxy_port             = module.mock_resources.proxy_port
+  proxy_ip               = azurerm_linux_virtual_machine.proxy.private_ip_address
+  proxy_port             = local.proxy_port
   proxy_cert_name        = var.proxy_cert_name
   proxy_cert_secret_name = var.proxy_cert_secret_name
-
-  # Existing network information
-  network_id                 = module.mock_resources.network_id
-  network_private_subnet_id  = module.mock_resources.network_private_subnet_id
-  network_frontend_subnet_id = module.mock_resources.network_frontend_subnet_id
-  network_redis_subnet_id    = module.mock_resources.network_redis_subnet_id
 
   # Private Active / Active Scenario
   vm_node_count               = 2
@@ -62,6 +51,4 @@ module "private_tcp_active_active" {
   redis_rdb_backup_frequency  = 60
 
   create_bastion = false
-
-  depends_on = [module.mock_resources]
 }
