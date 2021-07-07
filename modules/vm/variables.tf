@@ -61,7 +61,7 @@ variable "vm_node_count" {
 }
 
 variable "vm_userdata_script" {
-  type    = string
+  type = string
 }
 
 variable "vm_subnet_id" {
