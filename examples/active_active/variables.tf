@@ -46,7 +46,7 @@ variable "key_vault_name" {
 variable "certificate_name" {
   default     = ""
   type        = string
-  description = "(recommended) Azure Key Vault Certificate name for TLS certififate for DNS zone for Application Gateway or Load Balancer."
+  description = "(recommended) Azure Key Vault Certificate name for Application Gateway"
 }
 
 # Tagging

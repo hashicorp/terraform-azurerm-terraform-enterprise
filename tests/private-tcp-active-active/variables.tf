@@ -37,12 +37,6 @@ variable "ca_pem_certificate_secret_name" {
   description = "Name of the secret under which the DNS wildcard chained cert is stored in the Azure Key Vault."
 }
 
-
-variable "proxy_cert_secret_name" {
-  type        = string
-  description = "Name of the secret under which the proxy cert is stored in the Azure Key Vault."
-}
-
 # Storage
 # -------
 variable "resource_group_name_bootstrap" {
@@ -67,4 +61,12 @@ variable "proxy_cert_name" {
   type    = string
 }
 
-variable "proxy_cert_bundle_blob" {}
+variable "proxy_key_secret_name" {
+  type        = string
+  description = "Name of the secret under which the proxy cert key is stored in the Azure Key Vault."
+}
+
+variable "proxy_cert_secret_name" {
+  type        = string
+  description = "Name of the secret under which the proxy cert is stored in the Azure Key Vault."
+}

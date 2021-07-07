@@ -30,11 +30,16 @@ echo "[$(date +"%FT%T")] [Terraform Enterprise] Install JQ" | tee -a /var/log/pt
 curl --noproxy '*' -Lo /bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
 chmod +x /bin/jq
 
-echo "[$(date +"%FT%T")]  Downloading certificates for the mitm proxy from Azure blob" | tee -a /var/log/ptfe.log
-access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fstorage.azure.com%2F' -H Metadata:true | jq -r .access_token)
-curl -Lo /tmp/mitm.tgz https://${bootstrap_storage_account_name}.blob.core.windows.net/${bootstrap_storage_account_container_name}/${proxy_cert_bundle_blob} -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token"
-tar -xvf /tmp/mitm.tgz -C /tmp
-mv /tmp/.mitmproxy/* /etc/mitmproxy/
+echo "[$(date +"%FT%T")]  Downloading certificates for mitmproxy from Azure Key Vault" | tee -a /var/log/ptfe.log
+access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
+certificate=$(curl https://${key_vault_name}.vault.azure.net/secrets/${proxy_cert_secret_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
+private_key=$(curl https://${key_vault_name}.vault.azure.net/secrets/${proxy_key_secret_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
+
+echo "[$(date +"%FT%T")]  Deploying certificates for mitmproxy" | tee -a /var/log/ptfe.log
+cat <<EOF >/etc/mitmproxy/mitmproxy-ca.pem
+$certificate
+$private_key
+EOF
 
 echo "[$(date +"%FT%T")]  Starting mitmproxy service" | tee -a /var/log/ptfe.log
 systemctl daemon-reload

@@ -14,17 +14,12 @@ variable "key_vault_name" {
   description = "Azure Key Vault name containing all required secrets and certificates."
 }
 
-// variable "proxy_key_secret_name" {
-//   type        = string
-//   description = "Name of the secret under which the proxy cert key is stored in the Azure Key Vault."
-// }
+variable "proxy_key_secret_name" {
+  type        = string
+  description = "Name of the secret under which the proxy cert key is stored in the Azure Key Vault."
+}
 
-// variable "proxy_cert_secret_name" {
-//   type        = string
-//   description = "Name of the secret under which the proxy cert is stored in the Azure Key Vault."
-// }
-
-variable "bootstrap_resource_group_id" {}
-variable "bootstrap_storage_account_name" {}
-variable "bootstrap_storage_account_container_name" {}
-variable "proxy_cert_bundle_blob" {}
+variable "proxy_cert_secret_name" {
+  type        = string
+  description = "Name of the secret under which the proxy cert is stored in the Azure Key Vault."
+}
