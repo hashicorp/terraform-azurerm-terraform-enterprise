@@ -35,6 +35,7 @@ locals {
 
   # Network
   # -------
+  network_name               = var.network_name == null ? module.network[0].network_name : var.network_name
   network_id                 = var.network_id == null ? module.network[0].network_id : var.network_id
   network_private_subnet_id  = var.network_private_subnet_id == null ? module.network[0].network_private_subnet_id : var.network_private_subnet_id
   network_frontend_subnet_id = var.network_frontend_subnet_id == null ? module.network[0].network_frontend_subnet_id : var.network_frontend_subnet_id
@@ -131,6 +132,10 @@ module "service_accounts" {
   storage_account_tier             = var.storage_account_tier
   storage_account_replication_type = var.storage_account_replication_type
 
+  # Key Vault
+  resource_group_name_kv = module.resource_groups.resource_group_name_kv
+  key_vault_name         = var.key_vault_name
+
   # Application storage
   storage_account_name                           = var.storage_account_name
   storage_account_key                            = var.storage_account_key
@@ -157,10 +162,6 @@ module "object_storage" {
   # TFE License
   tfe_license_name     = var.tfe_license_name
   tfe_license_filepath = var.tfe_license_filepath
-
-  # Proxy
-  proxy_cert_name = var.proxy_cert_name
-  proxy_cert_path = var.proxy_cert_path
 
   # Application storage
   storage_account_name           = module.service_accounts.storage_account_name
@@ -226,7 +227,7 @@ module "redis" {
   redis_rdb_backup_enabled            = var.redis_rdb_backup_enabled
   redis_rdb_backup_frequency          = var.redis_rdb_backup_frequency
   redis_rdb_backup_max_snapshot_count = var.redis_rdb_backup_max_snapshot_count
-  redis_rdb_existing_storage_account  = var.redis_rdb_existing_storage_account != "" ? data.azurerm_storage_account.tfe_redis_existing_storage_account[0].primary_blob_connection_string : ""
+  redis_rdb_existing_storage_account  = var.redis_rdb_existing_storage_account != null ? data.azurerm_storage_account.tfe_redis_existing_storage_account[0].primary_blob_connection_string : null
 
   tags = var.tags
 
@@ -293,16 +294,17 @@ module "user_data" {
   user_data_release_sequence = var.user_data_release_sequence
 
   # Certificates
-  user_data_ca       = var.user_data_ca == null ? replace(module.certificates.tls_ca_cert, "\n", "\n") : replace(var.user_data_ca, "\n", "\n")
+  user_data_ca       = var.user_data_ca == null ? replace(module.certificates.tls_ca_cert, "\n", "\n") : var.user_data_ca
   user_data_cert     = var.user_data_cert == null ? module.certificates.tls_cert : var.user_data_cert
   user_data_cert_key = var.user_data_cert_key == null ? module.certificates.tls_key : var.user_data_cert_key
 
   # Proxy
-  proxy_ip        = var.proxy_ip
-  proxy_port      = var.proxy_port
-  proxy_cert_name = var.proxy_cert_name
-  proxy_cert_path = var.proxy_cert_path
-  no_proxy        = [local.fqdn, var.network_cidr]
+  key_vault_name         = var.key_vault_name
+  proxy_ip               = var.proxy_ip
+  proxy_port             = var.proxy_port
+  proxy_cert_name        = var.proxy_cert_name
+  proxy_cert_secret_name = var.proxy_cert_secret_name
+  no_proxy               = [local.fqdn, var.network_cidr]
 
   depends_on = [
     module.service_accounts,
@@ -386,9 +388,9 @@ module "load_balancer" {
 module "vm" {
   source = "./modules/vm"
 
-  friendly_name_prefix        = var.friendly_name_prefix
-  resource_group_name         = module.resource_groups.resource_group_name
-  location                    = var.location
+  friendly_name_prefix = var.friendly_name_prefix
+  resource_group_name  = module.resource_groups.resource_group_name
+  location             = var.location
 
   # VM
   vm_sku                                 = var.vm_sku

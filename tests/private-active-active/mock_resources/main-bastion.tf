@@ -1,10 +1,3 @@
-# Create an SSH key for bastion instance
-# --------------------------------------
-resource "tls_private_key" "bastion_ssh" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
 # Bastion Networking
 # ------------------
 resource "azurerm_subnet" "vm_bastion" {

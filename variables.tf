@@ -91,6 +91,12 @@ variable "create_bastion" {
 
 # Network
 # -------
+variable "network_name" {
+  default     = null
+  type        = string
+  description = "(Optional) Existing network name"
+}
+
 variable "network_id" {
   default     = null
   type        = string
@@ -374,13 +380,13 @@ variable "redis_rdb_backup_max_snapshot_count" {
 }
 
 variable "redis_rdb_existing_storage_account" {
-  default     = ""
+  default     = null
   type        = string
-  description = "(Optional) Name of an existing Premium Storage Account for data encryption at rest. If empty string is given, a new, Premium storage account will be created."
+  description = "(Optional) Name of an existing Premium Storage Account for data encryption at rest. If value is null, a new, Premium storage account will be created."
 }
 
 variable "redis_rdb_existing_storage_account_rg" {
-  default     = ""
+  default     = null
   type        = string
   description = "(Optional) Name of the resource group that contains the existing Premium Storage Account for data encryption at rest."
 }
@@ -499,10 +505,10 @@ variable "proxy_cert_name" {
   description = "Name for the stored proxy certificate bundle"
 }
 
-variable "proxy_cert_path" {
+variable "proxy_cert_secret_name" {
   default     = null
   type        = string
-  description = "Local path to the proxy certificate bundle"
+  description = "Name of the secret under which the proxy cert is stored in the Azure Key Vault"
 }
 
 # Tagging

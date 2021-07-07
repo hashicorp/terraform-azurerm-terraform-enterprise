@@ -1,7 +1,7 @@
 output "public_active_active" {
   value       = module.public_active_active
   description = "The outputs of the public_active_active module."
-  
+
   # This output is marked as sensitive to work around a bug in Terraform 0.14
   sensitive = true
 }

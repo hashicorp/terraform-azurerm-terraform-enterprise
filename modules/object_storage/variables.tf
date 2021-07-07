@@ -42,13 +42,3 @@ variable "bootstrap_storage_account_container_name" {
   type        = string
   description = "Bootstrap storage account container name"
 }
-
-# Proxy
-# -----
-variable "proxy_cert_name" {
-  description = "Name for the stored proxy certificate bundle"
-}
-
-variable "proxy_cert_path" {
-  description = "Local path to the proxy certificate bundle"
-}

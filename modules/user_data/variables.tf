@@ -119,6 +119,11 @@ variable "user_data_cert_key" {
 
 # Proxy
 # -----
+variable "key_vault_name" {
+  type        = string
+  description = "Azure Key Vault name containing all required secrets and certificates."
+}
+
 variable "proxy_ip" {
   type        = string
   description = "IP Address of the proxy server"
@@ -134,9 +139,9 @@ variable "proxy_cert_name" {
   description = "Name for the stored proxy certificate bundle"
 }
 
-variable "proxy_cert_path" {
+variable "proxy_cert_secret_name" {
   type        = string
-  description = "Local path to the proxy certificate bundle"
+  description = "Name of the secret under which the proxy cert is stored in the Azure Key Vault"
 }
 
 variable "no_proxy" {

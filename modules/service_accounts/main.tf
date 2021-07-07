@@ -58,3 +58,28 @@ resource "azurerm_role_assignment" "tfe_vmss_role_assignment" {
   role_definition_name = "Storage Blob Data Reader"
   principal_id         = azurerm_user_assigned_identity.vmss.principal_id
 }
+
+# Key Vault Policy - allow 'get' permission for vmss's managed identity
+# ----------------
+data "azurerm_client_config" "current" {}
+
+data "azurerm_key_vault" "kv" {
+  name                = var.key_vault_name
+  resource_group_name = var.resource_group_name_kv
+}
+
+resource "azurerm_key_vault_access_policy" "tfe_vmss_kv_access" {
+  key_vault_id = data.azurerm_key_vault.kv.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = azurerm_user_assigned_identity.vmss.principal_id
+
+  certificate_permissions = [
+    "get",
+    "list"
+  ]
+
+  secret_permissions = [
+    "get",
+    "list"
+  ]
+}
