@@ -88,3 +88,8 @@ variable "bastion_public_key_secret_name" {
   type        = string
   description = "Name of the secret under which the bastion public key is stored in the Azure Key Vault."
 }
+
+variable "network_allow_range" {
+  type        = string
+  description = "Network range to allow access to bastion vm."
+}

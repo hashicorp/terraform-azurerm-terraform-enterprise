@@ -39,7 +39,6 @@ resource "azurerm_network_security_group" "vm_bastion_nsg" {
   resource_group_name = local.resource_group_name
 
   # Allow inbound SSH traffic to bastion
-  # default value for network_allow_range is * so it is open to world if not supplied
   security_rule {
     name      = "allow-inbound-ssh"
     priority  = 125
@@ -47,7 +46,7 @@ resource "azurerm_network_security_group" "vm_bastion_nsg" {
     access    = "Allow"
     protocol  = "Tcp"
 
-    source_address_prefix = "*"
+    source_address_prefix = var.network_allow_range
     source_port_range     = "*"
 
     destination_port_range     = "22"
