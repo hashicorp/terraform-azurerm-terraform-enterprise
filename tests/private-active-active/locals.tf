@@ -8,6 +8,16 @@ locals {
     OkToDelete  = "True"
   }
 
-  friendly_name_prefix = module.mock_resources.friendly_name_prefix
-  proxy_port           = 3128
+  proxy_script = templatefile(
+    "${path.module}/files/squidproxy.sh.tpl",
+    {
+      http_proxy_port = local.proxy_port
+    }
+  )
+
+  friendly_name_prefix = random_string.friendly_name.id
+  resource_group_name  = module.private_active_active.resource_group_name
+  key_vault_name       = data.azurerm_key_vault.kv.name
+  proxy_user           = "proxyuser"
+  proxy_port           = "3128"
 }
