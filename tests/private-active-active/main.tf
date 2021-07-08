@@ -30,7 +30,6 @@ module "private_active_active" {
   # Behind proxy information
   proxy_ip               = azurerm_linux_virtual_machine.proxy.private_ip_address
   proxy_port             = local.proxy_port
-  proxy_cert_secret_name = var.proxy_cert_secret_name
 
   # Private Active / Active Scenario
   vm_node_count               = 2
