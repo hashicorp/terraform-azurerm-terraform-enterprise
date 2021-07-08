@@ -26,7 +26,7 @@ variable "dns_create_record" {
 }
 
 variable "dns_external_fqdn" {
-  default     = ""
+  default     = null
   type        = string
   description = "External DNS FQDN should be supplied if dns_create_record is false"
 }
@@ -458,7 +458,7 @@ variable "vm_os_disk_disk_size_gb" {
 # User Data
 # ---------
 variable "user_data_release_sequence" {
-  default     = ""
+  default     = null
   type        = string
   description = "Terraform Enterprise release sequence"
 }
@@ -495,7 +495,7 @@ variable "proxy_ip" {
 }
 
 variable "proxy_port" {
-  default = "3128"
+  default = null
   type    = string
 }
 
