@@ -27,7 +27,6 @@ variable "location" {
 }
 
 variable "resource_group_name" {
-  default     = ""
   type        = string
   description = "(Required) Azure resource group name"
 }

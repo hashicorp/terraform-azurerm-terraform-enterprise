@@ -11,7 +11,12 @@ locals {
     TlsBootstrapType             = "server-path"
   }
 
-  proxy_cert_name = var.proxy_cert_name == null ? "" : var.proxy_cert_name
+  key_vault_name         = var.key_vault_name == null ? "" : var.key_vault_name
+  proxy_ip               = var.proxy_ip == null ? "" : var.proxy_ip
+  proxy_port             = var.proxy_port == null ? "" : var.proxy_port
+  proxy_cert_name        = var.proxy_cert_name == null ? "" : var.proxy_cert_name
+  proxy_cert_secret_name = var.proxy_cert_secret_name == null ? "" : var.proxy_cert_secret_name
+  
   user_data_release_sequence = {
     ReleaseSequence = var.user_data_release_sequence
   }
@@ -47,10 +52,10 @@ locals {
       user_data_key  = base64encode(var.user_data_cert_key)
 
       # Proxy information
-      key_vault_name         = var.key_vault_name
-      proxy_ip               = var.proxy_ip
-      proxy_port             = var.proxy_port
-      proxy_cert_secret_name = var.proxy_cert_secret_name
+      key_vault_name         = local.key_vault_name
+      proxy_ip               = local.proxy_ip
+      proxy_port             = local.proxy_port
+      proxy_cert_secret_name = local.proxy_cert_secret_name
       proxy_cert             = local.proxy_cert_name
       no_proxy = join(
         ",",

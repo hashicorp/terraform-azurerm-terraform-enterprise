@@ -6,13 +6,11 @@ variable "friendly_name_prefix" {
 }
 
 variable "domain_name" {
-  default     = ""
   type        = string
   description = "Domain to create Terraform Enterprise subdomain within"
 }
 
 variable "tfe_subdomain" {
-  default     = ""
   type        = string
   description = "Subdomain for TFE"
 }
@@ -26,25 +24,21 @@ variable "location" {
 }
 
 variable "resource_group_name" {
-  default     = ""
   type        = string
   description = "Azure resource group name"
 }
 
 variable "resource_group_name_dns" {
-  default     = ""
   type        = string
   description = "Name of resource group which contains desired DNS zone"
 }
 
 variable "key_vault_name" {
-  default     = ""
   type        = string
   description = "(recommended) Azure Key Vault name containing required certificate"
 }
 
 variable "certificate_name" {
-  default     = ""
   type        = string
   description = "(recommended) Azure Key Vault Certificate name for Application Gateway"
 }
