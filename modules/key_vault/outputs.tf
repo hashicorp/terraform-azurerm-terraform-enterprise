@@ -10,8 +10,12 @@ output "tls_key" {
   value = var.user_data_cert == null ? tls_private_key.cert[0].private_key_pem : var.user_data_cert_key
 }
 
+output "key_vault_name" {
+  value = var.key_vault_name == null ? azurerm_key_vault.kv[0].name : data.azurerm_key_vault.existing[0].name
+}
+
 output "key_vault_id" {
-  value = var.load_balancer_type == "application_gateway" ? element(concat(azurerm_key_vault.kv.*.id, data.azurerm_key_vault.kv.*.id), 0) : ""
+  value = local.key_vault_id
 }
 
 # makes sure that if cert name supplied but kv not, then new is used

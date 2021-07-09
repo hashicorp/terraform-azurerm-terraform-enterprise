@@ -30,15 +30,3 @@ variable "storage_account_container_name" {
   type        = string
   description = "Storage account container name"
 }
-
-variable "bootstrap_storage_account_name" {
-  default     = null
-  type        = string
-  description = "Bootstrap storage account name"
-}
-
-variable "bootstrap_storage_account_container_name" {
-  default     = null
-  type        = string
-  description = "Bootstrap storage account container name"
-}

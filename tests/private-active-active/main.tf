@@ -19,17 +19,15 @@ module "private_active_active" {
   resource_group_name_dns = var.resource_group_name_dns
   domain_name             = var.domain_name
 
-  resource_group_name_kv = var.resource_group_name_kv
-  key_vault_name         = local.key_vault_name
-  certificate_name       = var.certificate_name
-
-  bootstrap_storage_account_name           = var.bootstrap_storage_account_name
-  bootstrap_storage_account_container_name = var.bootstrap_storage_account_container_name
-  resource_group_name_bootstrap            = var.resource_group_name_bootstrap
+  # Bootstrapping Key Vault
+  resource_group_name_kv  = var.resource_group_name_kv
+  key_vault_name          = local.key_vault_name
+  certificate_name        = var.certificate_name
+  tfe_license_secret_name = var.tfe_license_secret_name
 
   # Behind proxy information
-  proxy_ip               = azurerm_linux_virtual_machine.proxy.private_ip_address
-  proxy_port             = local.proxy_port
+  proxy_ip   = azurerm_linux_virtual_machine.proxy.private_ip_address
+  proxy_port = local.proxy_port
 
   # Private Active / Active Scenario
   vm_node_count               = 2

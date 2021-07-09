@@ -1,5 +1,9 @@
 provider "azurerm" {
-  features {}
+  features {
+    key_vault {
+      purge_soft_delete_on_destroy = true
+    }
+  }
 }
 
 resource "random_string" "friendly_name" {
@@ -13,11 +17,11 @@ module "public_active_active" {
   source = "../../"
 
   friendly_name_prefix = local.friendly_name_prefix
-  tfe_license_name     = "terraform-azurerm-terraform-enterprise.rli"
 
-  resource_group_name_bootstrap            = var.resource_group_name_bootstrap
-  bootstrap_storage_account_name           = var.bootstrap_storage_account_name
-  bootstrap_storage_account_container_name = var.bootstrap_storage_account_container_name
+  # Bootstrapping resources
+  resource_group_name_kv  = var.resource_group_name_kv
+  key_vault_name          = var.key_vault_name
+  tfe_license_secret_name = var.tfe_license_secret_name
 
   vm_node_count               = 2
   vm_sku                      = "Standard_D4_v3"

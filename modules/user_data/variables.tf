@@ -80,16 +80,6 @@ variable "user_data_azure_account_name" {
   description = "Azure storage account name"
 }
 
-variable "user_data_bootstrap_storage_account_name" {
-  type        = string
-  description = "Azure bootstrap storage account name"
-}
-
-variable "user_data_bootstrap_storage_container_name" {
-  type        = string
-  description = "Azure boostrap storage container name"
-}
-
 # TFE
 # ---
 variable "user_data_release_sequence" {
@@ -100,6 +90,11 @@ variable "user_data_release_sequence" {
 variable "user_data_tfe_license_name" {
   type        = string
   description = "Terraform Enterprise license file name"
+}
+
+variable "tfe_license_secret_name" {
+  type        = string
+  description = "Name of the secret under which the Base64 encoded Terraform Enterprise license is (or will be) stored in the Azure Key Vault."
 }
 
 variable "user_data_ca" {

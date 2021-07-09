@@ -6,10 +6,8 @@ variable "location" {
   description = "Azure location name e.g. East US"
 }
 
-
 # Domain
 # ------
-
 variable "domain_name" {
   type        = string
   description = "Domain to create Terraform Enterprise subdomain within"
@@ -22,7 +20,6 @@ variable "resource_group_name_dns" {
 
 # Key Vault and Certificate
 # -------------------------
-
 variable "resource_group_name_kv" {
   type        = string
   description = "Name of resource group which contains desired key vault"
@@ -38,22 +35,9 @@ variable "certificate_name" {
   description = "Azure Key Vault Certificate name for Application Gateway"
 }
 
-# Bootstrap Resources Storage Account
-# -----------------------------------
-
-variable "resource_group_name_bootstrap" {
+variable "tfe_license_secret_name" {
   type        = string
-  description = "The resource group of the storage account that houses the TFE license"
-}
-
-variable "bootstrap_storage_account_name" {
-  type        = string
-  description = "The name of the storage account that houses the TFE license"
-}
-
-variable "bootstrap_storage_account_container_name" {
-  type        = string
-  description = "The name of the container that houses the TFE license"
+  description = "Name of the secret under which the base64 encoded TFE license is stored in the Azure Key Vault."
 }
 
 # Proxy & Bastion

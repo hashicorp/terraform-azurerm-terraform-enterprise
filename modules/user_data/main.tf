@@ -11,12 +11,11 @@ locals {
     TlsBootstrapType             = "server-path"
   }
 
-  key_vault_name         = var.key_vault_name == null ? "" : var.key_vault_name
   proxy_ip               = var.proxy_ip == null ? "" : var.proxy_ip
   proxy_port             = var.proxy_port == null ? "" : var.proxy_port
   proxy_cert_name        = var.proxy_cert_name == null ? "" : var.proxy_cert_name
   proxy_cert_secret_name = var.proxy_cert_secret_name == null ? "" : var.proxy_cert_secret_name
-  
+
   user_data_release_sequence = {
     ReleaseSequence = var.user_data_release_sequence
   }
@@ -42,17 +41,15 @@ locals {
       active_active = var.active_active
       fqdn          = var.fqdn
 
-      # Storage account info for access to license and config files
-      bootstrap_storage_account_container_name = var.user_data_bootstrap_storage_container_name
-      bootstrap_storage_account_name           = var.user_data_bootstrap_storage_account_name
-      tfe_license_name                         = var.user_data_tfe_license_name
+      tfe_license_name        = var.user_data_tfe_license_name
+      tfe_license_secret_name = var.tfe_license_secret_name
 
       # Certificate information
       user_data_cert = base64encode(var.user_data_cert)
       user_data_key  = base64encode(var.user_data_cert_key)
 
       # Proxy information
-      key_vault_name         = local.key_vault_name
+      key_vault_name         = var.key_vault_name
       proxy_ip               = local.proxy_ip
       proxy_port             = local.proxy_port
       proxy_cert_secret_name = local.proxy_cert_secret_name

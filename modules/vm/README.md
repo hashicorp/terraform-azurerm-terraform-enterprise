@@ -4,7 +4,6 @@
 
 * `friendly_name_prefix` - string value to use as base for resource names
 * `resource_group_name` - string value for Azure resource group name
-* `resource_group_id_bootstrap` - string value for Azure bootstrap resource group ID
 * `location` - string value for Azure location
 * `vm_subnet_id` - string value for Azure resource id of network subnet for vmss
 * `vm_user` - string value for vm username

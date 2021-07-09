@@ -20,14 +20,12 @@ module "private_tcp_active_active" {
   domain_name             = var.domain_name
 
   # Bootstrapping resources
-  bootstrap_storage_account_name           = var.bootstrap_storage_account_name
-  bootstrap_storage_account_container_name = var.bootstrap_storage_account_container_name
-  resource_group_name_bootstrap            = var.resource_group_name_bootstrap
-  resource_group_name_kv                   = var.resource_group_name_kv
-  key_vault_name                           = local.key_vault_name
-  user_data_ca                             = local.user_data_ca
-  user_data_cert                           = local.user_data_cert
-  user_data_cert_key                       = local.user_data_cert_key
+  resource_group_name_kv  = var.resource_group_name_kv
+  key_vault_name          = var.key_vault_name
+  user_data_ca            = local.user_data_ca
+  user_data_cert          = local.user_data_cert
+  user_data_cert_key      = local.user_data_cert_key
+  tfe_license_secret_name = var.tfe_license_secret_name
 
   tags = local.common_tags
 

@@ -1,14 +1,16 @@
-variable "resource_group_name_bootstrap" {
+# Key Vault and Certificate
+# -------------------------
+variable "resource_group_name_kv" {
   type        = string
-  description = "Azure resource group name for bootstrap"
+  description = "The resource group of the Azure Key Vault containing all required secrets and certificates."
 }
 
-variable "bootstrap_storage_account_name" {
+variable "key_vault_name" {
   type        = string
-  description = "The name of the storage account in which the container that houses the TFE license."
+  description = "Azure Key Vault name containing all required secrets and certificates."
 }
 
-variable "bootstrap_storage_account_container_name" {
+variable "tfe_license_secret_name" {
   type        = string
-  description = "The name of the container that houses the TFE license."
+  description = "Name of the secret under which the Base64 encoded TFE license is stored in the Azure Key Vault."
 }
