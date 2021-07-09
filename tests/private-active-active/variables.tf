@@ -38,11 +38,6 @@ variable "certificate_name" {
   description = "Azure Key Vault Certificate name for Application Gateway"
 }
 
-variable "proxy_cert_secret_name" {
-  type        = string
-  description = "Name of the secret under which the proxy cert is stored in the Azure Key Vault."
-}
-
 # Bootstrap Resources Storage Account
 # -----------------------------------
 
