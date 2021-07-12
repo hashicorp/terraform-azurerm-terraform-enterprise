@@ -103,11 +103,10 @@ yum_packages() {
 retrieve_tfe_license() {
 	echo "[$(date +"%FT%T")] [Terraform Enterprise] Retrieve TFE license" | tee -a /var/log/ptfe.log
 
-	# Obtain access token for Azure Storage
-	access_token=$(sudo curl --noproxy '*' 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fstorage.azure.com%2F' -H Metadata:true | jq -r .access_token)
-
-	# Use access token to obtain license file
-	sudo curl https://${bootstrap_storage_account_name}.blob.core.windows.net/${bootstrap_storage_account_container_name}/${tfe_license_name} -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" --output /etc/${tfe_license_name}
+	# Obtain access token for Azure Key Vault to obtain base64 encoded TFE license secret
+	access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
+	license=$(curl --noproxy '*' https://${key_vault_name}.vault.azure.net/secrets/${tfe_license_secret_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
+    echo $license | base64 -d > /etc/${tfe_license_name}
 }
 
 install_tfe() {

@@ -1,4 +1,4 @@
-# Azure TFE Certificates Module
+# Azure TFE Key Vault Module
 
 ## Required variables
 
@@ -9,8 +9,8 @@
 ## Example usage
 
 ```hcl
-module "certificates" {
-  source = "./modules/certificates"
+module "key_vault" {
+  source = "./modules/key_vault"
 
   friendly_name_prefix   = var.friendly_name_prefix
   resource_group_name    = local.resource_group_name

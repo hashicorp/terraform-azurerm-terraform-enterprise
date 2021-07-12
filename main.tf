@@ -45,6 +45,10 @@ locals {
   # Redis
   # -----
   redis_port = var.redis_enable_non_ssl_port == true ? "6379" : "6380"
+
+  # Key Vault
+  # ---------
+  key_vault_name = module.key_vault.key_vault_name
 }
 
 # Azure resource groups
@@ -55,10 +59,9 @@ module "resource_groups" {
   friendly_name_prefix = var.friendly_name_prefix
   location             = var.location
 
-  resource_group_name           = var.resource_group_name
-  resource_group_name_dns       = var.resource_group_name_dns
-  resource_group_name_kv        = var.resource_group_name_kv
-  resource_group_name_bootstrap = var.resource_group_name_bootstrap
+  resource_group_name     = var.resource_group_name
+  resource_group_name_dns = var.resource_group_name_dns
+  resource_group_name_kv  = var.resource_group_name_kv
 
   tags = var.tags
 }
@@ -97,8 +100,8 @@ resource "tls_private_key" "tfe_ssh" {
 
 # TLS for backend
 # ---------------
-module "certificates" {
-  source = "./modules/certificates"
+module "key_vault" {
+  source = "./modules/key_vault"
 
   friendly_name_prefix   = var.friendly_name_prefix
   resource_group_name    = module.resource_groups.resource_group_name
@@ -108,13 +111,15 @@ module "certificates" {
   tenant_id = data.azurerm_client_config.current.tenant_id
   object_id = data.azurerm_client_config.current.object_id
 
-  fqdn               = local.fqdn
-  key_vault_name     = var.key_vault_name
-  certificate_name   = var.certificate_name
-  user_data_ca       = var.user_data_ca
-  user_data_cert     = var.user_data_cert
-  user_data_cert_key = var.user_data_cert_key
-  load_balancer_type = var.load_balancer_type
+  fqdn                    = local.fqdn
+  key_vault_name          = var.key_vault_name
+  certificate_name        = var.certificate_name
+  user_data_ca            = var.user_data_ca
+  user_data_cert          = var.user_data_cert
+  user_data_cert_key      = var.user_data_cert_key
+  load_balancer_type      = var.load_balancer_type
+  tfe_license_filepath    = var.tfe_license_filepath
+  tfe_license_secret_name = var.tfe_license_secret_name
 
   tags = var.tags
 }
@@ -124,26 +129,21 @@ module "certificates" {
 module "service_accounts" {
   source = "./modules/service_accounts"
 
-  friendly_name_prefix          = var.friendly_name_prefix
-  resource_group_name           = module.resource_groups.resource_group_name
-  resource_group_name_bootstrap = module.resource_groups.resource_group_name_bootstrap
-  location                      = var.location
+  friendly_name_prefix = var.friendly_name_prefix
+  resource_group_name  = module.resource_groups.resource_group_name
+  location             = var.location
 
   storage_account_tier             = var.storage_account_tier
   storage_account_replication_type = var.storage_account_replication_type
 
   # Key Vault
   resource_group_name_kv = module.resource_groups.resource_group_name_kv
-  key_vault_name         = var.key_vault_name
+  key_vault_name         = local.key_vault_name
 
   # Application storage
   storage_account_name                           = var.storage_account_name
   storage_account_key                            = var.storage_account_key
   storage_account_primary_blob_connection_string = var.storage_account_primary_blob_connection_string
-
-  # Bootstrap storage
-  bootstrap_storage_account_name = var.bootstrap_storage_account_name
-  resource_group_id_bootstrap    = module.resource_groups.resource_group_id_bootstrap
 
   tags = var.tags
 
@@ -166,10 +166,6 @@ module "object_storage" {
   # Application storage
   storage_account_name           = module.service_accounts.storage_account_name
   storage_account_container_name = var.storage_account_container_name
-
-  # Bootstrap storage
-  bootstrap_storage_account_name           = module.service_accounts.bootstrap_storage_account_name
-  bootstrap_storage_account_container_name = var.bootstrap_storage_account_container_name
 
   depends_on = [
     module.resource_groups,
@@ -283,23 +279,22 @@ module "user_data" {
   redis_enable_authentication = local.active_active == true ? var.redis_enable_authentication : true
 
   # Azure
-  user_data_azure_account_key                = module.service_accounts.storage_account_key
-  user_data_azure_account_name               = module.service_accounts.storage_account_name
-  user_data_azure_container_name             = module.object_storage.storage_account_container_name
-  user_data_bootstrap_storage_account_name   = module.service_accounts.bootstrap_storage_account_name
-  user_data_bootstrap_storage_container_name = module.object_storage.bootstrap_storage_account_container_name
+  user_data_azure_account_key    = module.service_accounts.storage_account_key
+  user_data_azure_account_name   = module.service_accounts.storage_account_name
+  user_data_azure_container_name = module.object_storage.storage_account_container_name
 
   # TFE
   user_data_tfe_license_name = var.tfe_license_name
   user_data_release_sequence = var.user_data_release_sequence
+  tfe_license_secret_name    = var.tfe_license_secret_name
 
   # Certificates
-  user_data_ca       = var.user_data_ca == null ? replace(module.certificates.tls_ca_cert, "\n", "\n") : var.user_data_ca
-  user_data_cert     = var.user_data_cert == null ? module.certificates.tls_cert : var.user_data_cert
-  user_data_cert_key = var.user_data_cert_key == null ? module.certificates.tls_key : var.user_data_cert_key
+  user_data_ca       = var.user_data_ca == null ? replace(module.key_vault.tls_ca_cert, "\n", "\n") : var.user_data_ca
+  user_data_cert     = var.user_data_cert == null ? module.key_vault.tls_cert : var.user_data_cert
+  user_data_cert_key = var.user_data_cert_key == null ? module.key_vault.tls_key : var.user_data_cert_key
 
   # Proxy
-  key_vault_name         = var.key_vault_name
+  key_vault_name         = local.key_vault_name
   proxy_ip               = var.proxy_ip
   proxy_port             = var.proxy_port
   proxy_cert_name        = var.proxy_cert_name
@@ -309,7 +304,7 @@ module "user_data" {
   depends_on = [
     module.service_accounts,
     module.object_storage,
-    module.certificates,
+    module.key_vault,
     module.network
   ]
 }
@@ -356,10 +351,10 @@ module "load_balancer" {
   tenant_id               = data.azurerm_client_config.current.tenant_id
 
   # Secrets
-  key_vault_id                    = var.load_balancer_type == "application_gateway" ? module.certificates.key_vault_id : ""
-  certificate_name                = var.load_balancer_type == "application_gateway" ? module.certificates.certificate_name : ""
-  certificate_key_vault_secret_id = var.load_balancer_type == "application_gateway" ? module.certificates.certificate_key_vault_secret_id : ""
-  trusted_root_certificate        = var.load_balancer_type == "application_gateway" && var.user_data_ca == null ? module.certificates.tls_ca_cert : var.user_data_ca
+  key_vault_id                    = var.load_balancer_type == "application_gateway" ? module.key_vault.key_vault_id : ""
+  certificate_name                = var.load_balancer_type == "application_gateway" ? module.key_vault.certificate_name : ""
+  certificate_key_vault_secret_id = var.load_balancer_type == "application_gateway" ? module.key_vault.certificate_key_vault_secret_id : ""
+  trusted_root_certificate        = var.load_balancer_type == "application_gateway" && var.user_data_ca == null ? module.key_vault.tls_ca_cert : var.user_data_ca
 
   # Network
   network_frontend_subnet_id = local.network_frontend_subnet_id
@@ -378,7 +373,7 @@ module "load_balancer" {
 
   depends_on = [
     module.resource_groups,
-    module.certificates,
+    module.key_vault,
     module.network
   ]
 }

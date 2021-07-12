@@ -63,16 +63,10 @@ variable "resource_group_name_kv" {
   description = "Name of resource group which contains desired key vault"
 }
 
-variable "resource_group_name_bootstrap" {
-  default     = null
-  type        = string
-  description = "Azure resource group name for bootstrap"
-}
-
 variable "key_vault_name" {
   default     = null
   type        = string
-  description = "(recommended) Azure Key Vault name containing required certificate"
+  description = "(recommended) Azure Key Vault name containing required certificate and Base64 encoded TFE license"
 }
 
 variable "certificate_name" {
@@ -163,20 +157,28 @@ variable "network_allow_range" {
   description = "(Optional) Network range to allow access to TFE"
 }
 
-# Object Storage
-# --------------
-variable "tfe_license_name" {
-  default     = "license.rli"
-  type        = string
-  description = "TFE License name"
-}
-
+# TFE License
+# -----------
 variable "tfe_license_filepath" {
   default     = null
   type        = string
   description = "TFE License filepath"
 }
 
+variable "tfe_license_secret_name" {
+  default     = "tfe-license-base64"
+  type        = string
+  description = "Name of the secret under which the Base64 encoded TFE license is (or will be) stored in the Azure Key Vault."
+}
+
+variable "tfe_license_name" {
+  default     = "license.rli"
+  type        = string
+  description = "TFE License name"
+}
+
+# Object Storage
+# --------------
 variable "storage_account_name" {
   default     = null
   type        = string
@@ -199,18 +201,6 @@ variable "storage_account_primary_blob_connection_string" {
   default     = null
   type        = string
   description = "Storage account primary blob endpoint"
-}
-
-variable "bootstrap_storage_account_name" {
-  default     = null
-  type        = string
-  description = "Bootstrap storage account name"
-}
-
-variable "bootstrap_storage_account_container_name" {
-  default     = null
-  type        = string
-  description = "Bootstrap storage account container name"
 }
 
 # Service Accounts

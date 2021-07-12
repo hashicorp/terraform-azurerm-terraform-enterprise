@@ -28,12 +28,6 @@ variable "resource_group_name_kv" {
   description = "Name of resource group which contains desired key vault"
 }
 
-variable "resource_group_name_bootstrap" {
-  default     = null
-  type        = string
-  description = "Azure resource group name for bootstrap"
-}
-
 # Tagging
 # -------
 variable "tags" {

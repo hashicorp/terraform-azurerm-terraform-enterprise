@@ -45,21 +45,9 @@ variable "ca_pem_certificate_secret_name" {
   description = "Name of the secret under which the DNS wildcard chained cert is stored in the Azure Key Vault."
 }
 
-# Storage
-# -------
-variable "resource_group_name_bootstrap" {
+variable "tfe_license_secret_name" {
   type        = string
-  description = "The resource group of the storage account that houses the TFE license"
-}
-
-variable "bootstrap_storage_account_name" {
-  type        = string
-  description = "The name of the storage account that houses the TFE license"
-}
-
-variable "bootstrap_storage_account_container_name" {
-  type        = string
-  description = "The name of the container that houses the TFE license"
+  description = "Name of the secret under which the Base64 encoded TFE license is stored in the Azure Key Vault."
 }
 
 # Proxy & Bastion

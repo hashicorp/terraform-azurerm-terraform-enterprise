@@ -21,10 +21,6 @@ output "resource_group_name" {
   value = module.resource_groups.resource_group_name
 }
 
-output "resource_group_name_bootstrap" {
-  value = module.resource_groups.resource_group_name_bootstrap
-}
-
 # Network
 # -------
 output "network_name" {
@@ -57,18 +53,10 @@ output "storage_account_name" {
   value = module.service_accounts.storage_account_name
 }
 
-output "bootstrap_storage_account_name" {
-  value = module.service_accounts.bootstrap_storage_account_name
-}
-
 # Object Storage
 # --------------
 output "storage_account_container_name" {
   value = module.object_storage.storage_account_container_name
-}
-
-output "bootstrap_storage_account_container_name" {
-  value = module.object_storage.bootstrap_storage_account_container_name
 }
 
 # Database
@@ -149,6 +137,12 @@ output "load_balancer_backend_id" {
 
 output "load_balancer_ip" {
   value = var.dns_create_record == false ? "External DNS record must be configured for: ${module.load_balancer.load_balancer_ip}" : module.load_balancer.load_balancer_ip
+}
+
+# Key Vault
+# ---------
+output "key_vault_id" {
+  value = module.key_vault.key_vault_id
 }
 
 # VM

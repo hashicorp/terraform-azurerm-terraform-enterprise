@@ -1,3 +1,8 @@
+locals {
+  key_vault_id = var.key_vault_name == null ? azurerm_key_vault.kv[0].id : data.azurerm_key_vault.existing[0].id
+}
+
+
 # Self Signed Certificate
 # -----------------------
 # CA Key
@@ -77,9 +82,19 @@ resource "tls_locally_signed_cert" "cert" {
 
 # Azure Key Vault
 # ---------------
+
+# Reference existing Key Vault if supplied
+data "azurerm_key_vault" "existing" {
+  count = var.key_vault_name == null ? 0 : 1
+
+  name                = var.key_vault_name
+  resource_group_name = var.resource_group_name_kv
+}
+
+
 # Create a new Azure Key Vault if not supplied
 resource "azurerm_key_vault" "kv" {
-  count = var.key_vault_name == null && var.load_balancer_type == "application_gateway" ? 1 : 0
+  count = var.key_vault_name == null ? 1 : 0
 
   name                = "${var.friendly_name_prefix}-kv"
   location            = var.location
@@ -95,9 +110,9 @@ resource "azurerm_key_vault" "kv" {
 }
 
 resource "azurerm_key_vault_access_policy" "tfe_kv_acl" {
-  count = var.key_vault_name == null && var.load_balancer_type == "application_gateway" ? 1 : 0
+  count = var.key_vault_name == null ? 1 : 0
 
-  key_vault_id = azurerm_key_vault.kv[0].id
+  key_vault_id = local.key_vault_id
   tenant_id    = var.tenant_id
   object_id    = var.object_id
 
@@ -113,25 +128,6 @@ resource "azurerm_key_vault_access_policy" "tfe_kv_acl" {
     "purge",
     "setissuers",
     "update",
-  ]
-
-  key_permissions = [
-    "backup",
-    "create",
-    "decrypt",
-    "delete",
-    "encrypt",
-    "get",
-    "import",
-    "list",
-    "purge",
-    "recover",
-    "restore",
-    "sign",
-    "unwrapKey",
-    "update",
-    "verify",
-    "wrapKey",
   ]
 
   secret_permissions = [
@@ -152,7 +148,7 @@ resource "azurerm_key_vault_certificate" "cert" {
   count = (var.certificate_name == null || var.key_vault_name == null) && var.load_balancer_type == "application_gateway" ? 1 : 0
 
   name         = "${var.friendly_name_prefix}cert"
-  key_vault_id = azurerm_key_vault.kv[0].id
+  key_vault_id = local.key_vault_id
 
   certificate_policy {
     issuer_parameters {
@@ -204,4 +200,17 @@ resource "azurerm_key_vault_certificate" "cert" {
   }
 
   tags = var.tags
+}
+
+# If the TFE license filepath is supplied, then
+# store the base64 encoded license in the Key Vault
+# -------------------------------------------------
+resource "azurerm_key_vault_secret" "tfe_license" {
+  count = var.tfe_license_filepath == null ? 0 : 1
+
+  name         = var.tfe_license_secret_name
+  value        = filebase64(var.tfe_license_filepath)
+  key_vault_id = local.key_vault_id
+
+  depends_on = [azurerm_key_vault_access_policy.tfe_kv_acl]
 }

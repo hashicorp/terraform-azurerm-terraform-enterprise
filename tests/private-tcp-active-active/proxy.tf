@@ -73,7 +73,7 @@ resource "azurerm_user_assigned_identity" "proxy" {
 }
 
 resource "azurerm_key_vault_access_policy" "tfe_kv_acl" {
-  key_vault_id = data.azurerm_key_vault.kv.id
+  key_vault_id = local.key_vault_id
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = azurerm_user_assigned_identity.proxy.principal_id
 

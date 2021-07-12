@@ -24,7 +24,7 @@ This module is intended to run in an Azure account with minimal preparation, how
 
 ### License file
 
-- A terraform license file is required and the path to this file must be supplied. An empty placeholder `license.rli` file exists in each example within a `./files` directory and serves as a reference `tfe_license_filepath = "${path.module}/files/license.rli"`.
+- A Terraform Enterprise license file is required, and it must be provided as either a Base64 encoded secret in Azure Key Vault OR a file on the local filesystem which you would reference like so: `tfe_license_filepath = "${path.module}/files/license.rli"`.
 
 ### Azure Resources
 
