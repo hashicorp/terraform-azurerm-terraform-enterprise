@@ -18,8 +18,11 @@ examples/*/*.tfvars
 examples/*/*.lock*
 
 .DS_Store
+
+# Secrets
 *ptfe-license*
 *.pem*
 *.cer*
 *.key*
+*.rli*
 work
