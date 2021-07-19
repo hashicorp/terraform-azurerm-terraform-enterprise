@@ -116,30 +116,8 @@ resource "azurerm_key_vault_access_policy" "tfe_kv_acl" {
   tenant_id    = var.tenant_id
   object_id    = var.object_id
 
-  certificate_permissions = [
-    "create",
-    "delete",
-    "get",
-    "import",
-    "list",
-    "listissuers",
-    "managecontacts",
-    "manageissuers",
-    "purge",
-    "setissuers",
-    "update",
-  ]
-
-  secret_permissions = [
-    "backup",
-    "delete",
-    "get",
-    "list",
-    "purge",
-    "recover",
-    "restore",
-    "set",
-  ]
+  certificate_permissions = var.certificate_permissions
+  secret_permissions      = var.secret_permissions
 }
 
 # Azure Key Vault Certificate

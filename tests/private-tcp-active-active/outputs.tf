@@ -27,5 +27,6 @@ output "initial_admin_user_url" {
 }
 
 output "bastion_fqdn" {
-  value = azurerm_public_ip.vm_bastion.fqdn
+  value       = azurerm_public_ip.vm_bastion.fqdn
+  description = "The fully qualified domain name of the basion host virtual machine."
 }

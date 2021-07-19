@@ -1,7 +1,3 @@
-provider "azurerm" {
-  features {}
-}
-
 resource "random_string" "friendly_name" {
   length  = 4
   upper   = false

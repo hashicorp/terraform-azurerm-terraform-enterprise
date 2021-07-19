@@ -72,7 +72,7 @@ variable "key_vault_name" {
 variable "certificate_name" {
   default     = null
   type        = string
-  description = "(recommended) Azure Key Vault Certificate name for Application Gateway"
+  description = "(recommended) The value should match an existing Key Vault Certificate residing in the Key Vault specified via `key_vault_name`. If not supplied, the module will create and use self signed certificates which is not recommended for production use."
 }
 
 # Bastion
@@ -221,6 +221,7 @@ variable "storage_account_replication_type" {
 # --------
 variable "database_user" {
   default     = "tfeuser"
+  type        = string
   description = "Postgres username"
 }
 
@@ -381,12 +382,6 @@ variable "redis_rdb_existing_storage_account_rg" {
   description = "(Optional) Name of the resource group that contains the existing Premium Storage Account for data encryption at rest."
 }
 
-variable "redis_minimum_tls_version" {
-  default     = "1.2"
-  type        = string
-  description = "(Optional) The minimum TLS version."
-}
-
 # VM
 # --
 variable "vm_node_count" {
@@ -434,11 +429,6 @@ variable "vm_sku" {
   description = "Azure virtual machine sku"
 }
 
-variable "vm_os_disk_storage_account_type" {
-  default = "StandardSSD_LRS"
-  type    = string
-}
-
 variable "vm_os_disk_disk_size_gb" {
   default     = 100
   type        = number
@@ -472,8 +462,9 @@ variable "user_data_cert_key" {
 }
 
 variable "user_data_redis_use_tls" {
-  default = true
-  type    = bool
+  default     = true
+  type        = bool
+  description = "Boolean to determine if TLS should be used"
 }
 
 # Proxy
@@ -485,8 +476,9 @@ variable "proxy_ip" {
 }
 
 variable "proxy_port" {
-  default = null
-  type    = string
+  default     = null
+  type        = string
+  description = "Port that the proxy server will use."
 }
 
 variable "proxy_cert_name" {
