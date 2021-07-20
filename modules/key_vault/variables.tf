@@ -5,18 +5,16 @@ variable "friendly_name_prefix" {
   description = "(Required) Name prefix used for resources"
 }
 
-variable "fqdn" {}
+variable "fqdn" {
+  type        = string
+  description = "DNS name (FQDN) identified by the Certificate"
+}
 
 # Provider
 # --------
 variable "location" {
   type        = string
   description = "Azure location name e.g. East US"
-}
-
-variable "resource_group_name" {
-  type        = string
-  description = "Azure resource group name"
 }
 
 variable "resource_group_name_kv" {
@@ -27,7 +25,7 @@ variable "resource_group_name_kv" {
 variable "tenant_id" {
   default     = null
   type        = string
-  description = "The Azure Active Directory tenant ID that should be used for authenticating requests to the key vault."
+  description = "The Azure Active Directory tenant ID that should be used for authenticating requests to the key vault"
 }
 
 variable "object_id" {
@@ -39,27 +37,32 @@ variable "object_id" {
 # Certificate
 # -----------
 variable "validity_period_hours" {
+  type        = number
   default     = 24 * 30 * 6
-  description = "The number of hours after initial issuing that the certificate will become invalid."
+  description = "The number of hours after initial issuing that the certificate will become invalid"
 }
 
 variable "private_key_algorithm" {
   default     = "RSA"
+  type        = string
   description = "The name of the algorithm to use for private keys (RSA or ECDSA)"
 }
 
 variable "private_key_ecdsa_curve" {
   default     = "P256"
+  type        = string
   description = "ECDS - The name of the elliptic curve to use (P224, P256, P384 or P521)"
 }
 
 variable "private_key_rsa_bits" {
   default     = "2048"
+  type        = string
   description = "RSA - The size of the generated RSA key in bits"
 }
 
 variable "organization_name" {
   default     = "Terraform Enterprise (untrusted)"
+  type        = string
   description = "The name of the organization to associate with the certificates"
 }
 
@@ -92,7 +95,7 @@ variable "key_vault_name" {
 variable "sku_name" {
   default     = "standard"
   type        = string
-  description = "The Name of the SKU used for this Key Vault. Possible values are standard and premium."
+  description = "The Name of the SKU used for this Key Vault. Possible values are standard and premium"
 }
 
 variable "soft_delete_retention_days" {
@@ -110,22 +113,42 @@ variable "enabled_for_deployment" {
 variable "enabled_for_disk_encryption" {
   default     = true
   type        = bool
-  description = "Boolean flag to specify whether Azure Disk Encryption is permitted to retrieve secrets from the vault and unwrap keys."
+  description = "Boolean flag to specify whether Azure Disk Encryption is permitted to retrieve secrets from the vault and unwrap keys"
 }
 
 variable "certificate_permissions" {
-  default = []
-  type    = list(string)
-}
+  type        = list(string)
+  description = "The list of permissions for the key vault certificates for the TFE instance"
 
-variable "key_permissions" {
-  default = []
-  type    = list(string)
+  default = [
+    "create",
+    "delete",
+    "get",
+    "import",
+    "list",
+    "listissuers",
+    "managecontacts",
+    "manageissuers",
+    "purge",
+    "setissuers",
+    "update",
+  ]
 }
 
 variable "secret_permissions" {
-  default = []
-  type    = list(string)
+  type        = list(string)
+  description = "The list of permissions for the key vault secrets for the TFE instance"
+
+  default = [
+    "backup",
+    "delete",
+    "get",
+    "list",
+    "purge",
+    "recover",
+    "restore",
+    "set",
+  ]
 }
 
 # Load balancer
@@ -161,5 +184,5 @@ variable "tfe_license_filepath" {
 
 variable "tfe_license_secret_name" {
   type        = string
-  description = "Name of the secret under which the base64 encoded TFE license is to be stored in the Azure Key Vault."
+  description = "Name of the secret under which the base64 encoded TFE license is to be stored in the Azure Key Vault"
 }

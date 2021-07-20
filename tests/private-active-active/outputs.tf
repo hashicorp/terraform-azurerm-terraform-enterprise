@@ -18,14 +18,15 @@ output "health_check_url" {
 
 output "iact_url" {
   value       = "${module.private_active_active.tfe_application_url}/admin/retrieve-iact"
-  description = "The URL with path to access the TFE instance Retrieve IACT."
+  description = "The URL with path to access the TFE instance Retrieve IACT"
 }
 
 output "initial_admin_user_url" {
   value       = "${module.private_active_active.tfe_application_url}/admin/initial-admin-user"
-  description = "The URL with path to access the TFE instance Initial Admin User."
+  description = "The URL with path to access the TFE instance Initial Admin User"
 }
 
 output "bastion_fqdn" {
-  value = azurerm_public_ip.vm_bastion.fqdn
+  value       = azurerm_public_ip.vm_bastion.fqdn
+  description = "The fully qualified domain name of the basion host virtual machine"
 }

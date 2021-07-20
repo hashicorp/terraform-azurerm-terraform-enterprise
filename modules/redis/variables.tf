@@ -1,10 +1,3 @@
-# General
-# -------
-variable "friendly_name_prefix" {
-  type        = string
-  description = "(Required) Name prefix used for resources"
-}
-
 # Provider
 # --------
 variable "location" {
@@ -82,7 +75,7 @@ variable "redis_rdb_existing_storage_account" {
 variable "redis_minimum_tls_version" {
   default     = "1.2"
   type        = string
-  description = "(Optional) The minimum TLS version."
+  description = "(Optional) The minimum TLS version"
 }
 
 # Tagging

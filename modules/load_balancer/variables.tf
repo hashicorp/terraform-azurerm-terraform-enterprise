@@ -65,7 +65,7 @@ variable "resource_group_name" {
 variable "tenant_id" {
   default     = null
   type        = string
-  description = "The Azure Active Directory tenant ID that should be used for authenticating requests to the key vault."
+  description = "The Azure Active Directory tenant ID that should be used for authenticating requests to the key vault"
 }
 
 variable "resource_group_name_dns" {
@@ -180,7 +180,7 @@ variable "load_balancer_waf_max_request_body_size_kb" {
 variable "load_balancer_sku_capacity" {
   default     = 2
   type        = number
-  description = "The Capacity of the SKU to use for Application Gateway (1 to 125)."
+  description = "The Capacity of the SKU to use for Application Gateway (1 to 125)"
 }
 
 # Network

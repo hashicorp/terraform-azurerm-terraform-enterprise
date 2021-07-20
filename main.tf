@@ -1,24 +1,3 @@
-# Required Providers
-# ------------------
-# https://registry.terraform.io/providers/hashicorp/azurerm/latest
-terraform {
-  required_version = ">= 0.13"
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 2.41.0"
-    }
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 3.0.0"
-    }
-    template = {
-      source  = "hashicorp/template"
-      version = "~> 2.1.2"
-    }
-  }
-}
-
 # Local variables and conditionals
 # --------------------------------
 locals {
@@ -104,7 +83,6 @@ module "key_vault" {
   source = "./modules/key_vault"
 
   friendly_name_prefix   = var.friendly_name_prefix
-  resource_group_name    = module.resource_groups.resource_group_name
   resource_group_name_kv = module.resource_groups.resource_group_name_kv
   location               = var.location
 
@@ -157,12 +135,6 @@ module "service_accounts" {
 module "object_storage" {
   source = "./modules/object_storage"
 
-  friendly_name_prefix = var.friendly_name_prefix
-
-  # TFE License
-  tfe_license_name     = var.tfe_license_name
-  tfe_license_filepath = var.tfe_license_filepath
-
   # Application storage
   storage_account_name           = module.service_accounts.storage_account_name
   storage_account_container_name = var.storage_account_container_name
@@ -210,9 +182,8 @@ module "redis" {
   source = "./modules/redis"
   count  = local.active_active == true ? 1 : 0
 
-  friendly_name_prefix = var.friendly_name_prefix
-  resource_group_name  = module.resource_groups.resource_group_name
-  location             = var.location
+  resource_group_name = module.resource_groups.resource_group_name
+  location            = var.location
 
   redis_family                        = var.redis_family
   redis_sku_name                      = var.redis_sku_name
@@ -388,16 +359,15 @@ module "vm" {
   location             = var.location
 
   # VM
-  vm_sku                                 = var.vm_sku
-  vm_image_id                            = var.vm_image_id
-  vm_os_disk_disk_size_gb                = var.vm_os_disk_disk_size_gb
-  vm_subnet_id                           = local.network_private_subnet_id
-  vm_user                                = var.vm_user
-  vm_public_key                          = var.vm_public_key == null ? tls_private_key.tfe_ssh[0].public_key_openssh : var.vm_public_key
-  vm_userdata_script                     = module.user_data.tfe_userdata_base64_encoded
-  vm_node_count                          = var.vm_node_count
-  vm_user_assigned_identity_id           = module.service_accounts.vmss_user_assigned_identity.id
-  vm_user_assigned_identity_principal_id = module.service_accounts.vmss_user_assigned_identity.principal_id
+  vm_sku                       = var.vm_sku
+  vm_image_id                  = var.vm_image_id
+  vm_os_disk_disk_size_gb      = var.vm_os_disk_disk_size_gb
+  vm_subnet_id                 = local.network_private_subnet_id
+  vm_user                      = var.vm_user
+  vm_public_key                = var.vm_public_key == null ? tls_private_key.tfe_ssh[0].public_key_openssh : var.vm_public_key
+  vm_userdata_script           = module.user_data.tfe_userdata_base64_encoded
+  vm_node_count                = var.vm_node_count
+  vm_user_assigned_identity_id = module.service_accounts.vmss_user_assigned_identity.id
 
   # Load balancer
   load_balancer_type       = var.load_balancer_type

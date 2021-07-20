@@ -16,7 +16,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
   custom_data = var.vm_userdata_script
 
   identity {
-    type = "UserAssigned"
+    type = var.vm_identity_type
 
     identity_ids = [var.vm_user_assigned_identity_id]
   }

@@ -39,7 +39,10 @@ variable "load_balancer_type" {
 
 # Load balancer
 # -------------
-variable "load_balancer_backend_id" {}
+variable "load_balancer_backend_id" {
+  type        = string
+  description = "The backend address pool ID of the load balancer or application gateway"
+}
 
 variable "load_balancer_public" {
   default     = true
@@ -52,7 +55,7 @@ variable "load_balancer_public" {
 variable "vm_node_count" {
   default     = 1
   type        = number
-  description = "The number of instances to create for TFE environment."
+  description = "The number of instances to create for TFE environment"
 
   validation {
     condition     = var.vm_node_count <= 5
@@ -61,7 +64,8 @@ variable "vm_node_count" {
 }
 
 variable "vm_userdata_script" {
-  type = string
+  type        = string
+  description = "The custom data script that will provision the TFE instance(s)"
 }
 
 variable "vm_subnet_id" {
@@ -96,21 +100,15 @@ variable "vm_image_id" {
 }
 
 variable "vm_user_assigned_identity_id" {
-  description = "The identity of the user assigned identity to be assigned to the virtual machine scale set."
-  type        = string
-}
-
-variable "vm_user_assigned_identity_principal_id" {
-  description = <<EOD
-  The Service Principal identity of the user assigned identity to be assigned to the virtual machine scale set.
-  EOD
+  description = "The identity of the user assigned identity to be assigned to the virtual machine scale set"
   type        = string
 }
 
 # Optional variables not currently specified in root module
 variable "vm_overprovision" {
-  default = false
-  type    = bool
+  default     = false
+  type        = bool
+  description = "Should Azure over-provision Virtual Machines in this Scale Set?"
 }
 
 variable "vm_sku" {
@@ -146,11 +144,11 @@ variable "vm_os_disk_storage_account_type" {
 variable "vm_os_disk_disk_size_gb" {
   default     = 100
   type        = number
-  description = "The size of the Data Disk which should be created."
+  description = "The size of the Data Disk which should be created"
 }
 
 variable "vm_identity_type" {
-  default     = "SystemAssigned"
+  default     = "UserAssigned"
   type        = string
   description = "The type of Managed Identity which should be assigned to the Linux Virtual Machine Scale Set. Possible values are SystemAssigned, UserAssigned and SystemAssigned, UserAssigned."
 }

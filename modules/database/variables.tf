@@ -21,6 +21,7 @@ variable "resource_group_name" {
 # --------
 variable "database_user" {
   default     = "tfeuser"
+  type        = string
   description = "Postgres username"
 }
 
@@ -49,23 +50,30 @@ variable "database_subnet" {
 
 # ----
 variable "database_backup_retention_days" {
-  default = 7
-  type    = number
+  default     = 7
+  type        = number
+  description = "Backup retention days for the PostgreSQL server. Supported values are between 7 and 35 days"
 }
 
 variable "database_geo_redundant_backup_enabled" {
-  default = true
-  type    = bool
+  default     = true
+  type        = bool
+  description = <<DESC
+  Turn Geo-redundant server backups on/off. This allows you to choose between locally redundant or geo-redundant
+  backup storage in the General Purpose and Memory Optimized tiers.
+  DESC
 }
 
 variable "database_auto_grow_enabled" {
-  default = true
-  type    = bool
+  default     = true
+  type        = bool
+  description = "Enable/Disable auto-growing of the storage for PostgreSQL server"
 }
 
 variable "database_ssl_enforcement_enabled" {
-  default = true
-  type    = bool
+  default     = true
+  type        = bool
+  description = "Specifies if SSL should be enforced on connections"
 }
 
 # Tagging
