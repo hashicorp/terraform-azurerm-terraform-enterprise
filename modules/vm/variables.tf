@@ -59,7 +59,7 @@ variable "vm_node_count" {
 
   validation {
     condition     = var.vm_node_count <= 5
-    error_message = "The vm_node_count value must be less than or equal to 5"
+    error_message = "The vm_node_count value must be less than or equal to 5."
   }
 }
 
