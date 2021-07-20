@@ -95,7 +95,6 @@ apt_packages() {
 yum_packages() {
 	echo "[$(date +"%FT%T")] [Terraform Enterprise] Install RHEL packages" | tee -a /var/log/ptfe.log
 
-	sudo yum update -y
 	sudo yum install unzip -y
 	sudo lvresize -r -L +20G /dev/mapper/rootvg-varlv
 }
