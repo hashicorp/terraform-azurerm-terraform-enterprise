@@ -168,7 +168,7 @@ variable "tfe_license_filepath" {
 variable "tfe_license_secret_name" {
   default     = "tfe-license-base64"
   type        = string
-  description = "Name of the secret under which the Base64 encoded TFE license is (or will be) stored in the Azure Key Vault."
+  description = "Name of the secret under which the Base64 encoded TFE license is (or will be) stored in the Azure Key Vault"
 }
 
 variable "tfe_license_name" {
@@ -387,11 +387,11 @@ variable "redis_rdb_existing_storage_account_rg" {
 variable "vm_node_count" {
   default     = 2
   type        = number
-  description = "The number of instances to create for TFE environment."
+  description = "The number of instances to create for TFE environment"
 
   validation {
     condition     = var.vm_node_count <= 5
-    error_message = "The vm_node_count value must be less than or equal to 5."
+    error_message = "The vm_node_count value must be less than or equal to 5"
   }
 }
 
@@ -432,7 +432,7 @@ variable "vm_sku" {
 variable "vm_os_disk_disk_size_gb" {
   default     = 100
   type        = number
-  description = "The size of the Data Disk which should be created."
+  description = "The size of the Data Disk which should be created"
 }
 
 # User Data
@@ -478,7 +478,7 @@ variable "proxy_ip" {
 variable "proxy_port" {
   default     = null
   type        = string
-  description = "Port that the proxy server will use."
+  description = "Port that the proxy server will use"
 }
 
 variable "proxy_cert_name" {

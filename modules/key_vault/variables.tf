@@ -7,7 +7,7 @@ variable "friendly_name_prefix" {
 
 variable "fqdn" {
   type        = string
-  description = "DNS name (FQDN) identified by the Certificate."
+  description = "DNS name (FQDN) identified by the Certificate"
 }
 
 # Provider
@@ -25,7 +25,7 @@ variable "resource_group_name_kv" {
 variable "tenant_id" {
   default     = null
   type        = string
-  description = "The Azure Active Directory tenant ID that should be used for authenticating requests to the key vault."
+  description = "The Azure Active Directory tenant ID that should be used for authenticating requests to the key vault"
 }
 
 variable "object_id" {
@@ -39,7 +39,7 @@ variable "object_id" {
 variable "validity_period_hours" {
   type        = number
   default     = 24 * 30 * 6
-  description = "The number of hours after initial issuing that the certificate will become invalid."
+  description = "The number of hours after initial issuing that the certificate will become invalid"
 }
 
 variable "private_key_algorithm" {
@@ -95,7 +95,7 @@ variable "key_vault_name" {
 variable "sku_name" {
   default     = "standard"
   type        = string
-  description = "The Name of the SKU used for this Key Vault. Possible values are standard and premium."
+  description = "The Name of the SKU used for this Key Vault. Possible values are standard and premium"
 }
 
 variable "soft_delete_retention_days" {
@@ -113,12 +113,12 @@ variable "enabled_for_deployment" {
 variable "enabled_for_disk_encryption" {
   default     = true
   type        = bool
-  description = "Boolean flag to specify whether Azure Disk Encryption is permitted to retrieve secrets from the vault and unwrap keys."
+  description = "Boolean flag to specify whether Azure Disk Encryption is permitted to retrieve secrets from the vault and unwrap keys"
 }
 
 variable "certificate_permissions" {
   type        = list(string)
-  description = "The list of permissions for the key vault certificates for the TFE instance."
+  description = "The list of permissions for the key vault certificates for the TFE instance"
 
   default = [
     "create",
@@ -137,7 +137,7 @@ variable "certificate_permissions" {
 
 variable "secret_permissions" {
   type        = list(string)
-  description = "The list of permissions for the key vault secrets for the TFE instance."
+  description = "The list of permissions for the key vault secrets for the TFE instance"
 
   default = [
     "backup",
@@ -184,5 +184,5 @@ variable "tfe_license_filepath" {
 
 variable "tfe_license_secret_name" {
   type        = string
-  description = "Name of the secret under which the base64 encoded TFE license is to be stored in the Azure Key Vault."
+  description = "Name of the secret under which the base64 encoded TFE license is to be stored in the Azure Key Vault"
 }

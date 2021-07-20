@@ -28,13 +28,13 @@ variable "bastion_subnet_id" {
 variable "bastion_allocation_method" {
   default     = "Static"
   type        = string
-  description = "Defines the allocation method for this IP address. Possible values are Static or Dynamic."
+  description = "Defines the allocation method for this IP address. Possible values are Static or Dynamic"
 }
 
 variable "bastion_sku" {
   default     = "Standard"
   type        = string
-  description = "The SKU of the Public IP. Accepted values are Basic and Standard."
+  description = "The SKU of the Public IP. Accepted values are Basic and Standard"
 }
 
 # Tagging

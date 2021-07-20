@@ -15,12 +15,12 @@ output "tls_key" {
 
 output "key_vault_name" {
   value       = var.key_vault_name == null ? azurerm_key_vault.kv[0].name : data.azurerm_key_vault.existing[0].name
-  description = "The name of the Azure key vault that houses the bootstrap secrets."
+  description = "The name of the Azure key vault that houses the bootstrap secrets"
 }
 
 output "key_vault_id" {
   value       = local.key_vault_id
-  description = "The resource ID of the Azure key vault that houses the bootstrap secrets."
+  description = "The resource ID of the Azure key vault that houses the bootstrap secrets"
 }
 
 # If cert name is supplied but key vault is not, then new cert is used.

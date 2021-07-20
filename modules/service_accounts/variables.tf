@@ -50,12 +50,12 @@ variable "storage_account_primary_blob_connection_string" {
 # ---------
 variable "resource_group_name_kv" {
   type        = string
-  description = "The resource group of the Azure Key Vault containing all required secrets and certificates."
+  description = "The resource group of the Azure Key Vault containing all required secrets and certificates"
 }
 
 variable "key_vault_name" {
   type        = string
-  description = "Azure Key Vault name containing all required secrets and certificates."
+  description = "Azure Key Vault name containing all required secrets and certificates"
 }
 
 # Tagging

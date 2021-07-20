@@ -75,7 +75,7 @@ variable "redis_rdb_existing_storage_account" {
 variable "redis_minimum_tls_version" {
   default     = "1.2"
   type        = string
-  description = "(Optional) The minimum TLS version."
+  description = "(Optional) The minimum TLS version"
 }
 
 # Tagging

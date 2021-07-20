@@ -55,11 +55,11 @@ variable "load_balancer_public" {
 variable "vm_node_count" {
   default     = 1
   type        = number
-  description = "The number of instances to create for TFE environment."
+  description = "The number of instances to create for TFE environment"
 
   validation {
     condition     = var.vm_node_count <= 5
-    error_message = "The vm_node_count value must be less than or equal to 5."
+    error_message = "The vm_node_count value must be less than or equal to 5"
   }
 }
 
@@ -100,7 +100,7 @@ variable "vm_image_id" {
 }
 
 variable "vm_user_assigned_identity_id" {
-  description = "The identity of the user assigned identity to be assigned to the virtual machine scale set."
+  description = "The identity of the user assigned identity to be assigned to the virtual machine scale set"
   type        = string
 }
 
@@ -144,7 +144,7 @@ variable "vm_os_disk_storage_account_type" {
 variable "vm_os_disk_disk_size_gb" {
   default     = 100
   type        = number
-  description = "The size of the Data Disk which should be created."
+  description = "The size of the Data Disk which should be created"
 }
 
 variable "vm_identity_type" {

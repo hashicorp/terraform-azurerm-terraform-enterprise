@@ -16,5 +16,5 @@ output "storage_account_primary_blob_connection_string" {
 output "vmss_user_assigned_identity" {
   value = azurerm_user_assigned_identity.vmss
 
-  description = "The user assigned identity to be assigned to the virtual machine scale set."
+  description = "The user assigned identity to be assigned to the virtual machine scale set"
 }

@@ -52,7 +52,7 @@ variable "database_subnet" {
 variable "database_backup_retention_days" {
   default     = 7
   type        = number
-  description = "Backup retention days for the PostgreSQL server. Supported values are between 7 and 35 days."
+  description = "Backup retention days for the PostgreSQL server. Supported values are between 7 and 35 days"
 }
 
 variable "database_geo_redundant_backup_enabled" {
@@ -67,13 +67,13 @@ variable "database_geo_redundant_backup_enabled" {
 variable "database_auto_grow_enabled" {
   default     = true
   type        = bool
-  description = "Enable/Disable auto-growing of the storage for PostgreSQL server."
+  description = "Enable/Disable auto-growing of the storage for PostgreSQL server"
 }
 
 variable "database_ssl_enforcement_enabled" {
   default     = true
   type        = bool
-  description = "Specifies if SSL should be enforced on connections."
+  description = "Specifies if SSL should be enforced on connections"
 }
 
 # Tagging

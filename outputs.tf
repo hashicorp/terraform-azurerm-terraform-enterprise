@@ -169,12 +169,12 @@ output "load_balancer_ip" {
 # ---------
 output "key_vault_id" {
   value       = module.key_vault.key_vault_id
-  description = "The resource ID of the Azure key vault that houses the bootstrap secrets."
+  description = "The resource ID of the Azure key vault that houses the bootstrap secrets"
 }
 
 # VM
 # --
 output "instance_user_name" {
   value       = var.vm_user
-  description = "The admin user on the TFE instance(s)."
+  description = "The admin user on the TFE instance(s)"
 }

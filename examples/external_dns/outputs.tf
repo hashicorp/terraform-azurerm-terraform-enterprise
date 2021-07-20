@@ -18,7 +18,7 @@ output "load_balancer_ip" {
 # ---
 output "instance_user_name" {
   value       = module.tfe.instance_user_name
-  description = "The admin user on the TFE instance(s)."
+  description = "The admin user on the TFE instance(s)"
 }
 
 output "instance_private_key" {

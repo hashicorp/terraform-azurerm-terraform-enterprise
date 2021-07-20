@@ -94,7 +94,7 @@ variable "user_data_tfe_license_name" {
 
 variable "tfe_license_secret_name" {
   type        = string
-  description = "Name of the secret under which the Base64 encoded Terraform Enterprise license is (or will be) stored in the Azure Key Vault."
+  description = "Name of the secret under which the Base64 encoded Terraform Enterprise license is (or will be) stored in the Azure Key Vault"
 }
 
 variable "user_data_ca" {
@@ -116,7 +116,7 @@ variable "user_data_cert_key" {
 # -----
 variable "key_vault_name" {
   type        = string
-  description = "Azure Key Vault name containing all required secrets and certificates."
+  description = "Azure Key Vault name containing all required secrets and certificates"
 }
 
 variable "proxy_ip" {
