@@ -6,7 +6,7 @@ variable "friendly_name_prefix" {
 }
 
 variable "fqdn" {
-  type = string
+  type        = string
   description = "DNS name (FQDN) identified by the Certificate."
 }
 

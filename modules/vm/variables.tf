@@ -39,7 +39,10 @@ variable "load_balancer_type" {
 
 # Load balancer
 # -------------
-variable "load_balancer_backend_id" {}
+variable "load_balancer_backend_id" {
+  type        = string
+  description = "The backend address pool ID of the load balancer or application gateway"
+}
 
 variable "load_balancer_public" {
   default     = true
@@ -61,7 +64,8 @@ variable "vm_node_count" {
 }
 
 variable "vm_userdata_script" {
-  type = string
+  type        = string
+  description = "The custom data script that will provision the TFE instance(s)"
 }
 
 variable "vm_subnet_id" {
@@ -100,17 +104,11 @@ variable "vm_user_assigned_identity_id" {
   type        = string
 }
 
-variable "vm_user_assigned_identity_principal_id" {
-  description = <<EOD
-  The Service Principal identity of the user assigned identity to be assigned to the virtual machine scale set.
-  EOD
-  type        = string
-}
-
 # Optional variables not currently specified in root module
 variable "vm_overprovision" {
-  default = false
-  type    = bool
+  default     = false
+  type        = bool
+  description = "Should Azure over-provision Virtual Machines in this Scale Set?"
 }
 
 variable "vm_sku" {
@@ -150,7 +148,7 @@ variable "vm_os_disk_disk_size_gb" {
 }
 
 variable "vm_identity_type" {
-  default     = "SystemAssigned"
+  default     = "UserAssigned"
   type        = string
   description = "The type of Managed Identity which should be assigned to the Linux Virtual Machine Scale Set. Possible values are SystemAssigned, UserAssigned and SystemAssigned, UserAssigned."
 }

@@ -27,9 +27,9 @@ resource "azurerm_redis_cache" "tfe_redis" {
 
   lifecycle {
     ignore_changes = [
-      redis_configuration.0.rdb_backup_frequency,
-      redis_configuration.0.rdb_backup_max_snapshot_count,
-      redis_configuration.0.rdb_storage_connection_string,
+      redis_configuration[0].rdb_backup_frequency,
+      redis_configuration[0].rdb_backup_max_snapshot_count,
+      redis_configuration[0].rdb_storage_connection_string,
     ]
   }
 

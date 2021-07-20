@@ -236,7 +236,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
   }
 
   lifecycle {
-    ignore_changes = [identity.0.identity_ids]
+    ignore_changes = [identity[0].identity_ids]
   }
 
   tags = var.tags

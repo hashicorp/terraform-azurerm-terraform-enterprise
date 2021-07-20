@@ -18,7 +18,7 @@ resource "azurerm_storage_account" "tfe_storage_account" {
   location            = var.location
   resource_group_name = var.resource_group_name
 
-  account_tier             = "Standard"
+  account_tier             = var.storage_account_tier
   account_replication_type = var.storage_account_replication_type
 
   tags = var.tags

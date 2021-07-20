@@ -125,8 +125,9 @@ variable "proxy_ip" {
 }
 
 variable "proxy_port" {
-  default = "3128"
-  type    = string
+  default     = "3128"
+  type        = string
+  description = "Port that the proxy server will use"
 }
 
 variable "proxy_cert_name" {
