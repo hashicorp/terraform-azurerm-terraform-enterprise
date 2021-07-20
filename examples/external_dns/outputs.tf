@@ -11,7 +11,8 @@ output "login_url" {
 }
 
 output "load_balancer_ip" {
-  value = module.tfe.load_balancer_ip
+  value       = module.tfe.load_balancer_ip
+  description = "The ip address of the load balancer"
 }
 
 # SSH
