@@ -16,7 +16,8 @@ output "tfe_console_url" {
 }
 
 output "tfe_console_password" {
-  value = module.tfe.tfe_console_password
+  value       = module.tfe.tfe_console_password
+  description = "The password for the TFE console"
 }
 
 # SSH
