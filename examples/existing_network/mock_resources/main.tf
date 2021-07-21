@@ -1,7 +1,3 @@
-provider "azurerm" {
-  features {}
-}
-
 # Local variables and conditionals
 # --------------------------------
 locals {
