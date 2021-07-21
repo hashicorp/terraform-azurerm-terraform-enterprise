@@ -85,18 +85,10 @@ proxy_cert() {
 	fi
 }
 
-apt_packages() {
-	echo "[$(date +"%FT%T")] [Terraform Enterprise] Install Ubuntu packages" | tee -a /var/log/ptfe.log
+resize_lv() {
+	echo "[$(date +"%FT%T")] [Terraform Enterprise] Resize RHEL logical volume" | tee -a /var/log/ptfe.log
 
-	sudo apt-get update -y
-	sudo apt-get install unzip -y
-}
-
-yum_packages() {
-	echo "[$(date +"%FT%T")] [Terraform Enterprise] Install RHEL packages" | tee -a /var/log/ptfe.log
-
-	sudo yum install unzip -y
-	sudo lvresize -r -L +20G /dev/mapper/rootvg-varlv
+	lvresize -r -L +20G /dev/mapper/rootvg-varlv
 }
 
 retrieve_tfe_license() {
@@ -143,14 +135,6 @@ install_tfe() {
 	fi
 }
 
-wait_tfe_ready() {
-	echo "[$(date +"%FT%T")] [Terraform Enterprise] Wait for application" | tee -a /var/log/ptfe.log
-
-	while ! curl -ksfS --connect-timeout 5 https://${fqdn}/_health_check; do
-    	sleep 5
-	done
-}
-
 echo "[$(date +"%FT%T")] [Terraform Enterprise] Determine distribution" | tee -a /var/log/ptfe.log
 DISTRO_NAME=$(grep "^NAME=" /etc/os-release | cut -d"\"" -f2)
 
@@ -162,10 +146,7 @@ retrieve_tfe_license
 
 if [[ $DISTRO_NAME == *"Red Hat"* ]]
 then
-	yum_packages
-else
-	apt_packages
+	resize_lv
 fi
 
 install_tfe
-wait_tfe_ready
