@@ -15,7 +15,6 @@ jobs:
       pull-requests: write
     env:
       WORK_DIR_PATH: ./tests/public-active-active
-      AWS_DEFAULT_REGION: us-east-2
     steps:
       - name: Create URL to the run output
         id: vars
