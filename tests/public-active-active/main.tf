@@ -1,11 +1,3 @@
-provider "azurerm" {
-  features {
-    key_vault {
-      purge_soft_delete_on_destroy = true
-    }
-  }
-}
-
 resource "random_string" "friendly_name" {
   length  = 4
   upper   = false
