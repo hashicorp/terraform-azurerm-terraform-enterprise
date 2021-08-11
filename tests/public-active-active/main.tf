@@ -15,6 +15,7 @@ module "public_active_active" {
   key_vault_name          = var.key_vault_name
   tfe_license_secret_name = var.tfe_license_secret_name
 
+  certificate_name            = var.certificate_name
   vm_node_count               = 2
   vm_sku                      = "Standard_D4_v3"
   vm_image_id                 = "ubuntu"

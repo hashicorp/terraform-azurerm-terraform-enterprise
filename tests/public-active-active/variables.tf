@@ -1,5 +1,10 @@
 # Key Vault and Certificate
 # -------------------------
+variable "certificate_name" {
+  description = "The name of a certificate in the Key Vault."
+  type        = string
+}
+
 variable "resource_group_name_kv" {
   type        = string
   description = "The resource group of the Azure Key Vault containing all required secrets and certificates"
