@@ -112,6 +112,15 @@ variable "user_data_cert_key" {
   description = "(optional) Value to be provided for Replicated TlsBootstrapKey setting"
 }
 
+variable "iact_subnet_list" {
+  default     = []
+  description = <<-EOD
+  A list of IP address ranges which will be authorized to access the IACT. The ranges must be expressed
+  in CIDR notation.
+  EOD
+  type        = list(string)
+}
+
 # Proxy
 # -----
 variable "key_vault_name" {

@@ -19,3 +19,14 @@ variable "tfe_license_secret_name" {
   type        = string
   description = "Name of the secret under which the Base64 encoded TFE license is stored in the Azure Key Vault"
 }
+
+# User Data
+# ---------
+variable "iact_subnet_list" {
+  default     = []
+  description = <<-EOD
+  A list of IP address ranges which will be authorized to access the IACT. The ranges must be expressed
+  in CIDR notation.
+  EOD
+  type        = list(string)
+}

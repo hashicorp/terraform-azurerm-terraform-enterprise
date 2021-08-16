@@ -16,6 +16,7 @@ module "public_active_active" {
   tfe_license_secret_name = var.tfe_license_secret_name
 
   certificate_name            = var.certificate_name
+  iact_subnet_list            = var.iact_subnet_list
   vm_node_count               = 2
   vm_sku                      = "Standard_D4_v3"
   vm_image_id                 = "ubuntu"

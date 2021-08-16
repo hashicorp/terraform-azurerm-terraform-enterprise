@@ -258,6 +258,7 @@ module "user_data" {
   user_data_tfe_license_name = var.tfe_license_name
   user_data_release_sequence = var.user_data_release_sequence
   tfe_license_secret_name    = var.tfe_license_secret_name
+  iact_subnet_list           = var.iact_subnet_list
 
   # Certificates
   user_data_ca       = var.user_data_ca == null ? replace(module.key_vault.tls_ca_cert, "\n", "\n") : var.user_data_ca

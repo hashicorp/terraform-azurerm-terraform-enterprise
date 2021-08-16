@@ -146,6 +146,10 @@ locals {
       value = ""
     }
 
+    iact_subnet_list = {
+      value = join(",", var.iact_subnet_list)
+    }
+
     install_id = {
       value = random_id.install_id.hex
     }
