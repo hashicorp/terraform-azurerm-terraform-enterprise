@@ -1,3 +1,15 @@
+# Domain
+# ------
+variable "domain_name" {
+  type        = string
+  description = "Domain to create Terraform Enterprise subdomain within"
+}
+
+variable "resource_group_name_dns" {
+  type        = string
+  description = "Name of resource group which contains desired DNS zone"
+}
+
 # Key Vault and Certificate
 # -------------------------
 variable "certificate_name" {

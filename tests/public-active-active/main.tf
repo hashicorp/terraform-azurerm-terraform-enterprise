@@ -13,6 +13,8 @@ module "public_active_active" {
   # Bootstrapping resources
   resource_group_name_kv  = var.resource_group_name_kv
   key_vault_name          = var.key_vault_name
+  resource_group_name_dns = var.resource_group_name_dns
+  domain_name             = var.domain_name
   tfe_license_secret_name = var.tfe_license_secret_name
 
   certificate_name            = var.certificate_name
