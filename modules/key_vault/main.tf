@@ -7,7 +7,7 @@ locals {
 # -----------------------
 # CA Key
 resource "tls_private_key" "ca" {
-  count = var.user_data_cert == null ? 1 : 0
+  count = var.user_data_ca == null ? 1 : 0
 
   algorithm   = var.private_key_algorithm
   ecdsa_curve = var.private_key_ecdsa_curve
@@ -16,7 +16,7 @@ resource "tls_private_key" "ca" {
 
 # CA Cert
 resource "tls_self_signed_cert" "ca" {
-  count = var.user_data_cert == null ? 1 : 0
+  count = var.user_data_ca == null ? 1 : 0
 
   is_ca_certificate = true
 
@@ -39,7 +39,7 @@ resource "tls_self_signed_cert" "ca" {
 
 # Cert Key
 resource "tls_private_key" "cert" {
-  count = var.user_data_cert == null ? 1 : 0
+  count = var.user_data_cert_key == null ? 1 : 0
 
   algorithm   = var.private_key_algorithm
   ecdsa_curve = var.private_key_ecdsa_curve

@@ -12,11 +12,6 @@ variable "resource_group_name_dns" {
 
 # Key Vault and Certificate
 # -------------------------
-variable "certificate_name" {
-  description = "The name of a certificate in the Key Vault."
-  type        = string
-}
-
 variable "resource_group_name_kv" {
   type        = string
   description = "The resource group of the Azure Key Vault containing all required secrets and certificates"
@@ -25,6 +20,16 @@ variable "resource_group_name_kv" {
 variable "key_vault_name" {
   type        = string
   description = "Azure Key Vault name containing all required secrets and certificates"
+}
+
+variable "ca_pem_key_secret_name" {
+  type        = string
+  description = "Name of the secret under which the DNS wildcard key is stored in the Azure Key Vault"
+}
+
+variable "ca_pem_certificate_secret_name" {
+  type        = string
+  description = "Name of the secret under which the DNS wildcard chained cert is stored in the Azure Key Vault"
 }
 
 variable "tfe_license_secret_name" {

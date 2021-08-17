@@ -17,7 +17,10 @@ module "public_active_active" {
   domain_name             = var.domain_name
   tfe_license_secret_name = var.tfe_license_secret_name
 
-  certificate_name            = var.certificate_name
+  user_data_ca       = local.user_data_cert
+  user_data_cert     = local.user_data_cert
+  user_data_cert_key = local.user_data_cert_key
+
   iact_subnet_list            = var.iact_subnet_list
   vm_node_count               = 2
   vm_sku                      = "Standard_D4_v3"
