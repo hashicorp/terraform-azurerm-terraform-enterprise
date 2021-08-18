@@ -159,12 +159,6 @@ variable "network_allow_range" {
 
 # TFE License
 # -----------
-variable "tfe_license_filepath" {
-  default     = null
-  type        = string
-  description = "TFE License filepath"
-}
-
 variable "tfe_license_secret_name" {
   default     = "tfe-license-base64"
   type        = string

@@ -102,12 +102,6 @@ variable "certificate_name" {
 
 # TFE License
 # -----------
-variable "tfe_license_filepath" {
-  default     = null
-  type        = string
-  description = "TFE License filepath"
-}
-
 variable "tfe_license_secret_name" {
   type        = string
   description = "Name of the secret under which the base64 encoded TFE license is to be stored in the Azure Key Vault"
