@@ -30,6 +30,6 @@ output "certificate_name" {
 }
 
 output "certificate_key_vault_secret_id" {
-  value       = var.load_balancer_type == "application_gateway" ? element(concat(azurerm_key_vault_certificate.cert.*.secret_id, data.azurerm_key_vault_certificate.cert.*.secret_id), 0) : ""
+  value       = element(concat(azurerm_key_vault_certificate.cert.*.secret_id, data.azurerm_key_vault_certificate.cert.*.secret_id), 0)
   description = "The resource ID of the key vault"
 }

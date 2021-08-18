@@ -128,7 +128,7 @@ resource "azurerm_key_vault_access_policy" "tfe_kv_acl" {
 # Azure Key Vault Certificate
 # ---------------------------
 resource "azurerm_key_vault_certificate" "cert" {
-  count = (var.certificate_name == null || var.key_vault_name == null) && var.load_balancer_type == "application_gateway" ? 1 : 0
+  count = (var.certificate_name == null || var.key_vault_name == null) ? 1 : 0
 
   name         = "${var.friendly_name_prefix}cert"
   key_vault_id = local.key_vault_id

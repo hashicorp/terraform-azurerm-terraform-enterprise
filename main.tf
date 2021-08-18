@@ -376,6 +376,9 @@ module "vm" {
   load_balancer_backend_id = module.load_balancer.load_balancer_backend_id
   load_balancer_public     = var.load_balancer_public
 
+  key_vault_id                    = var.load_balancer_type == "load_balancer" ? module.key_vault.key_vault_id : ""
+  certificate_key_vault_secret_id = var.load_balancer_type == "load_balancer" ? module.key_vault.certificate_key_vault_secret_id : ""
+
   tags = var.tags
 
   depends_on = [

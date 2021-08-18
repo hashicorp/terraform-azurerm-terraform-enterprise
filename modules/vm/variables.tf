@@ -104,6 +104,16 @@ variable "vm_user_assigned_identity_id" {
   type        = string
 }
 
+variable "key_vault_id" {
+  type        = string
+  description = "ID of Azure Key Vault containing required certificate"
+}
+
+variable "certificate_key_vault_secret_id" {
+  description = "The Secret URL of a Key Vault Certificate"
+  type        = string
+}
+
 # Optional variables not currently specified in root module
 variable "vm_overprovision" {
   default     = false
