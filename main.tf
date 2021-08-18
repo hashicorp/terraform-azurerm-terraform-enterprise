@@ -92,15 +92,8 @@ module "key_vault" {
   fqdn                    = local.fqdn
   key_vault_name          = var.key_vault_name
   certificate_name        = var.certificate_name
-  user_data_ca            = var.user_data_ca
-  user_data_cert          = var.user_data_cert
-  user_data_cert_key      = var.user_data_cert_key
-  load_balancer_type      = var.load_balancer_type
-  load_balancer_public    = var.load_balancer_public
   tfe_license_filepath    = var.tfe_license_filepath
   tfe_license_secret_name = var.tfe_license_secret_name
-
-  tags = var.tags
 }
 
 # Azure storage account
@@ -262,9 +255,9 @@ module "user_data" {
   iact_subnet_list           = var.iact_subnet_list
 
   # Certificates
-  user_data_ca       = var.user_data_ca == null && var.load_balancer_type == "load_balancer" && var.load_balancer_public == false ? replace(module.key_vault.tls_ca_cert, "\n", "\n") : var.user_data_ca
-  user_data_cert     = var.user_data_cert == null && var.load_balancer_type == "load_balancer" && var.load_balancer_public == false ? module.key_vault.tls_cert : var.user_data_cert
-  user_data_cert_key = var.user_data_cert_key == null && var.load_balancer_type == "load_balancer" ? module.key_vault.tls_key : var.user_data_cert_key
+  user_data_ca       = var.user_data_ca == null ? "" : var.user_data_ca
+  user_data_cert     = var.user_data_cert == null ? "" : var.user_data_cert
+  user_data_cert_key = var.user_data_cert_key == null ? "" : var.user_data_cert_key
 
   # Proxy
   key_vault_name         = local.key_vault_name
@@ -324,10 +317,10 @@ module "load_balancer" {
   tenant_id               = data.azurerm_client_config.current.tenant_id
 
   # Secrets
-  key_vault_id                    = var.load_balancer_type == "application_gateway" ? module.key_vault.key_vault_id : ""
-  certificate_name                = var.load_balancer_type == "application_gateway" ? module.key_vault.certificate_name : ""
-  certificate_key_vault_secret_id = var.load_balancer_type == "application_gateway" ? module.key_vault.certificate_key_vault_secret_id : ""
-  trusted_root_certificate        = var.load_balancer_type == "application_gateway" && var.user_data_ca == null ? module.key_vault.tls_ca_cert : var.user_data_ca
+  key_vault_id                    = module.key_vault.key_vault_id
+  certificate_name                = module.key_vault.certificate_name
+  certificate_key_vault_secret_id = module.key_vault.certificate_key_vault_secret_id
+  trusted_root_certificate        = var.user_data_ca
 
   # Network
   network_frontend_subnet_id = local.network_frontend_subnet_id
@@ -376,8 +369,8 @@ module "vm" {
   load_balancer_backend_id = module.load_balancer.load_balancer_backend_id
   load_balancer_public     = var.load_balancer_public
 
-  key_vault_id                    = var.load_balancer_type == "load_balancer" ? module.key_vault.key_vault_id : ""
-  certificate_key_vault_secret_id = var.load_balancer_type == "load_balancer" ? module.key_vault.certificate_key_vault_secret_id : ""
+  key_vault_id                    = module.key_vault.key_vault_id
+  certificate_key_vault_secret_id = module.key_vault.certificate_key_vault_secret_id
 
   tags = var.tags
 

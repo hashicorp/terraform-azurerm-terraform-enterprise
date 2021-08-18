@@ -11,10 +11,6 @@ locals {
     TlsBootstrapType             = "server-path"
   }
 
-  user_data_ca   = var.user_data_ca != null ? var.user_data_ca : ""
-  user_data_cert = var.user_data_cert != null ? base64encode(var.user_data_cert) : ""
-  user_data_key  = var.user_data_cert_key != null ? base64encode(var.user_data_cert_key) : ""
-
   proxy_ip               = var.proxy_ip == null ? "" : var.proxy_ip
   proxy_port             = var.proxy_port == null ? "" : var.proxy_port
   proxy_cert_name        = var.proxy_cert_name == null ? "" : var.proxy_cert_name
@@ -49,8 +45,8 @@ locals {
       tfe_license_secret_name = var.tfe_license_secret_name
 
       # Certificate information
-      user_data_cert = local.user_data_cert
-      user_data_key  = local.user_data_key
+      user_data_cert = base64encode(var.user_data_cert)
+      user_data_key  = base64encode(var.user_data_cert_key)
 
       # Proxy information
       key_vault_name         = var.key_vault_name
@@ -135,7 +131,7 @@ locals {
     }
 
     ca_certs = {
-      value = local.user_data_ca
+      value = var.user_data_ca
     }
 
     cookie_hash = {

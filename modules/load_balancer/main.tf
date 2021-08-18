@@ -281,9 +281,7 @@ resource "azurerm_lb" "tfe_load_balancer" {
 resource "azurerm_lb_backend_address_pool" "tfe_load_balancer_be" {
   count = var.load_balancer_type == "load_balancer" ? 1 : 0
 
-  name                = "${var.friendly_name_prefix}-lb-be"
-  resource_group_name = var.resource_group_name
-
+  name            = "${var.friendly_name_prefix}-lb-be"
   loadbalancer_id = azurerm_lb.tfe_load_balancer[0].id
 }
 

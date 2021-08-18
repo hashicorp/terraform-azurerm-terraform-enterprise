@@ -45,10 +45,11 @@ This module is intended to run in an Azure account with minimal preparation, how
 
 - Key Vault
 
-  - The value supplied for `key_vault_name` should match an existing Key Vault. If not supplied, the module will create and use self signed certificates which is not recommended for production use. If the existing Key Vault does not live in the primary resource group, you may optionally supply a value for `resource_group_name_kv`.
+  - The value supplied for `key_vault_name` should match an existing Key Vault. If the existing Key Vault does not live in the primary resource group, you may optionally supply a value for `resource_group_name_kv`.
+  - The key vault should have enabled access for deployment for Azure Virtual Machines, as the virtual machines will pull the certificate (and secrets, if applicable) from key vault.
 
 - Certificates
-  - The value supplied for `certificate_name` should match an existing Key Vault Certificate residing within the Key Vault specified via `key_vault_name`. If not supplied, the module will create and use self signed certificates which is not recommended for production use.
+  - The value supplied for `certificate_name` should match an existing Key Vault Certificate residing within the Key Vault specified via `key_vault_name`.
 
 ## Azure Services Used
 
