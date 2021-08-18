@@ -7,7 +7,8 @@ locals {
 # -----------------------
 # CA Key
 resource "tls_private_key" "ca" {
-  count = var.user_data_ca == null ? 1 : 0
+  // count = var.user_data_ca == null ? 1 : 0
+  count = var.user_data_ca == null && var.load_balancer_public == false ? 1 : 0
 
   algorithm   = var.private_key_algorithm
   ecdsa_curve = var.private_key_ecdsa_curve
@@ -16,7 +17,8 @@ resource "tls_private_key" "ca" {
 
 # CA Cert
 resource "tls_self_signed_cert" "ca" {
-  count = var.user_data_ca == null ? 1 : 0
+  // count = var.user_data_ca == null ? 1 : 0
+ count = var.user_data_ca == null && var.load_balancer_public == false ? 1 : 0
 
   is_ca_certificate = true
 
@@ -39,7 +41,8 @@ resource "tls_self_signed_cert" "ca" {
 
 # Cert Key
 resource "tls_private_key" "cert" {
-  count = var.user_data_cert_key == null ? 1 : 0
+  // count = var.user_data_cert_key == null ? 1 : 0
+  count = var.user_data_cert_key == null && var.load_balancer_type == "load_balancer" ? 1 : 0
 
   algorithm   = var.private_key_algorithm
   ecdsa_curve = var.private_key_ecdsa_curve
@@ -48,7 +51,8 @@ resource "tls_private_key" "cert" {
 
 # Cert Request
 resource "tls_cert_request" "cert" {
-  count = var.user_data_cert == null ? 1 : 0
+  // count = var.user_data_cert == null ? 1 : 0
+  count = var.user_data_cert == null && var.load_balancer_type == "load_balancer" && var.load_balancer_public == false ? 1 : 0
 
   key_algorithm   = tls_private_key.cert[0].algorithm
   private_key_pem = tls_private_key.cert[0].private_key_pem
@@ -63,7 +67,8 @@ resource "tls_cert_request" "cert" {
 
 # Cert
 resource "tls_locally_signed_cert" "cert" {
-  count = var.user_data_cert == null ? 1 : 0
+  // count = var.user_data_cert == null ? 1 : 0
+  count = var.user_data_cert == null && var.load_balancer_type == "load_balancer" && var.load_balancer_public == false ? 1 : 0
 
   cert_request_pem = tls_cert_request.cert[0].cert_request_pem
 

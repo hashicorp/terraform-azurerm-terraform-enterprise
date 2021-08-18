@@ -167,6 +167,12 @@ variable "load_balancer_type" {
   }
 }
 
+variable "load_balancer_public" {
+  default     = true
+  type        = bool
+  description = "Determines which certificates are needed"
+}
+
 # Tagging
 variable "tags" {
   default     = {}

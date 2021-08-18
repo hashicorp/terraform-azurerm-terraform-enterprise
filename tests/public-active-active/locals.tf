@@ -10,6 +10,6 @@ locals {
 
   friendly_name_prefix = random_string.friendly_name.id
   key_vault_id         = module.public_active_active.key_vault_id
-  user_data_cert       = base64decode(data.azurerm_key_vault_secret.user_data_cert.value)
+  // user_data_cert       = base64decode(data.azurerm_key_vault_secret.user_data_cert.value)
   user_data_cert_key   = base64decode(data.azurerm_key_vault_secret.user_data_cert_key.value)
 }
