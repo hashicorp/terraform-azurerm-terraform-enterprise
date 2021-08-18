@@ -24,10 +24,6 @@ locals {
   # Redis
   # -----
   redis_port = var.redis_enable_non_ssl_port == true ? "6379" : "6380"
-
-  # Key Vault
-  # ---------
-  key_vault_name = module.key_vault.key_vault_name
 }
 
 # Azure resource groups
@@ -77,27 +73,8 @@ resource "tls_private_key" "tfe_ssh" {
   rsa_bits  = 4096
 }
 
-# TLS for backend
-# ---------------
-module "key_vault" {
-  source = "./modules/key_vault"
-
-  friendly_name_prefix   = var.friendly_name_prefix
-  resource_group_name_kv = module.resource_groups.resource_group_name_kv
-  location               = var.location
-
-  tenant_id = data.azurerm_client_config.current.tenant_id
-  object_id = data.azurerm_client_config.current.object_id
-
-  fqdn                    = local.fqdn
-  key_vault_name          = var.key_vault_name
-  certificate_name        = var.certificate_name
-  tfe_license_filepath    = var.tfe_license_filepath
-  tfe_license_secret_name = var.tfe_license_secret_name
-}
-
-# Azure storage account
-# ---------------------
+# Azure service accounts
+# ----------------------
 module "service_accounts" {
   source = "./modules/service_accounts"
 
@@ -105,17 +82,19 @@ module "service_accounts" {
   resource_group_name  = module.resource_groups.resource_group_name
   location             = var.location
 
-  storage_account_tier             = var.storage_account_tier
-  storage_account_replication_type = var.storage_account_replication_type
-
-  # Key Vault
-  resource_group_name_kv = module.resource_groups.resource_group_name_kv
-  key_vault_name         = local.key_vault_name
-
   # Application storage
   storage_account_name                           = var.storage_account_name
   storage_account_key                            = var.storage_account_key
   storage_account_primary_blob_connection_string = var.storage_account_primary_blob_connection_string
+  storage_account_tier                           = var.storage_account_tier
+  storage_account_replication_type               = var.storage_account_replication_type
+
+  # Key Vault
+  resource_group_name_kv  = module.resource_groups.resource_group_name_kv
+  key_vault_name          = var.key_vault_name
+  certificate_name        = var.certificate_name
+  tfe_license_filepath    = var.tfe_license_filepath
+  tfe_license_secret_name = var.tfe_license_secret_name
 
   tags = var.tags
 
@@ -260,7 +239,7 @@ module "user_data" {
   user_data_cert_key = var.user_data_cert_key == null ? "" : var.user_data_cert_key
 
   # Proxy
-  key_vault_name         = local.key_vault_name
+  key_vault_name         = var.key_vault_name
   proxy_ip               = var.proxy_ip
   proxy_port             = var.proxy_port
   proxy_cert_name        = var.proxy_cert_name
@@ -270,7 +249,6 @@ module "user_data" {
   depends_on = [
     module.service_accounts,
     module.object_storage,
-    module.key_vault,
     module.network
   ]
 }
@@ -317,9 +295,9 @@ module "load_balancer" {
   tenant_id               = data.azurerm_client_config.current.tenant_id
 
   # Secrets
-  key_vault_id                    = module.key_vault.key_vault_id
-  certificate_name                = module.key_vault.certificate_name
-  certificate_key_vault_secret_id = module.key_vault.certificate_key_vault_secret_id
+  key_vault_id                    = module.service_accounts.key_vault_id
+  certificate_name                = module.service_accounts.certificate_name
+  certificate_key_vault_secret_id = module.service_accounts.certificate_key_vault_secret_id
   trusted_root_certificate        = var.user_data_ca
 
   # Network
@@ -339,7 +317,6 @@ module "load_balancer" {
 
   depends_on = [
     module.resource_groups,
-    module.key_vault,
     module.network
   ]
 }
@@ -369,8 +346,8 @@ module "vm" {
   load_balancer_backend_id = module.load_balancer.load_balancer_backend_id
   load_balancer_public     = var.load_balancer_public
 
-  key_vault_id                    = module.key_vault.key_vault_id
-  certificate_key_vault_secret_id = module.key_vault.certificate_key_vault_secret_id
+  key_vault_id                    = module.service_accounts.key_vault_id
+  certificate_key_vault_secret_id = module.service_accounts.certificate_key_vault_secret_id
 
   tags = var.tags
 

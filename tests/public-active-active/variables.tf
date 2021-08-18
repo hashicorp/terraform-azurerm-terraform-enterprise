@@ -27,16 +27,6 @@ variable "certificate_name" {
   description = "Azure Key Vault Certificate name for CA Cert"
 }
 
-// variable "ca_pem_key_secret_name" {
-//   type        = string
-//   description = "Name of the secret under which the DNS wildcard key is stored in the Azure Key Vault"
-// }
-
-// variable "ca_pem_certificate_secret_name" {
-//   type        = string
-//   description = "Name of the secret under which the DNS wildcard chained cert is stored in the Azure Key Vault"
-// }
-
 variable "tfe_license_secret_name" {
   type        = string
   description = "Name of the secret under which the Base64 encoded TFE license is stored in the Azure Key Vault"

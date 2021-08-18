@@ -17,8 +17,8 @@ variable "resource_group_name" {
   description = "Azure resource group name"
 }
 
-# Service Accounts
-# ----------------
+# Storage Account
+# ---------------
 variable "storage_account_tier" {
   default     = "Standard"
   type        = string
@@ -56,6 +56,61 @@ variable "resource_group_name_kv" {
 variable "key_vault_name" {
   type        = string
   description = "Azure Key Vault name containing all required secrets and certificates"
+}
+
+variable "certificate_permissions" {
+  type        = list(string)
+  description = "The list of permissions for the key vault certificates for the TFE instance"
+
+  default = [
+    "create",
+    "delete",
+    "get",
+    "import",
+    "list",
+    "listissuers",
+    "managecontacts",
+    "manageissuers",
+    "purge",
+    "setissuers",
+    "update",
+  ]
+}
+
+variable "secret_permissions" {
+  type        = list(string)
+  description = "The list of permissions for the key vault secrets for the TFE instance"
+
+  default = [
+    "backup",
+    "delete",
+    "get",
+    "list",
+    "purge",
+    "recover",
+    "restore",
+    "set",
+  ]
+}
+
+# Certificate
+# -----------
+variable "certificate_name" {
+  type        = string
+  description = "Azure Key Vault Certificate name for Application Gateway"
+}
+
+# TFE License
+# -----------
+variable "tfe_license_filepath" {
+  default     = null
+  type        = string
+  description = "TFE License filepath"
+}
+
+variable "tfe_license_secret_name" {
+  type        = string
+  description = "Name of the secret under which the base64 encoded TFE license is to be stored in the Azure Key Vault"
 }
 
 # Tagging
