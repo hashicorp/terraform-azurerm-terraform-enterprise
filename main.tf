@@ -93,7 +93,6 @@ module "service_accounts" {
   resource_group_name_kv  = module.resource_groups.resource_group_name_kv
   key_vault_name          = var.key_vault_name
   certificate_name        = var.certificate_name
-  tfe_license_secret_name = var.tfe_license_secret_name
 
   tags = var.tags
 
