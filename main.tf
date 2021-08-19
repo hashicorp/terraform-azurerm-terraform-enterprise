@@ -90,9 +90,9 @@ module "service_accounts" {
   storage_account_replication_type               = var.storage_account_replication_type
 
   # Key Vault
-  resource_group_name_kv  = module.resource_groups.resource_group_name_kv
-  key_vault_name          = var.key_vault_name
-  certificate_name        = var.certificate_name
+  resource_group_name_kv = module.resource_groups.resource_group_name_kv
+  key_vault_name         = var.key_vault_name
+  certificate_name       = var.certificate_name
 
   tags = var.tags
 

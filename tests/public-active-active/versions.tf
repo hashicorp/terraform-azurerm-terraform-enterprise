@@ -1,11 +1,11 @@
 terraform {
-  // backend "remote" {
-  //   organization = "terraform-enterprise-modules-test"
+  backend "remote" {
+    organization = "terraform-enterprise-modules-test"
 
-  //   workspaces {
-  //     name = "azure-public-active-active"
-  //   }
-  // }
+    workspaces {
+      name = "azure-public-active-active"
+    }
+  }
 
   required_version = ">= 0.13"
   required_providers {
