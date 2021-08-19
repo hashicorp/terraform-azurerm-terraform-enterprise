@@ -9,5 +9,4 @@ locals {
   }
 
   friendly_name_prefix = random_string.friendly_name.id
-  key_vault_id         = module.public_active_active.key_vault_id
 }
