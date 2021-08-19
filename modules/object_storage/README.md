@@ -17,7 +17,7 @@ module "object_storage" {
   friendly_name_prefix = var.friendly_name_prefix
 
   tfe_license_name        = var.tfe_license_name
-  tfe_license_secret_name = "<Existing Base64 encoded TFE license in Key Vault>"
+  tfe_license_secret_name = "<Secret name of existing Base64 encoded TFE license in Key Vault>"
 
   storage_account_name = local.storage_account_name
 }

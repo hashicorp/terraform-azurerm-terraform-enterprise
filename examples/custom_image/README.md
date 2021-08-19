@@ -22,10 +22,10 @@ provider "azurerm" {
 }
 
 module "tfe" {
-  source = "git@github.com:hashicorp/espd-tfe-azure.git"
+  source = "git@github.com:hashicorp/terraform-azurerm-terraform-enterprise.git"
 
   friendly_name_prefix    = "<Friendly name to use for resources>"
-  tfe_license_secret_name = "<Existing Base64 encoded TFE license in Key Vault>"
+  tfe_license_secret_name = "<Secret name of existing Base64 encoded TFE license in Key Vault>"
 
   resource_group_name = "<Existing Azure Resource Group to build TFE environment within>"
 
@@ -59,7 +59,7 @@ The required and optional variable inputs described in this document serve as a 
 | Name | Description | Type | Example Value |
 |------|-------------|------| ------------- |
 | `friendly_name_prefix` | Name prefix used for resources | string | somename |
-| `tfe_license_secret_name` | Existing Base64 encoded TFE license in Key Vault | string | license |
+| `tfe_license_secret_name` | Secret name of existing Base64 encoded TFE license in Key Vault | string | license |
 | `vm_node_count` | Number of virtual machines | number | 2 |
 | `vm_image_id` | Azure Resource ID for custom image | string | /subscriptions/[...]/images/imagename |
 | `key_vault_name` | Name of an existing Key Vault | string | mykv |

@@ -12,14 +12,15 @@ installation with the following traits.
 - no proxy server
 - no Redis authentication
 - no Redis encryption in transit
-- a self-signed certificate
 
 ## Pre-requisites
 
 This test assumes the following resources exist.
 
+- a DNS zone
 - an Azure Key Vault in which the following are stored:
   - Base64 encoded TFE license (secret)
+  - TFE CA certificate (certificate)
 
 ## How this test is used
 
