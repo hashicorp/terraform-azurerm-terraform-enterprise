@@ -223,7 +223,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
       request_timeout       = 60
       host_name             = var.fqdn
 
-      trusted_root_certificate_names = [local.trusted_root_certificate_name]
+      trusted_root_certificate_names = local.trusted_root_certificate_names
     }
   }
 
