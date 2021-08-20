@@ -32,8 +32,8 @@ module "tfe" {
   domain_name   = "<Domain name used to determine existing DNS zone>"
   tfe_subdomain = "<Desired DNS record subdomain>"
 
-  key_vault_name   = "<Existing Azure Key Vault name>"
-  certificate_name = "<Existing Azure Key Vault Certificate name>"
+  key_vault_name      = "<Existing Azure Key Vault name>"
+  ca_certificate_name = "<Existing Azure Key Vault Certificate name>"
 
   tags = "<Map of tag values>"
 
@@ -63,7 +63,7 @@ The required and optional variable inputs described in this document serve as a 
 | `vm_node_count` | Number of virtual machines | number | 2 |
 | `vm_image_id` | Azure Resource ID for custom image | string | /subscriptions/[...]/images/imagename |
 | `key_vault_name` | Name of an existing Key Vault | string | mykv |
-| `certificate_name` | Name of an existing Key Vault Ceritificate within `key_vault_name` | string | mycert |
+| `ca_certificate_name` | Name of an existing Key Vault Ceritificate within `key_vault_name` | string | mycert |
 ### Optional Inputs For This Example
 
 | Name | Description | Type | Example Value |

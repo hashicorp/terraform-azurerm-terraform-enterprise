@@ -6,8 +6,8 @@ locals {
     ImportSettingsFrom           = "/etc/ptfe-settings.json"
     LicenseFileLocation          = "/etc/${var.user_data_tfe_license_name}"
     TlsBootstrapHostname         = var.fqdn
-    TlsBootstrapCert             = "/etc/tfe/tls.pem"
-    TlsBootstrapKey              = "/etc/tfe/tls.key"
+    TlsBootstrapCert             = "/var/lib/waagent/${var.tls_certificate_thumbprint}.crt"
+    TlsBootstrapKey              = "/var/lib/waagent/${var.tls_certificate_thumbprint}.prv"
     TlsBootstrapType             = "server-path"
   }
 
@@ -43,10 +43,6 @@ locals {
 
       tfe_license_name        = var.user_data_tfe_license_name
       tfe_license_secret_name = var.tfe_license_secret_name
-
-      # Certificate information
-      user_data_cert = base64encode(var.user_data_cert)
-      user_data_key  = base64encode(var.user_data_cert_key)
 
       # Proxy information
       key_vault_name         = var.key_vault_name

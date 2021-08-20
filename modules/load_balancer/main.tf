@@ -120,15 +120,15 @@ resource "azurerm_application_gateway" "tfe_ag" {
   }
 
   ssl_certificate {
-    name                = var.certificate_name
-    key_vault_secret_id = var.certificate_key_vault_secret_id
+    name                = var.ca_certificate_name
+    key_vault_secret_id = var.ca_certificate_key_vault_secret_id
   }
 
   dynamic "trusted_root_certificate" {
     for_each = var.trusted_root_certificate == null ? [] : [1]
 
     content {
-      name = local.trusted_root_certificate_name
+      name = local.trusted_root_ca_certificate_name
       data = var.trusted_root_certificate
     }
   }
@@ -166,7 +166,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
     frontend_ip_configuration_name = local.frontend_ip_configuration_name
     frontend_port_name             = local.app_frontend_port_name
     protocol                       = "Https"
-    ssl_certificate_name           = var.certificate_name
+    ssl_certificate_name           = var.ca_certificate_name
   }
 
   backend_http_settings {
@@ -207,7 +207,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
       frontend_ip_configuration_name = local.frontend_ip_configuration_name
       frontend_port_name             = local.console_frontend_port_name
       protocol                       = "Https"
-      ssl_certificate_name           = var.certificate_name
+      ssl_certificate_name           = var.ca_certificate_name
     }
   }
 

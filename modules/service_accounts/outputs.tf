@@ -29,12 +29,17 @@ output "key_vault_id" {
   description = "The resource ID of the existing Azure key vault that houses the bootstrap secrets"
 }
 
-output "certificate_name" {
-  value       = data.azurerm_key_vault_certificate.cert.name
+output "ca_certificate_name" {
+  value       = data.azurerm_key_vault_certificate.ca_cert.name
   description = "The name of the existing CA certificate in the key vault"
 }
 
-output "certificate_key_vault_secret_id" {
-  value       = data.azurerm_key_vault_certificate.cert.secret_id
+output "ca_certificate_key_vault_secret_id" {
+  value       = data.azurerm_key_vault_certificate.ca_cert.secret_id
   description = "The certificate's secret ID (different than resource ID)"
+}
+
+output "tls_certificate_thumbprint" {
+  value       = data.azurerm_key_vault_certificate.tls_cert.thumbprint
+  description = "Thumbprint of the certificate provided for Replicated TlsBootstrapCert setting"
 }

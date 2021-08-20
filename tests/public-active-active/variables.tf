@@ -24,7 +24,7 @@ variable "key_vault_name" {
 
 variable "certificate_name" {
   type        = string
-  description = "Azure Key Vault Certificate name for CA Cert"
+  description = "Azure Key Vault Certificate name for CA Cert and provided for Replicated TlsBootstrapCert setting"
 }
 
 variable "tfe_license_secret_name" {

@@ -32,8 +32,8 @@ module "tfe" {
   domain_name   = "<Domain name used to determine existing DNS zone>"
   tfe_subdomain = "<Desired DNS record subdomain>"
 
-  key_vault_name   = "<Existing Azure Key Vault name>"
-  certificate_name = "<Existing Azure Key Vault Certificate name>"
+  key_vault_name      = "<Existing Azure Key Vault name>"
+  ca_certificate_name = "<Existing Azure Key Vault Certificate name>"
 
   tags = "<Map of tag values>"
 
@@ -65,7 +65,7 @@ The required and optional variable inputs described in this document serve as a 
 | `friendly_name_prefix` | Name prefix used for resources | string | somename |
 | `tfe_license_secret_name` | Secret name of existing Base64 encoded TFE license in Key Vault | string | license |
 | `key_vault_name` | Name of an existing Key Vault | string | mykv |
-| `certificate_name` | Name of an existing Key Vault Ceritificate within `key_vault_name` | string | mycert |
+| `ca_certificate_name` | Name of an existing Key Vault Ceritificate within `key_vault_name` | string | mycert |
 | `vm_node_count` | Number of virtual machines | number | 2 |
 | `network_id` | Name of the proxy CA certificate bundle | string | `/subscription/resource/id` |
 | `network_private_subnet_id` | Azure resource ID for an existing private subnet | string | `/subscription/resource/id` |

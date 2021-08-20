@@ -60,7 +60,12 @@ resource "azurerm_key_vault_access_policy" "tfe_vmss_kv_access" {
   ]
 }
 
-data "azurerm_key_vault_certificate" "cert" {
-  name         = var.certificate_name
+data "azurerm_key_vault_certificate" "ca_cert" {
+  name         = var.ca_certificate_name
+  key_vault_id = data.azurerm_key_vault.kv.id
+}
+
+data "azurerm_key_vault_certificate" "tls_cert" {
+  name         = var.tls_certificate_name
   key_vault_id = data.azurerm_key_vault.kv.id
 }

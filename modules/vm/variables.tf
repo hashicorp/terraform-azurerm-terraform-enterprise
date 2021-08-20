@@ -109,7 +109,7 @@ variable "key_vault_id" {
   description = "ID of Azure Key Vault containing required certificate"
 }
 
-variable "certificate_key_vault_secret_id" {
+variable "ca_certificate_key_vault_secret_id" {
   description = "The Secret URL of a Key Vault Certificate"
   type        = string
 }

@@ -16,14 +16,15 @@ module "public_active_active" {
   resource_group_name_dns = var.resource_group_name_dns
   domain_name             = var.domain_name
   tfe_license_secret_name = var.tfe_license_secret_name
-  certificate_name        = var.certificate_name
+  ca_certificate_name     = var.certificate_name
+  tls_certificate_name    = var.certificate_name
 
   iact_subnet_list            = var.iact_subnet_list
   vm_node_count               = 2
   vm_sku                      = "Standard_D4_v3"
   vm_image_id                 = "ubuntu"
   load_balancer_public        = true
-  load_balancer_type          = "application_gateway"
+  load_balancer_type          = "load_balancer"
   redis_enable_non_ssl_port   = true
   redis_enable_authentication = false
   user_data_redis_use_tls     = false

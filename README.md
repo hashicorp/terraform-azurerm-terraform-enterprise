@@ -49,7 +49,7 @@ This module is intended to run in an Azure account with minimal preparation, how
   - The key vault should have enabled access for deployment for Azure Virtual Machines, as the virtual machines will pull the certificate (and secrets, if applicable) from key vault.
 
 - Certificates
-  - The value supplied for `certificate_name` should match an existing Key Vault Certificate residing within the Key Vault specified via `key_vault_name`.
+  - The value supplied for `ca_certificate_name` should match an existing Key Vault Certificate residing within the Key Vault specified via `key_vault_name`.
 
 ## Azure Services Used
 

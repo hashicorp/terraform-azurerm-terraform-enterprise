@@ -7,10 +7,6 @@ create_tfe_config() {
 
 	sudo echo "${settings}" | sudo base64 -d > /etc/ptfe-settings.json
 	echo "${replicated}" | base64 -d > /etc/replicated.conf
-
-	mkdir -p /etc/tfe/	
-	echo ${user_data_cert} | base64 -d > /etc/tfe/tls.pem
-	echo ${user_data_key} | base64 -d > /etc/tfe/tls.key
 }
 
 install_jq() {

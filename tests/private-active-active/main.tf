@@ -18,7 +18,7 @@ module "private_active_active" {
   # Bootstrapping Key Vault
   resource_group_name_kv  = var.resource_group_name_kv
   key_vault_name          = local.key_vault_name
-  certificate_name        = var.certificate_name
+  ca_certificate_name     = var.ca_certificate_name
   tfe_license_secret_name = var.tfe_license_secret_name
 
   # Behind proxy information

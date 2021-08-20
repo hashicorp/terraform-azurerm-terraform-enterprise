@@ -48,9 +48,8 @@ module "user_data" {
   user_data_release_sequence = var.user_data_release_sequence
 
   # Key Vault
-  user_data_ca       = var.user_data_ca == null ? "" : replace(var.user_data_ca, "\n", "\n")
-  user_data_cert     = var.user_data_cert == null ? "" : var.user_data_cert
-  user_data_cert_key = var.user_data_cert_key == null ? "" : var.user_data_cert_key
+  user_data_ca               = var.user_data_ca == null ? "" : replace(var.user_data_ca, "\n", "\n")
+  tls_certificate_thumbprint = module.service_accounts.tls_certificate_thumbprint
 }
 ```
 

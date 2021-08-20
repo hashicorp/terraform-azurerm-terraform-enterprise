@@ -69,10 +69,15 @@ variable "key_vault_name" {
   description = "(recommended) Azure Key Vault name containing required certificate and Base64 encoded TFE license"
 }
 
-variable "certificate_name" {
+variable "ca_certificate_name" {
   default     = null
   type        = string
   description = "(recommended) The value should match an existing Key Vault Certificate residing in the Key Vault specified via `key_vault_name`. If not supplied, the module will create and use self signed certificates which is not recommended for production use."
+}
+
+variable "tls_certificate_name" {
+  type        = string
+  description = "Azure Key Vault Certificate name for certificate provided for Replicated TlsBootstrapCert setting"
 }
 
 # Bastion
@@ -441,18 +446,6 @@ variable "user_data_ca" {
   default     = null
   type        = string
   description = "(optional) Value to be provided for TFE ca_cert setting"
-}
-
-variable "user_data_cert" {
-  default     = null
-  type        = string
-  description = "(optional) Value to be provided for Replicated TlsBootstrapCert setting"
-}
-
-variable "user_data_cert_key" {
-  default     = null
-  type        = string
-  description = "(optional) Value to be provided for Replicated TlsBootstrapKey setting"
 }
 
 variable "user_data_redis_use_tls" {
