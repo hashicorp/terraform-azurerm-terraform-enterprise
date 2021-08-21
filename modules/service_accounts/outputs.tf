@@ -39,7 +39,7 @@ output "ca_certificate_key_vault_secret_id" {
   description = "The certificate's secret ID (different than resource ID)"
 }
 
-output "tls_certificate_thumbprint" {
-  value       = data.azurerm_key_vault_certificate.tls_cert.thumbprint
-  description = "Thumbprint of the certificate provided for Replicated TlsBootstrapCert setting"
+output "tls_certificate" {
+  value       = data.azurerm_key_vault_certificate.tls_cert
+  description = "Certificate provided for Replicated TlsBootstrapCert setting"
 }

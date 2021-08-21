@@ -14,12 +14,14 @@ module "private_active_active" {
 
   resource_group_name_dns = var.resource_group_name_dns
   domain_name             = var.domain_name
+  iact_subnet_list        = var.iact_subnet_list
 
   # Bootstrapping Key Vault
   resource_group_name_kv  = var.resource_group_name_kv
   key_vault_name          = local.key_vault_name
-  ca_certificate_name     = var.ca_certificate_name
   tfe_license_secret_name = var.tfe_license_secret_name
+  ca_certificate_name     = var.certificate_name
+  tls_certificate_name    = var.certificate_name
 
   # Behind proxy information
   proxy_ip   = azurerm_linux_virtual_machine.proxy.private_ip_address

@@ -11,23 +11,22 @@ module "public_active_active" {
   friendly_name_prefix = local.friendly_name_prefix
 
   # Bootstrapping resources
-  resource_group_name_kv  = var.resource_group_name_kv
-  key_vault_name          = var.key_vault_name
-  resource_group_name_dns = var.resource_group_name_dns
-  domain_name             = var.domain_name
-  tfe_license_secret_name = var.tfe_license_secret_name
-  ca_certificate_name     = var.certificate_name
-  tls_certificate_name    = var.certificate_name
-
-  iact_subnet_list            = var.iact_subnet_list
-  vm_node_count               = 2
-  vm_sku                      = "Standard_D4_v3"
-  vm_image_id                 = "ubuntu"
-  load_balancer_public        = true
-  load_balancer_type          = "load_balancer"
-  redis_enable_non_ssl_port   = true
-  redis_enable_authentication = false
-  user_data_redis_use_tls     = false
+  resource_group_name_kv       = var.resource_group_name_kv
+  key_vault_name               = var.key_vault_name
+  resource_group_name_dns      = var.resource_group_name_dns
+  domain_name                  = var.domain_name
+  tfe_license_secret_name      = var.tfe_license_secret_name
+  ca_certificate_name          = var.certificate_name
+  tls_certificate_name         = var.certificate_name
+  iact_subnet_list             = var.iact_subnet_list
+  vm_node_count                = 2
+  vm_sku                       = "Standard_D4_v3"
+  vm_image_id                  = "ubuntu"
+  load_balancer_public         = true
+  load_balancer_type           = "application_gateway"
+  redis_enable_non_ssl_port    = true
+  redis_enable_authentication  = false
+  user_data_redis_use_tls      = false
 
   tags = local.common_tags
 }

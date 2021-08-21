@@ -77,3 +77,14 @@ variable "network_allow_range" {
   type        = string
   description = "Network range to allow access to bastion vm"
 }
+
+# User Data
+# ---------
+variable "iact_subnet_list" {
+  default     = []
+  description = <<-EOD
+  A list of IP address ranges which will be authorized to access the IACT. The ranges must be expressed
+  in CIDR notation.
+  EOD
+  type        = list(string)
+}

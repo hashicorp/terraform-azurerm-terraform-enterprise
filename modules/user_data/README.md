@@ -49,7 +49,8 @@ module "user_data" {
 
   # Key Vault
   user_data_ca               = var.user_data_ca == null ? "" : replace(var.user_data_ca, "\n", "\n")
-  tls_certificate_thumbprint = module.service_accounts.tls_certificate_thumbprint
+  tls_certificate_name       = module.service_accounts.tls_certificate.name
+  tls_certificate_thumbprint = module.service_accounts.tls_certificate.thumbprint
 }
 ```
 
