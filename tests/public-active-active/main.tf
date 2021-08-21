@@ -16,8 +16,8 @@ module "public_active_active" {
   resource_group_name_dns = var.resource_group_name_dns
   domain_name             = var.domain_name
   tfe_license_secret_name = var.tfe_license_secret_name
-  ca_certificate_name     = var.certificate_name
-  tls_certificate_name    = var.certificate_name
+  ca_certificate_name     = "wildcard"
+  tls_certificate_name    = "wildcard"
 
   iact_subnet_list            = var.iact_subnet_list
   vm_node_count               = 2
