@@ -23,7 +23,7 @@ module "public_active_active" {
   vm_sku                       = "Standard_D4_v3"
   vm_image_id                  = "ubuntu"
   load_balancer_public         = true
-  load_balancer_type           = "application_gateway"
+  load_balancer_type           = "load_balancer"
   redis_enable_non_ssl_port    = true
   redis_enable_authentication  = false
   user_data_redis_use_tls      = false
