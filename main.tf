@@ -296,8 +296,8 @@ module "load_balancer" {
   key_vault_id                       = module.service_accounts.key_vault_id
   ca_certificate_name                = module.service_accounts.ca_certificate_name
   ca_certificate_key_vault_secret_id = module.service_accounts.ca_certificate_key_vault_secret_id
-  trusted_root_certificate_name      = module.service_accounts.tls_certificate.name
-  trusted_root_certificate_data      = module.service_accounts.tls_certificate.certificate_data_base64
+  # trusted_root_certificate_name      = module.service_accounts.tls_certificate.name
+  # trusted_root_certificate_data      = module.service_accounts.tls_certificate.certificate_data_base64
 
   # Network
   network_frontend_subnet_id = local.network_frontend_subnet_id
