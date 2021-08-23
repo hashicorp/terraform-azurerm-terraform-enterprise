@@ -30,10 +30,10 @@ variable "key_vault_name" {
   description = "Azure Key Vault name containing required certificate"
 }
 
-variable "ca_certificate_name" {
-  type        = string
-  description = "Azure Key Vault Certificate name for Application Gateway"
-}
+# variable "ca_certificate_name" {
+#   type        = string
+#   description = "Azure Key Vault Certificate name for Application Gateway"
+# }
 
 variable "tfe_license_secret_name" {
   type        = string
