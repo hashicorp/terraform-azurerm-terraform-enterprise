@@ -88,15 +88,15 @@ variable "ca_certificate_key_vault_secret_id" {
   description = "Secret ID of Azure Key Vault Certificate for Application Gateway"
 }
 
-variable "trusted_root_certificate_name" {
-  type        = string
-  description = "Name of the backend root certificate for Application Gateway to trust"
-}
+# variable "trusted_root_certificate_name" {
+#   type        = string
+#   description = "Name of the backend root certificate for Application Gateway to trust"
+# }
 
-variable "trusted_root_certificate_data" {
-  type        = string
-  description = "Backend root certificate data for Application Gateway to trust"
-}
+# variable "trusted_root_certificate_data" {
+#   type        = string
+#   description = "Backend root certificate data for Application Gateway to trust"
+# }
 
 # Load balancer
 # -------------
