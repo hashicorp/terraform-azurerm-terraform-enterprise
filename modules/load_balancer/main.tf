@@ -123,10 +123,10 @@ resource "azurerm_application_gateway" "tfe_ag" {
     key_vault_secret_id = var.ca_certificate_key_vault_secret_id
   }
 
-  // trusted_root_certificate {
-  //   name = var.trusted_root_certificate_name
-  //   data = filebase64("${path.module}/../../work/wildcard-chained.pem") # var.trusted_root_certificate_data
-  // }
+  # trusted_root_certificate {
+  #   name = var.trusted_root_certificate_name
+  #   data = filebase64("${path.module}/../../work/wildcard-chained.pem") # var.trusted_root_certificate_data
+  # }
 
   # Public front end configuration
   dynamic "frontend_ip_configuration" {
@@ -188,7 +188,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
       request_timeout       = 60
       host_name             = var.fqdn
 
-      // trusted_root_certificate_names = [var.trusted_root_certificate_name]
+      # trusted_root_certificate_names = [var.trusted_root_certificate_name]
     }
   }
 
@@ -238,7 +238,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
       request_timeout       = 60
       host_name             = var.fqdn
 
-      // trusted_root_certificate_names = [var.trusted_root_certificate_name]
+      # trusted_root_certificate_names = [var.trusted_root_certificate_name]
     }
   }
 
