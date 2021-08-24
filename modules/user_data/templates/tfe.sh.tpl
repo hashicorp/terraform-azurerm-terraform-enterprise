@@ -2,18 +2,30 @@
 
 set -e -u -o pipefail
 
-create_tfe_config() {
-	echo "[$(date +"%FT%T")] [Terraform Enterprise] Create configuration files" | tee -a /var/log/ptfe.log
-
-	sudo echo "${settings}" | sudo base64 -d > /etc/ptfe-settings.json
-	echo "${replicated}" | base64 -d > /etc/replicated.conf
-}
-
 install_jq() {
 	echo "[$(date +"%FT%T")] [Terraform Enterprise] Install JQ" | tee -a /var/log/ptfe.log
 
 	sudo curl --noproxy '*' -Lo /bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
 	sudo chmod +x /bin/jq
+}
+
+create_tfe_config() {
+	echo "[$(date +"%FT%T")] [Terraform Enterprise] Create configuration files" | tee -a /var/log/ptfe.log
+
+	sudo echo "${settings}" | sudo base64 -d > /etc/ptfe-settings.json
+	echo "${replicated}" | base64 -d > /etc/replicated.conf
+
+	if [[ $use_tls_kv_secrets == "1" ]]
+	then
+		echo "[$(date +"%FT%T")] [Terraform Enterprise] Retrieve TLS Certs" | tee -a /var/log/ptfe.log
+
+		# Obtain access token for Azure Key Vault to obtain base64 encoded TLS cert and key secrets
+		access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
+		tlscert=$(curl --noproxy '*' https://${key_vault_name}.vault.azure.net/secrets/${tls_bootstrap_cert_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
+		tlskey=$(curl --noproxy '*' https://${key_vault_name}.vault.azure.net/secrets/${tls_bootstrap_key_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
+		echo $tlscert | base64 -d > /var/lib/waagent/${tls_bootstrap_cert_name}.crt
+		echo $tlskey | base64 -d > /var/lib/waagent/${tls_bootstrap_key_name}.prv
+	fi
 }
 
 proxy_config() {
@@ -134,8 +146,8 @@ install_tfe() {
 echo "[$(date +"%FT%T")] [Terraform Enterprise] Determine distribution" | tee -a /var/log/ptfe.log
 DISTRO_NAME=$(grep "^NAME=" /etc/os-release | cut -d"\"" -f2)
 
-create_tfe_config
 install_jq
+create_tfe_config
 proxy_config
 proxy_cert
 retrieve_tfe_license

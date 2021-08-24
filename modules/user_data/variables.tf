@@ -102,9 +102,14 @@ variable "user_data_ca" {
   description = "(optional) Value to be provided for TFE ca_cert setting"
 }
 
-variable "tls_certificate_thumbprint" {
+variable "user_data_tls_bootstrap_cert" {
   type        = string
-  description = "(optional) Thumbprint of the certificate provided for Replicated TlsBootstrapCert setting"
+  description = "(optional) Value to be provided for Replicated TlsBootstrapCert setting"
+}
+
+variable "user_data_tls_bootstrap_key" {
+  type        = string
+  description = "(optional) Value to be provided for Replicated TlsBootstrapKey setting"
 }
 
 variable "iact_subnet_list" {

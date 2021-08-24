@@ -40,6 +40,16 @@ output "ca_certificate_key_vault_secret_id" {
 }
 
 output "tls_certificate" {
-  value       = data.azurerm_key_vault_certificate.tls_cert
-  description = "Certificate provided for Replicated TlsBootstrapCert setting"
+  value       = var.tls_certificate_name == null ? "" : data.azurerm_key_vault_certificate.tls_certificate[0]
+  description = "Certificate provided for Replicated TlsBootstrapCert setting in pfx format"
+}
+
+output "tls_bootstrap_cert" {
+  value       = var.tls_bootstrap_cert_secret_name == null ? "" : data.azurerm_key_vault_secret.tls_bootstrap_cert[0]
+  description = "Certificate provided for Replicated TlsBootstrapCert setting in pem format"
+}
+
+output "tls_bootstrap_key" {
+  value       = var.tls_bootstrap_key_secret_name == null ? "" : data.azurerm_key_vault_secret.tls_bootstrap_key[0]
+  description = "Private key provided for Replicated TlsBootstrapKey setting in pem format"
 }

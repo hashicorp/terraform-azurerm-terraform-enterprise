@@ -65,7 +65,23 @@ data "azurerm_key_vault_certificate" "ca_cert" {
   key_vault_id = data.azurerm_key_vault.kv.id
 }
 
-data "azurerm_key_vault_certificate" "tls_cert" {
+data "azurerm_key_vault_certificate" "tls_certificate" {
+  count = var.tls_certificate_name == null ? 0 : 1
+
   name         = var.tls_certificate_name
+  key_vault_id = data.azurerm_key_vault.kv.id
+}
+
+data "azurerm_key_vault_secret" "tls_bootstrap_cert" {
+  count = var.tls_bootstrap_cert_secret_name == null ? 0 : 1
+
+  name          = var.tls_bootstrap_cert_secret_name
+  key_vault_id = data.azurerm_key_vault.kv.id
+}
+
+data "azurerm_key_vault_secret" "tls_bootstrap_key" {
+  count = var.tls_bootstrap_key_secret_name == null ? 0 : 1
+
+  name          = var.tls_bootstrap_key_secret_name
   key_vault_id = data.azurerm_key_vault.kv.id
 }
