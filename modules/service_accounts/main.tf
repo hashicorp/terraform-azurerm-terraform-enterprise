@@ -71,17 +71,3 @@ data "azurerm_key_vault_certificate" "tls_certificate" {
   name         = var.tls_certificate_name
   key_vault_id = data.azurerm_key_vault.kv.id
 }
-
-data "azurerm_key_vault_secret" "tls_bootstrap_cert" {
-  count = var.tls_bootstrap_cert_secret_name == null ? 0 : 1
-
-  name          = var.tls_bootstrap_cert_secret_name
-  key_vault_id = data.azurerm_key_vault.kv.id
-}
-
-data "azurerm_key_vault_secret" "tls_bootstrap_key" {
-  count = var.tls_bootstrap_key_secret_name == null ? 0 : 1
-
-  name          = var.tls_bootstrap_key_secret_name
-  key_vault_id = data.azurerm_key_vault.kv.id
-}

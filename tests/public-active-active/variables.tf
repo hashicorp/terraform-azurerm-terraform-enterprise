@@ -32,6 +32,30 @@ variable "tfe_license_secret_name" {
   description = "Name of the secret under which the Base64 encoded TFE license is stored in the Azure Key Vault"
 }
 
+variable "tls_bootstrap_cert_secret_name" {
+  type        = string
+  description = <<-EOD
+  (optional) Value to be provided for Replicated's TlsBootstrapCert setting. If a trusted Azure Key Vault 
+  Certificate is used as the TlsBootstrapCert via the tls_certificate_name variable (this can be the same
+  certificate as ca_certificate_name), then tls_bootstrap_cert_secret_name and tls_bootstrap_key_secret_name
+  are not needed. However, if you want to use a different certificate or if you need to add an intermediate,
+  then using this variable will allow the TFE instance(s) to pull that secret from Key Vault and use it in
+  TFE.
+  EOD
+}
+
+variable "tls_bootstrap_key_secret_name" {
+  type        = string
+  description = <<-EOD
+  (optional) Value to be provided for Replicated's TlsBootstrapKey setting. If a trusted Azure Key Vault 
+  Certificate is used as the TlsBootstrapKey via the tls_certificate_name variable (this can be the same
+  certificate as ca_certificate_name), then tls_bootstrap_cert_secret_name and tls_bootstrap_key_secret_name
+  are not needed. However, if you want to use a different certificate/key pair, then using this variable
+  will allow the TFE instance(s) to pull that secret from Key Vault and use it in TFE.
+  EOD
+}
+
+
 # User Data
 # ---------
 variable "iact_subnet_list" {

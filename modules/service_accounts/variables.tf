@@ -62,12 +62,15 @@ variable "key_vault_name" {
 # -----------
 variable "ca_certificate_name" {
   type        = string
-  description = "Azure Key Vault Certificate name for Application Gateway"
+  description = "(Required) Azure Key Vault Certificate name for Application Gateway"
 }
 
 variable "tls_certificate_name" {
   type        = string
-  description = "Azure Key Vault Certificate name for certificate provided for Replicated TlsBootstrapCert setting"
+  description = <<-EOD
+  Azure Key Vault Certificate name for certificate provided for Replicated TlsBootstrapCert setting. This
+  can be the same certificate name as provided for the ca_certificate_name variable.
+  EOD
 }
 
 # Tagging

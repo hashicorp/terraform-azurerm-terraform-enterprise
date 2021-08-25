@@ -12,9 +12,9 @@ module "private_active_active" {
   friendly_name_prefix = local.friendly_name_prefix
   tfe_license_name     = "terraform-azurerm-terraform-enterprise.rli"
 
-  resource_group_name_dns = var.resource_group_name_dns
-  domain_name             = var.domain_name
-  iact_subnet_list        = var.iact_subnet_list
+  resource_group_name_dns    = var.resource_group_name_dns
+  domain_name                = var.domain_name
+  user_data_iact_subnet_list = var.iact_subnet_list
 
   # Bootstrapping Key Vault
   resource_group_name_kv  = var.resource_group_name_kv

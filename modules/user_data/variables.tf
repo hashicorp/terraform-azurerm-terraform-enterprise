@@ -102,23 +102,32 @@ variable "user_data_ca" {
   description = "(optional) Value to be provided for TFE ca_cert setting"
 }
 
-variable "user_data_tls_bootstrap_cert" {
+variable "user_data_use_tls_kv_secrets" {
+  type        = string
+  description = <<-EOD
+  If 1, then TFE will retrieve the secrets named in the tls_bootstrap_cert_secret_name and
+  tls_bootstrap_cert_key_name variables during its install script. If 0, the retrieval will
+  be skipped.
+  EOD
+}
+
+variable "user_data_tls_bootstrap_cert_name" {
   type        = string
   description = "(optional) Value to be provided for Replicated TlsBootstrapCert setting"
 }
 
-variable "user_data_tls_bootstrap_key" {
+variable "user_data_tls_bootstrap_key_name" {
   type        = string
   description = "(optional) Value to be provided for Replicated TlsBootstrapKey setting"
 }
 
-variable "iact_subnet_list" {
+variable "user_data_iact_subnet_list" {
   default     = []
+  type        = list(string)
   description = <<-EOD
   A list of IP address ranges which will be authorized to access the IACT. The ranges must be expressed
   in CIDR notation.
   EOD
-  type        = list(string)
 }
 
 # Proxy

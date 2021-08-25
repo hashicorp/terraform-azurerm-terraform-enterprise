@@ -6,8 +6,8 @@ locals {
     ImportSettingsFrom           = "/etc/ptfe-settings.json"
     LicenseFileLocation          = "/etc/${var.user_data_tfe_license_name}"
     TlsBootstrapHostname         = var.fqdn
-    TlsBootstrapCert             = "/var/lib/waagent/${var.user_data_tls_bootstrap_cert}.crt"
-    TlsBootstrapKey              = "/var/lib/waagent/${var.user_data_tls_bootstrap_key}.prv"
+    TlsBootstrapCert             = "/var/lib/waagent/${var.user_data_tls_bootstrap_cert_name}.crt"
+    TlsBootstrapKey              = "/var/lib/waagent/${var.user_data_tls_bootstrap_key_name}.prv"
     TlsBootstrapType             = "server-path"
   }
 
@@ -43,9 +43,9 @@ locals {
 
       tfe_license_name        = var.user_data_tfe_license_name
       tfe_license_secret_name = var.tfe_license_secret_name
-      use_tls_kv_secrets      = var.user_data_use_tls_kv_secrets == true ? "1" : "0"
-      tls_bootstrap_cert_name = var.tls_bootstrap_cert_name
-      tls_bootstrap_key_name  = var.tls_bootstrap_key_name
+      use_tls_kv_secrets      = var.user_data_use_tls_kv_secrets
+      tls_bootstrap_cert_name = var.user_data_tls_bootstrap_cert_name
+      tls_bootstrap_key_name  = var.user_data_tls_bootstrap_key_name
 
       # Proxy information
       key_vault_name         = var.key_vault_name
@@ -146,7 +146,7 @@ locals {
     }
 
     iact_subnet_list = {
-      value = join(",", var.iact_subnet_list)
+      value = join(",", var.user_data_iact_subnet_list)
     }
 
     install_id = {

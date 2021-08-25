@@ -27,8 +27,8 @@ locals {
 
   # User Data
   # ---------
-  tls_bootstrap_cert_name = var.tls_bootstrap_cert_secret_name == null ? upper(module.service_accounts.tls_certificate[0].thumbprint : var.tls_bootstrap_cert_secret_name
-  tls_bootstrap_key_name  = var.tls_bootstrap_key_secret_name == null ? upper(module.service_accounts.tls_certificate[0].thumbprint : var.tls_bootstrap_key_secret_name
+  tls_bootstrap_cert_name = var.tls_bootstrap_cert_secret_name == null ? upper(module.service_accounts.tls_certificate[0].thumbprint) : var.tls_bootstrap_cert_secret_name
+  tls_bootstrap_key_name  = var.tls_bootstrap_key_secret_name == null ? upper(module.service_accounts.tls_certificate[0].thumbprint) : var.tls_bootstrap_key_secret_name
 }
 
 # Azure resource groups
@@ -235,13 +235,13 @@ module "user_data" {
   user_data_tfe_license_name = var.tfe_license_name
   user_data_release_sequence = var.user_data_release_sequence
   tfe_license_secret_name    = var.tfe_license_secret_name
-  iact_subnet_list           = var.iact_subnet_list
+  user_data_iact_subnet_list = var.user_data_iact_subnet_list
 
   # Certificates
-  user_data_ca                 = var.user_data_ca == null ? "" : var.user_data_ca
-  user_data_use_tls_kv_secrets = var.tls_bootstrap_cert_secret_name != null ? true : false
-  user_data_tls_bootstrap_cert = local.tls_bootstrap_cert_name
-  user_data_tls_bootstrap_key  = local.tls_bootstrap_key_name
+  user_data_ca                      = var.user_data_ca == null ? "" : var.user_data_ca
+  user_data_use_tls_kv_secrets      = var.tls_bootstrap_cert_secret_name == null ? "0" : "1"
+  user_data_tls_bootstrap_cert_name = local.tls_bootstrap_cert_name
+  user_data_tls_bootstrap_key_name  = local.tls_bootstrap_key_name
 
   # Proxy
   key_vault_name         = var.key_vault_name
