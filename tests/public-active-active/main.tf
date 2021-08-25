@@ -11,16 +11,16 @@ module "public_active_active" {
   friendly_name_prefix = local.friendly_name_prefix
 
   # Bootstrapping resources
-  resource_group_name_kv      = var.resource_group_name_kv
-  key_vault_name              = var.key_vault_name
-  resource_group_name_dns     = var.resource_group_name_dns
-  domain_name                 = var.domain_name
-  tfe_license_secret_name     = var.tfe_license_secret_name
-  ca_certificate_name         = var.certificate_name
-  tls_certificate_name        = var.certificate_name
+  resource_group_name_kv         = var.resource_group_name_kv
+  key_vault_name                 = var.key_vault_name
+  resource_group_name_dns        = var.resource_group_name_dns
+  domain_name                    = var.domain_name
+  tfe_license_secret_name        = var.tfe_license_secret_name
+  ca_certificate_name            = var.certificate_name
+  tls_certificate_name           = var.certificate_name
   tls_bootstrap_cert_secret_name = var.tls_bootstrap_cert_secret_name
-  tls_bootstrap_key_secret_name = var.tls_bootstrap_key_secret_name
-  
+  tls_bootstrap_key_secret_name  = var.tls_bootstrap_key_secret_name
+
   user_data_iact_subnet_list  = var.iact_subnet_list
   vm_node_count               = 2
   vm_sku                      = "Standard_D4_v3"

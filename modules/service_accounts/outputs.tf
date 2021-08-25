@@ -21,17 +21,17 @@ output "vmss_user_assigned_identity" {
 
 output "key_vault_name" {
   value       = data.azurerm_key_vault.kv.name
-  description = "The name of the existing Azure key vault that houses the bootstrap secrets"
+  description = "The name of the existing Azure Key Vault that houses the bootstrap secrets"
 }
 
 output "key_vault_id" {
   value       = data.azurerm_key_vault.kv.id
-  description = "The resource ID of the existing Azure key vault that houses the bootstrap secrets"
+  description = "The resource ID of the existing Azure Key Vault that houses the bootstrap secrets"
 }
 
 output "ca_certificate_name" {
   value       = data.azurerm_key_vault_certificate.ca_cert.name
-  description = "The name of the existing CA certificate in the key vault"
+  description = "The name of the existing CA certificate in the Key Vault"
 }
 
 output "ca_certificate_key_vault_secret_id" {

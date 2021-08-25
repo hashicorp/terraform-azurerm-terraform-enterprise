@@ -10,5 +10,5 @@ output "resource_group_name_dns" {
 
 output "resource_group_name_kv" {
   value       = local.resource_group_name_kv
-  description = "The name of the resource group that houses the key vault"
+  description = "The name of the resource group that houses the Key Vault"
 }

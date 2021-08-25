@@ -65,6 +65,11 @@ variable "user_data_redis_use_tls" {
 
 # Azure
 # -----
+variable "key_vault_name" {
+  type        = string
+  description = "Azure Key Vault name containing all required secrets and certificates"
+}
+
 variable "user_data_azure_container_name" {
   type        = string
   description = "Azure storage container name"
@@ -113,12 +118,12 @@ variable "user_data_use_tls_kv_secrets" {
 
 variable "user_data_tls_bootstrap_cert_name" {
   type        = string
-  description = "(optional) Value to be provided for Replicated TlsBootstrapCert setting"
+  description = "Value to be provided for Replicated TlsBootstrapCert setting"
 }
 
 variable "user_data_tls_bootstrap_key_name" {
   type        = string
-  description = "(optional) Value to be provided for Replicated TlsBootstrapKey setting"
+  description = "Value to be provided for Replicated TlsBootstrapKey setting"
 }
 
 variable "user_data_iact_subnet_list" {
@@ -132,11 +137,6 @@ variable "user_data_iact_subnet_list" {
 
 # Proxy
 # -----
-variable "key_vault_name" {
-  type        = string
-  description = "Azure Key Vault name containing all required secrets and certificates"
-}
-
 variable "proxy_ip" {
   type        = string
   description = "IP Address of the proxy server"
