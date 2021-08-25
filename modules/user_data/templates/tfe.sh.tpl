@@ -15,8 +15,8 @@ create_tfe_config() {
 	sudo echo "${settings}" | sudo base64 -d > /etc/ptfe-settings.json
 	echo "${replicated}" | base64 -d > /etc/replicated.conf
 
-	# if [[ $use_tls_kv_secrets == "1" ]]
-	# then
+	if [[ ${use_tls_kv_secrets} == "1" ]]
+	then
 		echo "[$(date +"%FT%T")] [Terraform Enterprise] Retrieve TLS Certs" | tee -a /var/log/ptfe.log
 
 		# Obtain access token for Azure Key Vault to obtain base64 encoded TLS cert and key secrets
@@ -25,7 +25,7 @@ create_tfe_config() {
 		tlskey=$(curl --noproxy '*' https://${key_vault_name}.vault.azure.net/secrets/${tls_bootstrap_key_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
 		echo $tlscert | base64 -d > /var/lib/waagent/${tls_bootstrap_cert_name}.crt
 		echo $tlskey | base64 -d > /var/lib/waagent/${tls_bootstrap_key_name}.prv
-	# fi
+	fi
 }
 
 proxy_config() {
