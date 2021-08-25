@@ -29,6 +29,8 @@ locals {
   # ---------
   tls_bootstrap_cert_name = var.tls_bootstrap_cert_secret_name == null ? upper(module.service_accounts.tls_certificate[0].thumbprint) : var.tls_bootstrap_cert_secret_name
   tls_bootstrap_key_name  = var.tls_bootstrap_key_secret_name == null ? upper(module.service_accounts.tls_certificate[0].thumbprint) : var.tls_bootstrap_key_secret_name
+
+  base64_ca = var.user_data_ca == null ? null : base64encode(var.user_data_ca)
 }
 
 # Azure resource groups
@@ -303,8 +305,7 @@ module "load_balancer" {
   key_vault_id                       = module.service_accounts.key_vault_id
   ca_certificate_name                = module.service_accounts.ca_certificate_name
   ca_certificate_key_vault_secret_id = module.service_accounts.ca_certificate_key_vault_secret_id
-  # trusted_root_certificate_name      = module.service_accounts.tls_certificate.name
-  # trusted_root_certificate_data      = module.service_accounts.tls_certificate.certificate_data_base64
+  trusted_root_certificate           = var.load_balancer_type == "application_gateway" && var.tls_certificate_name == null ? local.base64_ca : base64encode(module.service_accounts.tls_certificate_data[0].pem)
 
   # Network
   network_frontend_subnet_id = local.network_frontend_subnet_id

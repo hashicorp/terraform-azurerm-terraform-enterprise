@@ -434,7 +434,10 @@ variable "user_data_release_sequence" {
 variable "user_data_ca" {
   default     = null
   type        = string
-  description = "(optional) Value to be provided for TFE ca_cert setting"
+  description = <<-EOD
+  PEM formatted value to be provided for TFE ca_cert setting and the trusted root certificate for the
+  Application Gateway, if applicable. Optional, unless load_balancer_type is application_gateway.
+  EOD
 }
 
 variable "user_data_redis_use_tls" {
@@ -462,8 +465,9 @@ variable "ca_certificate_name" {
 
 variable "tls_certificate_name" {
   type        = string
+  default     = null
   description = <<-EOD
-  Azure Key Vault Certificate name for certificate provided for Replicated TlsBootstrapCert setting. This
+  (Required) Azure Key Vault Certificate name for certificate provided for Replicated TlsBootstrapCert setting. This
   can be the same certificate name as provided for the ca_certificate_name variable.
   EOD
 }

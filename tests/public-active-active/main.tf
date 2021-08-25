@@ -17,7 +17,6 @@ module "public_active_active" {
   domain_name                    = var.domain_name
   tfe_license_secret_name        = var.tfe_license_secret_name
   ca_certificate_name            = var.certificate_name
-  tls_certificate_name           = var.certificate_name
   tls_bootstrap_cert_secret_name = var.tls_bootstrap_cert_secret_name
   tls_bootstrap_key_secret_name  = var.tls_bootstrap_key_secret_name
 

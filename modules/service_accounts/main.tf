@@ -71,3 +71,10 @@ data "azurerm_key_vault_certificate" "tls_certificate" {
   name         = var.tls_certificate_name
   key_vault_id = data.azurerm_key_vault.kv.id
 }
+
+data "azurerm_key_vault_certificate_data" "tls_certificate" {
+  count = var.tls_certificate_name == null ? 0 : 1
+
+  name         = data.azurerm_key_vault_certificate.tls_certificate[0].name
+  key_vault_id = data.azurerm_key_vault.kv.id
+}
