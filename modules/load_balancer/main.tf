@@ -120,7 +120,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
   }
 
   ssl_certificate {
-    name                = var.ca_certificate_name
+    name                = var.certificate_name
     key_vault_secret_id = var.ca_certificate_key_vault_secret_id
   }
 
@@ -177,7 +177,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
       frontend_ip_configuration_name = local.frontend_ip_configuration_name
       frontend_port_name             = local.app_frontend_port_name
       protocol                       = "Https"
-      ssl_certificate_name           = var.ca_certificate_name
+      ssl_certificate_name           = var.certificate_name
     }
   }
 
@@ -227,7 +227,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
       frontend_ip_configuration_name = local.frontend_ip_configuration_name
       frontend_port_name             = local.console_frontend_port_name
       protocol                       = "Https"
-      ssl_certificate_name           = var.ca_certificate_name
+      ssl_certificate_name           = var.certificate_name
     }
   }
 

@@ -457,7 +457,7 @@ variable "user_data_iact_subnet_list" {
 
 # TLS Certificates
 # ----------------
-variable "ca_certificate_name" {
+variable "certificate_name" {
   default     = null
   type        = string
   description = "(Required) The value should match an existing Key Vault Certificate residing in the Key Vault specified via `key_vault_name`."
@@ -468,7 +468,7 @@ variable "tls_certificate_name" {
   default     = null
   description = <<-EOD
   (Required) Azure Key Vault Certificate name for certificate provided for Replicated TlsBootstrapCert setting. This
-  can be the same certificate name as provided for the ca_certificate_name variable.
+  can be the same certificate name as provided for the certificate_name variable.
   EOD
 }
 
@@ -477,7 +477,7 @@ variable "tls_bootstrap_cert_secret_name" {
   description = <<-EOD
   (optional) Value to be provided for Replicated's TlsBootstrapCert setting. If a trusted Azure Key Vault 
   Certificate is used as the TlsBootstrapCert via the tls_certificate_name variable (this can be the same
-  certificate as ca_certificate_name), then tls_bootstrap_cert_secret_name and tls_bootstrap_key_secret_name
+  certificate as certificate_name), then tls_bootstrap_cert_secret_name and tls_bootstrap_key_secret_name
   are not needed. However, if you want to use a different certificate or if you need to add an intermediate,
   then using this variable will allow the TFE instance(s) to pull that secret from Key Vault and use it in
   TFE.
@@ -489,7 +489,7 @@ variable "tls_bootstrap_key_secret_name" {
   description = <<-EOD
   (optional) Value to be provided for Replicated's TlsBootstrapKey setting. If a trusted Azure Key Vault 
   Certificate is used as the TlsBootstrapKey via the tls_certificate_name variable (this can be the same
-  certificate as ca_certificate_name), then tls_bootstrap_cert_secret_name and tls_bootstrap_key_secret_name
+  certificate as certificate_name), then tls_bootstrap_cert_secret_name and tls_bootstrap_key_secret_name
   are not needed. However, if you want to use a different certificate/key pair, then using this variable
   will allow the TFE instance(s) to pull that secret from Key Vault and use it in TFE.
   EOD

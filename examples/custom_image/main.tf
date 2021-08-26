@@ -11,8 +11,8 @@ module "tfe" {
   domain_name   = var.domain_name
   tfe_subdomain = var.tfe_subdomain
 
-  key_vault_name      = var.key_vault_name
-  ca_certificate_name = var.ca_certificate_name
+  key_vault_name   = var.key_vault_name
+  certificate_name = var.certificate_name
 
   tags = var.tags
 

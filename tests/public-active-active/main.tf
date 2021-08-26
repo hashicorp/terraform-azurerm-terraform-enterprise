@@ -16,7 +16,7 @@ module "public_active_active" {
   resource_group_name_dns        = var.resource_group_name_dns
   domain_name                    = var.domain_name
   tfe_license_secret_name        = var.tfe_license_secret_name
-  ca_certificate_name            = var.certificate_name
+  certificate_name               = var.certificate_name
   tls_bootstrap_cert_secret_name = var.wildcard_chained_certificate_pem_secret_name
   tls_bootstrap_key_secret_name  = var.wildcard_private_key_pem_secret_name
 

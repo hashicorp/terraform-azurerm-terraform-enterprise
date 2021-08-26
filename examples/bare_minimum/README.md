@@ -25,7 +25,7 @@ module "tfe" {
   friendly_name_prefix    = "<Friendly name to use for resources>"
   tfe_license_secret_name = "<Secret name of existing Base64 encoded TFE license in Key Vault>"
   key_vault_name          = "<Existing Azure Key Vault name>"
-  ca_certificate_name     = "<Existing Azure Key Vault Certificate name>"
+  certificate_name        = "<Existing Azure Key Vault Certificate name>"
 }
 ```
 
@@ -46,4 +46,4 @@ The required and optional variable inputs described in this document serve as a 
 | `friendly_name_prefix` | Name prefix used for resources | string | somename |
 | `tfe_license_secret_name` | Secret name of existing Base64 encoded TFE license in Key Vault | string | license |
 | `key_vault_name` | Name of an existing Key Vault | string | mykv |
-| `ca_certificate_name` | Name of an existing Key Vault Ceritificate within `key_vault_name` | string | mycert |
+| `certificate_name` | Name of an existing Key Vault Ceritificate within `key_vault_name` | string | mycert |

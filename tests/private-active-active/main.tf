@@ -20,7 +20,7 @@ module "private_active_active" {
   resource_group_name_kv  = var.resource_group_name_kv
   key_vault_name          = local.key_vault_name
   tfe_license_secret_name = var.tfe_license_secret_name
-  ca_certificate_name     = var.certificate_name
+  certificate_name        = var.certificate_name
   tls_certificate_name    = var.certificate_name
 
   # Behind proxy information

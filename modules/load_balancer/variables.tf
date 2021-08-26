@@ -78,7 +78,7 @@ variable "key_vault_id" {
   description = "ID of Azure Key Vault containing required certificate"
 }
 
-variable "ca_certificate_name" {
+variable "certificate_name" {
   type        = string
   description = "Name of Azure Key Vault Certificate for Application Gateway"
 }

@@ -99,7 +99,7 @@ module "service_accounts" {
   # Key Vault
   resource_group_name_kv = module.resource_groups.resource_group_name_kv
   key_vault_name         = var.key_vault_name
-  ca_certificate_name    = var.ca_certificate_name
+  certificate_name       = var.certificate_name
   tls_certificate_name   = var.tls_certificate_name
 
   tags = var.tags
@@ -303,7 +303,7 @@ module "load_balancer" {
 
   # Secrets
   key_vault_id                       = module.service_accounts.key_vault_id
-  ca_certificate_name                = module.service_accounts.ca_certificate_name
+  certificate_name                   = module.service_accounts.certificate_name
   ca_certificate_key_vault_secret_id = module.service_accounts.ca_certificate_key_vault_secret_id
   trusted_root_certificate           = var.load_balancer_type == "application_gateway" && var.tls_certificate_name == null ? local.base64_ca : base64encode(module.service_accounts.tls_certificate_data[0].pem)
 
