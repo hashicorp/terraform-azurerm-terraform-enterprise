@@ -32,7 +32,7 @@ variable "tfe_license_secret_name" {
   description = "Name of the secret under which the Base64 encoded TFE license is stored in the Azure Key Vault"
 }
 
-variable "tls_bootstrap_cert_secret_name" {
+variable "wildcard_chained_certificate_pem_secret_name" {
   type        = string
   description = <<-EOD
   (optional) Value to be provided for Replicated's TlsBootstrapCert setting. If a trusted Azure Key Vault 
@@ -44,7 +44,7 @@ variable "tls_bootstrap_cert_secret_name" {
   EOD
 }
 
-variable "tls_bootstrap_key_secret_name" {
+variable "wildcard_private_key_pem_secret_name" {
   type        = string
   description = <<-EOD
   (optional) Value to be provided for Replicated's TlsBootstrapKey setting. If a trusted Azure Key Vault 
