@@ -60,21 +60,21 @@ resource "azurerm_key_vault_access_policy" "tfe_vmss_kv_access" {
   ]
 }
 
-data "azurerm_key_vault_certificate" "ca_cert" {
+data "azurerm_key_vault_certificate" "certificate" {
   name         = var.certificate_name
   key_vault_id = data.azurerm_key_vault.kv.id
 }
 
-data "azurerm_key_vault_certificate" "tls_certificate" {
-  count = var.tls_certificate_name == null ? 0 : 1
+data "azurerm_key_vault_certificate" "trusted_root_certificate" {
+  count = var.trusted_root_certificate_name == null ? 0 : 1
 
-  name         = var.tls_certificate_name
+  name         = var.trusted_root_certificate_name
   key_vault_id = data.azurerm_key_vault.kv.id
 }
 
-data "azurerm_key_vault_certificate_data" "tls_certificate" {
-  count = var.tls_certificate_name == null ? 0 : 1
+data "azurerm_key_vault_certificate_data" "trusted_root_certificate" {
+  count = var.trusted_root_certificate_name == null ? 0 : 1
 
-  name         = data.azurerm_key_vault_certificate.tls_certificate[0].name
+  name         = data.azurerm_key_vault_certificate.trusted_root_certificate[0].name
   key_vault_id = data.azurerm_key_vault.kv.id
 }

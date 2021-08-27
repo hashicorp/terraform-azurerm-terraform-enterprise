@@ -65,11 +65,12 @@ variable "certificate_name" {
   description = "(Required) Azure Key Vault Certificate name for Application Gateway"
 }
 
-variable "tls_certificate_name" {
+variable "trusted_root_certificate_name" {
   type        = string
   description = <<-EOD
-  Azure Key Vault Certificate name for certificate provided for Replicated TlsBootstrapCert setting. This
-  can be the same certificate name as provided for the certificate_name variable.
+  (Optional) Name of the backend root certificate for Application Gateway to trust. If the backend
+  certificate is issued by a well-known certificate authority (CA), you do not need to provide a
+  trusted_root_certificate.
   EOD
 }
 

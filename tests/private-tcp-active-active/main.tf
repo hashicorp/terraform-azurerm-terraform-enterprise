@@ -17,11 +17,11 @@ module "private_tcp_active_active" {
   user_data_iact_subnet_list = var.iact_subnet_list
 
   # Bootstrapping resources
-  resource_group_name_kv  = var.resource_group_name_kv
-  key_vault_name          = var.key_vault_name
-  user_data_ca            = local.user_data_ca
-  tls_certificate_name    = var.certificate_name
-  tfe_license_secret_name = var.tfe_license_secret_name
+  resource_group_name_kv        = var.resource_group_name_kv
+  key_vault_name                = var.key_vault_name
+  user_data_ca                  = local.user_data_ca
+  trusted_root_certificate_name = var.certificate_name
+  tfe_license_secret_name       = var.tfe_license_secret_name
 
   tags = local.common_tags
 

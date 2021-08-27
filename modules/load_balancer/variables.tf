@@ -83,12 +83,21 @@ variable "certificate_name" {
   description = "Name of Azure Key Vault Certificate for Application Gateway"
 }
 
-variable "ca_certificate_key_vault_secret_id" {
+variable "certificate_key_vault_secret_id" {
   type        = string
   description = "Secret ID of Azure Key Vault Certificate for Application Gateway"
 }
 
-variable "trusted_root_certificate" {
+variable "trusted_root_certificate_name" {
+  type        = string
+  description = <<-EOD
+  (Optional) Name of the backend root certificate for Application Gateway to trust. If the backend
+  certificate is issued by a well-known certificate authority (CA), you do not need to provide a
+  trusted_root_certificate.
+  EOD
+}
+
+variable "trusted_root_certificate_data" {
   type        = string
   description = <<-EOD
   (Optional) Base64 encoded PEM formatted backend root certificate data for Application Gateway to

@@ -30,21 +30,21 @@ output "key_vault_id" {
 }
 
 output "certificate_name" {
-  value       = data.azurerm_key_vault_certificate.ca_cert.name
-  description = "The name of the existing CA certificate in the Key Vault"
+  value       = data.azurerm_key_vault_certificate.certificate.name
+  description = "The name of the existing certificate in the Key Vault"
 }
 
-output "ca_certificate_key_vault_secret_id" {
-  value       = data.azurerm_key_vault_certificate.ca_cert.secret_id
+output "certificate_key_vault_secret_id" {
+  value       = data.azurerm_key_vault_certificate.certificate.secret_id
   description = "The certificate's secret ID (different than resource ID)"
 }
 
-output "tls_certificate" {
-  value       = var.tls_certificate_name == null ? "" : data.azurerm_key_vault_certificate.tls_certificate[0]
-  description = "Certificate provided for Replicated TlsBootstrapCert setting in pfx format. This output supplies the thumbprint, et. al."
+output "trusted_root_certificate" {
+  value       = var.trusted_root_certificate_name == null ? "" : data.azurerm_key_vault_certificate.trusted_root_certificate[0]
+  description = "Name of the certificate provided for the Application Gateway's trusted root certificate"
 }
 
-output "tls_certificate_data" {
-  value       = var.tls_certificate_name == null ? "" : data.azurerm_key_vault_certificate_data.tls_certificate[0]
-  description = "Certificate provided for Replicated TlsBootstrapCert setting in pfx format. This output supplies the pem, et. al."
+output "trusted_root_certificate_data" {
+  value       = var.trusted_root_certificate_name == null ? "" : data.azurerm_key_vault_certificate_data.trusted_root_certificate[0]
+  description = "Data of the certificate provided for the Application Gateway's trusted root certificate"
 }

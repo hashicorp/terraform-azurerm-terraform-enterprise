@@ -8,7 +8,7 @@ locals {
   # Application Gateway
   # -------------------
   gateway_ip_configuration_name          = "tfe-ag-gateway-ip-config"
-  trusted_root_certificate_name          = var.trusted_root_certificate == null ? [] : ["${var.friendly_name_prefix}-trusted-root-cert"]
+  trusted_root_certificate_name          = var.trusted_root_certificate_name == null ? [] : [var.trusted_root_certificate_name]
   frontend_ip_configuration_name_public  = "tfe-ag-frontend-ip-config-pub"
   frontend_ip_configuration_name_private = "tfe-ag-frontend-ip-config-priv"
   frontend_ip_configuration_name         = var.load_balancer_public == true ? local.frontend_ip_configuration_name_public : local.frontend_ip_configuration_name_private
@@ -121,15 +121,15 @@ resource "azurerm_application_gateway" "tfe_ag" {
 
   ssl_certificate {
     name                = var.certificate_name
-    key_vault_secret_id = var.ca_certificate_key_vault_secret_id
+    key_vault_secret_id = var.certificate_key_vault_secret_id
   }
 
   dynamic "trusted_root_certificate" {
-    for_each = var.trusted_root_certificate == null ? [] : [1]
+    for_each = var.trusted_root_certificate_name == null ? [] : [1]
 
     content {
       name = local.trusted_root_certificate_name[0]
-      data = var.trusted_root_certificate
+      data = var.trusted_root_certificate_data
     }
   }
 

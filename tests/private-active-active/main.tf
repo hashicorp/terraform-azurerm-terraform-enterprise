@@ -17,11 +17,11 @@ module "private_active_active" {
   user_data_iact_subnet_list = var.iact_subnet_list
 
   # Bootstrapping Key Vault
-  resource_group_name_kv  = var.resource_group_name_kv
-  key_vault_name          = local.key_vault_name
-  tfe_license_secret_name = var.tfe_license_secret_name
-  certificate_name        = var.certificate_name
-  tls_certificate_name    = var.certificate_name
+  resource_group_name_kv        = var.resource_group_name_kv
+  key_vault_name                = local.key_vault_name
+  tfe_license_secret_name       = var.tfe_license_secret_name
+  certificate_name              = var.certificate_name
+  trusted_root_certificate_name = var.certificate_name
 
   # Behind proxy information
   proxy_ip   = azurerm_linux_virtual_machine.proxy.private_ip_address

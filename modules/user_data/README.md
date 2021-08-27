@@ -16,10 +16,9 @@
 * `user_data_tfe_license_name` - string value for terraform enterprise license name
 * `key_vault_name` - Azure Key Vault name containing all required secrets and certificates
 * `tfe_license_secret_name` - Name of the secret under which the Base64 encoded Terraform Enterprise license is (or will be) stored in the Azure Key Vault
-* `user_data_use_tls_kv_secrets` - If 1, then TFE will retrieve the secrets named in the tls_bootstrap_cert_secret_name and
-  tls_bootstrap_cert_key_name variables during its install script. If 0, the retrieval will be skipped.
-* `user_data_tls_bootstrap_cert_name` - Value to be provided for Replicated TlsBootstrapCert setting
-* `user_data_tls_bootstrap_key_name` - Value to be provided for Replicated TlsBootstrapKey setting
+* `user_data_use_kv_secrets` - If 1, then TFE will retrieve the secrets named in the tfe_bootstrap_cert_secret_name and tfe_bootstrap_cert_key_name variables during its install script. If 0, the retrieval will be skipped.
+* `user_data_tfe_bootstrap_cert_name` - Value to be provided for Replicated TlsBootstrapCert setting
+* `user_data_tfe_bootstrap_key_name` - Value to be provided for Replicated TlsBootstrapKey setting
 
 ## Example usage
 
@@ -57,9 +56,9 @@ module "user_data" {
 
   # Certificates
   user_data_ca                      = var.user_data_ca == null ? "" : var.user_data_ca
-  user_data_use_tls_kv_secrets      = var.tls_bootstrap_cert_secret_name == null ? "0" : "1"
-  user_data_tls_bootstrap_cert_name = local.tls_bootstrap_cert_name
-  user_data_tls_bootstrap_key_name  = local.tls_bootstrap_key_name
+  user_data_use_kv_secrets      = var.tfe_bootstrap_cert_secret_name == null ? "0" : "1"
+  user_data_tfe_bootstrap_cert_name = local.tfe_bootstrap_cert_name
+  user_data_tfe_bootstrap_key_name  = local.tfe_bootstrap_key_name
 
   # Proxy
   key_vault_name         = var.key_vault_name

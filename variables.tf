@@ -455,6 +455,15 @@ variable "user_data_iact_subnet_list" {
   type        = list(string)
 }
 
+variable "user_data_trusted_proxies" {
+  default     = []
+  description = <<-EOD
+  A list of IP address ranges which will be considered safe to ignore when evaluating the IP addresses of requests like
+  those made to the IACT endpoint.
+  EOD
+  type        = list(string)
+}
+
 # TLS Certificates
 # ----------------
 variable "certificate_name" {
@@ -463,33 +472,34 @@ variable "certificate_name" {
   description = "(Required) The value should match an existing Key Vault Certificate residing in the Key Vault specified via `key_vault_name`."
 }
 
-variable "tls_certificate_name" {
-  type        = string
+variable "trusted_root_certificate_name" {
   default     = null
+  type        = string
   description = <<-EOD
-  (Required) Azure Key Vault Certificate name for certificate provided for Replicated TlsBootstrapCert setting. This
-  can be the same certificate name as provided for the certificate_name variable.
+  (Optional) Name of the backend root certificate for Application Gateway to trust. If the backend
+  certificate is issued by a well-known certificate authority (CA), you do not need to provide a
+  trusted_root_certificate.
   EOD
 }
 
-variable "tls_bootstrap_cert_secret_name" {
+variable "tfe_bootstrap_cert_secret_name" {
   type        = string
   description = <<-EOD
   (optional) Value to be provided for Replicated's TlsBootstrapCert setting. If a trusted Azure Key Vault 
-  Certificate is used as the TlsBootstrapCert via the tls_certificate_name variable (this can be the same
-  certificate as certificate_name), then tls_bootstrap_cert_secret_name and tls_bootstrap_key_secret_name
+  Certificate is used as the TlsBootstrapCert via the certificate_name variable (this can be the same
+  certificate as certificate_name), then tfe_bootstrap_cert_secret_name and tfe_bootstrap_key_secret_name
   are not needed. However, if you want to use a different certificate or if you need to add an intermediate,
   then using this variable will allow the TFE instance(s) to pull that secret from Key Vault and use it in
   TFE.
   EOD
 }
 
-variable "tls_bootstrap_key_secret_name" {
+variable "tfe_bootstrap_key_secret_name" {
   type        = string
   description = <<-EOD
   (optional) Value to be provided for Replicated's TlsBootstrapKey setting. If a trusted Azure Key Vault 
-  Certificate is used as the TlsBootstrapKey via the tls_certificate_name variable (this can be the same
-  certificate as certificate_name), then tls_bootstrap_cert_secret_name and tls_bootstrap_key_secret_name
+  Certificate is used as the TlsBootstrapKey via the certificate_name variable (this can be the same
+  certificate as certificate_name), then tfe_bootstrap_cert_secret_name and tfe_bootstrap_key_secret_name
   are not needed. However, if you want to use a different certificate/key pair, then using this variable
   will allow the TFE instance(s) to pull that secret from Key Vault and use it in TFE.
   EOD

@@ -17,7 +17,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
 
   secret {
     certificate {
-      url = var.ca_certificate_key_vault_secret_id
+      url = var.certificate_key_vault_secret_id
     }
     key_vault_id = var.key_vault_id
   }

@@ -21,10 +21,10 @@ create_tfe_config() {
 
 		# Obtain access token for Azure Key Vault to obtain base64 encoded TLS cert and key secrets
 		access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
-		tlscert=$(curl --noproxy '*' https://${key_vault_name}.vault.azure.net/secrets/${tls_bootstrap_cert_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
-		tlskey=$(curl --noproxy '*' https://${key_vault_name}.vault.azure.net/secrets/${tls_bootstrap_key_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
-		echo $tlscert | base64 -d > /var/lib/waagent/${tls_bootstrap_cert_name}.crt
-		echo $tlskey | base64 -d > /var/lib/waagent/${tls_bootstrap_key_name}.prv
+		tlscert=$(curl --noproxy '*' https://${key_vault_name}.vault.azure.net/secrets/${tfe_bootstrap_cert_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
+		tlskey=$(curl --noproxy '*' https://${key_vault_name}.vault.azure.net/secrets/${tfe_bootstrap_key_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
+		echo $tlscert | base64 -d > /var/lib/waagent/${tfe_bootstrap_cert_name}.crt
+		echo $tlskey | base64 -d > /var/lib/waagent/${tfe_bootstrap_key_name}.prv
 	fi
 }
 
