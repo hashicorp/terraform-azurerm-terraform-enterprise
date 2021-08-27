@@ -65,16 +65,9 @@ data "azurerm_key_vault_certificate" "certificate" {
   key_vault_id = data.azurerm_key_vault.kv.id
 }
 
-data "azurerm_key_vault_certificate" "trusted_root_certificate" {
+data "azurerm_key_vault_secret" "trusted_root_certificate" {
   count = var.trusted_root_certificate_name == null ? 0 : 1
 
   name         = var.trusted_root_certificate_name
-  key_vault_id = data.azurerm_key_vault.kv.id
-}
-
-data "azurerm_key_vault_certificate_data" "trusted_root_certificate" {
-  count = var.trusted_root_certificate_name == null ? 0 : 1
-
-  name         = data.azurerm_key_vault_certificate.trusted_root_certificate[0].name
   key_vault_id = data.azurerm_key_vault.kv.id
 }

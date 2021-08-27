@@ -40,11 +40,6 @@ output "certificate_key_vault_secret_id" {
 }
 
 output "trusted_root_certificate" {
-  value       = var.trusted_root_certificate_name == null ? "" : data.azurerm_key_vault_certificate.trusted_root_certificate[0]
-  description = "Name of the certificate provided for the Application Gateway's trusted root certificate"
-}
-
-output "trusted_root_certificate_data" {
-  value       = var.trusted_root_certificate_name == null ? "" : data.azurerm_key_vault_certificate_data.trusted_root_certificate[0]
-  description = "Data of the certificate provided for the Application Gateway's trusted root certificate"
+  value       = var.trusted_root_certificate_name == null ? "" : data.azurerm_key_vault_secret.trusted_root_certificate[0].value
+  description = "PEM value of the certificate provided for the Application Gateway's trusted root certificate"
 }

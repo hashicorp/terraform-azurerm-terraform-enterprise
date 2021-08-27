@@ -104,7 +104,10 @@ variable "tfe_license_secret_name" {
 
 variable "user_data_ca" {
   type        = string
-  description = "(optional) Value to be provided for TFE ca_cert setting"
+  description = <<-EOD
+  (Optional) Value to be provided for TFE ca_cert setting. A custom Certificate Authority
+  certificate bundle to be used for authenticating connections with Terraform Enterprise.
+  EOD
 }
 
 variable "user_data_use_kv_secrets" {
