@@ -56,7 +56,7 @@ module "user_data" {
 
   # Certificates
   user_data_ca                      = var.user_data_ca == null ? "" : var.user_data_ca
-  user_data_use_kv_secrets      = var.tfe_bootstrap_cert_secret_name == null ? "0" : "1"
+  user_data_use_kv_secrets          = var.tfe_bootstrap_cert_secret_name == null ? "0" : "1"
   user_data_tfe_bootstrap_cert_name = local.tfe_bootstrap_cert_name
   user_data_tfe_bootstrap_key_name  = local.tfe_bootstrap_key_name
 
