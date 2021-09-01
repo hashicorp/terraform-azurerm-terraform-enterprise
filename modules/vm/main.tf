@@ -69,7 +69,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
       dynamic "public_ip_address" {
         for_each = var.load_balancer_public == false ? [1] : []
         content {
-          name              = "${var.friendly_name_prefix}-public-ip"
+          name = "${var.friendly_name_prefix}-public-ip"
         }
       }
     }
