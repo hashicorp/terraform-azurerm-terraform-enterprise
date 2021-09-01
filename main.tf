@@ -8,7 +8,7 @@ locals {
 
   # DNS
   # ---
-  tfe_subdomain     = var.tfe_subdomain == null ? substr(random_pet.tfe_subdomain[0].id, 0, 24) : var.tfe_subdomain
+  tfe_subdomain     = var.tfe_subdomain == null ? random_pet.tfe_subdomain[0].id : var.tfe_subdomain
   dns_internal_fqdn = var.domain_name == null ? azurerm_public_ip.tfe_pip.fqdn : "${local.tfe_subdomain}.${var.domain_name}"
   fqdn              = var.dns_external_fqdn == null ? local.dns_internal_fqdn : var.dns_external_fqdn
 
@@ -52,8 +52,8 @@ module "resource_groups" {
 resource "random_pet" "tfe_subdomain" {
   count = var.tfe_subdomain == null ? 1 : 0
 
-  length    = 3
-  separator = ""
+  length    = 2
+  separator = "-"
 }
 
 # Public IP
