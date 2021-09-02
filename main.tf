@@ -309,7 +309,7 @@ module "load_balancer" {
   certificate_name                = module.service_accounts.certificate_name
   certificate_key_vault_secret_id = module.service_accounts.certificate_key_vault_secret_id
   trusted_root_certificate_name   = var.load_balancer_type == "application_gateway" && var.trusted_root_certificate_name != null ? var.trusted_root_certificate_name : null
-  trusted_root_certificate_data   = var.load_balancer_type == "application_gateway" && var.trusted_root_certificate_name != null ? base64encode(module.service_accounts.trusted_root_certificate[0]) : null
+  trusted_root_certificate_data   = var.load_balancer_type == "application_gateway" && var.trusted_root_certificate_name != null ? base64encode(module.service_accounts.trusted_root_certificate) : null
 
   # Network
   network_frontend_subnet_id = local.network_frontend_subnet_id
