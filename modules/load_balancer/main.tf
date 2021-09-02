@@ -96,6 +96,19 @@ resource "azurerm_application_gateway" "tfe_ag" {
     capacity = var.load_balancer_sku_capacity
   }
 
+  rewrite_rule_set {
+    name = "${var.friendly_name_prefix}-ag-rewrite_rules"
+
+    rewrite_rule {
+      name = "remove_port_from_headers"
+      rule_sequence = 100
+      request_header_configuration {
+        header_name = "X-Forwarded-For"
+        header_value = "{add_x_forwarded_for_proxy}"
+      }
+    }
+  }
+
   dynamic "waf_configuration" {
     for_each = var.load_balancer_sku_name == "WAF_v2" ? [1] : []
 
