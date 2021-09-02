@@ -100,10 +100,10 @@ resource "azurerm_application_gateway" "tfe_ag" {
     name = "${var.friendly_name_prefix}-ag-rewrite_rules"
 
     rewrite_rule {
-      name = "remove_port_from_headers"
+      name          = "remove_port_from_headers"
       rule_sequence = 100
       request_header_configuration {
-        header_name = "X-Forwarded-For"
+        header_name  = "X-Forwarded-For"
         header_value = "{add_x_forwarded_for_proxy}"
       }
     }
