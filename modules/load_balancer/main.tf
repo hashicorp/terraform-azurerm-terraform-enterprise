@@ -13,6 +13,7 @@ locals {
   frontend_ip_configuration_name_private = "tfe-ag-frontend-ip-config-priv"
   frontend_ip_configuration_name         = var.load_balancer_public == true ? local.frontend_ip_configuration_name_public : local.frontend_ip_configuration_name_private
   backend_address_pool_name              = "tfe-ag-backend-address-pool"
+  rewrite_rule_set_name                  = "tfe-ag-rewrite_rules"
 
   # TFE Application Configuration
   app_frontend_port_name          = "tfe-ag-frontend-port-app"
@@ -97,14 +98,14 @@ resource "azurerm_application_gateway" "tfe_ag" {
   }
 
   rewrite_rule_set {
-    name = "${var.friendly_name_prefix}-ag-rewrite_rules"
+    name = local.rewrite_rule_set_name
 
     rewrite_rule {
       name          = "remove_port_from_headers"
       rule_sequence = 100
       request_header_configuration {
         header_name  = "X-Forwarded-For"
-        header_value = "{add_x_forwarded_for_proxy}"
+        header_value = "{var_add_x_forwarded_for_proxy}"
       }
     }
   }
@@ -219,6 +220,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
       http_listener_name         = local.app_frontend_http_listener_name
       backend_address_pool_name  = local.backend_address_pool_name
       backend_http_settings_name = local.app_backend_http_settings_name
+      rewrite_rule_set_name      = local.rewrite_rule_set_name
     }
   }
 
