@@ -55,14 +55,10 @@ jobs:
           repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           body: |
-            :computer: @hc-team-tfe
+            ${{ format('### {0} Terraform Public Active/Active Destruction Report', job.status == 'success' && ':white_check_mark:' || ':x:') }}
 
-            ### Terraform Public Active/Active Destruction Report :newspaper:
+            ${{ format(':link: [Action Summary Page]({0})', steps.vars.outputs.run-url) }}
 
-            - `${{ steps.init.outcome }}` Terraform Initialization :gear: 
+            ${{ format('- {0} Terraform Init', steps.init.outcome == 'success' && ':white_check_mark:' || ':x:') }}
 
-            - `${{ steps.destroy.outcome }}` Terraform Destroy :fire:
-
-            :link: [Action Summary Page][1]
-
-            [1]: ${{ steps.vars.outputs.run-url }}
+            ${{ format('- {0} Terraform Destroy', steps.destroy.outcome == 'success' && ':white_check_mark:' || ':x:') }}
