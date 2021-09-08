@@ -1,9 +1,9 @@
 module "tfe" {
   source = "../../"
 
-  location             = var.location
-  friendly_name_prefix = var.friendly_name_prefix
-  tfe_license_filepath = "${path.module}/files/ptfe-license.rli"
+  location                = var.location
+  friendly_name_prefix    = var.friendly_name_prefix
+  tfe_license_secret_name = var.tfe_license_secret_name
 
   resource_group_name     = var.resource_group_name
   resource_group_name_dns = var.resource_group_name_dns

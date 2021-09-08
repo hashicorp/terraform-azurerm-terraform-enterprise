@@ -12,7 +12,6 @@ installation with the following traits.
 - no proxy server
 - no Redis authentication
 - no Redis encryption in transit
-- a self-signed certificate
 
 ## Pre-requisites
 
@@ -20,15 +19,8 @@ This test assumes the following resources exist.
 
 - a DNS zone
 - an Azure Key Vault in which the following are stored:
-  - TFE CA certificate pem (secret)
-  - TFE CA certificate key (secret)
-  - proxy CA certificate key (secret)
-  - proxy CA certificate private key (secret)
-  - proxy SSH public key (secret)
-  - proxy SSH private key (secret)
-  - bastion SSH public key (secret)
-  - bastion SSH private key (secret)
   - Base64 encoded TFE license (secret)
+  - TFE CA certificate (certificate)
 
 ## How this test is used
 

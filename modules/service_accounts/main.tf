@@ -4,6 +4,9 @@ locals {
   storage_account_primary_blob_connection_string = var.storage_account_primary_blob_connection_string == null ? azurerm_storage_account.tfe_storage_account[0].primary_blob_connection_string : var.storage_account_primary_blob_connection_string
 }
 
+
+# Storage Account
+# ---------------
 resource "random_pet" "random_pet_tfe_storage_account_name" {
   count = var.storage_account_name == null ? 1 : 0
 
@@ -29,8 +32,6 @@ resource "azurerm_storage_account" "tfe_storage_account" {
 data "azurerm_client_config" "current" {}
 
 data "azurerm_key_vault" "kv" {
-  count = var.key_vault_name == null ? 0 : 1
-
   name                = var.key_vault_name
   resource_group_name = var.resource_group_name_kv
 }
@@ -44,9 +45,7 @@ resource "azurerm_user_assigned_identity" "vmss" {
 }
 
 resource "azurerm_key_vault_access_policy" "tfe_vmss_kv_access" {
-  count = var.key_vault_name == null ? 0 : 1
-
-  key_vault_id = data.azurerm_key_vault.kv[0].id
+  key_vault_id = data.azurerm_key_vault.kv.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = azurerm_user_assigned_identity.vmss.principal_id
 
@@ -59,4 +58,16 @@ resource "azurerm_key_vault_access_policy" "tfe_vmss_kv_access" {
     "get",
     "list"
   ]
+}
+
+data "azurerm_key_vault_certificate" "certificate" {
+  name         = var.certificate_name
+  key_vault_id = data.azurerm_key_vault.kv.id
+}
+
+data "azurerm_key_vault_secret" "trusted_root_certificate" {
+  count = var.trusted_root_certificate_name == null ? 0 : 1
+
+  name         = var.trusted_root_certificate_name
+  key_vault_id = data.azurerm_key_vault.kv.id
 }

@@ -65,7 +65,7 @@ variable "resource_group_name" {
 variable "tenant_id" {
   default     = null
   type        = string
-  description = "The Azure Active Directory tenant ID that should be used for authenticating requests to the key vault"
+  description = "The Azure Active Directory tenant ID that should be used for authenticating requests to the Key Vault"
 }
 
 variable "resource_group_name_dns" {
@@ -88,9 +88,22 @@ variable "certificate_key_vault_secret_id" {
   description = "Secret ID of Azure Key Vault Certificate for Application Gateway"
 }
 
-variable "trusted_root_certificate" {
+variable "trusted_root_certificate_name" {
   type        = string
-  description = "Backend root certificate for Application Gateway to trust"
+  description = <<-EOD
+  (Optional) Name of the backend root certificate for Application Gateway to trust. If the backend
+  certificate is issued by a well-known certificate authority (CA), you do not need to provide a
+  trusted_root_certificate.
+  EOD
+}
+
+variable "trusted_root_certificate_data" {
+  type        = string
+  description = <<-EOD
+  (Optional) Base64 encoded PEM formatted backend root certificate data for Application Gateway to
+  trust. If the back-end certificate is issued by a well-known certificate authority (CA), you do
+  do not need to provide a trusted_root_certificate.
+  EOD
 }
 
 # Load balancer

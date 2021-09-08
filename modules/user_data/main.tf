@@ -6,8 +6,8 @@ locals {
     ImportSettingsFrom           = "/etc/ptfe-settings.json"
     LicenseFileLocation          = "/etc/${var.user_data_tfe_license_name}"
     TlsBootstrapHostname         = var.fqdn
-    TlsBootstrapCert             = "/etc/tfe/tls.pem"
-    TlsBootstrapKey              = "/etc/tfe/tls.key"
+    TlsBootstrapCert             = "/var/lib/waagent/${var.user_data_tfe_bootstrap_cert_name}.crt"
+    TlsBootstrapKey              = "/var/lib/waagent/${var.user_data_tfe_bootstrap_key_name}.prv"
     TlsBootstrapType             = "server-path"
   }
 
@@ -43,10 +43,9 @@ locals {
 
       tfe_license_name        = var.user_data_tfe_license_name
       tfe_license_secret_name = var.tfe_license_secret_name
-
-      # Certificate information
-      user_data_cert = base64encode(var.user_data_cert)
-      user_data_key  = base64encode(var.user_data_cert_key)
+      use_tls_kv_secrets      = var.user_data_use_kv_secrets
+      tfe_bootstrap_cert_name = var.user_data_tfe_bootstrap_cert_name
+      tfe_bootstrap_key_name  = var.user_data_tfe_bootstrap_key_name
 
       # Proxy information
       key_vault_name         = var.key_vault_name
@@ -146,6 +145,10 @@ locals {
       value = ""
     }
 
+    iact_subnet_list = {
+      value = join(",", var.user_data_iact_subnet_list)
+    }
+
     install_id = {
       value = random_id.install_id.hex
     }
@@ -164,6 +167,10 @@ locals {
 
     root_secret = {
       value = random_id.root_secret.hex
+    }
+
+    trusted_proxies = {
+      value = join(",", var.user_data_trusted_proxies)
     }
 
     user_token = {

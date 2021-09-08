@@ -25,9 +25,11 @@ locals {
   # -----
   redis_port = var.redis_enable_non_ssl_port == true ? "6379" : "6380"
 
-  # Key Vault
+  # User Data
   # ---------
-  key_vault_name = module.key_vault.key_vault_name
+  tfe_bootstrap_cert_name = var.tfe_bootstrap_cert_secret_name == null ? upper(module.service_accounts.certificate.thumbprint) : var.tfe_bootstrap_cert_secret_name
+  tfe_bootstrap_key_name  = var.tfe_bootstrap_key_secret_name == null ? upper(module.service_accounts.certificate.thumbprint) : var.tfe_bootstrap_key_secret_name
+  trusted_proxies         = []
 }
 
 # Azure resource groups
@@ -77,33 +79,8 @@ resource "tls_private_key" "tfe_ssh" {
   rsa_bits  = 4096
 }
 
-# TLS for backend
-# ---------------
-module "key_vault" {
-  source = "./modules/key_vault"
-
-  friendly_name_prefix   = var.friendly_name_prefix
-  resource_group_name_kv = module.resource_groups.resource_group_name_kv
-  location               = var.location
-
-  tenant_id = data.azurerm_client_config.current.tenant_id
-  object_id = data.azurerm_client_config.current.object_id
-
-  fqdn                    = local.fqdn
-  key_vault_name          = var.key_vault_name
-  certificate_name        = var.certificate_name
-  user_data_ca            = var.user_data_ca
-  user_data_cert          = var.user_data_cert
-  user_data_cert_key      = var.user_data_cert_key
-  load_balancer_type      = var.load_balancer_type
-  tfe_license_filepath    = var.tfe_license_filepath
-  tfe_license_secret_name = var.tfe_license_secret_name
-
-  tags = var.tags
-}
-
-# Azure storage account
-# ---------------------
+# Azure service accounts
+# ----------------------
 module "service_accounts" {
   source = "./modules/service_accounts"
 
@@ -111,17 +88,18 @@ module "service_accounts" {
   resource_group_name  = module.resource_groups.resource_group_name
   location             = var.location
 
-  storage_account_tier             = var.storage_account_tier
-  storage_account_replication_type = var.storage_account_replication_type
-
-  # Key Vault
-  resource_group_name_kv = module.resource_groups.resource_group_name_kv
-  key_vault_name         = local.key_vault_name
-
   # Application storage
   storage_account_name                           = var.storage_account_name
   storage_account_key                            = var.storage_account_key
   storage_account_primary_blob_connection_string = var.storage_account_primary_blob_connection_string
+  storage_account_tier                           = var.storage_account_tier
+  storage_account_replication_type               = var.storage_account_replication_type
+
+  # Key Vault
+  resource_group_name_kv        = module.resource_groups.resource_group_name_kv
+  key_vault_name                = var.key_vault_name
+  certificate_name              = var.certificate_name
+  trusted_root_certificate_name = var.trusted_root_certificate_name
 
   tags = var.tags
 
@@ -258,14 +236,20 @@ module "user_data" {
   user_data_tfe_license_name = var.tfe_license_name
   user_data_release_sequence = var.user_data_release_sequence
   tfe_license_secret_name    = var.tfe_license_secret_name
+  user_data_iact_subnet_list = var.user_data_iact_subnet_list
+  user_data_trusted_proxies = concat(
+    var.user_data_trusted_proxies,
+    local.trusted_proxies
+  )
 
   # Certificates
-  user_data_ca       = var.user_data_ca == null ? replace(module.key_vault.tls_ca_cert, "\n", "\n") : var.user_data_ca
-  user_data_cert     = var.user_data_cert == null ? module.key_vault.tls_cert : var.user_data_cert
-  user_data_cert_key = var.user_data_cert_key == null ? module.key_vault.tls_key : var.user_data_cert_key
+  user_data_ca                      = var.user_data_ca == null ? "" : var.user_data_ca
+  user_data_use_kv_secrets          = var.tfe_bootstrap_cert_secret_name == null ? "0" : "1"
+  user_data_tfe_bootstrap_cert_name = local.tfe_bootstrap_cert_name
+  user_data_tfe_bootstrap_key_name  = local.tfe_bootstrap_key_name
 
   # Proxy
-  key_vault_name         = local.key_vault_name
+  key_vault_name         = var.key_vault_name
   proxy_ip               = var.proxy_ip
   proxy_port             = var.proxy_port
   proxy_cert_name        = var.proxy_cert_name
@@ -275,7 +259,6 @@ module "user_data" {
   depends_on = [
     module.service_accounts,
     module.object_storage,
-    module.key_vault,
     module.network
   ]
 }
@@ -322,10 +305,11 @@ module "load_balancer" {
   tenant_id               = data.azurerm_client_config.current.tenant_id
 
   # Secrets
-  key_vault_id                    = var.load_balancer_type == "application_gateway" ? module.key_vault.key_vault_id : ""
-  certificate_name                = var.load_balancer_type == "application_gateway" ? module.key_vault.certificate_name : ""
-  certificate_key_vault_secret_id = var.load_balancer_type == "application_gateway" ? module.key_vault.certificate_key_vault_secret_id : ""
-  trusted_root_certificate        = var.load_balancer_type == "application_gateway" && var.user_data_ca == null ? module.key_vault.tls_ca_cert : var.user_data_ca
+  key_vault_id                    = module.service_accounts.key_vault_id
+  certificate_name                = module.service_accounts.certificate.name
+  certificate_key_vault_secret_id = module.service_accounts.certificate.secret_id
+  trusted_root_certificate_name   = var.load_balancer_type == "application_gateway" && var.trusted_root_certificate_name != null ? var.trusted_root_certificate_name : null
+  trusted_root_certificate_data   = var.load_balancer_type == "application_gateway" && var.trusted_root_certificate_name != null ? base64encode(module.service_accounts.trusted_root_certificate) : null
 
   # Network
   network_frontend_subnet_id = local.network_frontend_subnet_id
@@ -344,7 +328,6 @@ module "load_balancer" {
 
   depends_on = [
     module.resource_groups,
-    module.key_vault,
     module.network
   ]
 }
@@ -373,6 +356,9 @@ module "vm" {
   load_balancer_type       = var.load_balancer_type
   load_balancer_backend_id = module.load_balancer.load_balancer_backend_id
   load_balancer_public     = var.load_balancer_public
+
+  key_vault_id                    = module.service_accounts.key_vault_id
+  certificate_key_vault_secret_id = module.service_accounts.certificate.secret_id
 
   tags = var.tags
 

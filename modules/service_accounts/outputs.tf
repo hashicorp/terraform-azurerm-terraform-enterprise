@@ -18,3 +18,23 @@ output "vmss_user_assigned_identity" {
 
   description = "The user assigned identity to be assigned to the virtual machine scale set"
 }
+
+output "key_vault_name" {
+  value       = data.azurerm_key_vault.kv.name
+  description = "The name of the existing Azure Key Vault that houses the bootstrap secrets"
+}
+
+output "key_vault_id" {
+  value       = data.azurerm_key_vault.kv.id
+  description = "The resource ID of the existing Azure Key Vault that houses the bootstrap secrets"
+}
+
+output "certificate" {
+  value       = data.azurerm_key_vault_certificate.certificate
+  description = "The existing certificate in the Key Vault"
+}
+
+output "trusted_root_certificate" {
+  value       = var.trusted_root_certificate_name == null ? "" : data.azurerm_key_vault_secret.trusted_root_certificate[0].value
+  description = "PEM value of the certificate provided for the Application Gateway's trusted root certificate"
+}

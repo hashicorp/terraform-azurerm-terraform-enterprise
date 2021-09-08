@@ -17,8 +17,8 @@ variable "resource_group_name" {
   description = "Azure resource group name"
 }
 
-# Service Accounts
-# ----------------
+# Storage Account
+# ---------------
 variable "storage_account_tier" {
   default     = "Standard"
   type        = string
@@ -56,6 +56,22 @@ variable "resource_group_name_kv" {
 variable "key_vault_name" {
   type        = string
   description = "Azure Key Vault name containing all required secrets and certificates"
+}
+
+# Certificate
+# -----------
+variable "certificate_name" {
+  type        = string
+  description = "(Required) Azure Key Vault Certificate name for Application Gateway"
+}
+
+variable "trusted_root_certificate_name" {
+  type        = string
+  description = <<-EOD
+  (Optional) Name of the backend root certificate for Application Gateway to trust. If the backend
+  certificate is issued by a well-known certificate authority (CA), you do not need to provide a
+  trusted_root_certificate.
+  EOD
 }
 
 # Tagging

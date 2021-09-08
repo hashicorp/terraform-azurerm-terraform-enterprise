@@ -30,15 +30,15 @@ variable "key_vault_name" {
   description = "Azure Key Vault name containing all required secrets and certificates"
 }
 
-variable "ca_pem_key_secret_name" {
-  type        = string
-  description = "Name of the secret under which the DNS wildcard key is stored in the Azure Key Vault"
-}
+# variable "ca_pem_key_secret_name" {
+#   type        = string
+#   description = "Name of the secret under which the DNS wildcard key is stored in the Azure Key Vault"
+# }
 
-variable "ca_pem_certificate_secret_name" {
-  type        = string
-  description = "Name of the secret under which the DNS wildcard chained cert is stored in the Azure Key Vault"
-}
+# variable "ca_pem_certificate_secret_name" {
+#   type        = string
+#   description = "Name of the secret under which the DNS wildcard chained cert is stored in the Azure Key Vault"
+# }
 
 variable "tfe_license_secret_name" {
   type        = string
@@ -76,4 +76,15 @@ variable "bastion_public_key_secret_name" {
 variable "network_allow_range" {
   type        = string
   description = "Network range to allow access to bastion vm"
+}
+
+# User Data
+# ---------
+variable "iact_subnet_list" {
+  default     = []
+  description = <<-EOD
+  A list of IP address ranges which will be authorized to access the IACT. The ranges must be expressed
+  in CIDR notation.
+  EOD
+  type        = list(string)
 }

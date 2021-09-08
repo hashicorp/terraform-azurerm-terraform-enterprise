@@ -8,11 +8,12 @@ locals {
   # Application Gateway
   # -------------------
   gateway_ip_configuration_name          = "tfe-ag-gateway-ip-config"
-  trusted_root_certificate_name          = "${var.friendly_name_prefix}-trusted-root-cert"
+  trusted_root_certificate_name          = var.trusted_root_certificate_name == null ? [] : [var.trusted_root_certificate_name]
   frontend_ip_configuration_name_public  = "tfe-ag-frontend-ip-config-pub"
   frontend_ip_configuration_name_private = "tfe-ag-frontend-ip-config-priv"
   frontend_ip_configuration_name         = var.load_balancer_public == true ? local.frontend_ip_configuration_name_public : local.frontend_ip_configuration_name_private
   backend_address_pool_name              = "tfe-ag-backend-address-pool"
+  rewrite_rule_set_name                  = "tfe-ag-rewrite_rules"
 
   # TFE Application Configuration
   app_frontend_port_name          = "tfe-ag-frontend-port-app"
@@ -96,6 +97,19 @@ resource "azurerm_application_gateway" "tfe_ag" {
     capacity = var.load_balancer_sku_capacity
   }
 
+  rewrite_rule_set {
+    name = local.rewrite_rule_set_name
+
+    rewrite_rule {
+      name          = "remove_port_from_headers"
+      rule_sequence = 100
+      request_header_configuration {
+        header_name  = "X-Forwarded-For"
+        header_value = "{var_add_x_forwarded_for_proxy}"
+      }
+    }
+  }
+
   dynamic "waf_configuration" {
     for_each = var.load_balancer_sku_name == "WAF_v2" ? [1] : []
 
@@ -124,15 +138,23 @@ resource "azurerm_application_gateway" "tfe_ag" {
     key_vault_secret_id = var.certificate_key_vault_secret_id
   }
 
-  trusted_root_certificate {
-    name = local.trusted_root_certificate_name
-    data = var.trusted_root_certificate
+  dynamic "trusted_root_certificate" {
+    for_each = var.trusted_root_certificate_name == null ? [] : [1]
+
+    content {
+      name = local.trusted_root_certificate_name[0]
+      data = var.trusted_root_certificate_data
+    }
   }
 
   # Public front end configuration
-  frontend_ip_configuration {
-    name                 = local.frontend_ip_configuration_name_public
-    public_ip_address_id = var.tfe_pip_id
+  dynamic "frontend_ip_configuration" {
+    for_each = var.load_balancer_public == true ? [1] : []
+
+    content {
+      name                 = local.frontend_ip_configuration_name_public
+      public_ip_address_id = var.tfe_pip_id
+    }
   }
 
   # Private front end configuration
@@ -152,37 +174,54 @@ resource "azurerm_application_gateway" "tfe_ag" {
   }
 
   # TFE Application
-  frontend_port {
-    name = local.app_frontend_port_name
-    port = 443
+  dynamic "frontend_port" {
+    for_each = var.active_active == true ? [1] : []
+
+    content {
+      name = local.app_frontend_port_name
+      port = 443
+    }
   }
 
-  http_listener {
-    name                           = local.app_frontend_http_listener_name
-    frontend_ip_configuration_name = local.frontend_ip_configuration_name
-    frontend_port_name             = local.app_frontend_port_name
-    protocol                       = "Https"
-    ssl_certificate_name           = var.certificate_name
+  dynamic "http_listener" {
+    for_each = var.active_active == true ? [1] : []
+
+    content {
+      name                           = local.app_frontend_http_listener_name
+      frontend_ip_configuration_name = local.frontend_ip_configuration_name
+      frontend_port_name             = local.app_frontend_port_name
+      protocol                       = "Https"
+      ssl_certificate_name           = var.certificate_name
+    }
   }
 
-  backend_http_settings {
-    name                  = local.app_backend_http_settings_name
-    cookie_based_affinity = "Disabled"
-    path                  = ""
-    protocol              = "Https"
-    port                  = 443
-    request_timeout       = 60
-    host_name             = var.fqdn
+  dynamic "backend_http_settings" {
+    for_each = var.active_active == true ? [1] : []
 
-    trusted_root_certificate_names = [local.trusted_root_certificate_name]
+    content {
+      name                  = local.app_backend_http_settings_name
+      cookie_based_affinity = "Disabled"
+      path                  = ""
+      protocol              = "Https"
+      port                  = 443
+      request_timeout       = 60
+      host_name             = var.fqdn
+
+      trusted_root_certificate_names = local.trusted_root_certificate_name
+    }
   }
 
-  request_routing_rule {
-    name                       = local.app_request_routing_rule_name
-    rule_type                  = "Basic"
-    http_listener_name         = local.app_frontend_http_listener_name
-    backend_address_pool_name  = local.backend_address_pool_name
-    backend_http_settings_name = local.app_backend_http_settings_name
+  dynamic "request_routing_rule" {
+    for_each = var.active_active == true ? [1] : []
+
+    content {
+      name                       = local.app_request_routing_rule_name
+      rule_type                  = "Basic"
+      http_listener_name         = local.app_frontend_http_listener_name
+      backend_address_pool_name  = local.backend_address_pool_name
+      backend_http_settings_name = local.app_backend_http_settings_name
+      rewrite_rule_set_name      = local.rewrite_rule_set_name
+    }
   }
 
   # TFE Console
@@ -219,7 +258,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
       request_timeout       = 60
       host_name             = var.fqdn
 
-      trusted_root_certificate_names = [local.trusted_root_certificate_name]
+      trusted_root_certificate_names = local.trusted_root_certificate_name
     }
   }
 
@@ -281,9 +320,7 @@ resource "azurerm_lb" "tfe_load_balancer" {
 resource "azurerm_lb_backend_address_pool" "tfe_load_balancer_be" {
   count = var.load_balancer_type == "load_balancer" ? 1 : 0
 
-  name                = "${var.friendly_name_prefix}-lb-be"
-  resource_group_name = var.resource_group_name
-
+  name            = "${var.friendly_name_prefix}-lb-be"
   loadbalancer_id = azurerm_lb.tfe_load_balancer[0].id
 }
 

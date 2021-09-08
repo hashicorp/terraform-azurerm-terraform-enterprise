@@ -12,14 +12,16 @@ module "private_active_active" {
   friendly_name_prefix = local.friendly_name_prefix
   tfe_license_name     = "terraform-azurerm-terraform-enterprise.rli"
 
-  resource_group_name_dns = var.resource_group_name_dns
-  domain_name             = var.domain_name
+  resource_group_name_dns    = var.resource_group_name_dns
+  domain_name                = var.domain_name
+  user_data_iact_subnet_list = var.iact_subnet_list
 
   # Bootstrapping Key Vault
-  resource_group_name_kv  = var.resource_group_name_kv
-  key_vault_name          = local.key_vault_name
-  certificate_name        = var.certificate_name
-  tfe_license_secret_name = var.tfe_license_secret_name
+  resource_group_name_kv        = var.resource_group_name_kv
+  key_vault_name                = local.key_vault_name
+  tfe_license_secret_name       = var.tfe_license_secret_name
+  certificate_name              = var.certificate_name
+  trusted_root_certificate_name = var.certificate_name
 
   # Behind proxy information
   proxy_ip   = azurerm_linux_virtual_machine.proxy.private_ip_address

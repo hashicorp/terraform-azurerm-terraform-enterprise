@@ -12,16 +12,16 @@ module "private_tcp_active_active" {
   friendly_name_prefix = local.friendly_name_prefix
   tfe_license_name     = "terraform-azurerm-terraform-enterprise.rli"
 
-  resource_group_name_dns = var.resource_group_name_dns
-  domain_name             = var.domain_name
+  resource_group_name_dns    = var.resource_group_name_dns
+  domain_name                = var.domain_name
+  user_data_iact_subnet_list = var.iact_subnet_list
 
   # Bootstrapping resources
-  resource_group_name_kv  = var.resource_group_name_kv
-  key_vault_name          = var.key_vault_name
-  user_data_ca            = local.user_data_ca
-  user_data_cert          = local.user_data_cert
-  user_data_cert_key      = local.user_data_cert_key
-  tfe_license_secret_name = var.tfe_license_secret_name
+  resource_group_name_kv        = var.resource_group_name_kv
+  key_vault_name                = var.key_vault_name
+  user_data_ca                  = local.user_data_ca
+  trusted_root_certificate_name = var.certificate_name
+  tfe_license_secret_name       = var.tfe_license_secret_name
 
   tags = local.common_tags
 

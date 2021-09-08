@@ -25,7 +25,7 @@ variable "resource_group_name_dns" {
 
 variable "resource_group_name_kv" {
   type        = string
-  description = "Name of resource group which contains desired key vault"
+  description = "Name of resource group which contains desired Key Vault"
 }
 
 # Tagging

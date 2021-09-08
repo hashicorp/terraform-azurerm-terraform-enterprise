@@ -15,6 +15,13 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
 
   custom_data = var.vm_userdata_script
 
+  secret {
+    certificate {
+      url = var.certificate_key_vault_secret_id
+    }
+    key_vault_id = var.key_vault_id
+  }
+
   identity {
     type = var.vm_identity_type
 
