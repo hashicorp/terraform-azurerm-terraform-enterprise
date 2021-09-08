@@ -27,8 +27,8 @@ locals {
 
   # User Data
   # ---------
-  tfe_bootstrap_cert_name = var.tfe_bootstrap_cert_secret_name == null ? upper(module.service_accounts.certificate[0].thumbprint) : var.tfe_bootstrap_cert_secret_name
-  tfe_bootstrap_key_name  = var.tfe_bootstrap_key_secret_name == null ? upper(module.service_accounts.certificate[0].thumbprint) : var.tfe_bootstrap_key_secret_name
+  tfe_bootstrap_cert_name = var.tfe_bootstrap_cert_secret_name == null ? upper(module.service_accounts.certificate.thumbprint) : var.tfe_bootstrap_cert_secret_name
+  tfe_bootstrap_key_name  = var.tfe_bootstrap_key_secret_name == null ? upper(module.service_accounts.certificate.thumbprint) : var.tfe_bootstrap_key_secret_name
   trusted_proxies         = []
 }
 
