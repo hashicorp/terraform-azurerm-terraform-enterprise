@@ -148,13 +148,9 @@ resource "azurerm_application_gateway" "tfe_ag" {
   }
 
   # Public front end configuration
-  dynamic "frontend_ip_configuration" {
-    for_each = var.load_balancer_public == true ? [1] : []
-
-    content {
-      name                 = local.frontend_ip_configuration_name_public
-      public_ip_address_id = var.tfe_pip_id
-    }
+ frontend_ip_configuration {
+    name                 = local.frontend_ip_configuration_name_public
+    public_ip_address_id = var.tfe_pip_id
   }
 
   # Private front end configuration
