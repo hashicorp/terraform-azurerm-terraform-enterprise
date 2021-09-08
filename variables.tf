@@ -483,6 +483,7 @@ variable "trusted_root_certificate_name" {
 }
 
 variable "tfe_bootstrap_cert_secret_name" {
+  default     = null
   type        = string
   description = <<-EOD
   (Optional) Value to be provided for Replicated's TlsBootstrapCert setting. If a trusted Azure Key Vault 
@@ -494,6 +495,7 @@ variable "tfe_bootstrap_cert_secret_name" {
 }
 
 variable "tfe_bootstrap_key_secret_name" {
+  default     = null
   type        = string
   description = <<-EOD
   (Optional) Value to be provided for Replicated's TlsBootstrapKey setting. If a trusted Azure Key Vault 

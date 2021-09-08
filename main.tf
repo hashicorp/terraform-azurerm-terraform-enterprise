@@ -358,7 +358,7 @@ module "vm" {
   load_balancer_public     = var.load_balancer_public
 
   key_vault_id                    = module.service_accounts.key_vault_id
-  certificate_key_vault_secret_id = module.service_accounts.certificate_key_vault_secret_id
+  certificate_key_vault_secret_id = module.service_accounts.certificate.secret_id
 
   tags = var.tags
 
