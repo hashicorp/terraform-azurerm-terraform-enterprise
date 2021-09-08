@@ -84,7 +84,9 @@ This module is intended to run in an Azure account with minimal preparation, how
 
 ### SSL Certificates
 
-As stated in the [prerequisites](##Pre-requisites), there are a number of variables concerning certificates and secrets. This section hopes to clear up
+As stated in the [prerequisites](##Pre-requisites), there are a number
+of variables concerning certificates and secrets. This section provides 
+additional context on
 the use of each of those variables. 
 
 * All of the certificate and secret resources will expect to use the same key vault.
