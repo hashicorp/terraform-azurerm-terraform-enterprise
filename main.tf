@@ -306,8 +306,8 @@ module "load_balancer" {
 
   # Secrets
   key_vault_id                    = module.service_accounts.key_vault_id
-  certificate_name                = module.service_accounts.certificate_name
-  certificate_key_vault_secret_id = module.service_accounts.certificate_key_vault_secret_id
+  certificate_name                = module.service_accounts.certificate.name
+  certificate_key_vault_secret_id = module.service_accounts.certificate.secret_id
   trusted_root_certificate_name   = var.load_balancer_type == "application_gateway" && var.trusted_root_certificate_name != null ? var.trusted_root_certificate_name : null
   trusted_root_certificate_data   = var.load_balancer_type == "application_gateway" && var.trusted_root_certificate_name != null ? base64encode(module.service_accounts.trusted_root_certificate) : null
 

@@ -29,14 +29,9 @@ output "key_vault_id" {
   description = "The resource ID of the existing Azure Key Vault that houses the bootstrap secrets"
 }
 
-output "certificate_name" {
-  value       = data.azurerm_key_vault_certificate.certificate.name
-  description = "The name of the existing certificate in the Key Vault"
-}
-
-output "certificate_key_vault_secret_id" {
-  value       = data.azurerm_key_vault_certificate.certificate.secret_id
-  description = "The certificate's secret ID (different than resource ID)"
+output "certificate" {
+  value       = data.azurerm_key_vault_certificate.certificate
+  description = "The existing certificate in the Key Vault"
 }
 
 output "trusted_root_certificate" {
