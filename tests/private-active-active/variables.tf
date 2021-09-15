@@ -42,7 +42,7 @@ variable "tfe_license_secret_name" {
 variable "wildcard_chained_certificate_pem_secret_name" {
   type        = string
   description = <<-EOD
-  (optional) Value to be provided for Replicated's TlsBootstrapCert setting. If a trusted Azure Key Vault 
+  Value to be provided for Replicated's TlsBootstrapCert setting. If a trusted Azure Key Vault
   Certificate is used as the TlsBootstrapCert via the certificate_name variable (this can be the same
   certificate as certificate_name), then tfe_bootstrap_cert_secret_name and tfe_bootstrap_key_secret_name
   are not needed. However, if you want to use a different certificate or if you need to add an intermediate,
@@ -54,7 +54,7 @@ variable "wildcard_chained_certificate_pem_secret_name" {
 variable "wildcard_private_key_pem_secret_name" {
   type        = string
   description = <<-EOD
-  (optional) Value to be provided for Replicated's TlsBootstrapKey setting. If a trusted Azure Key Vault 
+  Value to be provided for Replicated's TlsBootstrapKey setting. If a trusted Azure Key Vault
   Certificate is used as the TlsBootstrapKey via the certificate_name variable (this can be the same
   certificate as certificate_name), then tfe_bootstrap_cert_secret_name and tfe_bootstrap_key_secret_name
   are not needed. However, if you want to use a different certificate/key pair, then using this variable
