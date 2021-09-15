@@ -281,7 +281,7 @@ jobs:
             -o 'StrictHostKeyChecking accept-new' \
             -i ./ssh-key.pem \
             -f -N -p 22 -D localhost:5000 \
-            ubuntu@"$INSTANCE_FQDN"
+            bastionuser@"$INSTANCE_FQDN"
 
       - name: Wait For TFE
         id: wait-for-tfe
