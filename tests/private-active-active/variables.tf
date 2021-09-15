@@ -1,7 +1,6 @@
 # General
 # -------
 variable "location" {
-  default     = "East US"
   type        = string
   description = "Azure location name e.g. East US"
 }
