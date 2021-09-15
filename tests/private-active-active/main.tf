@@ -26,7 +26,7 @@ module "private_active_active" {
   proxy_port = local.proxy_port
 
   # Private Active / Active Scenario
-  user_data_iact_subnet_list  = var.iact_subnet_list
+  user_data_iact_subnet_list  = ["${azurerm_linux_virtual_machine.vm_bastion.private_ip_address}/32"]
   vm_node_count               = 2
   vm_sku                      = "Standard_D16as_v4"
   vm_image_id                 = "rhel"
