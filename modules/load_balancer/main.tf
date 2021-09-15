@@ -148,7 +148,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
   }
 
   # Public front end configuration
- frontend_ip_configuration {
+  frontend_ip_configuration {
     name                 = local.frontend_ip_configuration_name_public
     public_ip_address_id = var.tfe_pip_id
   }
