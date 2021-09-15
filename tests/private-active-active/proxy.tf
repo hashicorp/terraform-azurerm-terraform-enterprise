@@ -80,7 +80,7 @@ resource "azurerm_linux_virtual_machine" "proxy" {
 
   admin_ssh_key {
     username   = local.proxy_user
-    public_key = data.azurerm_key_vault_secret.proxy_public_key.value
+    public_key = var.proxy_public_key
   }
 
   tags = local.common_tags
