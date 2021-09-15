@@ -17,7 +17,6 @@ locals {
 
   friendly_name_prefix = random_string.friendly_name.id
   resource_group_name  = module.private_active_active.resource_group_name
-  key_vault_name       = var.key_vault_name
   proxy_user           = "proxyuser"
   proxy_port           = "3128"
 }

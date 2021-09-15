@@ -12,7 +12,7 @@ module "private_active_active" {
 
   # Bootstrapping resources
   resource_group_name_kv         = var.resource_group_name_kv
-  key_vault_name                 = local.key_vault_name
+  key_vault_name                 = var.key_vault_name
   resource_group_name_dns        = var.resource_group_name_dns
   domain_name                    = var.domain_name
   tfe_license_secret_name        = var.tfe_license_secret_name
@@ -26,7 +26,7 @@ module "private_active_active" {
   proxy_port = local.proxy_port
 
   # Private Active / Active Scenario
-  user_data_iact_subnet_list = var.iact_subnet_list
+  user_data_iact_subnet_list  = var.iact_subnet_list
   vm_node_count               = 2
   vm_sku                      = "Standard_D16as_v4"
   vm_image_id                 = "rhel"
