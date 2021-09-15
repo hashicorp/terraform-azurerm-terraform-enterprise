@@ -248,6 +248,11 @@ jobs:
         working-directory: ${{ env.WORK_DIR_PATH }}
         run: terraform validate -no-color
 
+      - name: Write GitHub Actions runner CIDR to Terraform Variables
+        working-directory: ${{ env.WORK_DIR_PATH }}
+        run: |
+          echo "network_allow_range = \"$( dig +short @resolver1.opendns.com myip.opendns.com )/32\"" > github.auto.tfvars
+
       - name: Terraform Apply
         id: apply
         working-directory: ${{ env.WORK_DIR_PATH }}
