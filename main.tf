@@ -29,7 +29,10 @@ locals {
   # ---------
   tfe_bootstrap_cert_name = var.tfe_bootstrap_cert_secret_name == null ? upper(module.service_accounts.certificate.thumbprint) : var.tfe_bootstrap_cert_secret_name
   tfe_bootstrap_key_name  = var.tfe_bootstrap_key_secret_name == null ? upper(module.service_accounts.certificate.thumbprint) : var.tfe_bootstrap_key_secret_name
-  trusted_proxies         = []
+  trusted_proxies = concat(
+    var.user_data_trusted_proxies,
+    [var.network_frontend_subnet_cidr]
+  )
 }
 
 # Azure resource groups
@@ -237,10 +240,7 @@ module "user_data" {
   user_data_release_sequence = var.user_data_release_sequence
   tfe_license_secret_name    = var.tfe_license_secret_name
   user_data_iact_subnet_list = var.user_data_iact_subnet_list
-  user_data_trusted_proxies = concat(
-    var.user_data_trusted_proxies,
-    local.trusted_proxies
-  )
+  user_data_trusted_proxies  = local.trusted_proxies
 
   # Certificates
   user_data_ca                      = var.user_data_ca == null ? "" : var.user_data_ca
