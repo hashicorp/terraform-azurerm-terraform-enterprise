@@ -268,7 +268,7 @@ jobs:
         id: retrieve-bastion-fqdn
         working-directory: ${{ env.WORK_DIR_PATH }}
         run: |
-          terraform output -no-color -raw proxy_instance_name
+          terraform output -no-color -raw bastion_fqdn
 
       - name: Write Private SSH Key
         env:
