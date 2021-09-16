@@ -210,9 +210,8 @@ variable "network_private_ip" {
 }
 
 variable "network_frontend_subnet_cidr" {
-  default     = "10.0.0.0/20"
   type        = string
-  description = "(Optional) Public subnet CIDR range for Bastion"
+  description = "Public subnet CIDR range for Bastion"
 }
 
 # Tagging

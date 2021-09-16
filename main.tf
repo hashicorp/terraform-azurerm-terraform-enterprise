@@ -312,7 +312,8 @@ module "load_balancer" {
   trusted_root_certificate_data   = var.load_balancer_type == "application_gateway" && var.trusted_root_certificate_name != null ? base64encode(module.service_accounts.trusted_root_certificate) : null
 
   # Network
-  network_frontend_subnet_id = local.network_frontend_subnet_id
+  network_frontend_subnet_cidr = var.network_frontend_subnet_cidr
+  network_frontend_subnet_id   = local.network_frontend_subnet_id
 
   # Load balancer
   load_balancer_type                         = var.load_balancer_type
