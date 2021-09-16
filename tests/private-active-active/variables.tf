@@ -75,6 +75,7 @@ variable "bastion_public_key" {
 }
 
 variable "network_allow_range" {
+  default     = null
   type        = string
   description = "Network range to allow access to bastion vm"
 }
