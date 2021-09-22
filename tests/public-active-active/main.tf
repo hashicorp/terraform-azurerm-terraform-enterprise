@@ -20,6 +20,7 @@ module "public_active_active" {
   tfe_bootstrap_cert_secret_name = var.wildcard_chained_certificate_pem_secret_name
   tfe_bootstrap_key_secret_name  = var.wildcard_private_key_pem_secret_name
 
+  # Public Active / Active Scenario
   user_data_iact_subnet_list  = var.iact_subnet_list
   vm_node_count               = 2
   vm_sku                      = "Standard_D4_v3"

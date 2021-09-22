@@ -34,33 +34,28 @@ variable "create_bastion" {
 # Network
 # -------
 variable "network_cidr" {
-  default     = "10.0.0.0/16"
   type        = string
-  description = "(Optional) CIDR range for network"
+  description = "CIDR range for network"
 }
 
 variable "network_private_subnet_cidr" {
-  default     = "10.0.32.0/20"
   type        = string
-  description = "(Optional) Subnet CIDR range for TFE"
+  description = "Subnet CIDR range for TFE"
 }
 
 variable "network_frontend_subnet_cidr" {
-  default     = "10.0.0.0/20"
   type        = string
-  description = "(Optional) Subnet CIDR range for frontend"
+  description = "Subnet CIDR range for frontend"
 }
 
 variable "network_bastion_subnet_cidr" {
-  default     = "10.0.16.0/20"
   type        = string
-  description = "(Optional) Subnet CIDR range for Bastion"
+  description = "Subnet CIDR range for Bastion"
 }
 
 variable "network_redis_subnet_cidr" {
-  default     = "10.0.48.0/20"
   type        = string
-  description = "(Optional) Subnet CIDR range for Redis"
+  description = "Subnet CIDR range for Redis"
 }
 
 variable "network_allow_range" {

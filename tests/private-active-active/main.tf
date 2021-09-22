@@ -8,26 +8,25 @@ resource "random_string" "friendly_name" {
 module "private_active_active" {
   source = "../../"
 
-  location             = var.location
   friendly_name_prefix = local.friendly_name_prefix
-  tfe_license_name     = "terraform-azurerm-terraform-enterprise.rli"
 
-  resource_group_name_dns    = var.resource_group_name_dns
-  domain_name                = var.domain_name
-  user_data_iact_subnet_list = var.iact_subnet_list
+  # Bootstrapping resources
+  resource_group_name_kv         = var.resource_group_name_kv
+  key_vault_name                 = var.key_vault_name
+  resource_group_name_dns        = var.resource_group_name_dns
+  domain_name                    = var.domain_name
+  tfe_license_secret_name        = var.tfe_license_secret_name
+  certificate_name               = var.certificate_name
+  tfe_bootstrap_cert_secret_name = var.wildcard_chained_certificate_pem_secret_name
+  tfe_bootstrap_key_secret_name  = var.wildcard_private_key_pem_secret_name
 
-  # Bootstrapping Key Vault
-  resource_group_name_kv        = var.resource_group_name_kv
-  key_vault_name                = local.key_vault_name
-  tfe_license_secret_name       = var.tfe_license_secret_name
-  certificate_name              = var.certificate_name
-  trusted_root_certificate_name = var.certificate_name
 
   # Behind proxy information
   proxy_ip   = azurerm_linux_virtual_machine.proxy.private_ip_address
   proxy_port = local.proxy_port
 
   # Private Active / Active Scenario
+  user_data_iact_subnet_list  = ["${azurerm_linux_virtual_machine.vm_bastion.private_ip_address}/32"]
   vm_node_count               = 2
   vm_sku                      = "Standard_D16as_v4"
   vm_image_id                 = "rhel"
@@ -39,6 +38,7 @@ module "private_active_active" {
   redis_enable_authentication = true
   user_data_redis_use_tls     = false
 
-  create_bastion = false
-  tags           = local.common_tags
+  create_bastion              = false
+  network_bastion_subnet_cidr = azurerm_subnet.vm_bastion.address_prefixes[0]
+  tags                        = local.common_tags
 }

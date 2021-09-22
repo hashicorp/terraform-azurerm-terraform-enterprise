@@ -25,18 +25,11 @@ resource "azurerm_network_security_group" "proxy" {
     source_address_prefix = "*"
     source_port_range     = "*"
 
-    destination_port_range     = "*"
+    destination_port_range     = "22"
     destination_address_prefix = "10.0.64.0/20"
   }
 
   tags = local.common_tags
-}
-
-# Associate proxy subnet with nsg
-# -------------------------------
-resource "azurerm_subnet_network_security_group_association" "proxy_subnet_nsg_association" {
-  subnet_id                 = azurerm_subnet.proxy.id
-  network_security_group_id = azurerm_network_security_group.proxy.id
 }
 
 # Create a network interface for the proxy virtual machine
@@ -87,7 +80,7 @@ resource "azurerm_linux_virtual_machine" "proxy" {
 
   admin_ssh_key {
     username   = local.proxy_user
-    public_key = data.azurerm_key_vault_secret.proxy_public_key.value
+    public_key = var.proxy_public_key
   }
 
   tags = local.common_tags

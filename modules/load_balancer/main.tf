@@ -5,6 +5,8 @@ locals {
   # Determine the resulting TFE IP
   load_balancer_ip = var.load_balancer_public == true ? var.tfe_pip_ip_address : local.private_ip_address
 
+  is_legacy_rule_set_version = var.load_balancer_waf_rule_set_version == "2.2.9"
+
   # Application Gateway
   # -------------------
   gateway_ip_configuration_name          = "tfe-ag-gateway-ip-config"
@@ -114,10 +116,17 @@ resource "azurerm_application_gateway" "tfe_ag" {
     for_each = var.load_balancer_sku_name == "WAF_v2" ? [1] : []
 
     content {
-      enabled                  = true
-      firewall_mode            = var.load_balancer_waf_firewall_mode
-      rule_set_type            = "OWASP"
-      rule_set_version         = var.load_balancer_waf_rule_set_version
+      enabled          = true
+      firewall_mode    = var.load_balancer_waf_firewall_mode
+      rule_set_type    = "OWASP"
+      rule_set_version = var.load_balancer_waf_rule_set_version
+
+      # Allow HTTP header "Content-Type: application/vnd.api+json" for API requests
+      disabled_rule_group {
+        rule_group_name = local.is_legacy_rule_set_version ? "crs_30_http_policy" : "REQUEST-920-PROTOCOL-ENFORCEMENT"
+
+        rules = local.is_legacy_rule_set_version ? [960010] : [920420]
+      }
       file_upload_limit_mb     = var.load_balancer_waf_file_upload_limit_mb
       max_request_body_size_kb = var.load_balancer_waf_max_request_body_size_kb
     }
@@ -148,13 +157,9 @@ resource "azurerm_application_gateway" "tfe_ag" {
   }
 
   # Public front end configuration
-  dynamic "frontend_ip_configuration" {
-    for_each = var.load_balancer_public == true ? [1] : []
-
-    content {
-      name                 = local.frontend_ip_configuration_name_public
-      public_ip_address_id = var.tfe_pip_id
-    }
+  frontend_ip_configuration {
+    name                 = local.frontend_ip_configuration_name_public
+    public_ip_address_id = var.tfe_pip_id
   }
 
   # Private front end configuration
