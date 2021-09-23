@@ -41,4 +41,5 @@ module "private_tcp_active_active" {
 
   create_bastion              = false
   network_bastion_subnet_cidr = azurerm_subnet.vm_bastion.address_prefixes[0]
+  tags                        = local.common_tags
 }
