@@ -13,7 +13,7 @@ module "private_tcp_active_active" {
 
   resource_group_name_dns    = var.resource_group_name_dns
   domain_name                = var.domain_name
-  user_data_iact_subnet_list = var.iact_subnet_list
+  user_data_iact_subnet_list = ["${azurerm_linux_virtual_machine.vm_bastion.private_ip_address}/32"]
 
   # Bootstrapping resources
   ca_cert_secret_name            = var.ca_cert_secret_name
