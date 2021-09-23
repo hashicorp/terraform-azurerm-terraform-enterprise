@@ -1,4 +1,12 @@
 terraform {
+  backend "remote" {
+    organization = "terraform-enterprise-modules-test"
+
+    workspaces {
+      name = "azure-private-tcp-active-active"
+    }
+  }
+
   required_version = ">= 0.13"
   required_providers {
     azurerm = {
