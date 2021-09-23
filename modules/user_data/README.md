@@ -2,23 +2,35 @@
 
 ## Required variables
 
-* `friendly_name_prefix` - string value to use as base for resource names
-* `resource_group_name` - string value for Azure resource group name
-* `location` - string value for Azure location
-* `user_data_pg_dbname` - string value for postgres database name
-* `user_data_pg_netloc` - string value for postgres database url
-* `user_data_pg_user` - string value for postgres database username
-* `user_data_pg_password` - stirng value for postgres database password
-* `user_data_azure_account_key` - string value for azure storage account key
-* `user_data_azure_account_name` - string value for azure storage account name
-* `user_data_azure_container_name` - string value for azure storage container name
-* `fqdn` - string value for fully qualified domain name
-* `user_data_tfe_license_name` - string value for terraform enterprise license name
-* `key_vault_name` - Azure Key Vault name containing all required secrets and certificates
-* `tfe_license_secret_name` - Name of the secret under which the Base64 encoded Terraform Enterprise license is (or will be) stored in the Azure Key Vault
-* `user_data_use_kv_secrets` - If 1, then TFE will retrieve the secrets named in the tfe_bootstrap_cert_secret_name and tfe_bootstrap_cert_key_name variables during its install script. If 0, the retrieval will be skipped.
-* `user_data_tfe_bootstrap_cert_name` - Value to be provided for Replicated TlsBootstrapCert setting
-* `user_data_tfe_bootstrap_key_name` - Value to be provided for Replicated TlsBootstrapKey setting
+- `friendly_name_prefix` - string value to use as base for resource names
+- `resource_group_name` - string value for Azure resource group name
+- `location` - string value for Azure location
+- `user_data_pg_dbname` - string value for postgres database name
+- `user_data_pg_netloc` - string value for postgres database url
+- `user_data_pg_user` - string value for postgres database username
+- `user_data_pg_password` - stirng value for postgres database password
+- `user_data_azure_account_key` - string value for azure storage
+  account key
+- `user_data_azure_account_name` - string value for azure storage
+  account name
+- `user_data_azure_container_name` - string value for azure storage
+  container name
+- `fqdn` - string value for fully qualified domain name
+- `user_data_tfe_license_name` - string value for terraform enterprise
+  license name
+- `key_vault_name` - Azure Key Vault name containing all required
+  secrets and certificates
+- `tfe_license_secret_name` - Name of the secret under which the Base64
+  encoded Terraform Enterprise license is (or will be) stored in the
+  Azure Key Vault
+- `user_data_use_kv_secrets` - If 1, then TFE will retrieve the secrets
+  named in the tfe_bootstrap_cert_secret_name and
+  tfe_bootstrap_cert_key_name variables during its install script. If 0,
+  the retrieval will be skipped.
+- `user_data_tfe_bootstrap_cert_name` - Value to be provided for
+  Replicated TlsBootstrapCert setting
+- `user_data_tfe_bootstrap_key_name` - Value to be provided for
+  Replicated TlsBootstrapKey setting
 
 ## Example usage
 
@@ -72,5 +84,5 @@ module "user_data" {
 
 ## Resources
 
-* [random_string](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string)
-* [random_id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id)
+- [random_string](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string)
+- [random_id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id)
