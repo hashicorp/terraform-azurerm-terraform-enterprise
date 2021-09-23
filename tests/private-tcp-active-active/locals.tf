@@ -9,7 +9,7 @@ locals {
   }
 
   proxy_script = templatefile(
-    "${path.module}/files/mitm.sh.tpl",
+    "${path.module}/templates/mitm.sh.tpl",
     {
       http_proxy_port        = local.proxy_port
       key_vault_name         = var.key_vault_name
