@@ -52,14 +52,14 @@ variable "proxy_cert_secret_name" {
   description = "Name of the secret under which the proxy cert is stored in the Azure Key Vault"
 }
 
-variable "proxy_public_key_secret_name" {
+variable "proxy_public_key" {
   type        = string
-  description = "Name of the secret under which the proxy public key is stored in the Azure Key Vault"
+  description = "The public SSH key for the proxy."
 }
 
-variable "bastion_public_key_secret_name" {
+variable "bastion_public_key" {
   type        = string
-  description = "Name of the secret under which the bastion public key is stored in the Azure Key Vault"
+  description = "The public SSH key for the bastion."
 }
 
 variable "network_allow_range" {

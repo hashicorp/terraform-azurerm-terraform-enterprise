@@ -22,5 +22,4 @@ locals {
   resource_group_name  = module.private_tcp_active_active.resource_group_name
   proxy_user           = "proxyuser"
   proxy_port           = "3128"
-  key_vault_id         = module.private_tcp_active_active.key_vault_id
 }
