@@ -431,15 +431,6 @@ variable "user_data_release_sequence" {
   description = "Terraform Enterprise release sequence"
 }
 
-variable "user_data_ca" {
-  default     = null
-  type        = string
-  description = <<-EOD
-  (Optional) Value to be provided for TFE ca_cert setting. A custom Certificate Authority
-  certificate bundle to be used for authenticating connections with Terraform Enterprise.
-  EOD
-}
-
 variable "user_data_redis_use_tls" {
   default     = true
   type        = bool
@@ -466,6 +457,12 @@ variable "user_data_trusted_proxies" {
 
 # TLS Certificates
 # ----------------
+variable "ca_cert_secret_name" {
+  default     = null
+  type        = string
+  description = "Name of the secret under which the CA certificate is stored in the Azure Key Vault"
+}
+
 variable "certificate_name" {
   default     = null
   type        = string
@@ -486,7 +483,7 @@ variable "tfe_bootstrap_cert_secret_name" {
   default     = null
   type        = string
   description = <<-EOD
-  (Optional) Value to be provided for Replicated's TlsBootstrapCert setting. If a trusted Azure Key Vault 
+  (Optional) Value to be provided for Replicated's TlsBootstrapCert setting. If a trusted Azure Key Vault
   Certificate is used as the TlsBootstrapCert via the certificate_name variable, then tfe_bootstrap_cert_secret_name
   and tfe_bootstrap_key_secret_name are not needed. However, if you want to use a different certificate or
   if you need to add an intermediate,then using this variable will allow the TFE instance(s) to pull that secret
@@ -498,7 +495,7 @@ variable "tfe_bootstrap_key_secret_name" {
   default     = null
   type        = string
   description = <<-EOD
-  (Optional) Value to be provided for Replicated's TlsBootstrapKey setting. If a trusted Azure Key Vault 
+  (Optional) Value to be provided for Replicated's TlsBootstrapKey setting. If a trusted Azure Key Vault
   Certificate is used as the TlsBootstrapKey via the certificate_name variable, then tfe_bootstrap_cert_secret_name
   and tfe_bootstrap_key_secret_name are not needed. However, if you want to use a different certificate/key pair,
   then using this variable will allow the TFE instance(s) to pull that secret from Key Vault and use it in TFE.
@@ -518,18 +515,6 @@ variable "proxy_port" {
   default     = null
   type        = string
   description = "Port that the proxy server will use"
-}
-
-variable "proxy_cert_name" {
-  default     = null
-  type        = string
-  description = "Name for the stored proxy certificate bundle"
-}
-
-variable "proxy_cert_secret_name" {
-  default     = null
-  type        = string
-  description = "Name of the secret under which the proxy cert is stored in the Azure Key Vault"
 }
 
 # Tagging

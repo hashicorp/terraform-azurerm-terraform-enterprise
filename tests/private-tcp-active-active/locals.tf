@@ -23,5 +23,4 @@ locals {
   proxy_user           = "proxyuser"
   proxy_port           = "3128"
   key_vault_id         = module.private_tcp_active_active.key_vault_id
-  user_data_ca         = data.azurerm_key_vault_secret.user_data_ca.value
 }

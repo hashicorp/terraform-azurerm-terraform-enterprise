@@ -243,18 +243,16 @@ module "user_data" {
   user_data_trusted_proxies  = local.trusted_proxies
 
   # Certificates
-  user_data_ca                      = var.user_data_ca == null ? "" : var.user_data_ca
-  user_data_use_kv_secrets          = var.tfe_bootstrap_cert_secret_name == null ? "0" : "1"
+  ca_cert_secret_name               = var.ca_cert_secret_name
+  key_vault_name                    = var.key_vault_name
+  user_data_use_kv_secrets          = var.tfe_bootstrap_cert_secret_name != null
   user_data_tfe_bootstrap_cert_name = local.tfe_bootstrap_cert_name
   user_data_tfe_bootstrap_key_name  = local.tfe_bootstrap_key_name
 
   # Proxy
-  key_vault_name         = var.key_vault_name
-  proxy_ip               = var.proxy_ip
-  proxy_port             = var.proxy_port
-  proxy_cert_name        = var.proxy_cert_name
-  proxy_cert_secret_name = var.proxy_cert_secret_name
-  no_proxy               = [local.fqdn, var.network_cidr]
+  proxy_ip   = var.proxy_ip
+  proxy_port = var.proxy_port
+  no_proxy   = [local.fqdn, var.network_cidr]
 
   depends_on = [
     module.service_accounts,

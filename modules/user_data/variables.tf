@@ -102,20 +102,16 @@ variable "tfe_license_secret_name" {
   description = "Name of the secret under which the Base64 encoded Terraform Enterprise license is (or will be) stored in the Azure Key Vault"
 }
 
-variable "user_data_ca" {
+variable "ca_cert_secret_name" {
   type        = string
-  description = <<-EOD
-  (Optional) Value to be provided for TFE ca_cert setting. A custom Certificate Authority
-  certificate bundle to be used for authenticating connections with Terraform Enterprise.
-  EOD
+  description = "Name of the secret under which the CA certificate is stored in the Azure Key Vault"
 }
 
 variable "user_data_use_kv_secrets" {
-  type        = string
+  type        = bool
   description = <<-EOD
-  If 1, then TFE will retrieve the secrets named in the tfe_bootstrap_cert_secret_name and
-  tls_bootstrap_cert_key_name variables during its install script. If 0, the retrieval will
-  be skipped.
+  A toggle to enable the retrieval of the secrets named in the tfe_bootstrap_cert_secret_name and
+  tls_bootstrap_cert_key_name variables as part of the install script.
   EOD
 }
 
@@ -157,16 +153,6 @@ variable "proxy_port" {
   default     = "3128"
   type        = string
   description = "Port that the proxy server will use"
-}
-
-variable "proxy_cert_name" {
-  type        = string
-  description = "Name for the stored proxy certificate bundle"
-}
-
-variable "proxy_cert_secret_name" {
-  type        = string
-  description = "Name of the secret under which the proxy cert is stored in the Azure Key Vault"
 }
 
 variable "no_proxy" {

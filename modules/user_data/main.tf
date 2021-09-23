@@ -11,11 +11,6 @@ locals {
     TlsBootstrapType             = "server-path"
   }
 
-  proxy_ip               = var.proxy_ip == null ? "" : var.proxy_ip
-  proxy_port             = var.proxy_port == null ? "" : var.proxy_port
-  proxy_cert_name        = var.proxy_cert_name == null ? "" : var.proxy_cert_name
-  proxy_cert_secret_name = var.proxy_cert_secret_name == null ? "" : var.proxy_cert_secret_name
-
   user_data_release_sequence = {
     ReleaseSequence = var.user_data_release_sequence
   }
@@ -41,18 +36,18 @@ locals {
       active_active = var.active_active
       fqdn          = var.fqdn
 
+      # Secrets
+      ca_cert_secret_name     = var.ca_cert_secret_name
+      key_vault_name          = var.key_vault_name
+      tfe_bootstrap_cert_name = var.user_data_tfe_bootstrap_cert_name
+      tfe_bootstrap_key_name  = var.user_data_tfe_bootstrap_key_name
       tfe_license_name        = var.user_data_tfe_license_name
       tfe_license_secret_name = var.tfe_license_secret_name
       use_tls_kv_secrets      = var.user_data_use_kv_secrets
-      tfe_bootstrap_cert_name = var.user_data_tfe_bootstrap_cert_name
-      tfe_bootstrap_key_name  = var.user_data_tfe_bootstrap_key_name
 
       # Proxy information
-      key_vault_name         = var.key_vault_name
-      proxy_ip               = local.proxy_ip
-      proxy_port             = local.proxy_port
-      proxy_cert_secret_name = local.proxy_cert_secret_name
-      proxy_cert             = local.proxy_cert_name
+      proxy_ip   = var.proxy_ip
+      proxy_port = var.proxy_port
       no_proxy = join(
         ",",
         concat(
@@ -127,10 +122,6 @@ locals {
 
     archivist_token = {
       value = random_id.archivist_token.hex
-    }
-
-    ca_certs = {
-      value = var.user_data_ca
     }
 
     cookie_hash = {

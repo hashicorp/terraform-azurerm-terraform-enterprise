@@ -30,15 +30,10 @@ variable "key_vault_name" {
   description = "Azure Key Vault name containing all required secrets and certificates"
 }
 
-# variable "ca_pem_key_secret_name" {
-#   type        = string
-#   description = "Name of the secret under which the DNS wildcard key is stored in the Azure Key Vault"
-# }
-
-# variable "ca_pem_certificate_secret_name" {
-#   type        = string
-#   description = "Name of the secret under which the DNS wildcard chained cert is stored in the Azure Key Vault"
-# }
+variable "ca_cert_secret_name" {
+  type        = string
+  description = "Name of the secret under which the DNS wildcard key is stored in the Azure Key Vault"
+}
 
 variable "tfe_license_secret_name" {
   type        = string
@@ -47,12 +42,6 @@ variable "tfe_license_secret_name" {
 
 # Proxy & Bastion
 # ---------------
-variable "proxy_cert_name" {
-  default     = "mitmproxy"
-  type        = string
-  description = "Name for the stored proxy certificate bundle"
-}
-
 variable "proxy_key_secret_name" {
   type        = string
   description = "Name of the secret under which the proxy cert key is stored in the Azure Key Vault"

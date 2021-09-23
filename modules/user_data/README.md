@@ -23,10 +23,9 @@
 - `tfe_license_secret_name` - Name of the secret under which the Base64
   encoded Terraform Enterprise license is (or will be) stored in the
   Azure Key Vault
-- `user_data_use_kv_secrets` - If 1, then TFE will retrieve the secrets
-  named in the tfe_bootstrap_cert_secret_name and
-  tfe_bootstrap_cert_key_name variables during its install script. If 0,
-  the retrieval will be skipped.
+- `user_data_use_kv_secrets` - A toggle to enable the retrieval of the
+  secrets named in the tfe_bootstrap_cert_secret_name and
+  tls_bootstrap_cert_key_name variables as part of the install script.
 - `user_data_tfe_bootstrap_cert_name` - Value to be provided for
   Replicated TlsBootstrapCert setting
 - `user_data_tfe_bootstrap_key_name` - Value to be provided for
@@ -67,17 +66,15 @@ module "user_data" {
   user_data_iact_subnet_list = var.user_data_iact_subnet_list
 
   # Certificates
-  user_data_ca                      = var.user_data_ca == null ? "" : var.user_data_ca
-  user_data_use_kv_secrets          = var.tfe_bootstrap_cert_secret_name == null ? "0" : "1"
+  ca_cert_secret_name               = var.ca_cert_secret_name
+  key_vault_name                    = var.key_vault_name
   user_data_tfe_bootstrap_cert_name = local.tfe_bootstrap_cert_name
   user_data_tfe_bootstrap_key_name  = local.tfe_bootstrap_key_name
+  user_data_use_kv_secrets          = var.tfe_bootstrap_cert_secret_name != null
 
   # Proxy
-  key_vault_name         = var.key_vault_name
   proxy_ip               = var.proxy_ip
   proxy_port             = var.proxy_port
-  proxy_cert_name        = var.proxy_cert_name
-  proxy_cert_secret_name = var.proxy_cert_secret_name
   no_proxy               = [local.fqdn, var.network_cidr]
 }
 ```
