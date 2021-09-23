@@ -39,5 +39,6 @@ module "private_tcp_active_active" {
   redis_rdb_backup_enabled    = true
   redis_rdb_backup_frequency  = 60
 
-  create_bastion = false
+  create_bastion              = false
+  network_bastion_subnet_cidr = azurerm_subnet.vm_bastion.address_prefixes[0]
 }
