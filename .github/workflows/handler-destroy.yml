@@ -119,3 +119,60 @@ jobs:
             ${{ format('- {0} Terraform Init', steps.init.outcome == 'success' && ':white_check_mark:' || ':x:') }}
 
             ${{ format('- {0} Terraform Destroy', steps.destroy.outcome == 'success' && ':white_check_mark:' || ':x:') }}
+
+  private_tcp_active_active:
+    name: Destroy resources from Private TCP Active/Active
+    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'private-tcp-active-active') }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    env:
+      WORK_DIR_PATH: ./tests/private-tcp-active-active
+    steps:
+      - name: Create URL to the run output
+        id: vars
+        run: echo ::set-output name=run-url::https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
+
+      # Checkout the branch of the pull request being tested
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ github.event.client_payload.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.client_payload.pull_request.head.sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_hostname: 'app.terraform.io'
+          cli_config_credentials_token: ${{ secrets.PRIVATE_TCP_ACTIVE_ACTIVE_TFC_TOKEN }}
+          terraform_version: 0.14.8
+          terraform_wrapper: true
+
+      - name: Terraform Init
+        id: init
+        working-directory: ${{ env.WORK_DIR_PATH }}
+        run: terraform init -input=false -no-color
+
+      - name: Terraform Destroy
+        id: destroy
+        working-directory: ${{ env.WORK_DIR_PATH }}
+        run: terraform destroy -auto-approve -input=false -no-color
+
+      - name: Update comment
+        if: ${{ always() }}
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
+          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
+          body: |
+            ${{ format('### {0} Terraform Private TCP Active/Active Destruction Report', job.status == 'success' && ':white_check_mark:' || ':x:') }}
+
+            ${{ format(':link: [Action Summary Page]({0})', steps.vars.outputs.run-url) }}
+
+            ${{ format('- {0} Terraform Init', steps.init.outcome == 'success' && ':white_check_mark:' || ':x:') }}
+
+            ${{ format('- {0} Terraform Destroy', steps.destroy.outcome == 'success' && ':white_check_mark:' || ':x:') }}
