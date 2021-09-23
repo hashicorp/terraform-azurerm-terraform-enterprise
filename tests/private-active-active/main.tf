@@ -8,6 +8,7 @@ resource "random_string" "friendly_name" {
 module "private_active_active" {
   source = "../../"
 
+  location             = var.location
   friendly_name_prefix = local.friendly_name_prefix
 
   # Bootstrapping resources
