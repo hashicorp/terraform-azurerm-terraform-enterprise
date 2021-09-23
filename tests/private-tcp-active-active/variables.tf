@@ -29,11 +29,6 @@ variable "key_vault_name" {
   description = "Azure Key Vault name containing all required secrets and certificates"
 }
 
-variable "ca_cert_secret_name" {
-  type        = string
-  description = "Name of the secret under which the DNS wildcard key is stored in the Azure Key Vault"
-}
-
 variable "tfe_license_secret_name" {
   type        = string
   description = "Name of the secret under which the Base64 encoded TFE license is stored in the Azure Key Vault"
@@ -64,14 +59,14 @@ variable "wildcard_private_key_pem_secret_name" {
 
 # Proxy & Bastion
 # ---------------
-variable "proxy_key_secret_name" {
+variable "ca_private_key_secret_name" {
   type        = string
-  description = "Name of the secret under which the proxy cert key is stored in the Azure Key Vault"
+  description = "Name of the secret under which the CA private key for the mitmproxy is stored in the Azure Key Vault"
 }
 
-variable "proxy_cert_secret_name" {
+variable "ca_cert_secret_name" {
   type        = string
-  description = "Name of the secret under which the proxy cert is stored in the Azure Key Vault"
+  description = "Name of the secret under which the CA certificate for the mitmproxy is stored in the Azure Key Vault"
 }
 
 variable "proxy_public_key" {
