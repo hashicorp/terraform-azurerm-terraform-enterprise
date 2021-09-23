@@ -10,7 +10,6 @@ module "private_tcp_active_active" {
 
   location             = var.location
   friendly_name_prefix = local.friendly_name_prefix
-  tfe_license_name     = "terraform-azurerm-terraform-enterprise.rli"
 
   resource_group_name_dns    = var.resource_group_name_dns
   domain_name                = var.domain_name
