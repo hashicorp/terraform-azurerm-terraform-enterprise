@@ -1,9 +1,8 @@
 # General
 # -------
 variable "location" {
-  default     = "East US"
   type        = string
-  description = "(Required) Azure location name e.g. East US"
+  description = "Azure location name e.g. East US"
 }
 
 # Domain
