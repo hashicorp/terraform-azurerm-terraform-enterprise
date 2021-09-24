@@ -110,8 +110,8 @@ jobs:
         env:
           IACT_URL: ${{ steps.retrieve-iact-url.outputs.stdout }}
         run: |
-          echo "::set-output name=token::$( \
-            curl --fail --retry 5 --verbose "$IACT_URL" )"
+          token=$(curl --fail --retry 5 --verbose "$IACT_URL")
+          echo "::set-output name=token::$token"
 
       - name: Retrieve Initial Admin User URL
         id: retrieve-initial-admin-user-url
@@ -129,21 +129,23 @@ jobs:
           echo \
             '{"username": "test", "email": "tf-onprem-team@hashicorp.com", "password": "$TFE_PASSWORD"}' \
             > ./payload.json
-          echo "::set-output name=response::$( \
+          response=$( \
             curl \
             --fail \
             --retry 5 \
             --verbose \
             --header 'Content-Type: application/json' \
             --data @./payload.json \
-            "$IAU_URL"?token="$IACT")"
+            "$IAU_URL"?token="$IACT")
+          echo "::set-output name=response::$response"
 
       - name: Retrieve Admin Token
         id: retrieve-admin-token
         env:
           RESPONSE: ${{ steps.create-admin.outputs.response }}
         run: |
-          echo "::set-output name=token::$(echo "$RESPONSE" | jq --raw-output '.token')"
+          token=$(echo "$RESPONSE" | jq --raw-output '.token')
+          echo "::set-output name=token::$token"
 
       - name: Run k6 Smoke Test
         id: run-smoke-test
@@ -317,8 +319,8 @@ jobs:
         env:
           IACT_URL: ${{ steps.retrieve-iact-url.outputs.stdout }}
         run: |
-          echo "::set-output name=token::$( \
-            curl --fail --retry 5 --verbose --proxy socks5://localhost:5000 "$IACT_URL" )"
+          token=$(curl --fail --retry 5 --verbose --proxy socks5://localhost:5000 "$IACT_URL")
+          echo "::set-output name=token::$token"
 
       - name: Retrieve Initial Admin User URL
         id: retrieve-initial-admin-user-url
@@ -336,7 +338,7 @@ jobs:
           echo \
             '{"username": "test", "email": "tf-onprem-team@hashicorp.com", "password": "$TFE_PASSWORD"}' \
             > ./payload.json
-          echo "::set-output name=response::$( \
+          response=$( \
             curl \
             --fail \
             --retry 5 \
@@ -344,14 +346,16 @@ jobs:
             --header 'Content-Type: application/json' \
             --data @./payload.json \
             --proxy socks5://localhost:5000 \
-            "$IAU_URL"?token="$IACT_TOKEN")"
+            "$IAU_URL"?token="$IACT_TOKEN")
+          echo "::set-output name=response::$response"
 
       - name: Retrieve Admin Token
         id: retrieve-admin-token
         env:
           RESPONSE: ${{ steps.create-admin.outputs.response }}
         run: |
-          echo "::set-output name=token::$(echo "$RESPONSE" | jq --raw-output '.token')"
+          token=$(echo "$RESPONSE" | jq --raw-output '.token')
+          echo "::set-output name=token::$token"
 
       - name: Run k6 Smoke Test
         id: run-smoke-test
@@ -527,8 +531,8 @@ jobs:
         env:
           IACT_URL: ${{ steps.retrieve-iact-url.outputs.stdout }}
         run: |
-          echo "::set-output name=token::$( \
-            curl --fail --retry 5 --verbose --proxy socks5://localhost:5000 "$IACT_URL" )"
+          token=$(curl --fail --retry 5 --verbose --proxy socks5://localhost:5000 "$IACT_URL")
+          echo "::set-output name=token::$token"
 
       - name: Retrieve Initial Admin User URL
         id: retrieve-initial-admin-user-url
@@ -546,7 +550,7 @@ jobs:
           echo \
             '{"username": "test", "email": "tf-onprem-team@hashicorp.com", "password": "$TFE_PASSWORD"}' \
             > ./payload.json
-          echo "::set-output name=response::$( \
+          response=$( \
             curl \
             --fail \
             --retry 5 \
@@ -554,14 +558,16 @@ jobs:
             --header 'Content-Type: application/json' \
             --data @./payload.json \
             --proxy socks5://localhost:5000 \
-            "$IAU_URL"?token="$IACT_TOKEN")"
+            "$IAU_URL"?token="$IACT_TOKEN")
+          echo "::set-output name=response::$response"
 
       - name: Retrieve Admin Token
         id: retrieve-admin-token
         env:
           RESPONSE: ${{ steps.create-admin.outputs.response }}
         run: |
-          echo "::set-output name=token::$(echo "$RESPONSE" | jq --raw-output '.token')"
+          token=$(echo "$RESPONSE" | jq --raw-output '.token')
+          echo "::set-output name=token::$token"
 
       - name: Run k6 Smoke Test
         id: run-smoke-test
