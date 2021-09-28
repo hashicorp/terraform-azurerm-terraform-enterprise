@@ -44,8 +44,6 @@ This module is intended to run in an Azure account with minimal preparation, how
     - You must configured external DNS record for the aforementioned IP address
 
 - Key Vault
-
-  - The value supplied for `key_vault_name` should match an existing Key Vault. If the existing Key Vault does not live in the primary resource group, you may optionally supply a value for `resource_group_name_kv`.
   - The Key Vault should have enabled access for deployment for Azure Virtual Machines, as the virtual machines will pull the certificate (and secrets, if applicable) from Key Vault.
 
 ## Azure Services Used

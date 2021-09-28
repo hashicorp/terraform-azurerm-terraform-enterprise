@@ -23,11 +23,6 @@ variable "resource_group_name_dns" {
   description = "Name of resource group which contains desired DNS zone"
 }
 
-variable "resource_group_name_kv" {
-  type        = string
-  description = "Name of resource group which contains desired Key Vault"
-}
-
 # Tagging
 # -------
 variable "tags" {

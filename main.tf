@@ -43,7 +43,6 @@ module "resource_groups" {
 
   resource_group_name     = var.resource_group_name
   resource_group_name_dns = var.resource_group_name_dns
-  resource_group_name_kv  = var.resource_group_name_kv
 
   tags = var.tags
 }

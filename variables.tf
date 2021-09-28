@@ -57,18 +57,6 @@ variable "resource_group_name_dns" {
   description = "Name of resource group which contains desired DNS zone"
 }
 
-variable "resource_group_name_kv" {
-  default     = null
-  type        = string
-  description = "Name of resource group which contains desired Key Vault"
-}
-
-variable "key_vault_name" {
-  default     = null
-  type        = string
-  description = "(recommended) Azure Key Vault name containing required certificate and Base64 encoded TFE license"
-}
-
 # Bastion
 # -------
 variable "create_bastion" {

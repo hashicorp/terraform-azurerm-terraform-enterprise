@@ -7,8 +7,3 @@ output "resource_group_name_dns" {
   value       = local.resource_group_name_dns
   description = "The name of the resource group that houses the DNS zone"
 }
-
-output "resource_group_name_kv" {
-  value       = local.resource_group_name_kv
-  description = "The name of the resource group that houses the Key Vault"
-}
