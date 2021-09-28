@@ -16,16 +16,13 @@ module "private_tcp_active_active" {
   user_data_iact_subnet_list = ["${azurerm_linux_virtual_machine.vm_bastion.private_ip_address}/32"]
 
   # Bootstrapping resources
-  key_vault_name                 = var.key_vault_name
-  resource_group_name_kv         = var.resource_group_name_kv
-  tfe_bootstrap_cert_secret_name = var.wildcard_chained_certificate_pem_secret_name
-  tfe_bootstrap_key_secret_name  = var.wildcard_private_key_pem_secret_name
-  tfe_license_secret_name        = var.tfe_license_secret_name
+  tfe_license_secret     = data.azurerm_key_vault_secret.tfe_license
+  vm_certificate         = data.azurerm_key_vault_certificate.vm
 
   # Behind proxy information
-  ca_cert_secret_name = var.ca_cert_secret_name
-  proxy_ip            = azurerm_linux_virtual_machine.proxy.private_ip_address
-  proxy_port          = local.proxy_port
+  ca_certificate = data.azurerm_key_vault_certificate.ca
+  proxy_ip       = azurerm_linux_virtual_machine.proxy.private_ip_address
+  proxy_port     = local.proxy_port
 
   # Private Active / Active Scenario
   vm_node_count               = 2
