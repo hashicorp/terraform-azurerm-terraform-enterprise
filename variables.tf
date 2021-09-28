@@ -491,15 +491,18 @@ variable "tfe_bootstrap_cert_secret_name" {
   EOD
 }
 
-variable "tfe_bootstrap_key_secret_name" {
-  default     = null
-  type        = string
-  description = <<-EOD
-  (Optional) Value to be provided for Replicated's TlsBootstrapKey setting. If a trusted Azure Key Vault
-  Certificate is used as the TlsBootstrapKey via the certificate_name variable, then tfe_bootstrap_cert_secret_name
-  and tfe_bootstrap_key_secret_name are not needed. However, if you want to use a different certificate/key pair,
-  then using this variable will allow the TFE instance(s) to pull that secret from Key Vault and use it in TFE.
-  EOD
+variable "vm_certificate" {
+  default = {
+    key_vault_id = null
+    secret_id    = null
+    thumbprint   = null
+  }
+  type = object({
+    key_vault_id = string
+    secret_id    = string
+    thumbprint   = string
+  })
+  description = "A Key Vault Certificate to be attached to the Virtual Machine Scale Set."
 }
 
 

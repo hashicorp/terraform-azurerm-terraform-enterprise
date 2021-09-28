@@ -339,25 +339,24 @@ module "vm" {
   friendly_name_prefix = var.friendly_name_prefix
   resource_group_name  = module.resource_groups.resource_group_name
   location             = var.location
+  tenant_id            = data.azurerm_client_config.current.tenant_id
 
   # VM
-  vm_sku                       = var.vm_sku
-  vm_image_id                  = var.vm_image_id
-  vm_os_disk_disk_size_gb      = var.vm_os_disk_disk_size_gb
-  vm_subnet_id                 = local.network_private_subnet_id
-  vm_user                      = var.vm_user
-  vm_public_key                = var.vm_public_key == null ? tls_private_key.tfe_ssh[0].public_key_openssh : var.vm_public_key
-  vm_userdata_script           = module.user_data.tfe_userdata_base64_encoded
-  vm_node_count                = var.vm_node_count
-  vm_user_assigned_identity_id = module.service_accounts.vmss_user_assigned_identity.id
+  vm_sku                  = var.vm_sku
+  vm_image_id             = var.vm_image_id
+  vm_os_disk_disk_size_gb = var.vm_os_disk_disk_size_gb
+  vm_subnet_id            = local.network_private_subnet_id
+  vm_user                 = var.vm_user
+  vm_public_key           = var.vm_public_key == null ? tls_private_key.tfe_ssh[0].public_key_openssh : var.vm_public_key
+  vm_userdata_script      = module.user_data.tfe_userdata_base64_encoded
+  vm_node_count           = var.vm_node_count
 
   # Load balancer
   load_balancer_type       = var.load_balancer_type
   load_balancer_backend_id = module.load_balancer.load_balancer_backend_id
   load_balancer_public     = var.load_balancer_public
 
-  key_vault_id                    = module.service_accounts.key_vault_id
-  certificate_key_vault_secret_id = module.service_accounts.certificate.secret_id
+  certificate = var.vm_certificate
 
   tags = var.tags
 
