@@ -10,7 +10,6 @@ locals {
   # Application Gateway
   # -------------------
   gateway_ip_configuration_name          = "tfe-ag-gateway-ip-config"
-  trusted_root_certificate_name          = var.trusted_root_certificate_name == null ? [] : [var.trusted_root_certificate_name]
   frontend_ip_configuration_name_public  = "tfe-ag-frontend-ip-config-pub"
   frontend_ip_configuration_name_private = "tfe-ag-frontend-ip-config-priv"
   frontend_ip_configuration_name         = var.load_balancer_public == true ? local.frontend_ip_configuration_name_public : local.frontend_ip_configuration_name_private
@@ -66,7 +65,7 @@ resource "azurerm_user_assigned_identity" "tfe_ag_msi" {
 resource "azurerm_key_vault_access_policy" "tfe_kv_acl" {
   count = var.load_balancer_type == "application_gateway" ? 1 : 0
 
-  key_vault_id = var.key_vault_id
+  key_vault_id = var.certificate.key_vault_id
   tenant_id    = var.tenant_id
   object_id    = azurerm_user_assigned_identity.tfe_ag_msi[0].principal_id
 
@@ -143,17 +142,13 @@ resource "azurerm_application_gateway" "tfe_ag" {
   }
 
   ssl_certificate {
-    name                = var.certificate_name
-    key_vault_secret_id = var.certificate_key_vault_secret_id
+    name                = var.certificate.name
+    key_vault_secret_id = var.certificate.secret_id
   }
 
-  dynamic "trusted_root_certificate" {
-    for_each = var.trusted_root_certificate_name == null ? [] : [1]
-
-    content {
-      name = local.trusted_root_certificate_name[0]
-      data = var.trusted_root_certificate_data
-    }
+  trusted_root_certificate {
+    name = var.ca_certificate_secret.name
+    data = var.ca_certificate_secret.value == null ? null : base64encode(var.ca_certificate_secret.value)
   }
 
   # Public front end configuration
@@ -196,7 +191,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
       frontend_ip_configuration_name = local.frontend_ip_configuration_name
       frontend_port_name             = local.app_frontend_port_name
       protocol                       = "Https"
-      ssl_certificate_name           = var.certificate_name
+      ssl_certificate_name           = var.certificate.name
     }
   }
 
@@ -212,7 +207,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
       request_timeout       = 60
       host_name             = var.fqdn
 
-      trusted_root_certificate_names = local.trusted_root_certificate_name
+      trusted_root_certificate_names = compact([var.ca_certificate_secret.name])
     }
   }
 
@@ -247,7 +242,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
       frontend_ip_configuration_name = local.frontend_ip_configuration_name
       frontend_port_name             = local.console_frontend_port_name
       protocol                       = "Https"
-      ssl_certificate_name           = var.certificate_name
+      ssl_certificate_name           = var.certificate.name
     }
   }
 

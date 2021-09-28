@@ -457,38 +457,33 @@ variable "user_data_trusted_proxies" {
 
 # TLS Certificates
 # ----------------
-variable "ca_cert_secret_name" {
-  default     = null
-  type        = string
-  description = "Name of the secret under which the CA certificate is stored in the Azure Key Vault"
-}
-
-variable "certificate_name" {
-  default     = null
-  type        = string
-  description = "(Required) The value should match an existing Key Vault Certificate residing in the Key Vault specified via `key_vault_name`."
-}
-
-variable "trusted_root_certificate_name" {
-  default     = null
-  type        = string
+variable "ca_certificate_secret" {
+  default = {
+    name  = null
+    value = null
+  }
+  type = object({
+    name  = string
+    value = string
+  })
   description = <<-EOD
-  (Optional) Name of the backend root certificate for Application Gateway to trust. If the backend
-  certificate is issued by a well-known certificate authority (CA), you do not need to provide a
-  trusted_root_certificate.
+  A Key Vault secret of a certificate authority (CA) public certificate to be trusted by the Virtual Machine Scale Set
+  and the Application Gateway. This argument is only required if TLS certificates in the deployment are not issued by a well-known CA.
   EOD
 }
 
-variable "tfe_bootstrap_cert_secret_name" {
-  default     = null
-  type        = string
-  description = <<-EOD
-  (Optional) Value to be provided for Replicated's TlsBootstrapCert setting. If a trusted Azure Key Vault
-  Certificate is used as the TlsBootstrapCert via the certificate_name variable, then tfe_bootstrap_cert_secret_name
-  and tfe_bootstrap_key_secret_name are not needed. However, if you want to use a different certificate or
-  if you need to add an intermediate,then using this variable will allow the TFE instance(s) to pull that secret
-  from Key Vault and use it in TFE.
-  EOD
+variable "load_balancer_certificate" {
+  default = {
+    key_vault_id = null
+    name         = null
+    secret_id    = null
+  }
+  type = object({
+    key_vault_id = string
+    name         = string
+    secret_id    = string
+  })
+  description = "A Key Vault Certificate to be attached to the Application Gateway."
 }
 
 variable "vm_certificate" {
@@ -504,7 +499,6 @@ variable "vm_certificate" {
   })
   description = "A Key Vault Certificate to be attached to the Virtual Machine Scale Set."
 }
-
 
 # Proxy
 # -----
