@@ -16,20 +16,11 @@
 - `user_data_azure_container_name` - string value for azure storage
   container name
 - `fqdn` - string value for fully qualified domain name
-- `user_data_tfe_license_name` - string value for terraform enterprise
-  license name
-- `key_vault_name` - Azure Key Vault name containing all required
-  secrets and certificates
-- `tfe_license_secret_name` - Name of the secret under which the Base64
+- `tfe_license_secret` - The secret under which the Base64
   encoded Terraform Enterprise license is (or will be) stored in the
   Azure Key Vault
-- `user_data_use_kv_secrets` - A toggle to enable the retrieval of the
-  secrets named in the tfe_bootstrap_cert_secret_name and
-  tls_bootstrap_cert_key_name variables as part of the install script.
-- `user_data_tfe_bootstrap_cert_name` - Value to be provided for
-  Replicated TlsBootstrapCert setting
-- `user_data_tfe_bootstrap_key_name` - Value to be provided for
-  Replicated TlsBootstrapKey setting
+- `ca_certificate` - The PEM formatted public certificate of the
+  Certificate Authority in the Azure Key Vault
 
 ## Example usage
 
@@ -60,17 +51,12 @@ module "user_data" {
   user_data_azure_container_name = module.object_storage.storage_account_container_name
 
   # TFE
-  user_data_tfe_license_name = var.tfe_license_name
   user_data_release_sequence = var.user_data_release_sequence
-  tfe_license_secret_name    = var.tfe_license_secret_name
+  tfe_license_secret         = var.tfe_license_secret
   user_data_iact_subnet_list = var.user_data_iact_subnet_list
 
   # Certificates
-  ca_cert_secret_name               = var.ca_cert_secret_name
-  key_vault_name                    = var.key_vault_name
-  user_data_tfe_bootstrap_cert_name = local.tfe_bootstrap_cert_name
-  user_data_tfe_bootstrap_key_name  = local.tfe_bootstrap_key_name
-  user_data_use_kv_secrets          = var.tfe_bootstrap_cert_secret_name != null
+  ca_certificate = var.ca_certificate
 
   # Proxy
   proxy_ip               = var.proxy_ip
