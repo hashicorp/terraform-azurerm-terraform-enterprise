@@ -11,7 +11,8 @@ resource "random_pet" "random_pet_tfe_storage_account_name" {
   count = var.storage_account_name == null ? 1 : 0
 
   length    = 3
-  separator = ""
+  prefix    = var.friendly_name_prefix
+  separator = "-"
 }
 
 resource "azurerm_storage_account" "tfe_storage_account" {
