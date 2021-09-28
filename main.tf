@@ -96,12 +96,6 @@ module "service_accounts" {
   storage_account_tier                           = var.storage_account_tier
   storage_account_replication_type               = var.storage_account_replication_type
 
-  # Key Vault
-  resource_group_name_kv        = module.resource_groups.resource_group_name_kv
-  key_vault_name                = var.key_vault_name
-  certificate_name              = var.certificate_name
-  trusted_root_certificate_name = var.trusted_root_certificate_name
-
   tags = var.tags
 
   depends_on = [
