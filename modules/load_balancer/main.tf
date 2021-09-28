@@ -147,8 +147,8 @@ resource "azurerm_application_gateway" "tfe_ag" {
   }
 
   trusted_root_certificate {
-    name = var.ca_certificate_secret.name
-    data = var.ca_certificate_secret.value == null ? null : base64encode(var.ca_certificate_secret.value)
+    name = var.ca_certificate.name
+    data = var.ca_certificate.certificate_data_base64
   }
 
   # Public front end configuration
@@ -207,7 +207,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
       request_timeout       = 60
       host_name             = var.fqdn
 
-      trusted_root_certificate_names = compact([var.ca_certificate_secret.name])
+      trusted_root_certificate_names = compact([var.ca_certificate.name])
     }
   }
 

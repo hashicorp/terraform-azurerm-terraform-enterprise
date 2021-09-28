@@ -297,8 +297,8 @@ module "load_balancer" {
   tenant_id               = data.azurerm_client_config.current.tenant_id
 
   # Secrets
-  certificate           = var.load_balancer_certificate
-  ca_certificate_secret = var.ca_certificate_secret
+  certificate    = var.load_balancer_certificate
+  ca_certificate = var.ca_certificate
 
   # Network
   network_frontend_subnet_cidr = var.network_frontend_subnet_cidr
