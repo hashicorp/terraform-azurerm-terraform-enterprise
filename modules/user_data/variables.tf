@@ -65,11 +65,6 @@ variable "user_data_redis_use_tls" {
 
 # Azure
 # -----
-variable "key_vault_name" {
-  type        = string
-  description = "Azure Key Vault name containing all required secrets and certificates"
-}
-
 variable "user_data_azure_container_name" {
   type        = string
   description = "Azure storage container name"
@@ -92,37 +87,26 @@ variable "user_data_release_sequence" {
   description = "Terraform Enterprise version release sequence"
 }
 
-variable "user_data_tfe_license_name" {
-  type        = string
-  description = "Terraform Enterprise license file name"
+variable "tfe_license_secret" {
+  type = object({
+    secret_id = string
+  })
+  description = "The Key Vault secret under which the Base64 encoded Terraform Enterprise license is stored."
 }
 
-variable "tfe_license_secret_name" {
-  type        = string
-  description = "Name of the secret under which the Base64 encoded Terraform Enterprise license is (or will be) stored in the Azure Key Vault"
-}
-
-variable "ca_cert_secret_name" {
-  type        = string
-  description = "Name of the secret under which the CA certificate is stored in the Azure Key Vault"
-}
-
-variable "user_data_use_kv_secrets" {
-  type        = bool
+variable "ca_certificate" {
+  type = object({
+    secret_id = string
+  })
   description = <<-EOD
-  A toggle to enable the retrieval of the secrets named in the tfe_bootstrap_cert_secret_name and
-  tls_bootstrap_cert_key_name variables as part of the install script.
+  A Key Vault certificate which is the PEM formatted public certificate of a certificate authority (CA) to be trusted
+  by the Virtual Machine Scale Set.
   EOD
 }
 
-variable "user_data_tfe_bootstrap_cert_name" {
-  type        = string
-  description = "Value to be provided for Replicated TlsBootstrapCert setting"
-}
-
-variable "user_data_tfe_bootstrap_key_name" {
-  type        = string
-  description = "Value to be provided for Replicated TlsBootstrapKey setting"
+variable "certificate" {
+  type        = object({ thumbprint = string })
+  description = "The Key Vault Certificate for the Virtual Machine Scale Set."
 }
 
 variable "user_data_iact_subnet_list" {

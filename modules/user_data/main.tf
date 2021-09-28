@@ -1,14 +1,15 @@
 locals {
+  tfe_license_pathname = "/etc/terraform-enterprise.rli"
   replicated_base_config = {
     BypassPreflightChecks        = true
     DaemonAuthenticationPassword = random_string.password.result
     DaemonAuthenticationType     = "password"
     ImportSettingsFrom           = "/etc/ptfe-settings.json"
-    LicenseFileLocation          = "/etc/${var.user_data_tfe_license_name}"
+    LicenseFileLocation          = local.tfe_license_pathname
     TlsBootstrapHostname         = var.fqdn
-    TlsBootstrapCert             = "/var/lib/waagent/${var.user_data_tfe_bootstrap_cert_name}.crt"
-    TlsBootstrapKey              = "/var/lib/waagent/${var.user_data_tfe_bootstrap_key_name}.prv"
-    TlsBootstrapType             = "server-path"
+    TlsBootstrapCert             = "/var/lib/waagent/${upper(var.certificate.thumbprint)}.crt"
+    TlsBootstrapKey              = "/var/lib/waagent/${upper(var.certificate.thumbprint)}.prv"
+    TlsBootstrapType             = var.certificate.thumbprint == null ? "self-signed" : "server-path"
   }
 
   user_data_release_sequence = {
@@ -37,13 +38,9 @@ locals {
       fqdn          = var.fqdn
 
       # Secrets
-      ca_cert_secret_name     = var.ca_cert_secret_name
-      key_vault_name          = var.key_vault_name
-      tfe_bootstrap_cert_name = var.user_data_tfe_bootstrap_cert_name
-      tfe_bootstrap_key_name  = var.user_data_tfe_bootstrap_key_name
-      tfe_license_name        = var.user_data_tfe_license_name
-      tfe_license_secret_name = var.tfe_license_secret_name
-      use_tls_kv_secrets      = var.user_data_use_kv_secrets
+      ca_certificate_secret_id = var.ca_certificate.secret_id
+      tfe_license_pathname     = local.tfe_license_pathname
+      tfe_license_secret_id    = var.tfe_license_secret.secret_id
 
       # Proxy information
       proxy_ip   = var.proxy_ip

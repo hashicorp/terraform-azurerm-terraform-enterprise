@@ -14,17 +14,6 @@ create_tfe_config() {
 
 	sudo echo "${settings}" | sudo base64 -d > /etc/ptfe-settings.json
 	echo "${replicated}" | base64 -d > /etc/replicated.conf
-
-	%{ if use_tls_kv_secrets ~}
-	echo "[$(date +"%FT%T")] [Terraform Enterprise] Retrieve TLS Certs" | tee -a /var/log/ptfe.log
-
-	# Obtain access token for Azure Key Vault to obtain base64 encoded TLS cert and key secrets
-	access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
-	tlscert=$(curl --noproxy '*' https://${key_vault_name}.vault.azure.net/secrets/${tfe_bootstrap_cert_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
-	tlskey=$(curl --noproxy '*' https://${key_vault_name}.vault.azure.net/secrets/${tfe_bootstrap_key_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
-	echo $tlscert | base64 -d > /var/lib/waagent/${tfe_bootstrap_cert_name}.crt
-	echo $tlskey | base64 -d > /var/lib/waagent/${tfe_bootstrap_key_name}.prv
-	%{ endif ~}
 }
 
 proxy_config() {
@@ -52,22 +41,22 @@ EOF
 }
 
 ca_config() {
-	%{ if ca_cert_secret_name != null ~}
+	%{ if ca_certificate_secret_id != null ~}
 	echo "[$(date +"%FT%T")] [Terraform Enterprise] Configure CA cert" | tee -a /var/log/ptfe.log
 	# Obtain access token for Azure Key Vault to obtain cert secret
 	access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
-	cert_data=$(curl --noproxy '*' https://${key_vault_name}.vault.azure.net/secrets/${ca_cert_secret_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
+	certificate_data=$(curl --noproxy '*' ${ca_certificate_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
 
-	ca_cert_directory="/dev/null"
+	ca_certificate_directory="/dev/null"
 	if [[ $DISTRO_NAME == *"Red Hat"* ]]
 	then
-		ca_cert_directory=/usr/share/pki/ca-trust-source/anchors
+		ca_certificate_directory=/usr/share/pki/ca-trust-source/anchors
 	else
-		ca_cert_directory=/usr/local/share/ca-certificates/extra
+		ca_certificate_directory=/usr/local/share/ca-certificates/extra
 	fi
 
-	mkdir -p $ca_cert_directory
-	echo $cert_data > $ca_cert_directory/tfe-ca-certificate.crt
+	mkdir -p $ca_certificate_directory
+	echo $certificate_data > $ca_certificate_directory/tfe-ca-certificate.crt
 
 	if [[ $DISTRO_NAME == *"Red Hat"* ]]
 	then
@@ -76,7 +65,7 @@ ca_config() {
 		update-ca-certificates
 	fi
 
-	jq ". + { ca_certs: { value: \"$cert_data\" } }" -- /etc/ptfe-settings.json > ptfe-settings.json.updated
+	jq ". + { ca_certs: { value: \"$certificate_data\" } }" -- /etc/ptfe-settings.json > ptfe-settings.json.updated
 	cp ./ptfe-settings.json.updated /etc/ptfe-settings.json
 	%{ endif ~}
 }
@@ -92,8 +81,8 @@ retrieve_tfe_license() {
 
 	# Obtain access token for Azure Key Vault to obtain base64 encoded TFE license secret
 	access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
-	license=$(curl --noproxy '*' https://${key_vault_name}.vault.azure.net/secrets/${tfe_license_secret_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
-    echo $license | base64 -d > /etc/${tfe_license_name}
+	license=$(curl --noproxy '*' ${tfe_license_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
+    echo $license | base64 -d > ${tfe_license_pathname}
 }
 
 install_tfe() {

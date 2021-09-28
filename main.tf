@@ -27,8 +27,6 @@ locals {
 
   # User Data
   # ---------
-  tfe_bootstrap_cert_name = var.tfe_bootstrap_cert_secret_name == null ? upper(module.service_accounts.certificate.thumbprint) : var.tfe_bootstrap_cert_secret_name
-  tfe_bootstrap_key_name  = var.tfe_bootstrap_key_secret_name == null ? upper(module.service_accounts.certificate.thumbprint) : var.tfe_bootstrap_key_secret_name
   trusted_proxies = concat(
     var.user_data_trusted_proxies,
     [var.network_frontend_subnet_cidr]
@@ -236,18 +234,14 @@ module "user_data" {
   user_data_azure_container_name = module.object_storage.storage_account_container_name
 
   # TFE
-  user_data_tfe_license_name = var.tfe_license_name
   user_data_release_sequence = var.user_data_release_sequence
-  tfe_license_secret_name    = var.tfe_license_secret_name
+  tfe_license_secret         = var.tfe_license_secret
   user_data_iact_subnet_list = var.user_data_iact_subnet_list
   user_data_trusted_proxies  = local.trusted_proxies
 
   # Certificates
-  ca_cert_secret_name               = var.ca_cert_secret_name
-  key_vault_name                    = var.key_vault_name
-  user_data_use_kv_secrets          = var.tfe_bootstrap_cert_secret_name != null
-  user_data_tfe_bootstrap_cert_name = local.tfe_bootstrap_cert_name
-  user_data_tfe_bootstrap_key_name  = local.tfe_bootstrap_key_name
+  ca_certificate = var.ca_certificate
+  certificate    = var.vm_certificate
 
   # Proxy
   proxy_ip   = var.proxy_ip

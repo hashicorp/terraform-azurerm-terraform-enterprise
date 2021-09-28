@@ -153,16 +153,11 @@ variable "network_allow_range" {
 
 # TFE License
 # -----------
-variable "tfe_license_secret_name" {
-  default     = "tfe-license-base64"
-  type        = string
-  description = "Name of the secret under which the Base64 encoded TFE license is (or will be) stored in the Azure Key Vault"
-}
-
-variable "tfe_license_name" {
-  default     = "license.rli"
-  type        = string
-  description = "TFE License name"
+variable "tfe_license_secret" {
+  type = object({
+    secret_id = string
+  })
+  description = "The Key Vault secret under which the Base64 encoded TFE license is stored."
 }
 
 # Object Storage
@@ -457,18 +452,21 @@ variable "user_data_trusted_proxies" {
 
 # TLS Certificates
 # ----------------
-variable "ca_certificate_secret" {
+variable "ca_certificate" {
   default = {
-    name  = null
-    value = null
+    certificate_data_base64 = null
+    name                    = null
+    secret_id               = null
   }
   type = object({
-    name  = string
-    value = string
+    certificate_data_base64 = string
+    name                    = string
+    secret_id               = string
   })
   description = <<-EOD
-  A Key Vault secret of a certificate authority (CA) public certificate to be trusted by the Virtual Machine Scale Set
-  and the Application Gateway. This argument is only required if TLS certificates in the deployment are not issued by a well-known CA.
+  A Key Vault certificate which is the PEM formatted public certificate of a certificate authority (CA) to be trusted
+  by the Virtual Machine Scale Set and the Application Gateway. This argument is only required if TLS certificates in
+  the deployment are not issued by a well-known CA.
   EOD
 }
 
