@@ -7,7 +7,7 @@ resource "azurerm_user_assigned_identity" "vmss" {
 }
 
 resource "azurerm_key_vault_access_policy" "tfe_vmss_kv_access" {
-  for_each = compact([var.certificate.key_vault_id])
+  for_each = toset(compact([var.certificate.key_vault_id]))
 
   key_vault_id = each.value
   object_id    = azurerm_user_assigned_identity.vmss.principal_id
