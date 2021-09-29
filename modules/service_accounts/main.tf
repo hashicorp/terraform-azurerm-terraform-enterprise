@@ -10,15 +10,18 @@ locals {
 resource "random_pet" "random_pet_tfe_storage_account_name" {
   count = var.storage_account_name == null ? 1 : 0
 
-  length    = 3
-  prefix    = var.friendly_name_prefix
-  separator = "-"
+  length = 3
+  prefix = var.friendly_name_prefix
 }
 
 resource "azurerm_storage_account" "tfe_storage_account" {
   count = var.storage_account_name == null ? 1 : 0
 
-  name                = substr(random_pet.random_pet_tfe_storage_account_name[0].id, 0, 24)
+  name = substr(
+    lower(replace(random_pet.random_pet_tfe_storage_account_name[0].id, "/[^[:alnum:]]/", "")),
+    0,
+    24
+  )
   location            = var.location
   resource_group_name = var.resource_group_name
 
