@@ -89,7 +89,7 @@ variable "user_data_release_sequence" {
 
 variable "tfe_license_secret" {
   type = object({
-    secret_id = string
+    id = string
   })
   description = "The Key Vault secret under which the Base64 encoded Terraform Enterprise license is stored."
 }

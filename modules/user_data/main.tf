@@ -40,7 +40,7 @@ locals {
       # Secrets
       ca_certificate_secret_id = var.ca_certificate.secret_id
       tfe_license_pathname     = local.tfe_license_pathname
-      tfe_license_secret_id    = var.tfe_license_secret.secret_id
+      tfe_license_secret_id    = var.tfe_license_secret.id
 
       # Proxy information
       proxy_ip   = var.proxy_ip
