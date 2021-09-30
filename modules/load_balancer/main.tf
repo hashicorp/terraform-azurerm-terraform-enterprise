@@ -27,6 +27,8 @@ locals {
   console_frontend_http_listener_name = "tfe-ag-http-listener-frontend-port-console"
   console_backend_http_settings_name  = "tfe-ag-backend-http-settings-console"
   console_request_routing_rule_name   = "tfe-ag-routing-rule-console"
+
+  trusted_root_certificates = setsubtract([var.ca_certificate_secret], [null])
 }
 
 # New DNS Record
@@ -146,9 +148,12 @@ resource "azurerm_application_gateway" "tfe_ag" {
     key_vault_secret_id = var.certificate.secret_id
   }
 
-  trusted_root_certificate {
-    name = var.ca_certificate_secret.name
-    data = var.ca_certificate_secret.value
+  dynamic "trusted_root_certificate" {
+    for_each = local.trusted_root_certificates
+    content {
+      name = trusted_root_certificate.value.name
+      data = trusted_root_certificate.value.value
+    }
   }
 
   # Public front end configuration
@@ -207,7 +212,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
       request_timeout       = 60
       host_name             = var.fqdn
 
-      trusted_root_certificate_names = compact([var.ca_certificate_secret.name])
+      trusted_root_certificate_names = [for certificate in local.trusted_root_certificates : certificate.name]
     }
   }
 

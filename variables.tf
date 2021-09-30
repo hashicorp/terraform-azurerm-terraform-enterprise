@@ -441,12 +441,7 @@ variable "user_data_trusted_proxies" {
 # TLS Certificates
 # ----------------
 variable "ca_certificate_secret" {
-  default = {
-    id           = null
-    key_vault_id = null
-    name         = null
-    value        = null
-  }
+  default = null
   type = object({
     id           = string
     key_vault_id = string

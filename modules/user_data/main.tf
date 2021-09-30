@@ -42,7 +42,7 @@ locals {
       tls_bootstrap_key_pathname  = local.tls_bootstrap_key_pathname
 
       # Secrets
-      ca_certificate_secret_id = var.ca_certificate_secret.id
+      ca_certificate_secret = var.ca_certificate_secret
       certificate_secret_id    = var.certificate_secret.id
       key_secret_id            = var.key_secret.id
       tfe_license_pathname     = local.tfe_license_pathname

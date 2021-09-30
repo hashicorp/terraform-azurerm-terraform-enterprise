@@ -7,13 +7,16 @@ resource "azurerm_user_assigned_identity" "vmss" {
 }
 
 resource "azurerm_key_vault_access_policy" "tfe_vmss_kv_access" {
-  for_each = toset(compact([
-    var.ca_certificate_secret.key_vault_id,
-    var.certificate_secret.key_vault_id,
-    var.key_secret.key_vault_id
-  ]))
+  for_each = setsubtract(
+    [
+      var.ca_certificate_secret,
+      var.certificate_secret,
+      var.key_secret
+    ],
+    [null]
+  )
 
-  key_vault_id = each.value
+  key_vault_id = each.value.key_vault_id
   object_id    = azurerm_user_assigned_identity.vmss.principal_id
   tenant_id    = var.tenant_id
 
