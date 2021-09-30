@@ -41,21 +41,21 @@ EOF
 }
 
 certificate_config() {
-	%{ if certificate_secret_id != null ~}
+	%{ if certificate_secret != null ~}
 	echo "[$(date +"%FT%T")] [Terraform Enterprise] Configure TlsBootstrapCert" | tee -a /var/log/ptfe.log
 	# Obtain access token for Azure Key Vault
 	access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
-	certificate_data_b64=$(curl --noproxy '*' ${certificate_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
+	certificate_data_b64=$(curl --noproxy '*' ${certificate_secret.id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
 
 	mkdir -p $(dirname ${tls_bootstrap_cert_pathname})
 	echo $certificate_data_b64 | base64 --decode > ${tls_bootstrap_cert_pathname}
 
 	%{ endif ~}
-	%{ if key_secret_id != null ~}
+	%{ if key_secret != null ~}
 	echo "[$(date +"%FT%T")] [Terraform Enterprise] Configure TlsBootstrapKey" | tee -a /var/log/ptfe.log
 	# Obtain access token for Azure Key Vault
 	access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
-	key_data_b64=$(curl --noproxy '*' ${key_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
+	key_data_b64=$(curl --noproxy '*' ${key_secret.id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
 
 	mkdir -p $(dirname ${tls_bootstrap_key_pathname})
 	echo $key_data_b64 | base64 --decode > ${tls_bootstrap_key_pathname}
@@ -104,7 +104,7 @@ retrieve_tfe_license() {
 
 	# Obtain access token for Azure Key Vault
 	access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
-	license=$(curl --noproxy '*' ${tfe_license_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
+	license=$(curl --noproxy '*' ${tfe_license_secret.id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
     echo $license | base64 -d > ${tfe_license_pathname}
 }
 

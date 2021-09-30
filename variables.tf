@@ -456,11 +456,7 @@ variable "ca_certificate_secret" {
 }
 
 variable "load_balancer_certificate" {
-  default = {
-    key_vault_id = null
-    name         = null
-    secret_id    = null
-  }
+  default = null
   type = object({
     key_vault_id = string
     name         = string
@@ -470,10 +466,7 @@ variable "load_balancer_certificate" {
 }
 
 variable "vm_certificate_secret" {
-  default = {
-    key_vault_id = null
-    id           = null
-  }
+  default = null
   type = object({
     key_vault_id = string
     id           = string
@@ -485,10 +478,7 @@ variable "vm_certificate_secret" {
 }
 
 variable "vm_key_secret" {
-  default = {
-    key_vault_id = null
-    id           = null
-  }
+  default = null
   type = object({
     key_vault_id = string
     id           = string

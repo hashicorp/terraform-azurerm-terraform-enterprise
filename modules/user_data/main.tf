@@ -11,7 +11,7 @@ locals {
     TlsBootstrapHostname         = var.fqdn
     TlsBootstrapCert             = local.tls_bootstrap_cert_pathname
     TlsBootstrapKey              = local.tls_bootstrap_key_pathname
-    TlsBootstrapType             = var.certificate_secret.id == null ? "self-signed" : "server-path"
+    TlsBootstrapType             = var.certificate_secret == null ? "self-signed" : "server-path"
   }
 
   user_data_release_sequence = {
@@ -43,10 +43,10 @@ locals {
 
       # Secrets
       ca_certificate_secret = var.ca_certificate_secret
-      certificate_secret_id    = var.certificate_secret.id
-      key_secret_id            = var.key_secret.id
-      tfe_license_pathname     = local.tfe_license_pathname
-      tfe_license_secret_id    = var.tfe_license_secret.id
+      certificate_secret    = var.certificate_secret
+      key_secret            = var.key_secret
+      tfe_license_pathname  = local.tfe_license_pathname
+      tfe_license_secret    = var.tfe_license_secret
 
       # Proxy information
       proxy_ip   = var.proxy_ip
