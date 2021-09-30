@@ -28,7 +28,7 @@ locals {
   console_backend_http_settings_name  = "tfe-ag-backend-http-settings-console"
   console_request_routing_rule_name   = "tfe-ag-routing-rule-console"
 
-  trusted_root_certificates = setsubtract([var.ca_certificate_secret], [null])
+  trusted_root_certificates = var.ca_certificate_secret == null ? [] : [var.ca_certificate_secret]
 }
 
 # New DNS Record
