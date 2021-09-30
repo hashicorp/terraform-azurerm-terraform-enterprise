@@ -104,12 +104,34 @@ variable "vm_image_id" {
   }
 }
 
-variable "certificate" {
+variable "ca_certificate_secret" {
   type = object({
     key_vault_id = string
-    secret_id    = string
   })
-  description = "The Key Vault Certificate for the Virtual Machine Scale Set."
+  description = <<-EOD
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a certificate
+  authority (CA) to be trusted by the Virtual Machine Scale Set.
+  EOD
+}
+
+variable "certificate_secret" {
+  type = object({
+    key_vault_id = string
+  })
+  description = <<-EOD
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate for the Virtual
+  Machine Scale Set.
+  EOD
+}
+
+variable "key_secret" {
+  type = object({
+    key_vault_id = string
+  })
+  description = <<-EOD
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded private key for the Virtual Machine
+  Scale Set.
+  EOD
 }
 
 # Optional variables not currently specified in root module

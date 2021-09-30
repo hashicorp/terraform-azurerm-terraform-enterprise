@@ -1,5 +1,7 @@
 locals {
-  tfe_license_pathname = "/etc/terraform-enterprise.rli"
+  tfe_license_pathname        = "/etc/terraform-enterprise.rli"
+  tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"
+  tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
   replicated_base_config = {
     BypassPreflightChecks        = true
     DaemonAuthenticationPassword = random_string.password.result
@@ -7,9 +9,9 @@ locals {
     ImportSettingsFrom           = "/etc/ptfe-settings.json"
     LicenseFileLocation          = local.tfe_license_pathname
     TlsBootstrapHostname         = var.fqdn
-    TlsBootstrapCert             = "/var/lib/waagent/${upper(var.certificate.thumbprint)}.crt"
-    TlsBootstrapKey              = "/var/lib/waagent/${upper(var.certificate.thumbprint)}.prv"
-    TlsBootstrapType             = var.certificate.thumbprint == null ? "self-signed" : "server-path"
+    TlsBootstrapCert             = local.tls_bootstrap_cert_pathname
+    TlsBootstrapKey              = local.tls_bootstrap_key_pathname
+    TlsBootstrapType             = var.certificate_secret.id == null ? "self-signed" : "server-path"
   }
 
   user_data_release_sequence = {
@@ -32,13 +34,17 @@ locals {
     "${path.module}/templates/tfe.sh.tpl",
     {
       # Configuration data
-      replicated    = base64encode(local.replicated_configuration)
-      settings      = base64encode(local.tfe_configuration)
-      active_active = var.active_active
-      fqdn          = var.fqdn
+      active_active               = var.active_active
+      fqdn                        = var.fqdn
+      replicated                  = base64encode(local.replicated_configuration)
+      settings                    = base64encode(local.tfe_configuration)
+      tls_bootstrap_cert_pathname = local.tls_bootstrap_cert_pathname
+      tls_bootstrap_key_pathname  = local.tls_bootstrap_key_pathname
 
       # Secrets
-      ca_certificate_secret_id = var.ca_certificate.secret_id
+      ca_certificate_secret_id = var.ca_certificate_secret.id
+      certificate_secret_id    = var.certificate_secret.id
+      key_secret_id            = var.key_secret.id
       tfe_license_pathname     = local.tfe_license_pathname
       tfe_license_secret_id    = var.tfe_license_secret.id
 

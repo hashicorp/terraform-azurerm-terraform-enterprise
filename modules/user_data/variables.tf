@@ -94,19 +94,34 @@ variable "tfe_license_secret" {
   description = "The Key Vault secret under which the Base64 encoded Terraform Enterprise license is stored."
 }
 
-variable "ca_certificate" {
+variable "ca_certificate_secret" {
   type = object({
-    secret_id = string
+    id = string
   })
   description = <<-EOD
-  A Key Vault certificate which is the PEM formatted public certificate of a certificate authority (CA) to be trusted
-  by the Virtual Machine Scale Set.
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a certificate
+  authority (CA) to be trusted by the Virtual Machine Scale Set.
   EOD
 }
 
-variable "certificate" {
-  type        = object({ thumbprint = string })
-  description = "The Key Vault Certificate for the Virtual Machine Scale Set."
+variable "certificate_secret" {
+  type = object({
+    id = string
+  })
+  description = <<-EOD
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate for the Virtual
+  Machine Scale Set.
+  EOD
+}
+
+variable "key_secret" {
+  type = object({
+    id = string
+  })
+  description = <<-EOD
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded private key for the Virtual Machine
+  Scale Set.
+  EOD
 }
 
 variable "user_data_iact_subnet_list" {

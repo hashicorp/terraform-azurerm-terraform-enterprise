@@ -233,8 +233,9 @@ module "user_data" {
   user_data_trusted_proxies  = local.trusted_proxies
 
   # Certificates
-  ca_certificate = var.ca_certificate
-  certificate    = var.vm_certificate
+  ca_certificate_secret = var.ca_certificate_secret
+  certificate_secret    = var.vm_certificate_secret
+  key_secret            = var.vm_key_secret
 
   # Proxy
   proxy_ip   = var.proxy_ip
@@ -290,8 +291,8 @@ module "load_balancer" {
   tenant_id               = data.azurerm_client_config.current.tenant_id
 
   # Secrets
-  certificate    = var.load_balancer_certificate
-  ca_certificate = var.ca_certificate
+  ca_certificate_secret = var.ca_certificate_secret
+  certificate           = var.load_balancer_certificate
 
   # Network
   network_frontend_subnet_cidr = var.network_frontend_subnet_cidr
@@ -340,7 +341,9 @@ module "vm" {
   load_balancer_backend_id = module.load_balancer.load_balancer_backend_id
   load_balancer_public     = var.load_balancer_public
 
-  certificate = var.vm_certificate
+  ca_certificate_secret = var.ca_certificate_secret
+  certificate_secret    = var.vm_certificate_secret
+  key_secret            = var.vm_key_secret
 
   tags = var.tags
 

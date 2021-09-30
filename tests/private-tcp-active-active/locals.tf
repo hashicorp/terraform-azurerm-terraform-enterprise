@@ -11,9 +11,9 @@ locals {
   proxy_script = templatefile(
     "${path.module}/templates/mitm.sh.tpl",
     {
-      ca_certificate  = data.azurerm_key_vault_certificate_data.ca.pem
-      ca_private_key  = data.azurerm_key_vault_certificate_data.ca.key
-      http_proxy_port = local.proxy_port
+      certificate_secret_id = data.azurerm_key_vault_secret.ca_certificate.id
+      key_secret_id         = data.azurerm_key_vault_secret.ca_key.id
+      http_proxy_port       = local.proxy_port
     }
   )
 

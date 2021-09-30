@@ -7,16 +7,15 @@ resource "azurerm_user_assigned_identity" "vmss" {
 }
 
 resource "azurerm_key_vault_access_policy" "tfe_vmss_kv_access" {
-  for_each = toset(compact([var.certificate.key_vault_id]))
+  for_each = toset(compact([
+    var.ca_certificate_secret.key_vault_id,
+    var.certificate_secret.key_vault_id,
+    var.key_secret.key_vault_id
+  ]))
 
   key_vault_id = each.value
   object_id    = azurerm_user_assigned_identity.vmss.principal_id
   tenant_id    = var.tenant_id
-
-  certificate_permissions = [
-    "get",
-    "list"
-  ]
 
   secret_permissions = [
     "get",
@@ -40,14 +39,6 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
   zones        = var.zones
 
   custom_data = var.vm_userdata_script
-
-  secret {
-    certificate {
-      url = var.certificate.secret_id
-    }
-
-    key_vault_id = var.certificate.key_vault_id
-  }
 
   identity {
     type = var.vm_identity_type

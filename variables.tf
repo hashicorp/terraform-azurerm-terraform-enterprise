@@ -440,21 +440,23 @@ variable "user_data_trusted_proxies" {
 
 # TLS Certificates
 # ----------------
-variable "ca_certificate" {
+variable "ca_certificate_secret" {
   default = {
-    certificate_data_base64 = null
-    name                    = null
-    secret_id               = null
+    id           = null
+    key_vault_id = null
+    name         = null
+    value        = null
   }
   type = object({
-    certificate_data_base64 = string
-    name                    = string
-    secret_id               = string
+    id           = string
+    key_vault_id = string
+    name         = string
+    value        = string
   })
   description = <<-EOD
-  A Key Vault certificate which is the PEM formatted public certificate of a certificate authority (CA) to be trusted
-  by the Virtual Machine Scale Set and the Application Gateway. This argument is only required if TLS certificates in
-  the deployment are not issued by a well-known CA.
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a
+  certificate authority (CA) to be trusted by the Virtual Machine Scale Set and the Application Gateway. This argument
+  is only required if TLS certificates in the deployment are not issued by a well-known CA.
   EOD
 }
 
@@ -472,18 +474,34 @@ variable "load_balancer_certificate" {
   description = "A Key Vault Certificate to be attached to the Application Gateway."
 }
 
-variable "vm_certificate" {
+variable "vm_certificate_secret" {
   default = {
     key_vault_id = null
-    secret_id    = null
-    thumbprint   = null
+    id           = null
   }
   type = object({
     key_vault_id = string
-    secret_id    = string
-    thumbprint   = string
+    id           = string
   })
-  description = "A Key Vault Certificate to be attached to the Virtual Machine Scale Set."
+  description = <<-EOD
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate for the Virtual
+  Machine Scale Set.
+  EOD
+}
+
+variable "vm_key_secret" {
+  default = {
+    key_vault_id = null
+    id           = null
+  }
+  type = object({
+    key_vault_id = string
+    id           = string
+  })
+  description = <<-EOD
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded private key for the Virtual Machine
+  Scale Set.
+  EOD
 }
 
 # Proxy

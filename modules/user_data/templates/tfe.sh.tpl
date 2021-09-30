@@ -40,12 +40,34 @@ EOF
 	%{ endif ~}
 }
 
+certificate_config() {
+	%{ if certificate_secret_id != null ~}
+	echo "[$(date +"%FT%T")] [Terraform Enterprise] Configure TlsBootstrapCert" | tee -a /var/log/ptfe.log
+	# Obtain access token for Azure Key Vault
+	access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
+	certificate_data=$(curl --noproxy '*' ${certificate_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value | base64 --decode)
+
+	mkdir -p $(dirname ${tls_bootstrap_cert_pathname})
+	echo $certificate_data > ${tls_bootstrap_cert_pathname}
+
+	%{ endif ~}
+	%{ if key_secret_id != null ~}
+	echo "[$(date +"%FT%T")] [Terraform Enterprise] Configure TlsBootstrapKey" | tee -a /var/log/ptfe.log
+	# Obtain access token for Azure Key Vault
+	access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
+	key_data=$(curl --noproxy '*' ${key_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value | base64 --decode)
+
+	mkdir -p $(dirname ${tls_bootstrap_key_pathname})
+	echo $key_data > ${tls_bootstrap_key_pathname}
+	%{ endif ~}
+}
+
 ca_config() {
 	%{ if ca_certificate_secret_id != null ~}
 	echo "[$(date +"%FT%T")] [Terraform Enterprise] Configure CA cert" | tee -a /var/log/ptfe.log
-	# Obtain access token for Azure Key Vault to obtain cert secret
+	# Obtain access token for Azure Key Vault
 	access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
-	certificate_data=$(curl --noproxy '*' ${ca_certificate_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
+	certificate_data=$(curl --noproxy '*' ${ca_certificate_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value | base64 --decode)
 
 	ca_certificate_directory="/dev/null"
 	if [[ $DISTRO_NAME == *"Red Hat"* ]]
@@ -79,7 +101,7 @@ resize_lv() {
 retrieve_tfe_license() {
 	echo "[$(date +"%FT%T")] [Terraform Enterprise] Retrieve TFE license" | tee -a /var/log/ptfe.log
 
-	# Obtain access token for Azure Key Vault to obtain base64 encoded TFE license secret
+	# Obtain access token for Azure Key Vault
 	access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
 	license=$(curl --noproxy '*' ${tfe_license_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
     echo $license | base64 -d > ${tfe_license_pathname}
@@ -126,6 +148,7 @@ DISTRO_NAME=$(grep "^NAME=" /etc/os-release | cut -d"\"" -f2)
 install_jq
 create_tfe_config
 proxy_config
+certificate_config
 ca_config
 retrieve_tfe_license
 

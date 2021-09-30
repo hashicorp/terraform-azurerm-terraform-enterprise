@@ -1,15 +1,20 @@
-data "azurerm_key_vault_certificate" "vm" {
-  name         = var.vm_certificate_name
+data "azurerm_key_vault_secret" "vm_certificate" {
+  name         = var.vm_certificate_secret_name
   key_vault_id = var.key_vault_id
 }
 
-data "azurerm_key_vault_certificate" "ca" {
-  name         = var.ca_certificate_name
+data "azurerm_key_vault_secret" "vm_key" {
+  name         = var.vm_key_secret_name
   key_vault_id = var.key_vault_id
 }
 
-data "azurerm_key_vault_certificate_data" "ca" {
-  name         = var.ca_certificate_name
+data "azurerm_key_vault_secret" "ca_certificate" {
+  name         = var.ca_certificate_secret_name
+  key_vault_id = var.key_vault_id
+}
+
+data "azurerm_key_vault_secret" "ca_key" {
+  name         = var.ca_key_secret_name
   key_vault_id = var.key_vault_id
 }
 

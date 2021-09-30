@@ -81,14 +81,14 @@ variable "certificate" {
   description = "The Azure Key Vault Certificate for the Application Gateway"
 }
 
-variable "ca_certificate" {
+variable "ca_certificate_secret" {
   type = object({
-    certificate_data_base64 = string
-    name                    = string
+    name  = string
+    value = string
   })
   description = <<-EOD
-  A Key Vault certificate which is the PEM formatted public certificate of a certificate authority (CA) to be trusted
-  by the Application Gateway.
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a
+  certificate authority (CA) to be trusted by the Application Gateway.
   EOD
 }
 

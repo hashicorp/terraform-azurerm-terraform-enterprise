@@ -25,9 +25,20 @@ variable "key_vault_id" {
   description = "The identity of the Key Vault which contains secrets and certificates."
 }
 
-variable "vm_certificate_name" {
+variable "vm_certificate_secret_name" {
   type        = string
-  description = "Azure Key Vault Certificate name for the Virtual Machine Scale Set"
+  description = <<-EOD
+  The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a
+  certificate authority (CA) to be trusted by the Virtual Machine Scale Set.
+  EOD
+}
+
+variable "vm_key_secret_name" {
+  type        = string
+  description = <<-EOD
+  The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded private key of a
+  certificate authority (CA) to be trusted by the Virtual Machine Scale Set.
+  EOD
 }
 
 variable "tfe_license_secret_name" {
@@ -37,9 +48,20 @@ variable "tfe_license_secret_name" {
 
 # Proxy & Bastion
 # ---------------
-variable "ca_certificate_name" {
+variable "ca_certificate_secret_name" {
   type        = string
-  description = "Name of the secret under which the CA certificate for the mitmproxy is stored in the Azure Key Vault"
+  description = <<-EOD
+  The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a
+  certificate authority (CA) to be trusted by the Virtual Machine Scale Set.
+  EOD
+}
+
+variable "ca_key_secret_name" {
+  type        = string
+  description = <<-EOD
+  The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded private key of a
+  certificate authority (CA).
+  EOD
 }
 
 variable "proxy_public_ssh_key_secret_name" {
