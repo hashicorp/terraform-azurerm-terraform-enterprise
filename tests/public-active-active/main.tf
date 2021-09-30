@@ -8,17 +8,16 @@ resource "random_string" "friendly_name" {
 module "public_active_active" {
   source = "../../"
 
-  friendly_name_prefix = local.friendly_name_prefix
+  domain_name             = var.domain_name
+  friendly_name_prefix    = local.friendly_name_prefix
+  location                = var.location
+  resource_group_name_dns = var.resource_group_name_dns
 
   # Bootstrapping resources
-  resource_group_name_kv         = var.resource_group_name_kv
-  key_vault_name                 = var.key_vault_name
-  resource_group_name_dns        = var.resource_group_name_dns
-  domain_name                    = var.domain_name
-  tfe_license_secret_name        = var.tfe_license_secret_name
-  certificate_name               = var.certificate_name
-  tfe_bootstrap_cert_secret_name = var.wildcard_chained_certificate_pem_secret_name
-  tfe_bootstrap_key_secret_name  = var.wildcard_private_key_pem_secret_name
+  load_balancer_certificate = data.azurerm_key_vault_certificate.load_balancer
+  tfe_license_secret        = data.azurerm_key_vault_secret.tfe_license
+  vm_certificate_secret     = data.azurerm_key_vault_secret.vm_certificate
+  vm_key_secret             = data.azurerm_key_vault_secret.vm_key
 
   # Public Active / Active Scenario
   user_data_iact_subnet_list  = var.iact_subnet_list
