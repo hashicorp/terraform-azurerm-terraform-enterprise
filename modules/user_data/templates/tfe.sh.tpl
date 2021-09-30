@@ -45,20 +45,20 @@ certificate_config() {
 	echo "[$(date +"%FT%T")] [Terraform Enterprise] Configure TlsBootstrapCert" | tee -a /var/log/ptfe.log
 	# Obtain access token for Azure Key Vault
 	access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
-	certificate_data=$(curl --noproxy '*' ${certificate_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value | base64 --decode)
+	certificate_data_b64=$(curl --noproxy '*' ${certificate_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
 
 	mkdir -p $(dirname ${tls_bootstrap_cert_pathname})
-	echo $certificate_data > ${tls_bootstrap_cert_pathname}
+	echo $certificate_data_b64 | base64 --decode > ${tls_bootstrap_cert_pathname}
 
 	%{ endif ~}
 	%{ if key_secret_id != null ~}
 	echo "[$(date +"%FT%T")] [Terraform Enterprise] Configure TlsBootstrapKey" | tee -a /var/log/ptfe.log
 	# Obtain access token for Azure Key Vault
 	access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
-	key_data=$(curl --noproxy '*' ${key_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value | base64 --decode)
+	key_data_b64=$(curl --noproxy '*' ${key_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
 
 	mkdir -p $(dirname ${tls_bootstrap_key_pathname})
-	echo $key_data > ${tls_bootstrap_key_pathname}
+	echo $key_data_b64 | base64 --decode > ${tls_bootstrap_key_pathname}
 	%{ endif ~}
 }
 
@@ -67,7 +67,7 @@ ca_config() {
 	echo "[$(date +"%FT%T")] [Terraform Enterprise] Configure CA cert" | tee -a /var/log/ptfe.log
 	# Obtain access token for Azure Key Vault
 	access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
-	certificate_data=$(curl --noproxy '*' ${ca_certificate_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value | base64 --decode)
+	ca_certificate_data_b64=$(curl --noproxy '*' ${ca_certificate_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
 
 	ca_certificate_directory="/dev/null"
 	if [[ $DISTRO_NAME == *"Red Hat"* ]]
@@ -78,7 +78,7 @@ ca_config() {
 	fi
 
 	mkdir -p $ca_certificate_directory
-	echo $certificate_data > $ca_certificate_directory/tfe-ca-certificate.crt
+	echo $ca_certificate_data_b64 | base64 --decode > $ca_certificate_directory/tfe-ca-certificate.crt
 
 	if [[ $DISTRO_NAME == *"Red Hat"* ]]
 	then
@@ -87,7 +87,7 @@ ca_config() {
 		update-ca-certificates
 	fi
 
-	jq ". + { ca_certs: { value: \"$certificate_data\" } }" -- /etc/ptfe-settings.json > ptfe-settings.json.updated
+	jq ". + { ca_certs: { value: \"$(echo $certificate_data_b64 | base64 --decode)\" } }" -- /etc/ptfe-settings.json > ptfe-settings.json.updated
 	cp ./ptfe-settings.json.updated /etc/ptfe-settings.json
 	%{ endif ~}
 }

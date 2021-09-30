@@ -33,13 +33,13 @@ chmod +x /bin/jq
 echo "[$(date +"%FT%T")] Downloading Public Certificate and Private Key" | tee -a /var/log/ptfe.log
 # Obtain access token for Azure Key Vault
 access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
-certificate_data=$(curl --noproxy '*' ${certificate_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value | base64 --decode)
-key_data=$(curl --noproxy '*' ${key_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value | base64 --decode)
+certificate_data_b64=$(curl --noproxy '*' ${certificate_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
+key_data_b64=$(curl --noproxy '*' ${key_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
 
 echo "[$(date +"%FT%T")]  Deploying Public Certificate and Private Key for mitmproxy" | tee -a /var/log/ptfe.log
 cat <<EOF >/etc/mitmproxy/mitmproxy-ca.pem
-$certificate_date
-$key_data
+$(echo $certificate_data_b64 | base64 --decode)
+$(echo $key_data_b64 | base64 --decode)
 EOF
 
 echo "[$(date +"%FT%T")]  Starting mitmproxy service" | tee -a /var/log/ptfe.log
