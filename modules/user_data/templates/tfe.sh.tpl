@@ -59,6 +59,7 @@ certificate_config() {
 
 	mkdir -p $(dirname ${tls_bootstrap_key_pathname})
 	echo $key_data_b64 | base64 --decode > ${tls_bootstrap_key_pathname}
+	chmod 0600 ${tls_bootstrap_key_pathname}
 	%{ endif ~}
 }
 
