@@ -60,6 +60,25 @@ resource "azurerm_network_interface_security_group_association" "proxy" {
   network_security_group_id = azurerm_network_security_group.proxy.id
 }
 
+resource "azurerm_user_assigned_identity" "proxy" {
+  location            = var.location
+  name                = "${local.friendly_name_prefix}-proxy"
+  resource_group_name = local.resource_group_name
+
+  tags = local.common_tags
+}
+
+resource "azurerm_key_vault_access_policy" "proxy" {
+  key_vault_id = var.key_vault_id
+  object_id    = azurerm_user_assigned_identity.proxy.principal_id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+
+  secret_permissions = [
+    "get",
+    "list"
+  ]
+}
+
 # Create the proxy virtual machine
 # --------------------------------
 resource "azurerm_linux_virtual_machine" "proxy" {
@@ -83,6 +102,12 @@ resource "azurerm_linux_virtual_machine" "proxy" {
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
+  }
+
+  identity {
+    type = "UserAssigned"
+
+    identity_ids = [azurerm_user_assigned_identity.proxy.id]
   }
 
   admin_ssh_key {
