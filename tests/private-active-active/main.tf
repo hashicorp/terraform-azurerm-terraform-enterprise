@@ -16,12 +16,10 @@ module "private_active_active" {
   user_data_iact_subnet_list = ["${azurerm_linux_virtual_machine.vm_bastion.private_ip_address}/32"]
 
   # Bootstrapping resources
-  certificate_name               = var.certificate_name
-  key_vault_name                 = var.key_vault_name
-  resource_group_name_kv         = var.resource_group_name_kv
-  tfe_bootstrap_cert_secret_name = var.wildcard_chained_certificate_pem_secret_name
-  tfe_bootstrap_key_secret_name  = var.wildcard_private_key_pem_secret_name
-  tfe_license_secret_name        = var.tfe_license_secret_name
+  load_balancer_certificate = data.azurerm_key_vault_certificate.load_balancer
+  tfe_license_secret        = data.azurerm_key_vault_secret.tfe_license
+  vm_certificate_secret     = data.azurerm_key_vault_secret.vm_certificate
+  vm_key_secret             = data.azurerm_key_vault_secret.vm_key
 
   # Behind proxy information
   proxy_ip   = azurerm_linux_virtual_machine.proxy.private_ip_address
