@@ -29,7 +29,7 @@ locals {
   console_request_routing_rule_name   = "tfe-ag-routing-rule-console"
 
   trusted_root_certificates      = var.ca_certificate_secret == null ? {} : { (var.ca_certificate_secret.name) = var.ca_certificate_secret.value }
-  trusted_root_certificate_names = [for certificate in local.trusted_root_certificates : certificate.name]
+  trusted_root_certificate_names = keys(local.trusted_root_certificates)
 }
 
 # New DNS Record
