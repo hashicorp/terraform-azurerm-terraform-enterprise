@@ -28,7 +28,8 @@ locals {
   console_backend_http_settings_name  = "tfe-ag-backend-http-settings-console"
   console_request_routing_rule_name   = "tfe-ag-routing-rule-console"
 
-  trusted_root_certificates = var.ca_certificate_secret == null ? [] : [var.ca_certificate_secret]
+  trusted_root_certificates      = var.ca_certificate_secret == null ? {} : { (var.ca_certificate_secret.name) = var.ca_certificate_secret.value }
+  trusted_root_certificate_names = [for certificate in local.trusted_root_certificates : certificate.name]
 }
 
 # New DNS Record
@@ -151,8 +152,8 @@ resource "azurerm_application_gateway" "tfe_ag" {
   dynamic "trusted_root_certificate" {
     for_each = local.trusted_root_certificates
     content {
-      name = trusted_root_certificate.value.name
-      data = trusted_root_certificate.value.value
+      name = trusted_root_certificate.key
+      data = trusted_root_certificate.value
     }
   }
 
@@ -212,7 +213,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
       request_timeout       = 60
       host_name             = var.fqdn
 
-      trusted_root_certificate_names = [for certificate in local.trusted_root_certificates : certificate.name]
+      trusted_root_certificate_names = local.trusted_root_certificate_names
     }
   }
 
@@ -263,7 +264,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
       request_timeout       = 60
       host_name             = var.fqdn
 
-      trusted_root_certificate_names = local.trusted_root_certificate_name
+      trusted_root_certificate_names = local.trusted_root_certificate_names
     }
   }
 
