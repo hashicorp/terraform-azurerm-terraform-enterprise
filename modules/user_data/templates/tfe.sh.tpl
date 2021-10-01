@@ -37,6 +37,8 @@ EOF
 	export http_proxy="${proxy_ip}:${proxy_port}"
 	export https_proxy="${proxy_ip}:${proxy_port}"
 	export no_proxy="${no_proxy}"
+	%{ else ~}
+	echo "[$(date +"%FT%T")] [Terraform Enterprise] Skipping proxy configuration" | tee -a /var/log/ptfe.log
 	%{ endif ~}
 }
 
@@ -50,6 +52,9 @@ certificate_config() {
 	mkdir -p $(dirname ${tls_bootstrap_cert_pathname})
 	echo $certificate_data_b64 | base64 --decode > ${tls_bootstrap_cert_pathname}
 
+	%{ else ~}
+	echo "[$(date +"%FT%T")] [Terraform Enterprise] Skipping TlsBootstrapCert configuration" | tee -a /var/log/ptfe.log
+
 	%{ endif ~}
 	%{ if key_secret != null ~}
 	echo "[$(date +"%FT%T")] [Terraform Enterprise] Configure TlsBootstrapKey" | tee -a /var/log/ptfe.log
@@ -60,6 +65,8 @@ certificate_config() {
 	mkdir -p $(dirname ${tls_bootstrap_key_pathname})
 	echo $key_data_b64 | base64 --decode > ${tls_bootstrap_key_pathname}
 	chmod 0600 ${tls_bootstrap_key_pathname}
+	%{ else ~}
+	echo "[$(date +"%FT%T")] [Terraform Enterprise] Skipping TlsBootstrapKey configuration" | tee -a /var/log/ptfe.log
 	%{ endif ~}
 }
 
@@ -90,6 +97,8 @@ ca_config() {
 
 	jq ". + { ca_certs: { value: \"$(echo $certificate_data_b64 | base64 --decode)\" } }" -- /etc/ptfe-settings.json > ptfe-settings.json.updated
 	cp ./ptfe-settings.json.updated /etc/ptfe-settings.json
+	%{ else ~}
+	echo "[$(date +"%FT%T")] [Terraform Enterprise] Skipping CA certificate configuration" | tee -a /var/log/ptfe.log
 	%{ endif ~}
 }
 
