@@ -50,6 +50,14 @@ variable "tfe_license_secret_name" {
   description = "Name of the secret under which the Base64 encoded TFE license is stored in the Azure Key Vault"
 }
 
+variable "ca_certificate_secret_name" {
+  type        = string
+  description = <<-EOD
+  The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a
+  certificate authority (CA) to be trusted by the Virtual Machine Scale Set.
+  EOD
+}
+
 # User Data
 # ---------
 variable "iact_subnet_list" {

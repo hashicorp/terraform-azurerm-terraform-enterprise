@@ -14,6 +14,7 @@ module "public_active_active" {
   resource_group_name_dns = var.resource_group_name_dns
 
   # Bootstrapping resources
+  ca_certificate_secret     = data.azurerm_key_vault_secret.ca_certificate
   load_balancer_certificate = data.azurerm_key_vault_certificate.load_balancer
   tfe_license_secret        = data.azurerm_key_vault_secret.tfe_license
   vm_certificate_secret     = data.azurerm_key_vault_secret.vm_certificate
