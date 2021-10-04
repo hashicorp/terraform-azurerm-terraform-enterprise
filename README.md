@@ -88,7 +88,7 @@ additional context on the use of each of those variables.
 
 - IMPORTANT: In order to keep PEM formatted secrets properly formatted,
   they must be uploaded to Key Vault via Terraform (as the whole file or
-  via `az keyvault secret set`. Uploading them manually through the Azure
+  via `az keyvault secret set`). Uploading them manually through the Azure
   Portal will result in newline formatting issues.
 
 | Variable Name               | Variable Description                                                                                               | Explanation                                                                                                                                                                                                                                                                                                                                                                                                            |
