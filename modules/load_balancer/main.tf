@@ -149,6 +149,12 @@ resource "azurerm_application_gateway" "tfe_ag" {
     key_vault_secret_id = var.certificate.secret_id
   }
 
+  ssl_policy {
+    # AppGwSslPolicy20170401S requires >= TLSv1_2
+    policy_name = "AppGwSslPolicy20170401S"
+    policy_type = "Predefined"
+  }
+
   dynamic "trusted_root_certificate" {
     for_each = local.trusted_root_certificates
     content {

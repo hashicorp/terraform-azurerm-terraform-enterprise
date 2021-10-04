@@ -163,6 +163,10 @@ locals {
       value = random_id.root_secret.hex
     }
 
+    tls_vers = {
+      value = "tls_1_2_tls_1_3"
+    }
+
     trusted_proxies = {
       value = join(",", var.user_data_trusted_proxies)
     }
