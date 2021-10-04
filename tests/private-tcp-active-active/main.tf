@@ -26,9 +26,8 @@ module "private_tcp_active_active" {
   proxy_port            = local.proxy_port
 
   # Private Active / Active Scenario
-  vm_node_count = 2
-  # TODO: revert to "Standard_D32a_v4" when quota is increased
-  vm_sku                      = "Standard_D16as_v4"
+  vm_node_count               = 2
+  vm_sku                      = "Standard_D32a_v4"
   vm_image_id                 = "rhel"
   load_balancer_public        = false
   load_balancer_type          = "load_balancer"
