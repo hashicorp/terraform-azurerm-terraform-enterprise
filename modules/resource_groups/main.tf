@@ -7,7 +7,6 @@ locals {
   #   and kv if alternative resource group names are not supplied
   resource_group_name     = var.resource_group_name == null ? azurerm_resource_group.tfe_resource_group[0].name : var.resource_group_name
   resource_group_name_dns = var.resource_group_name_dns == null ? local.resource_group_name : var.resource_group_name_dns
-  resource_group_name_kv  = var.resource_group_name_kv == null ? local.resource_group_name : var.resource_group_name_kv
 }
 
 resource "azurerm_resource_group" "tfe_resource_group" {

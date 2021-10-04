@@ -63,7 +63,6 @@ variable "resource_group_name" {
 }
 
 variable "tenant_id" {
-  default     = null
   type        = string
   description = "The Azure Active Directory tenant ID that should be used for authenticating requests to the Key Vault"
 }
@@ -73,36 +72,23 @@ variable "resource_group_name_dns" {
   description = "Azure resource group name to use for DNS"
 }
 
-variable "key_vault_id" {
-  type        = string
-  description = "ID of Azure Key Vault containing required certificate"
+variable "certificate" {
+  type = object({
+    key_vault_id = string
+    name         = string
+    secret_id    = string
+  })
+  description = "The Azure Key Vault Certificate for the Application Gateway"
 }
 
-variable "certificate_name" {
-  type        = string
-  description = "Name of Azure Key Vault Certificate for Application Gateway"
-}
-
-variable "certificate_key_vault_secret_id" {
-  type        = string
-  description = "Secret ID of Azure Key Vault Certificate for Application Gateway"
-}
-
-variable "trusted_root_certificate_name" {
-  type        = string
+variable "ca_certificate_secret" {
+  type = object({
+    name  = string
+    value = string
+  })
   description = <<-EOD
-  (Optional) Name of the backend root certificate for Application Gateway to trust. If the backend
-  certificate is issued by a well-known certificate authority (CA), you do not need to provide a
-  trusted_root_certificate.
-  EOD
-}
-
-variable "trusted_root_certificate_data" {
-  type        = string
-  description = <<-EOD
-  (Optional) Base64 encoded PEM formatted backend root certificate data for Application Gateway to
-  trust. If the back-end certificate is issued by a well-known certificate authority (CA), you do
-  do not need to provide a trusted_root_certificate.
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a
+  certificate authority (CA) to be trusted by the Application Gateway.
   EOD
 }
 

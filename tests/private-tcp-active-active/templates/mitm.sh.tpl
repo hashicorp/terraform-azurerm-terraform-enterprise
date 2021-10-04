@@ -26,19 +26,20 @@ echo "[$(date +"%FT%T")]  Downloading mitmproxy tar from the web" | tee -a /var/
 curl -Lo /tmp/mitmproxy.tar.gz https://snapshots.mitmproxy.org/6.0.2/mitmproxy-6.0.2-linux.tar.gz
 tar xvf /tmp/mitmproxy.tar.gz -C /usr/local/bin/
 
-echo "[$(date +"%FT%T")] [Terraform Enterprise] Install JQ" | tee -a /var/log/ptfe.log
+echo "[$(date +"%FT%T")] Install JQ" | tee -a /var/log/ptfe.log
 curl --noproxy '*' -Lo /bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
 chmod +x /bin/jq
 
-echo "[$(date +"%FT%T")]  Downloading certificates for mitmproxy from Azure Key Vault" | tee -a /var/log/ptfe.log
+echo "[$(date +"%FT%T")] Downloading Public Certificate and Private Key" | tee -a /var/log/ptfe.log
+# Obtain access token for Azure Key Vault
 access_token=$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net' -H Metadata:true | jq -r .access_token)
-certificate=$(curl https://${key_vault_name}.vault.azure.net/secrets/${proxy_cert_secret_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
-private_key=$(curl https://${key_vault_name}.vault.azure.net/secrets/${proxy_key_secret_name}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
+certificate_data_b64=$(curl --noproxy '*' ${certificate_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
+key_data_b64=$(curl --noproxy '*' ${key_secret_id}?api-version=2016-10-01 -H "x-ms-version: 2017-11-09" -H "Authorization: Bearer $access_token" | jq -r .value)
 
-echo "[$(date +"%FT%T")]  Deploying certificates for mitmproxy" | tee -a /var/log/ptfe.log
+echo "[$(date +"%FT%T")]  Deploying Public Certificate and Private Key for mitmproxy" | tee -a /var/log/ptfe.log
 cat <<EOF >/etc/mitmproxy/mitmproxy-ca.pem
-$certificate
-$private_key
+$(echo $certificate_data_b64 | base64 --decode)
+$(echo $key_data_b64 | base64 --decode)
 EOF
 
 echo "[$(date +"%FT%T")]  Starting mitmproxy service" | tee -a /var/log/ptfe.log

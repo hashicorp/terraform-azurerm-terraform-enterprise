@@ -27,8 +27,6 @@ locals {
 
   # User Data
   # ---------
-  tfe_bootstrap_cert_name = var.tfe_bootstrap_cert_secret_name == null ? upper(module.service_accounts.certificate.thumbprint) : var.tfe_bootstrap_cert_secret_name
-  tfe_bootstrap_key_name  = var.tfe_bootstrap_key_secret_name == null ? upper(module.service_accounts.certificate.thumbprint) : var.tfe_bootstrap_key_secret_name
   trusted_proxies = concat(
     var.user_data_trusted_proxies,
     [var.network_frontend_subnet_cidr]
@@ -45,7 +43,6 @@ module "resource_groups" {
 
   resource_group_name     = var.resource_group_name
   resource_group_name_dns = var.resource_group_name_dns
-  resource_group_name_kv  = var.resource_group_name_kv
 
   tags = var.tags
 }
@@ -97,12 +94,6 @@ module "service_accounts" {
   storage_account_primary_blob_connection_string = var.storage_account_primary_blob_connection_string
   storage_account_tier                           = var.storage_account_tier
   storage_account_replication_type               = var.storage_account_replication_type
-
-  # Key Vault
-  resource_group_name_kv        = module.resource_groups.resource_group_name_kv
-  key_vault_name                = var.key_vault_name
-  certificate_name              = var.certificate_name
-  trusted_root_certificate_name = var.trusted_root_certificate_name
 
   tags = var.tags
 
@@ -236,25 +227,20 @@ module "user_data" {
   user_data_azure_container_name = module.object_storage.storage_account_container_name
 
   # TFE
-  user_data_tfe_license_name = var.tfe_license_name
   user_data_release_sequence = var.user_data_release_sequence
-  tfe_license_secret_name    = var.tfe_license_secret_name
+  tfe_license_secret         = var.tfe_license_secret
   user_data_iact_subnet_list = var.user_data_iact_subnet_list
   user_data_trusted_proxies  = local.trusted_proxies
 
   # Certificates
-  user_data_ca                      = var.user_data_ca == null ? "" : var.user_data_ca
-  user_data_use_kv_secrets          = var.tfe_bootstrap_cert_secret_name == null ? "0" : "1"
-  user_data_tfe_bootstrap_cert_name = local.tfe_bootstrap_cert_name
-  user_data_tfe_bootstrap_key_name  = local.tfe_bootstrap_key_name
+  ca_certificate_secret = var.ca_certificate_secret
+  certificate_secret    = var.vm_certificate_secret
+  key_secret            = var.vm_key_secret
 
   # Proxy
-  key_vault_name         = var.key_vault_name
-  proxy_ip               = var.proxy_ip
-  proxy_port             = var.proxy_port
-  proxy_cert_name        = var.proxy_cert_name
-  proxy_cert_secret_name = var.proxy_cert_secret_name
-  no_proxy               = [local.fqdn, var.network_cidr]
+  proxy_ip   = var.proxy_ip
+  proxy_port = var.proxy_port
+  no_proxy   = [local.fqdn, var.network_cidr]
 
   depends_on = [
     module.service_accounts,
@@ -305,11 +291,8 @@ module "load_balancer" {
   tenant_id               = data.azurerm_client_config.current.tenant_id
 
   # Secrets
-  key_vault_id                    = module.service_accounts.key_vault_id
-  certificate_name                = module.service_accounts.certificate.name
-  certificate_key_vault_secret_id = module.service_accounts.certificate.secret_id
-  trusted_root_certificate_name   = var.load_balancer_type == "application_gateway" && var.trusted_root_certificate_name != null ? var.trusted_root_certificate_name : null
-  trusted_root_certificate_data   = var.load_balancer_type == "application_gateway" && var.trusted_root_certificate_name != null ? base64encode(module.service_accounts.trusted_root_certificate) : null
+  ca_certificate_secret = var.ca_certificate_secret
+  certificate           = var.load_balancer_certificate
 
   # Network
   network_frontend_subnet_cidr = var.network_frontend_subnet_cidr
@@ -341,25 +324,26 @@ module "vm" {
   friendly_name_prefix = var.friendly_name_prefix
   resource_group_name  = module.resource_groups.resource_group_name
   location             = var.location
+  tenant_id            = data.azurerm_client_config.current.tenant_id
 
   # VM
-  vm_sku                       = var.vm_sku
-  vm_image_id                  = var.vm_image_id
-  vm_os_disk_disk_size_gb      = var.vm_os_disk_disk_size_gb
-  vm_subnet_id                 = local.network_private_subnet_id
-  vm_user                      = var.vm_user
-  vm_public_key                = var.vm_public_key == null ? tls_private_key.tfe_ssh[0].public_key_openssh : var.vm_public_key
-  vm_userdata_script           = module.user_data.tfe_userdata_base64_encoded
-  vm_node_count                = var.vm_node_count
-  vm_user_assigned_identity_id = module.service_accounts.vmss_user_assigned_identity.id
+  vm_sku                  = var.vm_sku
+  vm_image_id             = var.vm_image_id
+  vm_os_disk_disk_size_gb = var.vm_os_disk_disk_size_gb
+  vm_subnet_id            = local.network_private_subnet_id
+  vm_user                 = var.vm_user
+  vm_public_key           = var.vm_public_key == null ? tls_private_key.tfe_ssh[0].public_key_openssh : var.vm_public_key
+  vm_userdata_script      = module.user_data.tfe_userdata_base64_encoded
+  vm_node_count           = var.vm_node_count
 
   # Load balancer
   load_balancer_type       = var.load_balancer_type
   load_balancer_backend_id = module.load_balancer.load_balancer_backend_id
   load_balancer_public     = var.load_balancer_public
 
-  key_vault_id                    = module.service_accounts.key_vault_id
-  certificate_key_vault_secret_id = module.service_accounts.certificate.secret_id
+  ca_certificate_secret = var.ca_certificate_secret
+  certificate_secret    = var.vm_certificate_secret
+  key_secret            = var.vm_key_secret
 
   tags = var.tags
 

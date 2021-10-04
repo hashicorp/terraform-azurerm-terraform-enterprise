@@ -1,20 +1,18 @@
 locals {
+  tfe_license_pathname        = "/etc/terraform-enterprise.rli"
+  tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"
+  tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
   replicated_base_config = {
     BypassPreflightChecks        = true
     DaemonAuthenticationPassword = random_string.password.result
     DaemonAuthenticationType     = "password"
     ImportSettingsFrom           = "/etc/ptfe-settings.json"
-    LicenseFileLocation          = "/etc/${var.user_data_tfe_license_name}"
+    LicenseFileLocation          = local.tfe_license_pathname
     TlsBootstrapHostname         = var.fqdn
-    TlsBootstrapCert             = "/var/lib/waagent/${var.user_data_tfe_bootstrap_cert_name}.crt"
-    TlsBootstrapKey              = "/var/lib/waagent/${var.user_data_tfe_bootstrap_key_name}.prv"
-    TlsBootstrapType             = "server-path"
+    TlsBootstrapCert             = local.tls_bootstrap_cert_pathname
+    TlsBootstrapKey              = local.tls_bootstrap_key_pathname
+    TlsBootstrapType             = var.certificate_secret == null ? "self-signed" : "server-path"
   }
-
-  proxy_ip               = var.proxy_ip == null ? "" : var.proxy_ip
-  proxy_port             = var.proxy_port == null ? "" : var.proxy_port
-  proxy_cert_name        = var.proxy_cert_name == null ? "" : var.proxy_cert_name
-  proxy_cert_secret_name = var.proxy_cert_secret_name == null ? "" : var.proxy_cert_secret_name
 
   user_data_release_sequence = {
     ReleaseSequence = var.user_data_release_sequence
@@ -36,23 +34,23 @@ locals {
     "${path.module}/templates/tfe.sh.tpl",
     {
       # Configuration data
-      replicated    = base64encode(local.replicated_configuration)
-      settings      = base64encode(local.tfe_configuration)
-      active_active = var.active_active
-      fqdn          = var.fqdn
+      active_active               = var.active_active
+      fqdn                        = var.fqdn
+      replicated                  = base64encode(local.replicated_configuration)
+      settings                    = base64encode(local.tfe_configuration)
+      tls_bootstrap_cert_pathname = local.tls_bootstrap_cert_pathname
+      tls_bootstrap_key_pathname  = local.tls_bootstrap_key_pathname
 
-      tfe_license_name        = var.user_data_tfe_license_name
-      tfe_license_secret_name = var.tfe_license_secret_name
-      use_tls_kv_secrets      = var.user_data_use_kv_secrets
-      tfe_bootstrap_cert_name = var.user_data_tfe_bootstrap_cert_name
-      tfe_bootstrap_key_name  = var.user_data_tfe_bootstrap_key_name
+      # Secrets
+      ca_certificate_secret = var.ca_certificate_secret
+      certificate_secret    = var.certificate_secret
+      key_secret            = var.key_secret
+      tfe_license_pathname  = local.tfe_license_pathname
+      tfe_license_secret    = var.tfe_license_secret
 
       # Proxy information
-      key_vault_name         = var.key_vault_name
-      proxy_ip               = local.proxy_ip
-      proxy_port             = local.proxy_port
-      proxy_cert_secret_name = local.proxy_cert_secret_name
-      proxy_cert             = local.proxy_cert_name
+      proxy_ip   = var.proxy_ip
+      proxy_port = var.proxy_port
       no_proxy = join(
         ",",
         concat(
@@ -129,10 +127,6 @@ locals {
       value = random_id.archivist_token.hex
     }
 
-    ca_certs = {
-      value = var.user_data_ca
-    }
-
     cookie_hash = {
       value = random_id.cookie_hash.hex
     }
@@ -167,6 +161,10 @@ locals {
 
     root_secret = {
       value = random_id.root_secret.hex
+    }
+
+    tls_vers = {
+      value = "tls_1_2_tls_1_3"
     }
 
     trusted_proxies = {

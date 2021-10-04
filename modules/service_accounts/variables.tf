@@ -46,34 +46,6 @@ variable "storage_account_primary_blob_connection_string" {
   description = "Storage account primary blob endpoint"
 }
 
-# Key Vault
-# ---------
-variable "resource_group_name_kv" {
-  type        = string
-  description = "The resource group of the Azure Key Vault containing all required secrets and certificates"
-}
-
-variable "key_vault_name" {
-  type        = string
-  description = "Azure Key Vault name containing all required secrets and certificates"
-}
-
-# Certificate
-# -----------
-variable "certificate_name" {
-  type        = string
-  description = "(Required) Azure Key Vault Certificate name for Application Gateway"
-}
-
-variable "trusted_root_certificate_name" {
-  type        = string
-  description = <<-EOD
-  (Optional) Name of the backend root certificate for Application Gateway to trust. If the backend
-  certificate is issued by a well-known certificate authority (CA), you do not need to provide a
-  trusted_root_certificate.
-  EOD
-}
-
 # Tagging
 # -------
 variable "tags" {

@@ -57,18 +57,6 @@ variable "resource_group_name_dns" {
   description = "Name of resource group which contains desired DNS zone"
 }
 
-variable "resource_group_name_kv" {
-  default     = null
-  type        = string
-  description = "Name of resource group which contains desired Key Vault"
-}
-
-variable "key_vault_name" {
-  default     = null
-  type        = string
-  description = "(recommended) Azure Key Vault name containing required certificate and Base64 encoded TFE license"
-}
-
 # Bastion
 # -------
 variable "create_bastion" {
@@ -153,16 +141,11 @@ variable "network_allow_range" {
 
 # TFE License
 # -----------
-variable "tfe_license_secret_name" {
-  default     = "tfe-license-base64"
-  type        = string
-  description = "Name of the secret under which the Base64 encoded TFE license is (or will be) stored in the Azure Key Vault"
-}
-
-variable "tfe_license_name" {
-  default     = "license.rli"
-  type        = string
-  description = "TFE License name"
+variable "tfe_license_secret" {
+  type = object({
+    id = string
+  })
+  description = "The Key Vault secret under which the Base64 encoded TFE license is stored."
 }
 
 # Object Storage
@@ -431,15 +414,6 @@ variable "user_data_release_sequence" {
   description = "Terraform Enterprise release sequence"
 }
 
-variable "user_data_ca" {
-  default     = null
-  type        = string
-  description = <<-EOD
-  (Optional) Value to be provided for TFE ca_cert setting. A custom Certificate Authority
-  certificate bundle to be used for authenticating connections with Terraform Enterprise.
-  EOD
-}
-
 variable "user_data_redis_use_tls" {
   default     = true
   type        = bool
@@ -466,45 +440,54 @@ variable "user_data_trusted_proxies" {
 
 # TLS Certificates
 # ----------------
-variable "certificate_name" {
-  default     = null
-  type        = string
-  description = "(Required) The value should match an existing Key Vault Certificate residing in the Key Vault specified via `key_vault_name`."
-}
-
-variable "trusted_root_certificate_name" {
-  default     = null
-  type        = string
+variable "ca_certificate_secret" {
+  default = null
+  type = object({
+    id           = string
+    key_vault_id = string
+    name         = string
+    value        = string
+  })
   description = <<-EOD
-  (Optional) Name of the backend root certificate for Application Gateway to trust. If the backend
-  certificate is issued by a well-known certificate authority (CA), you do not need to provide a
-  trusted_root_certificate.
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a
+  certificate authority (CA) to be trusted by the Virtual Machine Scale Set and the Application Gateway. This argument
+  is only required if TLS certificates in the deployment are not issued by a well-known CA.
   EOD
 }
 
-variable "tfe_bootstrap_cert_secret_name" {
-  default     = null
-  type        = string
+variable "load_balancer_certificate" {
+  default = null
+  type = object({
+    key_vault_id = string
+    name         = string
+    secret_id    = string
+  })
+  description = "A Key Vault Certificate to be attached to the Application Gateway."
+}
+
+variable "vm_certificate_secret" {
+  default = null
+  type = object({
+    key_vault_id = string
+    id           = string
+  })
   description = <<-EOD
-  (Optional) Value to be provided for Replicated's TlsBootstrapCert setting. If a trusted Azure Key Vault 
-  Certificate is used as the TlsBootstrapCert via the certificate_name variable, then tfe_bootstrap_cert_secret_name
-  and tfe_bootstrap_key_secret_name are not needed. However, if you want to use a different certificate or
-  if you need to add an intermediate,then using this variable will allow the TFE instance(s) to pull that secret
-  from Key Vault and use it in TFE.
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate for the Virtual
+  Machine Scale Set.
   EOD
 }
 
-variable "tfe_bootstrap_key_secret_name" {
-  default     = null
-  type        = string
+variable "vm_key_secret" {
+  default = null
+  type = object({
+    key_vault_id = string
+    id           = string
+  })
   description = <<-EOD
-  (Optional) Value to be provided for Replicated's TlsBootstrapKey setting. If a trusted Azure Key Vault 
-  Certificate is used as the TlsBootstrapKey via the certificate_name variable, then tfe_bootstrap_cert_secret_name
-  and tfe_bootstrap_key_secret_name are not needed. However, if you want to use a different certificate/key pair,
-  then using this variable will allow the TFE instance(s) to pull that secret from Key Vault and use it in TFE.
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded private key for the Virtual Machine
+  Scale Set.
   EOD
 }
-
 
 # Proxy
 # -----
@@ -518,18 +501,6 @@ variable "proxy_port" {
   default     = null
   type        = string
   description = "Port that the proxy server will use"
-}
-
-variable "proxy_cert_name" {
-  default     = null
-  type        = string
-  description = "Name for the stored proxy certificate bundle"
-}
-
-variable "proxy_cert_secret_name" {
-  default     = null
-  type        = string
-  description = "Name of the secret under which the proxy cert is stored in the Azure Key Vault"
 }
 
 # Tagging

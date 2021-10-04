@@ -165,13 +165,6 @@ output "load_balancer_ip" {
   description = "The IP address of the load balancer"
 }
 
-# Key Vault
-# ---------
-output "key_vault_id" {
-  value       = module.service_accounts.key_vault_id
-  description = "The resource ID of the Azure Key Vault that houses the bootstrap secrets"
-}
-
 # VM
 # --
 output "instance_user_name" {

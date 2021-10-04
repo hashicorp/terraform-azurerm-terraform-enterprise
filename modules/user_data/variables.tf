@@ -65,11 +65,6 @@ variable "user_data_redis_use_tls" {
 
 # Azure
 # -----
-variable "key_vault_name" {
-  type        = string
-  description = "Azure Key Vault name containing all required secrets and certificates"
-}
-
 variable "user_data_azure_container_name" {
   type        = string
   description = "Azure storage container name"
@@ -92,41 +87,41 @@ variable "user_data_release_sequence" {
   description = "Terraform Enterprise version release sequence"
 }
 
-variable "user_data_tfe_license_name" {
-  type        = string
-  description = "Terraform Enterprise license file name"
+variable "tfe_license_secret" {
+  type = object({
+    id = string
+  })
+  description = "The Key Vault secret under which the Base64 encoded Terraform Enterprise license is stored."
 }
 
-variable "tfe_license_secret_name" {
-  type        = string
-  description = "Name of the secret under which the Base64 encoded Terraform Enterprise license is (or will be) stored in the Azure Key Vault"
-}
-
-variable "user_data_ca" {
-  type        = string
+variable "ca_certificate_secret" {
+  type = object({
+    id = string
+  })
   description = <<-EOD
-  (Optional) Value to be provided for TFE ca_cert setting. A custom Certificate Authority
-  certificate bundle to be used for authenticating connections with Terraform Enterprise.
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a certificate
+  authority (CA) to be trusted by the Virtual Machine Scale Set.
   EOD
 }
 
-variable "user_data_use_kv_secrets" {
-  type        = string
+variable "certificate_secret" {
+  type = object({
+    id = string
+  })
   description = <<-EOD
-  If 1, then TFE will retrieve the secrets named in the tfe_bootstrap_cert_secret_name and
-  tls_bootstrap_cert_key_name variables during its install script. If 0, the retrieval will
-  be skipped.
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate for the Virtual
+  Machine Scale Set.
   EOD
 }
 
-variable "user_data_tfe_bootstrap_cert_name" {
-  type        = string
-  description = "Value to be provided for Replicated TlsBootstrapCert setting"
-}
-
-variable "user_data_tfe_bootstrap_key_name" {
-  type        = string
-  description = "Value to be provided for Replicated TlsBootstrapKey setting"
+variable "key_secret" {
+  type = object({
+    id = string
+  })
+  description = <<-EOD
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded private key for the Virtual Machine
+  Scale Set.
+  EOD
 }
 
 variable "user_data_iact_subnet_list" {
@@ -157,16 +152,6 @@ variable "proxy_port" {
   default     = "3128"
   type        = string
   description = "Port that the proxy server will use"
-}
-
-variable "proxy_cert_name" {
-  type        = string
-  description = "Name for the stored proxy certificate bundle"
-}
-
-variable "proxy_cert_secret_name" {
-  type        = string
-  description = "Name of the secret under which the proxy cert is stored in the Azure Key Vault"
 }
 
 variable "no_proxy" {

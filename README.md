@@ -44,12 +44,7 @@ This module is intended to run in an Azure account with minimal preparation, how
     - You must configured external DNS record for the aforementioned IP address
 
 - Key Vault
-
-  - The value supplied for `key_vault_name` should match an existing Key Vault. If the existing Key Vault does not live in the primary resource group, you may optionally supply a value for `resource_group_name_kv`.
   - The Key Vault should have enabled access for deployment for Azure Virtual Machines, as the virtual machines will pull the certificate (and secrets, if applicable) from Key Vault.
-
-- Certificates
-  - The value supplied for `certificate_name` should match an existing Key Vault Certificate residing within the Key Vault specified via the `key_vault_name` variable.
 
 ## Azure Services Used
 
@@ -85,25 +80,22 @@ This module is intended to run in an Azure account with minimal preparation, how
 ### SSL Certificates
 
 As stated in the [prerequisites](##Pre-requisites), there are a number
-of variables concerning certificates and secrets. This section provides 
-additional context on
-the use of each of those variables. 
+of variables concerning certificates and secrets. This section provides
+additional context on the use of each of those variables.
 
-* All of the certificate and secret resources will expect to use the same key vault.
+- All of the certificate and secret resources will expect to use the
+  same key vault.
 
-* IMPORTANT: In order to keep PEM formatted secrets properly formatted, they must be uploaded to Key Vault via Terraform (as the whole file or via `az keyvault secret set`. Uploading them manually through the Azure Portal will result in newline formatting issues.
+- IMPORTANT: In order to keep PEM formatted secrets properly formatted,
+  they must be uploaded to Key Vault via Terraform (as the whole file or
+  via `az keyvault secret set`). Uploading them manually through the Azure
+  Portal will result in newline formatting issues.
 
-| Variable Name | Variable Description | Explanation |
-| --- | --- | --- |
-| `certificate_name` | Name of the PFX formatted CERTIFICATE found in the Azure Key Vault (PEM certificates are not currently supported by Azure) | **Required** <br>This certificate is used for TLS. We recommend using certificates signed by well known CA authorities. <br><br/>This certificate will be placed on the TFE instance via the virtual machine scale set. <br><br/>It will also be placed on the Application Gateway if that is your load balancing option, in which case certificates signed by well known CA authorities whose CN matches the host name in the HTTP backend settings do not require any additional step for end to end TLS to work. ([Reference](https://docs.microsoft.com/en-us/azure/application-gateway/ssl-overview)) <br><br/>TFE will also use this certificate in its `TlsBootstrap*` settings via the `user_data` module. |
-| `trusted_root_certificate_name` |  Name of the PEM formatted SECRET of the backend root certificate found in Azure Key Vault |  **Optional** <br>This variable is only used if your load balancer option is the Application Gateway. If the backend server certificate is self-signed, or signed by unknown CA/intermediaries, then to enable end to end TLS in Application Gateway, a trusted root certificate must be uploaded. If the backend certificate is issued by a well-known certificate authority (CA), you do not need to provide a `trusted_root_certificate` and can leave this variable empty. ([Reference](https://docs.microsoft.com/en-us/azure/application-gateway/ssl-overview)) |
-| `tfe_bootstrap_cert_secret_name` | Name of the PEM formatted SECRET of the TLS certificate in PEM format | **Optional** <br>Value to be provided for Replicated's `TlsBootstrapCert` setting. If a trusted Azure Key Vault Certificate is used via the `certificate_name` variable, then this variable is not needed. However, if you want to use a different certificate or if you need to add an intermediate, then using this variable will allow the TFE instance(s) to pull that secret from Key Vault and use it in TFE. |
-| `tfe_bootstrap_key_secret_name` | Name of the PEM formatted SECRET of the TLS certificate private key found in Azure Key Vault | **Optional** <br>Value to be provided for Replicated's `TlsBootstrapKey` setting. If a trusted Azure Key Vault Certificate is used via the `certificate_name` variable, then this variable is not needed.<br><br/>However, if you want to use a different certificate or if you need to add an intermediate, then using this variable will allow the TFE instance(s) to pull that secret from Key Vault and use it in TFE.|
-| `user_data_ca` | PEM formatted value | **Optional** <br>This is an additional value that can be appended to Replicated's `ca_cert` setting. A custom Certificate Authority certificate bundle to be used for authenticating connections with Terraform Enterprise.<br><br/>If this variable is used, then you will need to provide the entire value of the PEM through this variable, via a Key Vault Secret data source (recommended) or other.|
-| `proxy_cert_name` | Name for the stored proxy certificate bundle | **Optional** <br>This variable is only for the name of the certificate file once it is added to the instance(s).<br><br/>If this variable is given a value as well as a value for the `proxy_ip` variable, then TFE will be configured with a proxy, and if not, that configuration will be skipped. |
-| `proxy_cert_secret_name` | Name of the PEM formatted SECRET of the proxy certificate bundle found in Azure Key Vault | **Optional** <br>Adding a value for this variable alone will not configure TFE with a proxy; you must also add values for `proxy_cert_name` and `proxy_ip`.<br><br/>The value for this secret will be added to the system's trusted CA repository. |
-
-
+| Variable Name               | Variable Description                                                                                               | Explanation                                                                                                                                                                                                                                                                                                                                                                                                            |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `load_balancer_certificate` | A PFX formatted certificate found in the Azure Key Vault                                                           | **Required** <br>This certificate is used for TLS. We recommend using certificates signed by well known CA authorities. <br><br/>This certificate will be placed on the Application Gateway if that is your load balancing option. ([Reference](https://docs.microsoft.com/en-us/azure/application-gateway/ssl-overview))                                                                                              |
+| `vm_certificate`            | A PFX formatted certificate found in the Azure Key Vault                                                           | **Required** <br>This certificate is used for TLS. We recommend using certificates signed by well known CA authorities. <br><br/>This certificate will be placed on the TFE instance via the virtual machine scale set. ([Reference](https://docs.microsoft.com/en-us/azure/application-gateway/ssl-overview)) <br><br/>TFE will also use this certificate in its `TlsBootstrap*` settings via the `user_data` module. |
+| `ca_certificate`            | A PEM formatted certificate of a custom Certificate Authority (CA) public certificate found in the Azure Key Vault | **Optional** <br>If TLS certificates in the deployment are signed by an unknown CA then this argument is required to enable end-to-end TLS. [Reference](https://docs.microsoft.com/en-us/azure/application-gateway/ssl-overview)                                                                                                                                                                                       |
 
 ### Connecting to the TFE Server Instance
 

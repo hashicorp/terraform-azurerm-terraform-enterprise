@@ -1,5 +1,3 @@
-data "azurerm_client_config" "current" {}
-
 # Create a subnet for proxy
 # -------------------------
 resource "azurerm_subnet" "proxy" {
@@ -62,25 +60,18 @@ resource "azurerm_network_interface_security_group_association" "proxy" {
   network_security_group_id = azurerm_network_security_group.proxy.id
 }
 
-# Managed Service Identity to read from Key Vault
-# -----------------------------------------------
 resource "azurerm_user_assigned_identity" "proxy" {
-  name                = "${local.friendly_name_prefix}-proxy-msi"
   location            = var.location
+  name                = "${local.friendly_name_prefix}-proxy"
   resource_group_name = local.resource_group_name
 
   tags = local.common_tags
 }
 
-resource "azurerm_key_vault_access_policy" "tfe_kv_acl" {
-  key_vault_id = local.key_vault_id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
+resource "azurerm_key_vault_access_policy" "proxy" {
+  key_vault_id = var.key_vault_id
   object_id    = azurerm_user_assigned_identity.proxy.principal_id
-
-  certificate_permissions = [
-    "get",
-    "list"
-  ]
+  tenant_id    = data.azurerm_client_config.current.tenant_id
 
   secret_permissions = [
     "get",
@@ -113,15 +104,15 @@ resource "azurerm_linux_virtual_machine" "proxy" {
     storage_account_type = "Standard_LRS"
   }
 
-  admin_ssh_key {
-    username   = local.proxy_user
-    public_key = data.azurerm_key_vault_secret.proxy_public_key.value
-  }
-
   identity {
     type = "UserAssigned"
 
     identity_ids = [azurerm_user_assigned_identity.proxy.id]
+  }
+
+  admin_ssh_key {
+    username   = local.proxy_user
+    public_key = data.azurerm_key_vault_secret.proxy_public_ssh_key.value
   }
 
   tags = local.common_tags

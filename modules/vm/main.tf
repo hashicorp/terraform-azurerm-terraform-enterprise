@@ -1,3 +1,30 @@
+resource "azurerm_user_assigned_identity" "vmss" {
+  location            = var.location
+  name                = "${var.friendly_name_prefix}-vmss"
+  resource_group_name = var.resource_group_name
+
+  tags = var.tags
+}
+
+resource "azurerm_key_vault_access_policy" "tfe_vmss_kv_access" {
+  for_each = toset([
+    for secret in [
+      var.ca_certificate_secret,
+      var.certificate_secret,
+      var.key_secret
+    ] : secret.key_vault_id if secret != null
+  ])
+
+  key_vault_id = each.value
+  object_id    = azurerm_user_assigned_identity.vmss.principal_id
+  tenant_id    = var.tenant_id
+
+  secret_permissions = [
+    "get",
+    "list"
+  ]
+}
+
 resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
   name                = "${var.friendly_name_prefix}-vmss"
   location            = var.location
@@ -15,17 +42,10 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
 
   custom_data = var.vm_userdata_script
 
-  secret {
-    certificate {
-      url = var.certificate_key_vault_secret_id
-    }
-    key_vault_id = var.key_vault_id
-  }
-
   identity {
     type = var.vm_identity_type
 
-    identity_ids = [var.vm_user_assigned_identity_id]
+    identity_ids = [azurerm_user_assigned_identity.vmss.id]
   }
 
   # Source image id will be used if vm_image_id anything other than 'ubuntu' or 'rhel'

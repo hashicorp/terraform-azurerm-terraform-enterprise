@@ -12,6 +12,11 @@ variable "location" {
   description = "Azure location name e.g. East US"
 }
 
+variable "tenant_id" {
+  type        = string
+  description = "The Azure Active Directory tenant ID that should be used for authenticating requests to the Key Vault"
+}
+
 variable "zones" {
   default     = ["1", "2", "3"]
   type        = list(string)
@@ -99,19 +104,34 @@ variable "vm_image_id" {
   }
 }
 
-variable "vm_user_assigned_identity_id" {
-  description = "The identity of the user assigned identity to be assigned to the virtual machine scale set"
-  type        = string
+variable "ca_certificate_secret" {
+  type = object({
+    key_vault_id = string
+  })
+  description = <<-EOD
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a certificate
+  authority (CA) to be trusted by the Virtual Machine Scale Set.
+  EOD
 }
 
-variable "key_vault_id" {
-  type        = string
-  description = "ID of Azure Key Vault containing required certificate"
+variable "certificate_secret" {
+  type = object({
+    key_vault_id = string
+  })
+  description = <<-EOD
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate for the Virtual
+  Machine Scale Set.
+  EOD
 }
 
-variable "certificate_key_vault_secret_id" {
-  type        = string
-  description = "The Secret URL of a Key Vault Certificate"
+variable "key_secret" {
+  type = object({
+    key_vault_id = string
+  })
+  description = <<-EOD
+  A Key Vault secret which contains the Base64 encoded version of a PEM encoded private key for the Virtual Machine
+  Scale Set.
+  EOD
 }
 
 # Optional variables not currently specified in root module

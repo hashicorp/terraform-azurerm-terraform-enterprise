@@ -86,7 +86,7 @@ resource "azurerm_linux_virtual_machine" "vm_bastion" {
 
   admin_ssh_key {
     username   = "bastionuser"
-    public_key = data.azurerm_key_vault_secret.bastion_public_key.value
+    public_key = data.azurerm_key_vault_secret.bastion_public_ssh_key.value
   }
 
   tags = local.common_tags

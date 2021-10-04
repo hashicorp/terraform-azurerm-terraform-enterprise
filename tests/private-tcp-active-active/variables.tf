@@ -1,9 +1,8 @@
 # General
 # -------
 variable "location" {
-  default     = "East US"
   type        = string
-  description = "(Required) Azure location name e.g. East US"
+  description = "Azure location name e.g. East US"
 }
 
 # Domain
@@ -20,25 +19,27 @@ variable "resource_group_name_dns" {
 
 # Key Vault and Certificate
 # -------------------------
-variable "resource_group_name_kv" {
+
+variable "key_vault_id" {
   type        = string
-  description = "The resource group of the Azure Key Vault containing all required secrets and certificates"
+  description = "The identity of the Key Vault which contains secrets and certificates."
 }
 
-variable "key_vault_name" {
+variable "vm_certificate_secret_name" {
   type        = string
-  description = "Azure Key Vault name containing all required secrets and certificates"
+  description = <<-EOD
+  The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a
+  certificate authority (CA) to be trusted by the Virtual Machine Scale Set.
+  EOD
 }
 
-# variable "ca_pem_key_secret_name" {
-#   type        = string
-#   description = "Name of the secret under which the DNS wildcard key is stored in the Azure Key Vault"
-# }
-
-# variable "ca_pem_certificate_secret_name" {
-#   type        = string
-#   description = "Name of the secret under which the DNS wildcard chained cert is stored in the Azure Key Vault"
-# }
+variable "vm_key_secret_name" {
+  type        = string
+  description = <<-EOD
+  The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded private key of a
+  certificate authority (CA) to be trusted by the Virtual Machine Scale Set.
+  EOD
+}
 
 variable "tfe_license_secret_name" {
   type        = string
@@ -47,44 +48,34 @@ variable "tfe_license_secret_name" {
 
 # Proxy & Bastion
 # ---------------
-variable "proxy_cert_name" {
-  default     = "mitmproxy"
+variable "ca_certificate_secret_name" {
   type        = string
-  description = "Name for the stored proxy certificate bundle"
+  description = <<-EOD
+  The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a
+  certificate authority (CA) to be trusted by the Virtual Machine Scale Set.
+  EOD
 }
 
-variable "proxy_key_secret_name" {
+variable "ca_key_secret_name" {
   type        = string
-  description = "Name of the secret under which the proxy cert key is stored in the Azure Key Vault"
+  description = <<-EOD
+  The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded private key of a
+  certificate authority (CA).
+  EOD
 }
 
-variable "proxy_cert_secret_name" {
+variable "proxy_public_ssh_key_secret_name" {
   type        = string
-  description = "Name of the secret under which the proxy cert is stored in the Azure Key Vault"
+  description = "The name of the public SSH key secret for the proxy."
 }
 
-variable "proxy_public_key_secret_name" {
+variable "bastion_public_ssh_key_secret_name" {
   type        = string
-  description = "Name of the secret under which the proxy public key is stored in the Azure Key Vault"
-}
-
-variable "bastion_public_key_secret_name" {
-  type        = string
-  description = "Name of the secret under which the bastion public key is stored in the Azure Key Vault"
+  description = "The name of the public SSH key secret for the bastion."
 }
 
 variable "network_allow_range" {
+  default     = null
   type        = string
   description = "Network range to allow access to bastion vm"
-}
-
-# User Data
-# ---------
-variable "iact_subnet_list" {
-  default     = []
-  description = <<-EOD
-  A list of IP address ranges which will be authorized to access the IACT. The ranges must be expressed
-  in CIDR notation.
-  EOD
-  type        = list(string)
 }

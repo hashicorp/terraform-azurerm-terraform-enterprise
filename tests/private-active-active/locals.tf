@@ -9,7 +9,7 @@ locals {
   }
 
   proxy_script = templatefile(
-    "${path.module}/files/squidproxy.sh.tpl",
+    "${path.module}/templates/squidproxy.sh.tpl",
     {
       http_proxy_port = local.proxy_port
     }

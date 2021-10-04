@@ -9,12 +9,11 @@ locals {
   }
 
   proxy_script = templatefile(
-    "${path.module}/files/mitm.sh.tpl",
+    "${path.module}/templates/mitm.sh.tpl",
     {
-      http_proxy_port        = local.proxy_port
-      key_vault_name         = var.key_vault_name
-      proxy_key_secret_name  = var.proxy_key_secret_name
-      proxy_cert_secret_name = var.proxy_cert_secret_name
+      certificate_secret_id = data.azurerm_key_vault_secret.ca_certificate.id
+      key_secret_id         = data.azurerm_key_vault_secret.ca_key.id
+      http_proxy_port       = local.proxy_port
     }
   )
 
@@ -22,6 +21,4 @@ locals {
   resource_group_name  = module.private_tcp_active_active.resource_group_name
   proxy_user           = "proxyuser"
   proxy_port           = "3128"
-  key_vault_id         = module.private_tcp_active_active.key_vault_id
-  user_data_ca         = data.azurerm_key_vault_secret.user_data_ca.value
 }
