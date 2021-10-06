@@ -103,6 +103,18 @@ variable "network_redis_subnet_id" {
   description = "(Optional) Existing network Redis subnet ID"
 }
 
+variable "network_database_subnet_id" {
+  default     = null
+  type        = string
+  description = "The identity of an existing database subnetwork."
+}
+
+variable "network_database_private_dns_zone_id" {
+  default = null
+  type = string
+  description = "The identity of an existing private DNS zone for the database."
+}
+
 variable "network_cidr" {
   default     = "10.0.0.0/16"
   type        = string
@@ -131,6 +143,12 @@ variable "network_redis_subnet_cidr" {
   default     = "10.0.48.0/20"
   type        = string
   description = "(Optional) Subnet CIDR range for Redis"
+}
+
+variable "network_database_subnet_cidr" {
+  default     = "10.0.64.0/20"
+  type        = string
+  description = "The CIDR range of the database subnetwork."
 }
 
 variable "network_allow_range" {

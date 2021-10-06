@@ -244,3 +244,36 @@ resource "azurerm_subnet" "tfe_network_redis_subnet" {
   address_prefixes     = [var.network_redis_subnet_cidr]
   virtual_network_name = azurerm_virtual_network.tfe_network.name
 }
+
+# Database subnet
+# -----------------
+resource "azurerm_subnet" "database" {
+  name                 = "${var.friendly_name_prefix}-database-subnet"
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.tfe_network.name
+
+  address_prefixes  = [var.network_database_subnet_cidr]
+  service_endpoints = ["Microsoft.Storage"]
+
+  delegation {
+    name = "flexibleServers"
+
+    service_delegation {
+      name = "Microsoft.DBforPostgreSQL/flexibleServers"
+
+      actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
+    }
+  }
+}
+
+resource "azurerm_private_dns_zone" "database" {
+  name                = "${var.friendly_name_prefix}.postgres.database.azure.com"
+  resource_group_name = var.resource_group_name
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "database" {
+  name                  = "${var.friendly_name_prefix}-database"
+  private_dns_zone_name = azurerm_private_dns_zone.database.name
+  resource_group_name   = var.resource_group_name
+  virtual_network_id    = azurerm_virtual_network.tfe_network.id
+}

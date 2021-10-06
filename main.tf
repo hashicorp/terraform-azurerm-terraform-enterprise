@@ -14,12 +14,14 @@ locals {
 
   # Network
   # -------
-  network_name               = var.network_name == null ? module.network[0].network_name : var.network_name
-  network_id                 = var.network_id == null ? module.network[0].network_id : var.network_id
-  network_private_subnet_id  = var.network_private_subnet_id == null ? module.network[0].network_private_subnet_id : var.network_private_subnet_id
-  network_frontend_subnet_id = var.network_frontend_subnet_id == null ? module.network[0].network_frontend_subnet_id : var.network_frontend_subnet_id
-  network_bastion_subnet_id  = var.network_bastion_subnet_id == null && var.create_bastion == true ? module.network[0].network_bastion_subnet_id : var.network_bastion_subnet_id
-  network_redis_subnet_id    = var.network_redis_subnet_id == null && local.active_active == true ? module.network[0].network_redis_subnet_id : var.network_redis_subnet_id
+  network_name                         = var.network_name == null ? module.network[0].network_name : var.network_name
+  network_id                           = var.network_id == null ? module.network[0].network_id : var.network_id
+  network_private_subnet_id            = var.network_private_subnet_id == null ? module.network[0].network_private_subnet_id : var.network_private_subnet_id
+  network_frontend_subnet_id           = var.network_frontend_subnet_id == null ? module.network[0].network_frontend_subnet_id : var.network_frontend_subnet_id
+  network_bastion_subnet_id            = var.network_bastion_subnet_id == null && var.create_bastion == true ? module.network[0].network_bastion_subnet_id : var.network_bastion_subnet_id
+  network_redis_subnet_id              = var.network_redis_subnet_id == null && local.active_active == true ? module.network[0].network_redis_subnet_id : var.network_redis_subnet_id
+  network_database_subnet_id           = var.network_database_subnet_id == null ? module.network[0].database_subnet.id : var.network_database_subnet_id
+  network_database_private_dns_zone_id = var.network_database_private_dns_zone_id == null ? module.network[0].database_private_dns_zone.id : var.network_database_private_dns_zone_id
 
   # Redis
   # -----
@@ -129,12 +131,13 @@ module "network" {
 
   active_active = local.active_active
 
-  network_cidr                 = var.network_cidr
-  network_private_subnet_cidr  = var.network_private_subnet_cidr
-  network_frontend_subnet_cidr = var.network_frontend_subnet_cidr
-  network_bastion_subnet_cidr  = var.network_bastion_subnet_cidr
-  network_redis_subnet_cidr    = var.network_redis_subnet_cidr
   network_allow_range          = var.network_allow_range
+  network_bastion_subnet_cidr  = var.network_bastion_subnet_cidr
+  network_cidr                 = var.network_cidr
+  network_database_subnet_cidr = var.network_database_subnet_cidr
+  network_frontend_subnet_cidr = var.network_frontend_subnet_cidr
+  network_private_subnet_cidr  = var.network_private_subnet_cidr
+  network_redis_subnet_cidr    = var.network_redis_subnet_cidr
 
   create_bastion = var.create_bastion
 
@@ -185,11 +188,12 @@ module "database" {
   resource_group_name  = module.resource_groups.resource_group_name
   location             = var.location
 
-  database_user         = var.database_user
-  database_machine_type = var.database_machine_type
-  database_size_mb      = var.database_size_mb
-  database_version      = var.database_version
-  database_subnet       = local.network_private_subnet_id
+  database_machine_type        = var.database_machine_type
+  database_private_dns_zone_id = local.network_database_private_dns_zone_id
+  database_size_mb             = var.database_size_mb
+  database_subnet_id           = local.network_database_subnet_id
+  database_user                = var.database_user
+  database_version             = var.database_version
 
   tags = var.tags
 

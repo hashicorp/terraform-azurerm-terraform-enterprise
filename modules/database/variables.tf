@@ -40,9 +40,14 @@ variable "database_version" {
   description = "Postgres version"
 }
 
-variable "database_subnet" {
+variable "database_subnet_id" {
   type        = string
   description = "(Required) Network subnet id for database"
+}
+
+variable "database_private_dns_zone_id" {
+  type        = string
+  description = "The identity of the private DNS zone in which the database will be deployed."
 }
 
 # ----

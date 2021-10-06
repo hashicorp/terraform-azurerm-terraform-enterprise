@@ -58,6 +58,11 @@ variable "network_redis_subnet_cidr" {
   description = "Subnet CIDR range for Redis"
 }
 
+variable "network_database_subnet_cidr" {
+  type        = string
+  description = "The CIDR range of the database subnetwork."
+}
+
 variable "network_allow_range" {
   default     = "*"
   type        = string
