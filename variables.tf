@@ -197,20 +197,20 @@ variable "database_user" {
 }
 
 variable "database_machine_type" {
-  default     = "GP_Gen5_4"
+  default     = "GP_Standard_D4ds_v4"
   type        = string
   description = "Postgres sku short name: tier + family + cores"
 }
 
 variable "database_size_mb" {
-  default     = 5120
+  default     = 32768
   type        = number
   description = "Postgres storage size in MB"
 }
 
 variable "database_version" {
-  default     = "12.8"
-  type        = string
+  default     = 12
+  type        = number
   description = "Postgres version"
 }
 
