@@ -18,11 +18,3 @@ resource "azurerm_postgresql_flexible_server" "tfe_pg" {
   tags                   = var.tags
   version                = var.database_version
 }
-
-resource "azurerm_postgresql_flexible_server_database" "tfe_pg_db" {
-  name      = "${var.friendly_name_prefix}-pg-db"
-  server_id = azurerm_postgresql_flexible_server.tfe_pg.id
-
-  charset   = "UTF8"
-  collation = "English_United States.1252"
-}
