@@ -57,51 +57,51 @@ output "network_redis_subnet_id" {
 # Service Accounts
 # ----------------
 output "storage_account_name" {
-  value       = module.service_accounts.storage_account_name
+  value       = var.user_data_installation_type == "poc" ? null : module.service_accounts.storage_account_name
   description = "The name of the storage account used by TFE"
 }
 
 # Object Storage
 # --------------
 output "storage_account_container_name" {
-  value       = module.object_storage.storage_account_container_name
+  value       = var.user_data_installation_type == "poc" ? null : module.object_storage.storage_account_container_name
   description = "The name of the container used by TFE"
 }
 
 # Database
 # --------
 output "database_server_id" {
-  value       = module.database.database_server_id
+  value       = var.user_data_installation_type == "poc" ? null : module.database[0].database_server_id
   description = "The resource ID of the TFE PostgreSQL server"
 }
 
 output "database_server_name" {
-  value       = module.database.database_server_name
+  value       = var.user_data_installation_type == "poc" ? null : module.database[0].database_server_name
   description = "The name of the TFE PostgreSQL server"
 }
 
 output "database_server_fqdn" {
-  value       = module.database.database_server_fqdn
+  value       = var.user_data_installation_type == "poc" ? null : module.database[0].database_server_fqdn
   description = "The fully qualified domain name of the TFE PostgreSQL database"
 }
 
 output "database_user" {
-  value       = module.database.database_user
+  value       = var.user_data_installation_type == "poc" ? null : module.database[0].database_user
   description = "The username for the TFE PostgreSQL database"
 }
 
 output "database_password" {
-  value       = module.database.database_password
+  value       = var.user_data_installation_type == "poc" ? null : module.database[0].database_password
   description = "The password to the TFE PostgreSQL database"
 }
 
 output "database_id" {
-  value       = module.database.database_id
+  value       = var.user_data_installation_type == "poc" ? null : module.database[0].database_id
   description = "The resource ID of the TFE PostgreSQL database"
 }
 
 output "database_name" {
-  value       = module.database.database_name
+  value       = var.user_data_installation_type == "poc" ? null : module.database[0].database_name
   description = "The name of the TFE PostgreSQL database"
 }
 

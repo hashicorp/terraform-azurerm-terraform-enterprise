@@ -186,54 +186,38 @@ resource "azurerm_application_gateway" "tfe_ag" {
   }
 
   # TFE Application
-  dynamic "frontend_port" {
-    for_each = var.active_active == true ? [1] : []
-
-    content {
-      name = local.app_frontend_port_name
-      port = 443
-    }
+  frontend_port {
+    name = local.app_frontend_port_name
+    port = 443
   }
 
-  dynamic "http_listener" {
-    for_each = var.active_active == true ? [1] : []
-
-    content {
-      name                           = local.app_frontend_http_listener_name
-      frontend_ip_configuration_name = local.frontend_ip_configuration_name
-      frontend_port_name             = local.app_frontend_port_name
-      protocol                       = "Https"
-      ssl_certificate_name           = var.certificate.name
-    }
+  http_listener {
+    name                           = local.app_frontend_http_listener_name
+    frontend_ip_configuration_name = local.frontend_ip_configuration_name
+    frontend_port_name             = local.app_frontend_port_name
+    protocol                       = "Https"
+    ssl_certificate_name           = var.certificate.name
   }
 
-  dynamic "backend_http_settings" {
-    for_each = var.active_active == true ? [1] : []
+  backend_http_settings {
+    name                  = local.app_backend_http_settings_name
+    cookie_based_affinity = "Disabled"
+    path                  = ""
+    protocol              = "Https"
+    port                  = 443
+    request_timeout       = 60
+    host_name             = var.fqdn
 
-    content {
-      name                  = local.app_backend_http_settings_name
-      cookie_based_affinity = "Disabled"
-      path                  = ""
-      protocol              = "Https"
-      port                  = 443
-      request_timeout       = 60
-      host_name             = var.fqdn
-
-      trusted_root_certificate_names = local.trusted_root_certificate_names
-    }
+    trusted_root_certificate_names = local.trusted_root_certificate_names
   }
 
-  dynamic "request_routing_rule" {
-    for_each = var.active_active == true ? [1] : []
-
-    content {
-      name                       = local.app_request_routing_rule_name
-      rule_type                  = "Basic"
-      http_listener_name         = local.app_frontend_http_listener_name
-      backend_address_pool_name  = local.backend_address_pool_name
-      backend_http_settings_name = local.app_backend_http_settings_name
-      rewrite_rule_set_name      = local.rewrite_rule_set_name
-    }
+  request_routing_rule {
+    name                       = local.app_request_routing_rule_name
+    rule_type                  = "Basic"
+    http_listener_name         = local.app_frontend_http_listener_name
+    backend_address_pool_name  = local.backend_address_pool_name
+    backend_http_settings_name = local.app_backend_http_settings_name
+    rewrite_rule_set_name      = local.rewrite_rule_set_name
   }
 
   # TFE Console

@@ -133,6 +133,36 @@ variable "user_data_iact_subnet_list" {
   EOD
 }
 
+variable "user_data_installation_type" {
+  default     = "production"
+  type        = string
+  description = "Installation type for Terraform Enterprise"
+
+  validation {
+    condition = (
+      var.user_data_installation_type == "poc" ||
+      var.user_data_installation_type == "production"
+    )
+
+    error_message = "The installation type must be 'production' (recommended) or 'poc' (only used for demo-mode)."
+  }
+}
+
+variable "user_data_production_type" {
+  type        = string
+  description = "Installation type for Terraform Enterprise"
+
+  # TODO: Add functionality for "disk" production type.
+  validation {
+    condition = (
+      var.user_data_production_type == "external" ||
+      var.user_data_production_type == null
+    )
+
+    error_message = "The production type must be 'external' if the installation type is 'production'. It should be null if installation type is 'poc'. This module does not yet support 'disk' production type."
+  }
+}
+
 variable "user_data_trusted_proxies" {
   description = <<-EOD
   A list of IP address ranges which will be considered safe to ignore when evaluating the IP addresses of requests like

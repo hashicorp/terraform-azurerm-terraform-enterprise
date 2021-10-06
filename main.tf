@@ -106,6 +106,7 @@ module "service_accounts" {
 # -------------------------------------------------------------
 module "object_storage" {
   source = "./modules/object_storage"
+  count  = var.user_data_installation_type == "poc" ? 0 : 1
 
   # Application storage
   storage_account_name           = module.service_accounts.storage_account_name
@@ -180,6 +181,7 @@ module "redis" {
 # --------------
 module "database" {
   source = "./modules/database"
+  count  = var.user_data_installation_type == "poc" ? 0 : 1
 
   friendly_name_prefix = var.friendly_name_prefix
   resource_group_name  = module.resource_groups.resource_group_name
@@ -209,28 +211,30 @@ module "user_data" {
   active_active = local.active_active
 
   # Database
-  user_data_pg_dbname   = module.database.database_name
-  user_data_pg_netloc   = "${module.database.database_server_fqdn}:5432"
-  user_data_pg_user     = "${module.database.database_user}@${module.database.database_server_name}"
-  user_data_pg_password = module.database.database_password
+  user_data_pg_dbname   = var.user_data_installation_type == "poc" ? null : module.database.database_name
+  user_data_pg_netloc   = var.user_data_installation_type == "poc" ? null : "${module.database.database_server_fqdn}:5432"
+  user_data_pg_user     = var.user_data_installation_type == "poc" ? null : "${module.database.database_user}@${module.database.database_server_name}"
+  user_data_pg_password = var.user_data_installation_type == "poc" ? null : module.database.database_password
 
   # Redis
-  user_data_redis_host        = local.active_active == true ? module.redis[0].redis_hostname : ""
-  user_data_redis_port        = local.active_active == true ? local.redis_port : ""
-  user_data_redis_pass        = local.active_active == true ? module.redis[0].redis_pass : ""
+  user_data_redis_host        = local.active_active == true ? module.redis[0].redis_hostname : null
+  user_data_redis_port        = local.active_active == true ? local.redis_port : null
+  user_data_redis_pass        = local.active_active == true ? module.redis[0].redis_pass : null
   user_data_redis_use_tls     = local.active_active == true ? var.user_data_redis_use_tls : true
   redis_enable_authentication = local.active_active == true ? var.redis_enable_authentication : true
 
   # Azure
-  user_data_azure_account_key    = module.service_accounts.storage_account_key
-  user_data_azure_account_name   = module.service_accounts.storage_account_name
-  user_data_azure_container_name = module.object_storage.storage_account_container_name
+  user_data_azure_account_key    = var.user_data_installation_type == "poc" ? null : module.service_accounts.storage_account_key
+  user_data_azure_account_name   = var.user_data_installation_type == "poc" ? null : module.service_accounts.storage_account_name
+  user_data_azure_container_name = var.user_data_installation_type == "poc" ? null : module.object_storage.storage_account_container_name
 
   # TFE
-  user_data_release_sequence = var.user_data_release_sequence
-  tfe_license_secret         = var.tfe_license_secret
-  user_data_iact_subnet_list = var.user_data_iact_subnet_list
-  user_data_trusted_proxies  = local.trusted_proxies
+  user_data_release_sequence  = var.user_data_release_sequence
+  tfe_license_secret          = var.tfe_license_secret
+  user_data_iact_subnet_list  = var.user_data_iact_subnet_list
+  user_data_trusted_proxies   = local.trusted_proxies
+  user_data_installation_type = var.user_data_installation_type
+  user_data_production_type   = var.user_data_installation_type == "poc" ? null : "external"
 
   # Certificates
   ca_certificate_secret = var.ca_certificate_secret

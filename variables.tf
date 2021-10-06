@@ -408,6 +408,21 @@ variable "vm_os_disk_disk_size_gb" {
 
 # User Data
 # ---------
+variable "user_data_installation_type" {
+  default     = "production"
+  type        = string
+  description = "Installation type for Terraform Enterprise"
+
+  validation {
+    condition = (
+      var.user_data_installation_type == "poc" ||
+      var.user_data_installation_type == "production"
+    )
+
+    error_message = "The installation type must be 'production' (recommended) or 'poc' (only used for demo-mode proofs of concept)."
+  }
+}
+
 variable "user_data_release_sequence" {
   default     = null
   type        = string
