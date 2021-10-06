@@ -213,10 +213,10 @@ module "user_data" {
   active_active = local.active_active
 
   # Database
-  user_data_pg_dbname   = module.database.database_name
-  user_data_pg_netloc   = "${module.database.database_server_fqdn}:5432"
-  user_data_pg_user     = "${module.database.database_user}@${module.database.database_server_name}"
-  user_data_pg_password = module.database.database_password
+  user_data_pg_dbname   = module.database.name
+  user_data_pg_netloc   = module.database.address
+  user_data_pg_user     = module.database.server.administrator_login
+  user_data_pg_password = module.database.server.administrator_password
 
   # Redis
   user_data_redis_host        = local.active_active == true ? module.redis[0].redis_hostname : ""
