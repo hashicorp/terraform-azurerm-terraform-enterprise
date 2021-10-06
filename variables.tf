@@ -110,8 +110,8 @@ variable "network_database_subnet_id" {
 }
 
 variable "network_database_private_dns_zone_id" {
-  default = null
-  type = string
+  default     = null
+  type        = string
   description = "The identity of an existing private DNS zone for the database."
 }
 
