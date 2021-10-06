@@ -211,10 +211,10 @@ module "user_data" {
   active_active = local.active_active
 
   # Database
-  user_data_pg_dbname   = var.user_data_installation_type == "poc" ? null : module.database.database_name
-  user_data_pg_netloc   = var.user_data_installation_type == "poc" ? null : "${module.database.database_server_fqdn}:5432"
-  user_data_pg_user     = var.user_data_installation_type == "poc" ? null : "${module.database.database_user}@${module.database.database_server_name}"
-  user_data_pg_password = var.user_data_installation_type == "poc" ? null : module.database.database_password
+  user_data_pg_dbname   = var.user_data_installation_type == "poc" ? null : module.database[0].database_name
+  user_data_pg_netloc   = var.user_data_installation_type == "poc" ? null : "${module.database[0].database_server_fqdn}:5432"
+  user_data_pg_user     = var.user_data_installation_type == "poc" ? null : "${module.database[0].database_user}@${module.database[0].database_server_name}"
+  user_data_pg_password = var.user_data_installation_type == "poc" ? null : module.database[0].database_password
 
   # Redis
   user_data_redis_host        = local.active_active == true ? module.redis[0].redis_hostname : null
@@ -226,7 +226,7 @@ module "user_data" {
   # Azure
   user_data_azure_account_key    = var.user_data_installation_type == "poc" ? null : module.service_accounts.storage_account_key
   user_data_azure_account_name   = var.user_data_installation_type == "poc" ? null : module.service_accounts.storage_account_name
-  user_data_azure_container_name = var.user_data_installation_type == "poc" ? null : module.object_storage.storage_account_container_name
+  user_data_azure_container_name = var.user_data_installation_type == "poc" ? null : module.object_storage[0].storage_account_container_name
 
   # TFE
   user_data_release_sequence  = var.user_data_release_sequence

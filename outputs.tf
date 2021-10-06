@@ -64,7 +64,7 @@ output "storage_account_name" {
 # Object Storage
 # --------------
 output "storage_account_container_name" {
-  value       = var.user_data_installation_type == "poc" ? null : module.object_storage.storage_account_container_name
+  value       = var.user_data_installation_type == "poc" ? null : module.object_storage[0].storage_account_container_name
   description = "The name of the container used by TFE"
 }
 
