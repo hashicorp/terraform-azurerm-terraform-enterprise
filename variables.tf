@@ -197,7 +197,7 @@ variable "database_user" {
 }
 
 variable "database_machine_type" {
-  default     = "GP_Standard_D4ds_v4"
+  default     = "GP_Standard_D4s_v3"
   type        = string
   description = "Postgres sku short name: tier + family + cores"
 }
