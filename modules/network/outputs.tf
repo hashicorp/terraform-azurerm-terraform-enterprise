@@ -27,3 +27,15 @@ output "network_redis_subnet_id" {
   value       = var.active_active == true ? azurerm_subnet.tfe_network_redis_subnet[0].id : ""
   description = "The subnet ID used for the Redis Cache"
 }
+
+output "database_subnet" {
+  value = azurerm_subnet.database
+
+  description = "The subnetwork dedicated to the database."
+}
+
+output "database_private_dns_zone" {
+  value = azurerm_private_dns_zone.database
+
+  description = "The private DNS zone dedicated to the database."
+}

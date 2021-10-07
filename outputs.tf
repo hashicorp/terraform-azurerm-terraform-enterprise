@@ -70,39 +70,9 @@ output "storage_account_container_name" {
 
 # Database
 # --------
-output "database_server_id" {
-  value       = var.user_data_installation_type == "poc" ? null : module.database[0].database_server_id
-  description = "The resource ID of the TFE PostgreSQL server"
-}
-
-output "database_server_name" {
-  value       = var.user_data_installation_type == "poc" ? null : module.database[0].database_server_name
-  description = "The name of the TFE PostgreSQL server"
-}
-
-output "database_server_fqdn" {
-  value       = var.user_data_installation_type == "poc" ? null : module.database[0].database_server_fqdn
-  description = "The fully qualified domain name of the TFE PostgreSQL database"
-}
-
-output "database_user" {
-  value       = var.user_data_installation_type == "poc" ? null : module.database[0].database_user
-  description = "The username for the TFE PostgreSQL database"
-}
-
-output "database_password" {
-  value       = var.user_data_installation_type == "poc" ? null : module.database[0].database_password
-  description = "The password to the TFE PostgreSQL database"
-}
-
-output "database_id" {
-  value       = var.user_data_installation_type == "poc" ? null : module.database[0].database_id
-  description = "The resource ID of the TFE PostgreSQL database"
-}
-
-output "database_name" {
-  value       = var.user_data_installation_type == "poc" ? null : module.database[0].database_name
-  description = "The name of the TFE PostgreSQL database"
+output "database" {
+  value       = var.user_data_installation_type == "poc" ? null : module.database[0]
+  description = "The TFE PostgreSQL database."
 }
 
 # SSH
