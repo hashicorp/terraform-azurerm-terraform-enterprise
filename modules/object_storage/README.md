@@ -19,11 +19,16 @@ module "object_storage" {
   tfe_license_name        = var.tfe_license_name
   tfe_license_secret_name = "<Secret name of existing Base64 encoded TFE license in Key Vault>"
 
-  storage_account_name = local.storage_account_name
+  storage_account_name             = local.storage_account_name
+  storage_account_tier             = var.storage_account_tier
+  storage_account_replication_type = var.storage_account_replication_type
+
+  tags = var.tags
 }
 ```
 
 ## Resources
 
+* [azurerm_storage_account](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account)
 * [azurerm_storage_container](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_container)
-* [azurerm_storage_blob](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_blob)
+* [random_pet](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/pet)

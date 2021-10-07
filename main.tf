@@ -81,10 +81,11 @@ resource "tls_private_key" "tfe_ssh" {
   rsa_bits  = 4096
 }
 
-# Azure service accounts
-# ----------------------
-module "service_accounts" {
-  source = "./modules/service_accounts"
+# Azure storage container and storage blob for TFE license file
+# -------------------------------------------------------------
+module "object_storage" {
+  source = "./modules/object_storage"
+  count  = var.user_data_installation_type == "poc" ? 0 : 1
 
   friendly_name_prefix = var.friendly_name_prefix
   resource_group_name  = module.resource_groups.resource_group_name
@@ -92,32 +93,13 @@ module "service_accounts" {
 
   # Application storage
   storage_account_name                           = var.storage_account_name
+  storage_account_container_name                 = var.storage_account_container_name
   storage_account_key                            = var.storage_account_key
   storage_account_primary_blob_connection_string = var.storage_account_primary_blob_connection_string
   storage_account_tier                           = var.storage_account_tier
   storage_account_replication_type               = var.storage_account_replication_type
 
   tags = var.tags
-
-  depends_on = [
-    module.resource_groups
-  ]
-}
-
-# Azure storage container and storage blob for TFE license file
-# -------------------------------------------------------------
-module "object_storage" {
-  source = "./modules/object_storage"
-  count  = var.user_data_installation_type == "poc" ? 0 : 1
-
-  # Application storage
-  storage_account_name           = module.service_accounts.storage_account_name
-  storage_account_container_name = var.storage_account_container_name
-
-  depends_on = [
-    module.resource_groups,
-    module.service_accounts
-  ]
 }
 
 # Azure virtual network, subnet, and security group
@@ -146,10 +128,6 @@ module "network" {
   load_balancer_public = var.load_balancer_public
 
   tags = var.tags
-
-  depends_on = [
-    module.resource_groups
-  ]
 }
 
 # Azure cache
@@ -173,11 +151,6 @@ module "redis" {
   redis_rdb_existing_storage_account  = var.redis_rdb_existing_storage_account != null ? data.azurerm_storage_account.tfe_redis_existing_storage_account[0].primary_blob_connection_string : null
 
   tags = var.tags
-
-  depends_on = [
-    module.resource_groups,
-    module.network
-  ]
 }
 
 # Azure postgres
@@ -200,7 +173,6 @@ module "database" {
   tags = var.tags
 
   depends_on = [
-    module.resource_groups,
     module.network
   ]
 }
@@ -228,8 +200,8 @@ module "user_data" {
   redis_enable_authentication = local.active_active == true ? var.redis_enable_authentication : true
 
   # Azure
-  user_data_azure_account_key    = var.user_data_installation_type == "poc" ? null : module.service_accounts.storage_account_key
-  user_data_azure_account_name   = var.user_data_installation_type == "poc" ? null : module.service_accounts.storage_account_name
+  user_data_azure_account_key    = var.user_data_installation_type == "poc" ? null : module.object_storage[0].storage_account_key
+  user_data_azure_account_name   = var.user_data_installation_type == "poc" ? null : module.object_storage[0].storage_account_name
   user_data_azure_container_name = var.user_data_installation_type == "poc" ? null : module.object_storage[0].storage_account_container_name
 
   # TFE
@@ -249,12 +221,6 @@ module "user_data" {
   proxy_ip   = var.proxy_ip
   proxy_port = var.proxy_port
   no_proxy   = [local.fqdn, var.network_cidr]
-
-  depends_on = [
-    module.service_accounts,
-    module.object_storage,
-    module.network
-  ]
 }
 
 # Azure bastion service used to connect to TFE instance(s)
@@ -270,11 +236,6 @@ module "bastion" {
   bastion_subnet_id = local.network_bastion_subnet_id
 
   tags = var.tags
-
-  depends_on = [
-    module.resource_groups,
-    module.network
-  ]
 }
 
 # Azure load balancer
@@ -317,11 +278,6 @@ module "load_balancer" {
   load_balancer_waf_max_request_body_size_kb = var.load_balancer_waf_max_request_body_size_kb
 
   tags = var.tags
-
-  depends_on = [
-    module.resource_groups,
-    module.network
-  ]
 }
 
 # Azure virtual machine scale set
@@ -354,12 +310,4 @@ module "vm" {
   key_secret            = var.vm_key_secret
 
   tags = var.tags
-
-  depends_on = [
-    module.resource_groups,
-    module.network,
-    module.load_balancer,
-    module.user_data,
-    module.service_accounts
-  ]
 }
