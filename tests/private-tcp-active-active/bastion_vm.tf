@@ -6,8 +6,6 @@ resource "azurerm_subnet" "vm_bastion" {
 
   address_prefixes     = ["10.0.16.0/20"]
   virtual_network_name = module.private_tcp_active_active.network_name
-
-  depends_on = [azurerm_subnet.proxy]
 }
 
 resource "azurerm_public_ip" "vm_bastion" {
