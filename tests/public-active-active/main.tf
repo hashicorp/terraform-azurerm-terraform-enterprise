@@ -29,6 +29,7 @@ module "public_active_active" {
   redis_enable_non_ssl_port   = true
   redis_enable_authentication = false
   user_data_redis_use_tls     = false
+  user_data_installation_type = "production"
 
   tags = local.common_tags
 }

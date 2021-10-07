@@ -36,6 +36,7 @@ module "private_active_active" {
   redis_enable_non_ssl_port   = true
   redis_enable_authentication = true
   user_data_redis_use_tls     = false
+  user_data_installation_type = "production"
 
   create_bastion              = false
   network_bastion_subnet_cidr = azurerm_subnet.vm_bastion.address_prefixes[0]
