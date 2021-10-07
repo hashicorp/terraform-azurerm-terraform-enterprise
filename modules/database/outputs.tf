@@ -1,34 +1,17 @@
-output "database_server_id" {
-  value       = azurerm_postgresql_server.tfe_pg.id
-  description = "The resource ID of the TFE PostgreSQL server"
+output "address" {
+  value = "${azurerm_postgresql_flexible_server.tfe_pg.fqdn}:5432"
+
+  description = "The address of the PostgreSQL database."
+}
+output "name" {
+  # This is the name of the default database created with the server.
+  value = "postgres"
+
+  description = "The name of the PostgreSQL database."
 }
 
-output "database_server_name" {
-  value       = azurerm_postgresql_server.tfe_pg.name
-  description = "The name of the TFE PostgreSQL server"
-}
+output "server" {
+  value = azurerm_postgresql_flexible_server.tfe_pg
 
-output "database_server_fqdn" {
-  value       = azurerm_postgresql_server.tfe_pg.fqdn
-  description = "The fully qualified domain name of the TFE PostgreSQL database"
-}
-
-output "database_user" {
-  value       = var.database_user
-  description = "The username for the TFE PostgreSQL database"
-}
-
-output "database_password" {
-  value       = random_string.tfe_pg_password.result
-  description = "The password to the TFE PostgreSQL database"
-}
-
-output "database_id" {
-  value       = azurerm_postgresql_database.tfe_pg_db.id
-  description = "The resource ID of the TFE PostgreSQL database"
-}
-
-output "database_name" {
-  value       = azurerm_postgresql_database.tfe_pg_db.name
-  description = "The name of the TFE PostgreSQL database"
+  description = "The PostgreSQL server."
 }
