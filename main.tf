@@ -215,10 +215,10 @@ module "user_data" {
   active_active = local.active_active
 
   # Database
-  user_data_pg_dbname   =  var.user_data_installation_type == "poc" ? null : module.database[0].name
-  user_data_pg_netloc   =  var.user_data_installation_type == "poc" ? null : module.database[0].address
-  user_data_pg_user     =  var.user_data_installation_type == "poc" ? null : module.database[0].server.administrator_login
-  user_data_pg_password =  var.user_data_installation_type == "poc" ? null : module.database[0].server.administrator_password
+  user_data_pg_dbname   = var.user_data_installation_type == "poc" ? null : module.database[0].name
+  user_data_pg_netloc   = var.user_data_installation_type == "poc" ? null : module.database[0].address
+  user_data_pg_user     = var.user_data_installation_type == "poc" ? null : module.database[0].server.administrator_login
+  user_data_pg_password = var.user_data_installation_type == "poc" ? null : module.database[0].server.administrator_password
 
   # Redis
   user_data_redis_host        = local.active_active == true ? module.redis[0].redis_hostname : null
