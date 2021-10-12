@@ -36,8 +36,8 @@ locals {
   )
 
   database = length(module.database) > 0 ? module.database[0] : toset({
-    name                   = null
-    address                = null
+    name    = null
+    address = null
     server = {
       administrator_login    = null
       administrator_password = null
