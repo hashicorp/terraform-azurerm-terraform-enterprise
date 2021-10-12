@@ -172,6 +172,9 @@ module "database" {
 
   tags = var.tags
 
+  depends_on = [
+    module.network
+  ]
 }
 
 # Azure user data / cloud init used to install and configure TFE on instance(s)
