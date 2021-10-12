@@ -195,10 +195,6 @@ module "database" {
   database_version             = var.database_version
 
   tags = var.tags
-
-  depends_on = [
-    module.network
-  ]
 }
 
 # Azure user data / cloud init used to install and configure TFE on instance(s)
