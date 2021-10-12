@@ -57,7 +57,7 @@ output "network_redis_subnet_id" {
 # Service Accounts
 # ----------------
 output "storage_account_name" {
-  value       = var.user_data_installation_type == "poc" ? null : module.object_storage[0].storage_account_name
+  value       = length(module.object_storage) > 0 ? module.object_storage[0].storage_account_name : null
   description = "The name of the storage account used by TFE"
 }
 
