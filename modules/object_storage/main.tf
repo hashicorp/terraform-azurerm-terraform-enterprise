@@ -17,7 +17,7 @@ resource "random_pet" "random_pet_tfe_storage_account_name" {
 
 resource "azurerm_storage_account" "tfe_storage_account" {
   count = var.storage_account_name == null ? 1 : 0
-
+  # Ensure the name is 24 alphanumeric characters as required by Azure.
   name = substr(
     lower(replace(random_pet.random_pet_tfe_storage_account_name[0].id, "/[^[:alnum:]]/", "")),
     0,
