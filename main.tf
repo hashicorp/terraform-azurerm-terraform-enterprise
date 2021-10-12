@@ -226,7 +226,6 @@ module "user_data" {
   user_data_iact_subnet_list  = var.user_data_iact_subnet_list
   user_data_trusted_proxies   = local.trusted_proxies
   user_data_installation_type = var.user_data_installation_type
-  user_data_production_type   = local.demo_mode == true ? null : "external"
 
   # Certificates
   ca_certificate_secret = var.ca_certificate_secret

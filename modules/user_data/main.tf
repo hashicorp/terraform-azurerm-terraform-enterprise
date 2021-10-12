@@ -120,7 +120,7 @@ locals {
     }
 
     production_type = {
-      value = var.user_data_production_type
+      value = var.user_data_installation_type == "poc" ? null : "external"
     }
 
     archivist_token = {
