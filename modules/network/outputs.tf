@@ -19,23 +19,23 @@ output "network_frontend_subnet_id" {
 }
 
 output "network_bastion_subnet_id" {
-  value       = var.create_bastion == true ? azurerm_subnet.tfe_network_bastion_subnet[0].id : ""
+  value       = var.create_bastion == true ? azurerm_subnet.tfe_network_bastion_subnet[0].id : null
   description = "The subnet ID used for the Bastion"
 }
 
 output "network_redis_subnet_id" {
-  value       = var.active_active == true ? azurerm_subnet.tfe_network_redis_subnet[0].id : ""
+  value       = var.active_active == true && var.demo_mode == false ? azurerm_subnet.tfe_network_redis_subnet[0].id : null
   description = "The subnet ID used for the Redis Cache"
 }
 
 output "database_subnet" {
-  value = azurerm_subnet.database
+  value = var.demo_mode == true ? null : azurerm_subnet.database[0]
 
   description = "The subnetwork dedicated to the database."
 }
 
 output "database_private_dns_zone" {
-  value = azurerm_private_dns_zone.database
+  value = var.demo_mode == true ? null : azurerm_private_dns_zone.database[0]
 
   description = "The private DNS zone dedicated to the database."
 }

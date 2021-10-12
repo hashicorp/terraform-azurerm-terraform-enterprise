@@ -21,8 +21,8 @@ locals {
   network_frontend_subnet_id           = var.network_frontend_subnet_id == null ? module.network[0].network_frontend_subnet_id : var.network_frontend_subnet_id
   network_bastion_subnet_id            = var.network_bastion_subnet_id == null && var.create_bastion == true ? module.network[0].network_bastion_subnet_id : var.network_bastion_subnet_id
   network_redis_subnet_id              = var.network_redis_subnet_id == null && local.active_active == true ? module.network[0].network_redis_subnet_id : var.network_redis_subnet_id
-  network_database_subnet_id           = var.network_database_subnet_id == null ? module.network[0].database_subnet.id : var.network_database_subnet_id
-  network_database_private_dns_zone_id = var.network_database_private_dns_zone_id == null ? module.network[0].database_private_dns_zone.id : var.network_database_private_dns_zone_id
+  network_database_subnet_id           = var.network_database_subnet_id == null && local.demo_mode == false ? module.network[0].database_subnet.id : var.network_database_subnet_id
+  network_database_private_dns_zone_id = var.network_database_private_dns_zone_id == null && local.demo_mode == false ? module.network[0].database_private_dns_zone.id : var.network_database_private_dns_zone_id
 
   # Redis
   # -----
@@ -35,14 +35,21 @@ locals {
     [var.network_frontend_subnet_cidr]
   )
 
-  database = length(module.database) > 0 ? module.database[0] : toset({
+  database = length(module.database) > 0 ? {
+    name    = module.database[0].name
+    address = module.database[0].address
+    server = {
+      administrator_login    = module.database[0].server.administrator_login
+      administrator_password = module.database[0].server.administrator_password
+    }
+    } : {
     name    = null
     address = null
     server = {
       administrator_login    = null
       administrator_password = null
     }
-  })
+  }
 
   object_storage = length(module.object_storage) > 0 ? module.object_storage[0] : {
     storage_account_key            = null
@@ -139,6 +146,7 @@ module "network" {
   network_redis_subnet_cidr    = var.network_redis_subnet_cidr
 
   create_bastion = var.create_bastion
+  demo_mode      = local.demo_mode
 
   load_balancer_type   = var.load_balancer_type
   load_balancer_public = var.load_balancer_public
