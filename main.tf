@@ -5,10 +5,11 @@ locals {
   # ----------------
   # Determine whether or not TFE in active-active mode based on node count, by default standalone is assumed
   active_active = var.vm_node_count >= 2 ? true : false
+  demo_mode     = var.user_data_installation_type == "poc" ? true : false
 
   # DNS
   # ---
-  tfe_subdomain     = var.tfe_subdomain == null ? substr(random_pet.tfe_subdomain[0].id, 0, 12) : var.tfe_subdomain
+  tfe_subdomain     = var.tfe_subdomain == null ? substr(random_pet.tfe_subdomain[0].id, 0, 24) : var.tfe_subdomain
   dns_internal_fqdn = var.domain_name == null ? azurerm_public_ip.tfe_pip.fqdn : "${local.tfe_subdomain}.${var.domain_name}"
   fqdn              = var.dns_external_fqdn == null ? local.dns_internal_fqdn : var.dns_external_fqdn
 
@@ -33,6 +34,21 @@ locals {
     var.user_data_trusted_proxies,
     [var.network_frontend_subnet_cidr]
   )
+
+  database = length(module.database) > 0 ? module.database[0] : toset({
+    name                   = null
+    address                = null
+    server = {
+      administrator_login    = null
+      administrator_password = null
+    }
+  })
+
+  object_storage = length(module.object_storage) > 0 ? module.object_storage[0] : {
+    storage_account_key            = null
+    storage_account_name           = null
+    storage_account_container_name = null
+  }
 }
 
 # Azure resource groups
@@ -85,7 +101,7 @@ resource "tls_private_key" "tfe_ssh" {
 # -------------------------------------------------------------
 module "object_storage" {
   source = "./modules/object_storage"
-  count  = var.user_data_installation_type == "poc" ? 0 : 1
+  count  = local.demo_mode == true ? 0 : 1
 
   friendly_name_prefix = var.friendly_name_prefix
   resource_group_name  = module.resource_groups.resource_group_name
@@ -157,7 +173,7 @@ module "redis" {
 # --------------
 module "database" {
   source = "./modules/database"
-  count  = var.user_data_installation_type == "poc" ? 0 : 1
+  count  = local.demo_mode == true ? 0 : 1
 
   friendly_name_prefix = var.friendly_name_prefix
   resource_group_name  = module.resource_groups.resource_group_name
@@ -187,10 +203,10 @@ module "user_data" {
   active_active = local.active_active
 
   # Database
-  user_data_pg_dbname   = var.user_data_installation_type == "poc" ? null : module.database[0].name
-  user_data_pg_netloc   = var.user_data_installation_type == "poc" ? null : module.database[0].address
-  user_data_pg_user     = var.user_data_installation_type == "poc" ? null : module.database[0].server.administrator_login
-  user_data_pg_password = var.user_data_installation_type == "poc" ? null : module.database[0].server.administrator_password
+  user_data_pg_dbname   = local.database.name
+  user_data_pg_netloc   = local.database.address
+  user_data_pg_user     = local.database.server.administrator_login
+  user_data_pg_password = local.database.server.administrator_password
 
   # Redis
   user_data_redis_host        = local.active_active == true ? module.redis[0].redis_hostname : null
@@ -200,9 +216,9 @@ module "user_data" {
   redis_enable_authentication = local.active_active == true ? var.redis_enable_authentication : true
 
   # Azure
-  user_data_azure_account_key    = var.user_data_installation_type == "poc" ? null : module.object_storage[0].storage_account_key
-  user_data_azure_account_name   = var.user_data_installation_type == "poc" ? null : module.object_storage[0].storage_account_name
-  user_data_azure_container_name = var.user_data_installation_type == "poc" ? null : module.object_storage[0].storage_account_container_name
+  user_data_azure_account_key    = local.object_storage.storage_account_key
+  user_data_azure_account_name   = local.object_storage.storage_account_name
+  user_data_azure_container_name = local.object_storage.storage_account_container_name
 
   # TFE
   user_data_release_sequence  = var.user_data_release_sequence
@@ -210,7 +226,7 @@ module "user_data" {
   user_data_iact_subnet_list  = var.user_data_iact_subnet_list
   user_data_trusted_proxies   = local.trusted_proxies
   user_data_installation_type = var.user_data_installation_type
-  user_data_production_type   = var.user_data_installation_type == "poc" ? null : "external"
+  user_data_production_type   = local.demo_mode == true ? null : "external"
 
   # Certificates
   ca_certificate_secret = var.ca_certificate_secret

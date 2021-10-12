@@ -57,21 +57,21 @@ output "network_redis_subnet_id" {
 # Service Accounts
 # ----------------
 output "storage_account_name" {
-  value       = var.user_data_installation_type == "poc" ? null : module.object_storage[0].storage_account_name
+  value       = local.object_storage.storage_account_name
   description = "The name of the storage account used by TFE"
 }
 
 # Object Storage
 # --------------
 output "storage_account_container_name" {
-  value       = var.user_data_installation_type == "poc" ? null : module.object_storage[0].storage_account_container_name
+  value       = local.object_storage.storage_account_container_name
   description = "The name of the container used by TFE"
 }
 
 # Database
 # --------
 output "database" {
-  value       = var.user_data_installation_type == "poc" ? null : module.database[0]
+  value       = local.database
   description = "The TFE PostgreSQL database."
 }
 
