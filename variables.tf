@@ -415,6 +415,7 @@ variable "vm_os_disk_disk_size_gb" {
 # User Data
 # ---------
 variable "user_data_installation_type" {
+  default     = "production"
   type        = string
   description = "Installation type for Terraform Enterprise"
 

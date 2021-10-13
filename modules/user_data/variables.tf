@@ -134,7 +134,6 @@ variable "user_data_iact_subnet_list" {
 }
 
 variable "user_data_installation_type" {
-  default     = "production"
   type        = string
   description = "Installation type for Terraform Enterprise"
 
