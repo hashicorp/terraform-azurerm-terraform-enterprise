@@ -277,6 +277,8 @@ resource "azurerm_private_dns_zone" "database" {
 
   name                = "${var.friendly_name_prefix}.postgres.database.azure.com"
   resource_group_name = var.resource_group_name
+
+  depends_on = [azurerm_virtual_network.tfe_network]
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "database" {
