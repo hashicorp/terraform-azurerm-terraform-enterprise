@@ -1,17 +1,17 @@
 # Application
 # -----------
 output "tfe_application_url" {
-  value       = "https://${local.fqdn}"
+  value       = "https://${module.load_balancer.fqdn}"
   description = "Terraform Enterprise Application URL"
 }
 
 output "login_url" {
-  value       = "https://${local.fqdn}/admin/account/new?token=${module.user_data.user_token.value}"
+  value       = "https://${module.load_balancer.fqdn}/admin/account/new?token=${module.user_data.user_token.value}"
   description = "Login URL to setup the TFE instance once it is initialized"
 }
 
 output "tfe_console_url" {
-  value       = "https://${local.fqdn}:8800"
+  value       = "https://${module.load_balancer.fqdn}:8800"
   description = "Terraform Enterprise Console URL"
 }
 

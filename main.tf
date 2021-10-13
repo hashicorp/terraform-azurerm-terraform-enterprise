@@ -7,12 +7,6 @@ locals {
   active_active = var.vm_node_count >= 2 ? true : false
   demo_mode     = var.user_data_installation_type == "poc" ? true : false
 
-  # DNS
-  # ---
-  tfe_subdomain     = var.tfe_subdomain == null ? substr(random_pet.tfe_subdomain[0].id, 0, 24) : var.tfe_subdomain
-  dns_internal_fqdn = var.domain_name == null ? azurerm_public_ip.tfe_pip.fqdn : "${local.tfe_subdomain}.${var.domain_name}"
-  fqdn              = var.dns_external_fqdn == null ? local.dns_internal_fqdn : var.dns_external_fqdn
-
   # Network
   # -------
   network_name                         = var.network_name == null ? module.network[0].network_name : var.network_name
@@ -68,29 +62,6 @@ module "resource_groups" {
 
   resource_group_name     = var.resource_group_name
   resource_group_name_dns = var.resource_group_name_dns
-
-  tags = var.tags
-}
-
-# Subdomain
-# ---------
-resource "random_pet" "tfe_subdomain" {
-  count = var.tfe_subdomain == null ? 1 : 0
-
-  length    = 2
-  separator = ""
-}
-
-# Public IP
-# ---------
-resource "azurerm_public_ip" "tfe_pip" {
-  name                = "${var.friendly_name_prefix}-lb-pip"
-  location            = var.location
-  resource_group_name = module.resource_groups.resource_group_name
-
-  sku               = "Standard"
-  allocation_method = "Static"
-  domain_name_label = var.domain_name == null ? local.tfe_subdomain : null
 
   tags = var.tags
 }
@@ -203,7 +174,7 @@ module "user_data" {
   source = "./modules/user_data"
 
   # General
-  fqdn          = local.fqdn
+  fqdn          = module.load_balancer.fqdn
   active_active = local.active_active
 
   # Database
@@ -239,7 +210,7 @@ module "user_data" {
   # Proxy
   proxy_ip   = var.proxy_ip
   proxy_port = var.proxy_port
-  no_proxy   = [local.fqdn, var.network_cidr]
+  no_proxy   = [module.load_balancer.fqdn, var.network_cidr]
 }
 
 # Azure bastion service used to connect to TFE instance(s)
@@ -268,15 +239,13 @@ module "load_balancer" {
   zones                = var.zones
 
   # General
-  fqdn                    = local.fqdn
   active_active           = local.active_active
   domain_name             = var.domain_name
-  tfe_subdomain           = local.tfe_subdomain
-  tfe_pip_id              = azurerm_public_ip.tfe_pip.id
-  tfe_pip_ip_address      = azurerm_public_ip.tfe_pip.ip_address
+  tfe_subdomain           = var.tfe_subdomain
   resource_group_name_dns = module.resource_groups.resource_group_name_dns
   dns_create_record       = var.dns_create_record
   tenant_id               = data.azurerm_client_config.current.tenant_id
+  dns_external_fqdn       = var.dns_external_fqdn
 
   # Secrets
   ca_certificate_secret = var.ca_certificate_secret

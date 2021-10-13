@@ -7,3 +7,13 @@ output "load_balancer_ip" {
   value       = local.load_balancer_ip
   description = "The IP address of the load balancer"
 }
+
+output "fqdn" {
+  value       = local.fqdn
+  description = "Fully qualified domain name of the load balancer"
+}
+
+output "tfe_subdomain" {
+  value = local.tfe_subdomain
+  description = "Subdomain for TFE"
+}

@@ -3,7 +3,10 @@ locals {
   private_ip_address = var.network_private_ip == null && var.load_balancer_public == false ? cidrhost(var.network_frontend_subnet_cidr, 16) : var.network_private_ip
 
   # Determine the resulting TFE IP
-  load_balancer_ip = var.load_balancer_public == true ? var.tfe_pip_ip_address : local.private_ip_address
+  tfe_subdomain     = var.tfe_subdomain == null ? substr(random_pet.tfe_subdomain[0].id, 0, 24) : var.tfe_subdomain
+  load_balancer_ip  = var.load_balancer_public == true ? azurerm_public_ip.tfe_pip.ip_address : local.private_ip_address
+  dns_internal_fqdn = var.domain_name == null ? azurerm_public_ip.tfe_pip.fqdn : "${local.tfe_subdomain}.${var.domain_name}"
+  fqdn              = var.dns_external_fqdn == null ? local.dns_internal_fqdn : var.dns_external_fqdn
 
   is_legacy_rule_set_version = var.load_balancer_waf_rule_set_version == "2.2.9"
 
@@ -32,18 +35,41 @@ locals {
   trusted_root_certificate_names = keys(local.trusted_root_certificates)
 }
 
+# Subdomain
+# ---------
+resource "random_pet" "tfe_subdomain" {
+  count = var.tfe_subdomain == null ? 1 : 0
+
+  length    = 2
+  separator = ""
+}
+
+# Public IP
+# ---------
+resource "azurerm_public_ip" "tfe_pip" {
+  name                = "${var.friendly_name_prefix}-lb-pip"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+
+  sku               = "Standard"
+  allocation_method = "Static"
+  domain_name_label = var.domain_name == null ? local.tfe_subdomain : null
+
+  tags = var.tags
+}
+
 # New DNS Record
 # --------------
 resource "azurerm_dns_a_record" "tfe_pip_dns" {
   count = var.domain_name != null && var.dns_create_record == true ? 1 : 0
 
-  name                = var.tfe_subdomain
+  name                = local.tfe_subdomain
   zone_name           = var.domain_name
   resource_group_name = var.resource_group_name_dns
   ttl                 = 300
 
   # Public
-  target_resource_id = var.load_balancer_public == true ? var.tfe_pip_id : null
+  target_resource_id = var.load_balancer_public == true ? azurerm_public_ip.tfe_pip.id : null
 
   # Private
   records = var.load_balancer_public == false ? [local.private_ip_address] : null
@@ -166,7 +192,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
   # Public front end configuration
   frontend_ip_configuration {
     name                 = local.frontend_ip_configuration_name_public
-    public_ip_address_id = var.tfe_pip_id
+    public_ip_address_id = azurerm_public_ip.tfe_pip.id
   }
 
   # Private front end configuration
@@ -206,7 +232,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
     protocol              = "Https"
     port                  = 443
     request_timeout       = 60
-    host_name             = var.fqdn
+    host_name             = local.fqdn
 
     trusted_root_certificate_names = local.trusted_root_certificate_names
   }
@@ -252,7 +278,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
       protocol              = "Https"
       port                  = 8800
       request_timeout       = 60
-      host_name             = var.fqdn
+      host_name             = local.fqdn
 
       trusted_root_certificate_names = local.trusted_root_certificate_names
     }
@@ -294,7 +320,7 @@ resource "azurerm_lb" "tfe_load_balancer" {
 
     content {
       name                 = "${var.friendly_name_prefix}-lb-fe"
-      public_ip_address_id = var.tfe_pip_id
+      public_ip_address_id = azurerm_public_ip.tfe_pip.id
     }
   }
 
