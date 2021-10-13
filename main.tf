@@ -9,7 +9,7 @@ locals {
 
   # Network
   # -------
-  network = length(module.network) > 0 ? module.network[0] : {
+  network = length(module.network) == 0 ? {
     bastion_subnet = {
       id = var.network_bastion_subnet_id
     }
@@ -29,7 +29,7 @@ locals {
     redis_subnet = {
       id = var.network_redis_subnet_id
     }
-  }
+  } : module.network[0]
 
   # Redis
   # -----
