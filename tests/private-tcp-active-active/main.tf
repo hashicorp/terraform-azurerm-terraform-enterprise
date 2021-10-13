@@ -38,6 +38,6 @@ module "private_tcp_active_active" {
   redis_rdb_backup_frequency  = 60
   user_data_installation_type = "production"
 
-  create_bastion              = false
-  tags                        = local.common_tags
+  create_bastion = false
+  tags           = local.common_tags
 }
