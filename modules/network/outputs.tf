@@ -14,23 +14,23 @@ output "frontend_subnet" {
 }
 
 output "bastion_subnet" {
-  value       = length(azurerm_subnet.tfe_network_bastion_subnet) > 0 ? azurerm_subnet.tfe_network_bastion_subnet[0] : null
+  value       = try(azurerm_subnet.tfe_network_bastion_subnet[0], null)
   description = "The subnetwork used for the Bastion"
 }
 
 output "redis_subnet" {
-  value       = length(azurerm_subnet.tfe_network_redis_subnet) > 0 ? azurerm_subnet.tfe_network_redis_subnet[0] : null
+  value       = try(azurerm_subnet.tfe_network_redis_subnet[0], null)
   description = "The subnetwork used for the Redis Cache"
 }
 
 output "database_subnet" {
-  value = length(azurerm_subnet.database) > 0 ? azurerm_subnet.database[0] : null
+  value = try(azurerm_subnet.database[0], null)
 
   description = "The subnetwork dedicated to the database."
 }
 
 output "database_private_dns_zone" {
-  value = length(azurerm_private_dns_zone.database) > 0 ? azurerm_private_dns_zone.database[0] : null
+  value = try(azurerm_private_dns_zone.database[0], null)
 
   description = "The private DNS zone dedicated to the database."
 }

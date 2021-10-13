@@ -9,27 +9,30 @@ locals {
 
   # Network
   # -------
-  network = length(module.network) == 0 ? {
-    bastion_subnet = {
-      id = var.network_bastion_subnet_id
+  network = try(
+    module.network[0],
+    {
+      bastion_subnet = {
+        id = var.network_bastion_subnet_id
+      }
+      database_private_dns_zone = {
+        id = var.network_database_private_dns_zone_id
+      }
+      database_subnet = {
+        id = var.network_database_subnet_id
+      }
+      frontend_subnet = {
+        id = var.network_frontend_subnet_id
+      }
+      network = {}
+      private_subnet = {
+        id = var.network_private_subnet_id
+      }
+      redis_subnet = {
+        id = var.network_redis_subnet_id
+      }
     }
-    database_private_dns_zone = {
-      id = var.network_database_private_dns_zone_id
-    }
-    database_subnet = {
-      id = var.network_database_subnet_id
-    }
-    frontend_subnet = {
-      id = var.network_frontend_subnet_id
-    }
-    network = {}
-    private_subnet = {
-      id = var.network_private_subnet_id
-    }
-    redis_subnet = {
-      id = var.network_redis_subnet_id
-    }
-  } : module.network[0]
+  )
 
   # Redis
   # -----
@@ -42,27 +45,26 @@ locals {
     [var.network_frontend_subnet_cidr]
   )
 
-  database = length(module.database) > 0 ? {
-    name    = module.database[0].name
-    address = module.database[0].address
-    server = {
-      administrator_login    = module.database[0].server.administrator_login
-      administrator_password = module.database[0].server.administrator_password
+  database = try(
+    module.database[0],
+    {
+      name    = null
+      address = null
+      server = {
+        administrator_login    = null
+        administrator_password = null
+      }
     }
-    } : {
-    name    = null
-    address = null
-    server = {
-      administrator_login    = null
-      administrator_password = null
-    }
-  }
+  )
 
-  object_storage = length(module.object_storage) > 0 ? module.object_storage[0] : {
-    storage_account_key            = null
-    storage_account_name           = null
-    storage_account_container_name = null
-  }
+  object_storage = try(
+    module.object_storage[0],
+    {
+      storage_account_key            = null
+      storage_account_name           = null
+      storage_account_container_name = null
+    }
+  )
 }
 
 # Azure resource groups
