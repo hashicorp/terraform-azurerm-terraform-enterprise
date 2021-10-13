@@ -22,6 +22,7 @@ locals {
     frontend_subnet = {
       id = var.network_frontend_subnet_id
     }
+    network = {}
     private_subnet = {
       id = var.network_private_subnet_id
     }
