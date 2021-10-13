@@ -14,6 +14,6 @@ output "fqdn" {
 }
 
 output "tfe_subdomain" {
-  value = local.tfe_subdomain
+  value       = local.tfe_subdomain
   description = "Subdomain for TFE"
 }
