@@ -67,18 +67,22 @@ resource "azurerm_network_security_group" "tfe_network_private_nsg" {
   }
 
   # Allow inbound SSH from bastion subnet
-  security_rule {
-    name      = "allow-private-inbound-ssh"
-    priority  = 200
-    direction = "Inbound"
-    access    = "Allow"
-    protocol  = "Tcp"
+  dynamic "security_rule" {
+    for_each = var.create_bastion == true ? [1] : []
 
-    source_address_prefix = var.network_bastion_subnet_cidr
-    source_port_range     = "*"
+    content {
+      name      = "allow-private-inbound-ssh"
+      priority  = 200
+      direction = "Inbound"
+      access    = "Allow"
+      protocol  = "Tcp"
 
-    destination_port_range     = "22"
-    destination_address_prefix = var.network_private_subnet_cidr
+      source_address_prefix = var.network_bastion_subnet_cidr
+      source_port_range     = "*"
+
+      destination_port_range     = "22"
+      destination_address_prefix = var.network_private_subnet_cidr
+    }
   }
 
   # Allow Application Gateway traffic
@@ -236,7 +240,7 @@ resource "azurerm_subnet" "tfe_network_bastion_subnet" {
 # Redis subnet
 # -------------
 resource "azurerm_subnet" "tfe_network_redis_subnet" {
-  count = var.active_active == true ? 1 : 0
+  count = var.active_active == true && var.demo_mode == false ? 1 : 0
 
   name                = "${var.friendly_name_prefix}-redis-subnet"
   resource_group_name = var.resource_group_name
@@ -245,9 +249,27 @@ resource "azurerm_subnet" "tfe_network_redis_subnet" {
   virtual_network_name = azurerm_virtual_network.tfe_network.name
 }
 
-# Database subnet
+# Database private DNS zone and subnet
 # -----------------
+resource "azurerm_private_dns_zone" "database" {
+  count = var.demo_mode == true ? 0 : 1
+
+  name                = "${var.friendly_name_prefix}.postgres.database.azure.com"
+  resource_group_name = var.resource_group_name
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "database" {
+  count = var.demo_mode == true ? 0 : 1
+
+  name                  = "${var.friendly_name_prefix}-database"
+  private_dns_zone_name = azurerm_private_dns_zone.database[0].name
+  resource_group_name   = var.resource_group_name
+  virtual_network_id    = azurerm_virtual_network.tfe_network.id
+}
+
 resource "azurerm_subnet" "database" {
+  count = var.demo_mode == true ? 0 : 1
+
   name                 = "${var.friendly_name_prefix}-database-subnet"
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.tfe_network.name
@@ -264,16 +286,8 @@ resource "azurerm_subnet" "database" {
       actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
     }
   }
-}
 
-resource "azurerm_private_dns_zone" "database" {
-  name                = "${var.friendly_name_prefix}.postgres.database.azure.com"
-  resource_group_name = var.resource_group_name
-}
-
-resource "azurerm_private_dns_zone_virtual_network_link" "database" {
-  name                  = "${var.friendly_name_prefix}-database"
-  private_dns_zone_name = azurerm_private_dns_zone.database.name
-  resource_group_name   = var.resource_group_name
-  virtual_network_id    = azurerm_virtual_network.tfe_network.id
+  depends_on = [
+    azurerm_private_dns_zone_virtual_network_link.database
+  ]
 }

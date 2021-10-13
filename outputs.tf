@@ -1,17 +1,17 @@
 # Application
 # -----------
 output "tfe_application_url" {
-  value       = "https://${local.fqdn}"
+  value       = "https://${module.load_balancer.fqdn}"
   description = "Terraform Enterprise Application URL"
 }
 
 output "login_url" {
-  value       = "https://${local.fqdn}/admin/account/new?token=${module.user_data.user_token.value}"
+  value       = "https://${module.load_balancer.fqdn}/admin/account/new?token=${module.user_data.user_token.value}"
   description = "Login URL to setup the TFE instance once it is initialized"
 }
 
 output "tfe_console_url" {
-  value       = "https://${local.fqdn}:8800"
+  value       = "https://${module.load_balancer.fqdn}:8800"
   description = "Terraform Enterprise Console URL"
 }
 
@@ -24,54 +24,29 @@ output "resource_group_name" {
 
 # Network
 # -------
-output "network_name" {
-  value       = local.network_name
-  description = "The name of the virtual network used for all resources"
-}
-
-output "network_id" {
-  value       = local.network_id
-  description = "The virtual network ID used for all resources"
-}
-
-output "network_private_subnet_id" {
-  value       = local.network_private_subnet_id
-  description = "The subnet ID used for TFE"
-}
-
-output "network_frontend_subnet_id" {
-  value       = local.network_frontend_subnet_id
-  description = "The subnet ID used for the front end"
-}
-
-output "network_bastion_subnet_id" {
-  value       = var.network_id != null && var.create_bastion == true ? module.network.*.network_bastion_subnet_id : []
-  description = "The subnet ID used for the Bastion"
-}
-
-output "network_redis_subnet_id" {
-  value       = var.network_id != null && local.active_active == true ? module.network.*.network_redis_subnet_id : []
-  description = "The subnet ID used for the Redis Cache"
+output "network" {
+  value       = local.network
+  description = "The virtual network used for all resources"
 }
 
 # Service Accounts
 # ----------------
 output "storage_account_name" {
-  value       = module.service_accounts.storage_account_name
+  value       = local.object_storage.storage_account_name
   description = "The name of the storage account used by TFE"
 }
 
 # Object Storage
 # --------------
 output "storage_account_container_name" {
-  value       = module.object_storage.storage_account_container_name
+  value       = local.object_storage.storage_account_container_name
   description = "The name of the container used by TFE"
 }
 
 # Database
 # --------
 output "database" {
-  value       = module.database
+  value       = local.database
   description = "The TFE PostgreSQL database."
 }
 

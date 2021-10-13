@@ -11,23 +11,9 @@ variable "domain_name" {
 }
 
 variable "tfe_subdomain" {
+  default     = null
   type        = string
   description = "Subdomain for TFE"
-}
-
-variable "fqdn" {
-  type        = string
-  description = "The fully qualified domain name for the TFE environment"
-}
-
-variable "tfe_pip_id" {
-  type        = string
-  description = "The TFE public ip resource ID"
-}
-
-variable "tfe_pip_ip_address" {
-  type        = string
-  description = "The TFE public ip address"
 }
 
 variable "active_active" {
@@ -42,6 +28,12 @@ variable "dns_create_record" {
   default     = true
   type        = bool
   description = "If true, will create a DNS record. If false, no record will be created and IP of load balancer will instead be output."
+}
+
+variable "dns_external_fqdn" {
+  default     = null
+  type        = string
+  description = "External DNS FQDN should be supplied if dns_create_record is false"
 }
 
 # Provider

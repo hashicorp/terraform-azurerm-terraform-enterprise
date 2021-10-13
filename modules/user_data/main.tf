@@ -116,11 +116,11 @@ locals {
     }
 
     installation_type = {
-      value = "production"
+      value = var.user_data_installation_type
     }
 
     production_type = {
-      value = "external"
+      value = var.user_data_installation_type == "poc" ? null : "external"
     }
 
     archivist_token = {
@@ -234,7 +234,7 @@ locals {
     }
 
     placement = {
-      value = "placement_azure"
+      value = var.user_data_installation_type == "poc" ? null : "placement_azure"
     }
   }
 }

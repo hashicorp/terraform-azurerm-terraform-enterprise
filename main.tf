@@ -5,23 +5,33 @@ locals {
   # ----------------
   # Determine whether or not TFE in active-active mode based on node count, by default standalone is assumed
   active_active = var.vm_node_count >= 2 ? true : false
-
-  # DNS
-  # ---
-  tfe_subdomain     = var.tfe_subdomain == null ? substr(random_pet.tfe_subdomain[0].id, 0, 24) : var.tfe_subdomain
-  dns_internal_fqdn = var.domain_name == null ? azurerm_public_ip.tfe_pip.fqdn : "${local.tfe_subdomain}.${var.domain_name}"
-  fqdn              = var.dns_external_fqdn == null ? local.dns_internal_fqdn : var.dns_external_fqdn
+  demo_mode     = var.user_data_installation_type == "poc" ? true : false
 
   # Network
   # -------
-  network_name                         = var.network_name == null ? module.network[0].network_name : var.network_name
-  network_id                           = var.network_id == null ? module.network[0].network_id : var.network_id
-  network_private_subnet_id            = var.network_private_subnet_id == null ? module.network[0].network_private_subnet_id : var.network_private_subnet_id
-  network_frontend_subnet_id           = var.network_frontend_subnet_id == null ? module.network[0].network_frontend_subnet_id : var.network_frontend_subnet_id
-  network_bastion_subnet_id            = var.network_bastion_subnet_id == null && var.create_bastion == true ? module.network[0].network_bastion_subnet_id : var.network_bastion_subnet_id
-  network_redis_subnet_id              = var.network_redis_subnet_id == null && local.active_active == true ? module.network[0].network_redis_subnet_id : var.network_redis_subnet_id
-  network_database_subnet_id           = var.network_database_subnet_id == null ? module.network[0].database_subnet.id : var.network_database_subnet_id
-  network_database_private_dns_zone_id = var.network_database_private_dns_zone_id == null ? module.network[0].database_private_dns_zone.id : var.network_database_private_dns_zone_id
+  network = try(
+    module.network[0],
+    {
+      bastion_subnet = {
+        id = var.network_bastion_subnet_id
+      }
+      database_private_dns_zone = {
+        id = var.network_database_private_dns_zone_id
+      }
+      database_subnet = {
+        id = var.network_database_subnet_id
+      }
+      frontend_subnet = {
+        id = var.network_frontend_subnet_id
+      }
+      private_subnet = {
+        id = var.network_private_subnet_id
+      }
+      redis_subnet = {
+        id = var.network_redis_subnet_id
+      }
+    }
+  )
 
   # Redis
   # -----
@@ -32,6 +42,27 @@ locals {
   trusted_proxies = concat(
     var.user_data_trusted_proxies,
     [var.network_frontend_subnet_cidr]
+  )
+
+  database = try(
+    module.database[0],
+    {
+      name    = null
+      address = null
+      server = {
+        administrator_login    = null
+        administrator_password = null
+      }
+    }
+  )
+
+  object_storage = try(
+    module.object_storage[0],
+    {
+      storage_account_key            = null
+      storage_account_name           = null
+      storage_account_container_name = null
+    }
   )
 }
 
@@ -49,29 +80,6 @@ module "resource_groups" {
   tags = var.tags
 }
 
-# Subdomain
-# ---------
-resource "random_pet" "tfe_subdomain" {
-  count = var.tfe_subdomain == null ? 1 : 0
-
-  length    = 3
-  separator = ""
-}
-
-# Public IP
-# ---------
-resource "azurerm_public_ip" "tfe_pip" {
-  name                = "${var.friendly_name_prefix}-lb-pip"
-  location            = var.location
-  resource_group_name = module.resource_groups.resource_group_name
-
-  sku               = "Standard"
-  allocation_method = "Static"
-  domain_name_label = var.domain_name == null ? local.tfe_subdomain : null
-
-  tags = var.tags
-}
-
 # SSH for instances
 # -----------------
 resource "tls_private_key" "tfe_ssh" {
@@ -81,10 +89,11 @@ resource "tls_private_key" "tfe_ssh" {
   rsa_bits  = 4096
 }
 
-# Azure service accounts
-# ----------------------
-module "service_accounts" {
-  source = "./modules/service_accounts"
+# Azure storage container and storage blob for TFE license file
+# -------------------------------------------------------------
+module "object_storage" {
+  source = "./modules/object_storage"
+  count  = local.demo_mode == true ? 0 : 1
 
   friendly_name_prefix = var.friendly_name_prefix
   resource_group_name  = module.resource_groups.resource_group_name
@@ -92,38 +101,20 @@ module "service_accounts" {
 
   # Application storage
   storage_account_name                           = var.storage_account_name
+  storage_account_container_name                 = var.storage_account_container_name
   storage_account_key                            = var.storage_account_key
   storage_account_primary_blob_connection_string = var.storage_account_primary_blob_connection_string
   storage_account_tier                           = var.storage_account_tier
   storage_account_replication_type               = var.storage_account_replication_type
 
   tags = var.tags
-
-  depends_on = [
-    module.resource_groups
-  ]
-}
-
-# Azure storage container and storage blob for TFE license file
-# -------------------------------------------------------------
-module "object_storage" {
-  source = "./modules/object_storage"
-
-  # Application storage
-  storage_account_name           = module.service_accounts.storage_account_name
-  storage_account_container_name = var.storage_account_container_name
-
-  depends_on = [
-    module.resource_groups,
-    module.service_accounts
-  ]
 }
 
 # Azure virtual network, subnet, and security group
 # -------------------------------------------------
 module "network" {
   source = "./modules/network"
-  count  = var.network_id == null ? 1 : 0
+  count  = var.network_private_subnet_id == null ? 1 : 0
 
   friendly_name_prefix = var.friendly_name_prefix
   resource_group_name  = module.resource_groups.resource_group_name
@@ -140,15 +131,12 @@ module "network" {
   network_redis_subnet_cidr    = var.network_redis_subnet_cidr
 
   create_bastion = var.create_bastion
+  demo_mode      = local.demo_mode
 
   load_balancer_type   = var.load_balancer_type
   load_balancer_public = var.load_balancer_public
 
   tags = var.tags
-
-  depends_on = [
-    module.resource_groups
-  ]
 }
 
 # Azure cache
@@ -163,7 +151,7 @@ module "redis" {
   redis_family                        = var.redis_family
   redis_sku_name                      = var.redis_sku_name
   redis_size                          = var.redis_size
-  redis_subnet_id                     = local.network_redis_subnet_id
+  redis_subnet_id                     = local.network.redis_subnet.id
   redis_enable_authentication         = var.redis_enable_authentication
   redis_enable_non_ssl_port           = var.redis_enable_non_ssl_port
   redis_rdb_backup_enabled            = var.redis_rdb_backup_enabled
@@ -172,35 +160,26 @@ module "redis" {
   redis_rdb_existing_storage_account  = var.redis_rdb_existing_storage_account != null ? data.azurerm_storage_account.tfe_redis_existing_storage_account[0].primary_blob_connection_string : null
 
   tags = var.tags
-
-  depends_on = [
-    module.resource_groups,
-    module.network
-  ]
 }
 
 # Azure postgres
 # --------------
 module "database" {
   source = "./modules/database"
+  count  = local.demo_mode == true ? 0 : 1
 
   friendly_name_prefix = var.friendly_name_prefix
   resource_group_name  = module.resource_groups.resource_group_name
   location             = var.location
 
   database_machine_type        = var.database_machine_type
-  database_private_dns_zone_id = local.network_database_private_dns_zone_id
+  database_private_dns_zone_id = local.network.database_private_dns_zone.id
   database_size_mb             = var.database_size_mb
-  database_subnet_id           = local.network_database_subnet_id
+  database_subnet_id           = local.network.database_subnet.id
   database_user                = var.database_user
   database_version             = var.database_version
 
   tags = var.tags
-
-  depends_on = [
-    module.resource_groups,
-    module.network
-  ]
 }
 
 # Azure user data / cloud init used to install and configure TFE on instance(s)
@@ -209,32 +188,33 @@ module "user_data" {
   source = "./modules/user_data"
 
   # General
-  fqdn          = local.fqdn
+  fqdn          = module.load_balancer.fqdn
   active_active = local.active_active
 
   # Database
-  user_data_pg_dbname   = module.database.name
-  user_data_pg_netloc   = module.database.address
-  user_data_pg_user     = module.database.server.administrator_login
-  user_data_pg_password = module.database.server.administrator_password
+  user_data_pg_dbname   = local.database.name
+  user_data_pg_netloc   = local.database.address
+  user_data_pg_user     = local.database.server.administrator_login
+  user_data_pg_password = local.database.server.administrator_password
 
   # Redis
-  user_data_redis_host        = local.active_active == true ? module.redis[0].redis_hostname : ""
-  user_data_redis_port        = local.active_active == true ? local.redis_port : ""
-  user_data_redis_pass        = local.active_active == true ? module.redis[0].redis_pass : ""
+  user_data_redis_host        = local.active_active == true ? module.redis[0].redis_hostname : null
+  user_data_redis_port        = local.active_active == true ? local.redis_port : null
+  user_data_redis_pass        = local.active_active == true ? module.redis[0].redis_pass : null
   user_data_redis_use_tls     = local.active_active == true ? var.user_data_redis_use_tls : true
   redis_enable_authentication = local.active_active == true ? var.redis_enable_authentication : true
 
   # Azure
-  user_data_azure_account_key    = module.service_accounts.storage_account_key
-  user_data_azure_account_name   = module.service_accounts.storage_account_name
-  user_data_azure_container_name = module.object_storage.storage_account_container_name
+  user_data_azure_account_key    = local.object_storage.storage_account_key
+  user_data_azure_account_name   = local.object_storage.storage_account_name
+  user_data_azure_container_name = local.object_storage.storage_account_container_name
 
   # TFE
-  user_data_release_sequence = var.user_data_release_sequence
-  tfe_license_secret         = var.tfe_license_secret
-  user_data_iact_subnet_list = var.user_data_iact_subnet_list
-  user_data_trusted_proxies  = local.trusted_proxies
+  user_data_release_sequence  = var.user_data_release_sequence
+  tfe_license_secret          = var.tfe_license_secret
+  user_data_iact_subnet_list  = var.user_data_iact_subnet_list
+  user_data_trusted_proxies   = local.trusted_proxies
+  user_data_installation_type = var.user_data_installation_type
 
   # Certificates
   ca_certificate_secret = var.ca_certificate_secret
@@ -244,13 +224,7 @@ module "user_data" {
   # Proxy
   proxy_ip   = var.proxy_ip
   proxy_port = var.proxy_port
-  no_proxy   = [local.fqdn, var.network_cidr]
-
-  depends_on = [
-    module.service_accounts,
-    module.object_storage,
-    module.network
-  ]
+  no_proxy   = [module.load_balancer.fqdn, var.network_cidr]
 }
 
 # Azure bastion service used to connect to TFE instance(s)
@@ -263,14 +237,9 @@ module "bastion" {
   resource_group_name  = module.resource_groups.resource_group_name
   location             = var.location
 
-  bastion_subnet_id = local.network_bastion_subnet_id
+  bastion_subnet_id = local.network.bastion_subnet.id
 
   tags = var.tags
-
-  depends_on = [
-    module.resource_groups,
-    module.network
-  ]
 }
 
 # Azure load balancer
@@ -284,15 +253,13 @@ module "load_balancer" {
   zones                = var.zones
 
   # General
-  fqdn                    = local.fqdn
   active_active           = local.active_active
   domain_name             = var.domain_name
-  tfe_subdomain           = local.tfe_subdomain
-  tfe_pip_id              = azurerm_public_ip.tfe_pip.id
-  tfe_pip_ip_address      = azurerm_public_ip.tfe_pip.ip_address
+  tfe_subdomain           = var.tfe_subdomain
   resource_group_name_dns = module.resource_groups.resource_group_name_dns
   dns_create_record       = var.dns_create_record
   tenant_id               = data.azurerm_client_config.current.tenant_id
+  dns_external_fqdn       = var.dns_external_fqdn
 
   # Secrets
   ca_certificate_secret = var.ca_certificate_secret
@@ -300,7 +267,7 @@ module "load_balancer" {
 
   # Network
   network_frontend_subnet_cidr = var.network_frontend_subnet_cidr
-  network_frontend_subnet_id   = local.network_frontend_subnet_id
+  network_frontend_subnet_id   = local.network.frontend_subnet.id
 
   # Load balancer
   load_balancer_type                         = var.load_balancer_type
@@ -313,11 +280,6 @@ module "load_balancer" {
   load_balancer_waf_max_request_body_size_kb = var.load_balancer_waf_max_request_body_size_kb
 
   tags = var.tags
-
-  depends_on = [
-    module.resource_groups,
-    module.network
-  ]
 }
 
 # Azure virtual machine scale set
@@ -334,7 +296,7 @@ module "vm" {
   vm_sku                  = var.vm_sku
   vm_image_id             = var.vm_image_id
   vm_os_disk_disk_size_gb = var.vm_os_disk_disk_size_gb
-  vm_subnet_id            = local.network_private_subnet_id
+  vm_subnet_id            = local.network.private_subnet.id
   vm_user                 = var.vm_user
   vm_public_key           = var.vm_public_key == null ? tls_private_key.tfe_ssh[0].public_key_openssh : var.vm_public_key
   vm_userdata_script      = module.user_data.tfe_userdata_base64_encoded
@@ -350,12 +312,4 @@ module "vm" {
   key_secret            = var.vm_key_secret
 
   tags = var.tags
-
-  depends_on = [
-    module.resource_groups,
-    module.network,
-    module.load_balancer,
-    module.user_data,
-    module.service_accounts
-  ]
 }
