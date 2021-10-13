@@ -19,7 +19,6 @@ module "tfe" {
   vm_node_count = 2
 
   # Existing network information
-  network_id                 = var.network_id
   network_private_subnet_id  = var.network_private_subnet_id
   network_bastion_subnet_id  = var.network_bastion_subnet_id
   network_frontend_subnet_id = var.network_frontend_subnet_id

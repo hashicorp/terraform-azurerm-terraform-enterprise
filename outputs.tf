@@ -24,34 +24,9 @@ output "resource_group_name" {
 
 # Network
 # -------
-output "network_name" {
-  value       = local.network_name
-  description = "The name of the virtual network used for all resources"
-}
-
-output "network_id" {
-  value       = local.network_id
-  description = "The virtual network ID used for all resources"
-}
-
-output "network_private_subnet_id" {
-  value       = local.network_private_subnet_id
-  description = "The subnet ID used for TFE"
-}
-
-output "network_frontend_subnet_id" {
-  value       = local.network_frontend_subnet_id
-  description = "The subnet ID used for the front end"
-}
-
-output "network_bastion_subnet_id" {
-  value       = var.network_id != null && var.create_bastion == true ? module.network.*.network_bastion_subnet_id : []
-  description = "The subnet ID used for the Bastion"
-}
-
-output "network_redis_subnet_id" {
-  value       = var.network_id != null && local.active_active == true ? module.network.*.network_redis_subnet_id : []
-  description = "The subnet ID used for the Redis Cache"
+output "network" {
+  value       = local.network
+  description = "The virtual network used for all resources"
 }
 
 # Service Accounts

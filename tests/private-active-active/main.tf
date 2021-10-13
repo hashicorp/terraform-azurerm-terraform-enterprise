@@ -39,6 +39,5 @@ module "private_active_active" {
   user_data_installation_type = "production"
 
   create_bastion              = false
-  network_bastion_subnet_cidr = azurerm_subnet.vm_bastion.address_prefixes[0]
   tags                        = local.common_tags
 }

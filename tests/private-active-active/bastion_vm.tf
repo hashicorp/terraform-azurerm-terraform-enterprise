@@ -5,7 +5,7 @@ resource "azurerm_subnet" "vm_bastion" {
   resource_group_name = local.resource_group_name
 
   address_prefixes     = ["10.0.16.0/20"]
-  virtual_network_name = module.private_active_active.network_name
+  virtual_network_name = module.private_active_active.network.network.name
 }
 
 resource "azurerm_public_ip" "vm_bastion" {

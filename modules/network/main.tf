@@ -249,8 +249,24 @@ resource "azurerm_subnet" "tfe_network_redis_subnet" {
   virtual_network_name = azurerm_virtual_network.tfe_network.name
 }
 
-# Database subnet
+# Database private DNS zone and subnet
 # -----------------
+resource "azurerm_private_dns_zone" "database" {
+  count = var.demo_mode == true ? 0 : 1
+
+  name                = "${var.friendly_name_prefix}.postgres.database.azure.com"
+  resource_group_name = var.resource_group_name
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "database" {
+  count = var.demo_mode == true ? 0 : 1
+
+  name                  = "${var.friendly_name_prefix}-database"
+  private_dns_zone_name = azurerm_private_dns_zone.database[0].name
+  resource_group_name   = var.resource_group_name
+  virtual_network_id    = azurerm_virtual_network.tfe_network.id
+}
+
 resource "azurerm_subnet" "database" {
   count = var.demo_mode == true ? 0 : 1
 
@@ -270,22 +286,8 @@ resource "azurerm_subnet" "database" {
       actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
     }
   }
-}
 
-resource "azurerm_private_dns_zone" "database" {
-  count = var.demo_mode == true ? 0 : 1
-
-  name                = "${var.friendly_name_prefix}.postgres.database.azure.com"
-  resource_group_name = var.resource_group_name
-
-  depends_on = [azurerm_virtual_network.tfe_network]
-}
-
-resource "azurerm_private_dns_zone_virtual_network_link" "database" {
-  count = var.demo_mode == true ? 0 : 1
-
-  name                  = "${var.friendly_name_prefix}-database"
-  private_dns_zone_name = azurerm_private_dns_zone.database[0].name
-  resource_group_name   = var.resource_group_name
-  virtual_network_id    = azurerm_virtual_network.tfe_network.id
+  depends_on = [
+    azurerm_private_dns_zone_virtual_network_link.database
+  ]
 }

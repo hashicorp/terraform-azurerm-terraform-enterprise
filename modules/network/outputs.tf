@@ -1,41 +1,36 @@
-output "network_name" {
-  value       = azurerm_virtual_network.tfe_network.name
-  description = "The name of the virtual network used for all resources"
+output "network" {
+  value       = azurerm_virtual_network.tfe_network
+  description = "The virtual network used for all resources"
 }
 
-output "network_id" {
-  value       = azurerm_virtual_network.tfe_network.id
-  description = "The virtual network ID used for all resources"
+output "private_subnet" {
+  value       = azurerm_subnet.tfe_network_private_subnet
+  description = "The subnetwork used for TFE"
 }
 
-output "network_private_subnet_id" {
-  value       = azurerm_subnet.tfe_network_private_subnet.id
-  description = "The subnet ID used for TFE"
+output "frontend_subnet" {
+  value       = azurerm_subnet.tfe_network_frontend_subnet
+  description = "The subnetwork used for the front end"
 }
 
-output "network_frontend_subnet_id" {
-  value       = azurerm_subnet.tfe_network_frontend_subnet.id
-  description = "The subnet ID used for the front end"
+output "bastion_subnet" {
+  value       = try(azurerm_subnet.tfe_network_bastion_subnet[0], null)
+  description = "The subnetwork used for the Bastion"
 }
 
-output "network_bastion_subnet_id" {
-  value       = var.create_bastion == true ? azurerm_subnet.tfe_network_bastion_subnet[0].id : null
-  description = "The subnet ID used for the Bastion"
-}
-
-output "network_redis_subnet_id" {
-  value       = var.active_active == true && var.demo_mode == false ? azurerm_subnet.tfe_network_redis_subnet[0].id : null
-  description = "The subnet ID used for the Redis Cache"
+output "redis_subnet" {
+  value       = try(azurerm_subnet.tfe_network_redis_subnet[0], null)
+  description = "The subnetwork used for the Redis Cache"
 }
 
 output "database_subnet" {
-  value = var.demo_mode == true ? null : azurerm_subnet.database[0]
+  value = try(azurerm_subnet.database[0], null)
 
   description = "The subnetwork dedicated to the database."
 }
 
 output "database_private_dns_zone" {
-  value = var.demo_mode == true ? null : azurerm_private_dns_zone.database[0]
+  value = try(azurerm_private_dns_zone.database[0], null)
 
   description = "The private DNS zone dedicated to the database."
 }

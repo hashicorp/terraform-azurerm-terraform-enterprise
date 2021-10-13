@@ -9,14 +9,30 @@ locals {
 
   # Network
   # -------
-  network_name                         = var.network_name == null ? module.network[0].network_name : var.network_name
-  network_id                           = var.network_id == null ? module.network[0].network_id : var.network_id
-  network_private_subnet_id            = var.network_private_subnet_id == null ? module.network[0].network_private_subnet_id : var.network_private_subnet_id
-  network_frontend_subnet_id           = var.network_frontend_subnet_id == null ? module.network[0].network_frontend_subnet_id : var.network_frontend_subnet_id
-  network_bastion_subnet_id            = var.network_bastion_subnet_id == null && var.create_bastion == true ? module.network[0].network_bastion_subnet_id : var.network_bastion_subnet_id
-  network_redis_subnet_id              = var.network_redis_subnet_id == null && local.active_active == true ? module.network[0].network_redis_subnet_id : var.network_redis_subnet_id
-  network_database_subnet_id           = var.network_database_subnet_id == null && local.demo_mode == false ? module.network[0].database_subnet.id : var.network_database_subnet_id
-  network_database_private_dns_zone_id = var.network_database_private_dns_zone_id == null && local.demo_mode == false ? module.network[0].database_private_dns_zone.id : var.network_database_private_dns_zone_id
+  network = try(
+    module.network[0],
+    {
+      bastion_subnet = {
+        id = var.network_bastion_subnet_id
+      }
+      database_private_dns_zone = {
+        id = var.network_database_private_dns_zone_id
+      }
+      database_subnet = {
+        id = var.network_database_subnet_id
+      }
+      frontend_subnet = {
+        id = var.network_frontend_subnet_id
+      }
+      network = {}
+      private_subnet = {
+        id = var.network_private_subnet_id
+      }
+      redis_subnet = {
+        id = var.network_redis_subnet_id
+      }
+    }
+  )
 
   # Redis
   # -----
@@ -29,27 +45,26 @@ locals {
     [var.network_frontend_subnet_cidr]
   )
 
-  database = length(module.database) > 0 ? {
-    name    = module.database[0].name
-    address = module.database[0].address
-    server = {
-      administrator_login    = module.database[0].server.administrator_login
-      administrator_password = module.database[0].server.administrator_password
+  database = try(
+    module.database[0],
+    {
+      name    = null
+      address = null
+      server = {
+        administrator_login    = null
+        administrator_password = null
+      }
     }
-    } : {
-    name    = null
-    address = null
-    server = {
-      administrator_login    = null
-      administrator_password = null
-    }
-  }
+  )
 
-  object_storage = length(module.object_storage) > 0 ? module.object_storage[0] : {
-    storage_account_key            = null
-    storage_account_name           = null
-    storage_account_container_name = null
-  }
+  object_storage = try(
+    module.object_storage[0],
+    {
+      storage_account_key            = null
+      storage_account_name           = null
+      storage_account_container_name = null
+    }
+  )
 }
 
 # Azure resource groups
@@ -100,7 +115,7 @@ module "object_storage" {
 # -------------------------------------------------
 module "network" {
   source = "./modules/network"
-  count  = var.network_id == null ? 1 : 0
+  count  = var.network_private_subnet_id == null ? 1 : 0
 
   friendly_name_prefix = var.friendly_name_prefix
   resource_group_name  = module.resource_groups.resource_group_name
@@ -137,7 +152,7 @@ module "redis" {
   redis_family                        = var.redis_family
   redis_sku_name                      = var.redis_sku_name
   redis_size                          = var.redis_size
-  redis_subnet_id                     = local.network_redis_subnet_id
+  redis_subnet_id                     = local.network.redis_subnet.id
   redis_enable_authentication         = var.redis_enable_authentication
   redis_enable_non_ssl_port           = var.redis_enable_non_ssl_port
   redis_rdb_backup_enabled            = var.redis_rdb_backup_enabled
@@ -159,9 +174,9 @@ module "database" {
   location             = var.location
 
   database_machine_type        = var.database_machine_type
-  database_private_dns_zone_id = local.network_database_private_dns_zone_id
+  database_private_dns_zone_id = local.network.database_private_dns_zone.id
   database_size_mb             = var.database_size_mb
-  database_subnet_id           = local.network_database_subnet_id
+  database_subnet_id           = local.network.database_subnet.id
   database_user                = var.database_user
   database_version             = var.database_version
 
@@ -223,7 +238,7 @@ module "bastion" {
   resource_group_name  = module.resource_groups.resource_group_name
   location             = var.location
 
-  bastion_subnet_id = local.network_bastion_subnet_id
+  bastion_subnet_id = local.network.bastion_subnet.id
 
   tags = var.tags
 }
@@ -253,7 +268,7 @@ module "load_balancer" {
 
   # Network
   network_frontend_subnet_cidr = var.network_frontend_subnet_cidr
-  network_frontend_subnet_id   = local.network_frontend_subnet_id
+  network_frontend_subnet_id   = local.network.frontend_subnet.id
 
   # Load balancer
   load_balancer_type                         = var.load_balancer_type
@@ -282,7 +297,7 @@ module "vm" {
   vm_sku                  = var.vm_sku
   vm_image_id             = var.vm_image_id
   vm_os_disk_disk_size_gb = var.vm_os_disk_disk_size_gb
-  vm_subnet_id            = local.network_private_subnet_id
+  vm_subnet_id            = local.network.private_subnet.id
   vm_user                 = var.vm_user
   vm_public_key           = var.vm_public_key == null ? tls_private_key.tfe_ssh[0].public_key_openssh : var.vm_public_key
   vm_userdata_script      = module.user_data.tfe_userdata_base64_encoded
