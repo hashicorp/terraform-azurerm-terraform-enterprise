@@ -45,11 +45,6 @@ variable "certificate_name" {
 
 # Network
 # -------
-variable "network_id" {
-  type        = string
-  description = "(Required) Existing network ID"
-}
-
 variable "network_private_subnet_id" {
   type        = string
   description = "(Required) Existing network private subnet ID"

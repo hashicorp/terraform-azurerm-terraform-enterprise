@@ -5,7 +5,7 @@ resource "azurerm_subnet" "proxy" {
   resource_group_name = local.resource_group_name
 
   address_prefixes     = [local.network_proxy_subnet_cidr]
-  virtual_network_name = module.private_active_active.network_name
+  virtual_network_name = module.private_active_active.network.network.name
 }
 
 # Create a security group for proxy

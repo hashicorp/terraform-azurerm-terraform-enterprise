@@ -67,18 +67,6 @@ variable "create_bastion" {
 
 # Network
 # -------
-variable "network_name" {
-  default     = null
-  type        = string
-  description = "(Optional) Existing network name"
-}
-
-variable "network_id" {
-  default     = null
-  type        = string
-  description = "(Optional) Existing network ID"
-}
-
 variable "network_private_subnet_id" {
   default     = null
   type        = string
