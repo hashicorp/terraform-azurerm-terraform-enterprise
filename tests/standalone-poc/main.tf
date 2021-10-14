@@ -7,17 +7,17 @@ resource "random_string" "friendly_name" {
 
 resource "azurerm_key_vault_secret" "tfe_license" {
   name         = "tfe-license-${local.friendly_name_prefix}"
-  value        = filebase64(var.tfe_license_path)
+  value        = filebase64(var.license_file)
   key_vault_id = var.key_vault_id
 }
 
 module "standalone_poc" {
   source = "../../"
 
-  domain_name             = var.domain_name
+  domain_name             = "team-private-terraform-enterprise.azure.ptfedev.com"
   friendly_name_prefix    = local.friendly_name_prefix
-  location                = var.location
-  resource_group_name_dns = var.resource_group_name_dns
+  location                = "Central US"
+  resource_group_name_dns = "ptfeacc-rg"
 
   # Bootstrapping resources
   load_balancer_certificate = data.azurerm_key_vault_certificate.load_balancer
