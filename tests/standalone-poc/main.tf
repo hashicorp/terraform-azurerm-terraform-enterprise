@@ -35,6 +35,8 @@ module "standalone_poc" {
   user_data_installation_type = "poc"
   redis_enable_authentication = false
   user_data_redis_use_tls     = false
+  iact_subnet_list            = ["0.0.0.0/0"]
 
-  tags = local.common_tags
+  create_bastion = false
+  tags           = local.common_tags
 }
