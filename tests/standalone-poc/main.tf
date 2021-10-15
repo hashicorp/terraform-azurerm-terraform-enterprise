@@ -26,7 +26,7 @@ module "standalone_poc" {
   vm_key_secret             = data.azurerm_key_vault_secret.vm_key
 
   # Standalone Demo Mode Scenario
-  user_data_iact_subnet_list  = var.iact_subnet_list
+  user_data_iact_subnet_list  = ["0.0.0.0/0"]
   vm_node_count               = 1
   vm_sku                      = "Standard_D4_v3"
   vm_image_id                 = "ubuntu"
@@ -36,5 +36,6 @@ module "standalone_poc" {
   redis_enable_authentication = false
   user_data_redis_use_tls     = false
 
-  tags = local.common_tags
+  create_bastion = false
+  tags           = local.common_tags
 }
