@@ -1,9 +1,9 @@
 # Application
 # -----------
-output "tfe_application_url" {
-  value       = "https://${module.load_balancer.fqdn}"
-  description = "Terraform Enterprise Application URL"
-}
+# output "tfe_application_url" {
+#   value       = "https://${module.load_balancer.fqdn}"
+#   description = "Terraform Enterprise Application URL"
+# }
 
 output "login_url" {
   value       = "https://${module.load_balancer.fqdn}/admin/account/new?token=${module.user_data.user_token.value}"
