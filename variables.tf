@@ -412,6 +412,22 @@ variable "vm_os_disk_disk_size_gb" {
   description = "The size of the Data Disk which should be created"
 }
 
+variable "vm_vmss_scale_in_policy" {
+  default     = "Default"
+  type        = string
+  description = "The scale-in policy to use for the virtual machine scale set."
+
+  validation {
+    condition = (
+      var.vm_vmss_scale_in_policy == "Default" ||
+      var.vm_vmss_scale_in_policy == "NewestVM" ||
+      var.vm_vmss_scale_in_policy == "OldestVM"
+    )
+
+    error_message = "The vm_vmss_scale_in_policy value must be 'Default', 'NewestVM', or 'OldestVM'."
+  }
+}
+
 # User Data
 # ---------
 variable "user_data_installation_type" {

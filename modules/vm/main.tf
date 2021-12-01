@@ -30,10 +30,11 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
   location            = var.location
   resource_group_name = var.resource_group_name
 
-  overprovision  = var.vm_overprovision
-  instances      = var.vm_node_count
-  sku            = var.vm_sku
-  admin_username = var.vm_user
+  overprovision   = var.vm_overprovision
+  instances       = var.vm_node_count
+  sku             = var.vm_sku
+  admin_username  = var.vm_user
+  scale_in_policy = var.vm_vmss_scale_in_policy
 
   upgrade_mode = var.vm_upgrade_mode
 

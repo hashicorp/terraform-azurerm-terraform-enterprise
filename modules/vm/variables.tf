@@ -104,6 +104,21 @@ variable "vm_image_id" {
   }
 }
 
+variable "vm_vmss_scale_in_policy" {
+  description = "The scale-in policy to use for the virtual machine scale set."
+  type        = string
+
+  validation {
+    condition = (
+      var.vm_vmss_scale_in_policy == "Default" ||
+      var.vm_vmss_scale_in_policy == "NewestVM" ||
+      var.vm_vmss_scale_in_policy == "OldestVM"
+    )
+
+    error_message = "The vm_vmss_scale_in_policy value must be 'Default', 'NewestVM', or 'OldestVM'."
+  }
+}
+
 variable "ca_certificate_secret" {
   type = object({
     key_vault_id = string
