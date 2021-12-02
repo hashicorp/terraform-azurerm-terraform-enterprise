@@ -301,6 +301,7 @@ module "vm" {
   vm_public_key           = var.vm_public_key == null ? tls_private_key.tfe_ssh[0].public_key_openssh : var.vm_public_key
   vm_userdata_script      = module.user_data.tfe_userdata_base64_encoded
   vm_node_count           = var.vm_node_count
+  vm_vmss_scale_in_policy = var.vm_vmss_scale_in_policy
 
   # Load balancer
   load_balancer_type       = var.load_balancer_type
