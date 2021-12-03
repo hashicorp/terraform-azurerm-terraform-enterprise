@@ -114,6 +114,13 @@ resource "azurerm_key_vault_access_policy" "tfe_kv_acl" {
 resource "azurerm_application_gateway" "tfe_ag" {
   count = var.load_balancer_type == "application_gateway" ? 1 : 0
 
+  depends_on = [
+    # This explicit dependency is required to ensure that the access policy is created before the application gateway.
+    # It is not possible to use the the object ID of the access policy as the identity ID of the application gateway
+    # as they are required to be different values of the user assigned identity (principal ID versus ID).
+    azurerm_key_vault_access_policy.tfe_kv_acl
+  ]
+
   name                = "${var.friendly_name_prefix}-ag"
   resource_group_name = var.resource_group_name
   location            = var.location
