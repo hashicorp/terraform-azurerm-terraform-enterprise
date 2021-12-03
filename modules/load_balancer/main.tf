@@ -96,7 +96,7 @@ resource "azurerm_key_vault_access_policy" "tfe_kv_acl" {
 
   key_vault_id = var.certificate.key_vault_id
   tenant_id    = var.tenant_id
-  object_id    = azurerm_user_assigned_identity.tfe_ag_msi[0].principal_id
+  object_id    = azurerm_user_assigned_identity.tfe_ag_msi[0].id
 
   certificate_permissions = [
     "get",
