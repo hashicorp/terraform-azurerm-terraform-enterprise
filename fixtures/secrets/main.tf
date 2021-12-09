@@ -74,23 +74,23 @@ resource "azurerm_key_vault_secret" "bastion_private_key" {
   tags = var.tags
 }
 
-# Store the mitmproxy CA certificate as secrets
+# Store the CA certificate as secrets
 # ---------------------------------------------
-resource "azurerm_key_vault_secret" "mitmproxy_ca_certificate" {
-  count = var.mitmproxy_ca_certificate == null ? 0 : 1
+resource "azurerm_key_vault_secret" "ca_certificate" {
+  count = var.ca_certificate == null ? 0 : 1
 
-  name         = var.mitmproxy_ca_certificate.name
-  value        = base64encode(var.mitmproxy_ca_certificate.value)
+  name         = var.ca_certificate.name
+  value        = base64encode(var.ca_certificate.value)
   key_vault_id = var.key_vault_id
 
   tags = var.tags
 }
 
-resource "azurerm_key_vault_secret" "mitmproxy_ca_private_key" {
-  count = var.mitmproxy_ca_private_key == null ? 0 : 1
+resource "azurerm_key_vault_secret" "ca_private_key" {
+  count = var.ca_private_key == null ? 0 : 1
 
-  name         = var.mitmproxy_ca_private_key.name
-  value        = base64encode(var.mitmproxy_ca_private_key.value)
+  name         = var.ca_private_key.name
+  value        = base64encode(var.ca_private_key.value)
   key_vault_id = var.key_vault_id
 
   tags = var.tags

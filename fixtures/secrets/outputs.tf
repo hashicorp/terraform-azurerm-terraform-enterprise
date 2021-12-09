@@ -58,25 +58,25 @@ output "proxy_private_key" {
   sensitive   = true
 }
 
-output "mitmproxy_ca_certificate" {
-  value = var.mitmproxy_ca_certificate == null ? {
+output "ca_certificate" {
+  value = var.ca_certificate == null ? {
     name   = null
     secret = null
     } : {
-    name   = azurerm_key_vault_secret.mitmproxy_ca_certificate[0].name
-    secret = azurerm_key_vault_secret.mitmproxy_ca_certificate[0].value
+    name   = azurerm_key_vault_secret.ca_certificate[0].name
+    secret = azurerm_key_vault_secret.ca_certificate[0].value
   }
   description = "The Key Vault secret value of the Base64 encoded CA certificate to be trusted by the proxy virtual machine."
   sensitive   = true
 }
 
-output "mitmproxy_ca_private_key" {
-  value = var.mitmproxy_ca_private_key == null ? {
+output "ca_private_key" {
+  value = var.ca_private_key == null ? {
     name   = null
     secret = null
     } : {
-    name   = azurerm_key_vault_secret.mitmproxy_ca_private_key[0].name
-    secret = azurerm_key_vault_secret.mitmproxy_ca_private_key[0].value
+    name   = azurerm_key_vault_secret.ca_private_key[0].name
+    secret = azurerm_key_vault_secret.ca_private_key[0].value
   }
   description = "The Key Vault secret value of the Base64 encoded CA private key."
   sensitive   = true

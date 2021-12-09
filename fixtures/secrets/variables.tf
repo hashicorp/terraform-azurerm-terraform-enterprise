@@ -64,7 +64,7 @@ variable "proxy_private_key" {
   EOD
 }
 
-variable "mitmproxy_ca_certificate" {
+variable "ca_certificate" {
   default = null
   type = object({
     name  = string
@@ -72,13 +72,11 @@ variable "mitmproxy_ca_certificate" {
   })
   description = <<-EOD
   A map that consists of the newly created secret name and its value. This secret value is the Base64
-  encoded version of a PEM encoded public certificate of a certificate authority (CA) to be trusted by
-  the proxy virtual machine. This secret will be used when deploying a mitm proxy with the proxy fixture
-  module.
+  encoded version of a PEM encoded public certificate of a certificate authority (CA).
   EOD
 }
 
-variable "mitmproxy_ca_private_key" {
+variable "ca_private_key" {
   default = null
   type = object({
     name  = string
@@ -86,8 +84,7 @@ variable "mitmproxy_ca_private_key" {
   })
   description = <<-EOD
   A map that consists of the newly created secret name and its value. This secret value is the Base64
-  encoded version of a PEM encoded private key of a certificate authority (CA). This secret will be
-  used when deploying a mitm proxy with the proxy fixture module.
+  encoded version of a PEM encoded private key of a certificate authority (CA).
   EOD
 }
 
