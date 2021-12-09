@@ -1,7 +1,7 @@
 output "tfe_license" {
   value = var.tfe_license == null ? {
-    name   = ""
-    secret = ""
+    name   = null
+    secret = null
     } : {
     name   = azurerm_key_vault_secret.tfe_license[0].name
     secret = azurerm_key_vault_secret.tfe_license[0].value
@@ -12,8 +12,8 @@ output "tfe_license" {
 
 output "private_key_pem" {
   value = var.private_key_pem == null ? {
-    name   = ""
-    secret = ""
+    name   = null
+    secret = null
     } : {
     name   = azurerm_key_vault_secret.private_key_pem[0].name
     secret = azurerm_key_vault_secret.private_key_pem[0].value
@@ -24,8 +24,8 @@ output "private_key_pem" {
 
 output "chained_certificate_pem" {
   value = var.chained_certificate_pem == null ? {
-    name   = ""
-    secret = ""
+    name   = null
+    secret = null
     } : {
     name   = azurerm_key_vault_secret.chained_certificate_pem[0].name
     secret = azurerm_key_vault_secret.chained_certificate_pem[0].value
@@ -36,8 +36,8 @@ output "chained_certificate_pem" {
 
 output "proxy_public_key" {
   value = var.proxy_public_key == null ? {
-    name   = ""
-    secret = ""
+    name   = null
+    secret = null
     } : {
     name   = azurerm_key_vault_secret.proxy_public_key[0].name
     secret = azurerm_key_vault_secret.proxy_public_key[0].value
@@ -48,8 +48,8 @@ output "proxy_public_key" {
 
 output "proxy_private_key" {
   value = var.proxy_private_key == null ? {
-    name   = ""
-    secret = ""
+    name   = null
+    secret = null
     } : {
     name   = azurerm_key_vault_secret.proxy_private_key[0].name
     secret = azurerm_key_vault_secret.proxy_private_key[0].value
@@ -60,8 +60,8 @@ output "proxy_private_key" {
 
 output "mitmproxy_ca_certificate" {
   value = var.mitmproxy_ca_certificate == null ? {
-    name   = ""
-    secret = ""
+    name   = null
+    secret = null
     } : {
     name   = azurerm_key_vault_secret.mitmproxy_ca_certificate[0].name
     secret = azurerm_key_vault_secret.mitmproxy_ca_certificate[0].value
@@ -72,8 +72,8 @@ output "mitmproxy_ca_certificate" {
 
 output "mitmproxy_ca_private_key" {
   value = var.mitmproxy_ca_private_key == null ? {
-    name   = ""
-    secret = ""
+    name   = null
+    secret = null
     } : {
     name   = azurerm_key_vault_secret.mitmproxy_ca_private_key[0].name
     secret = azurerm_key_vault_secret.mitmproxy_ca_private_key[0].value
@@ -84,8 +84,8 @@ output "mitmproxy_ca_private_key" {
 
 output "bastion_public_key" {
   value = var.bastion_public_key == null ? {
-    name   = ""
-    secret = ""
+    name   = null
+    secret = null
     } : {
     name   = azurerm_key_vault_secret.bastion_public_key[0].name
     secret = azurerm_key_vault_secret.bastion_public_key[0].value
@@ -96,8 +96,8 @@ output "bastion_public_key" {
 
 output "bastion_private_key" {
   value = var.bastion_private_key == null ? {
-    name   = ""
-    secret = ""
+    name   = null
+    secret = null
     } : {
     name   = azurerm_key_vault_secret.bastion_private_key[0].name
     secret = azurerm_key_vault_secret.bastion_private_key[0].value
