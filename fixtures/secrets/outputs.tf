@@ -18,7 +18,7 @@ output "private_key_pem" {
     name   = azurerm_key_vault_secret.private_key_pem[0].name
     secret = azurerm_key_vault_secret.private_key_pem[0].value
   }
-  description = "The Key Vault secret value which will be used for the vm_key_secret variable in the root module.."
+  description = "The Key Vault secret value which will be used for the vm_key_secret variable in the root module."
   sensitive   = true
 }
 
