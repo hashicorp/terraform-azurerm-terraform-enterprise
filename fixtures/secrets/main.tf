@@ -75,7 +75,7 @@ resource "azurerm_key_vault_secret" "bastion_private_key" {
 }
 
 # Store the CA certificate as secrets
-# ---------------------------------------------
+# -----------------------------------
 resource "azurerm_key_vault_secret" "ca_certificate" {
   count = var.ca_certificate == null ? 0 : 1
 
