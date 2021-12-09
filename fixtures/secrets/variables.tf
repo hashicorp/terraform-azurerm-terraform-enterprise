@@ -8,19 +8,19 @@ variable "key_vault_id" {
 # Secrets
 # -------
 variable "tfe_license" {
-  default     = null
-  type        = object({
+  default = null
+  type = object({
     name = string
-    path = string    
+    path = string
   })
   description = "A map that consists of the newly created secret name and the local path to the Terraform Enterprise license."
 }
 
 variable "private_key_pem" {
-  default     = null
-  type        = object({
+  default = null
+  type = object({
     name  = string
-    value = string    
+    value = string
   })
   description = <<-EOD
   A map that consists of the newly created secret name and its value. This secret will be used for
@@ -29,10 +29,10 @@ variable "private_key_pem" {
 }
 
 variable "chained_certificate_pem" {
-  default     = null
-  type        = object({
+  default = null
+  type = object({
     name  = string
-    value = string    
+    value = string
   })
   description = <<-EOD
   A map that consists of the newly created secret name and its value. This secret will be used for
@@ -41,10 +41,10 @@ variable "chained_certificate_pem" {
 }
 
 variable "proxy_public_key" {
-  default     = null
-  type        = object({
+  default = null
+  type = object({
     name  = string
-    value = string    
+    value = string
   })
   description = <<-EOD
   A map that consists of the newly created secret name and its value. This secret will be used for
@@ -53,10 +53,10 @@ variable "proxy_public_key" {
 }
 
 variable "proxy_private_key" {
-  default     = null
-  type        = object({
+  default = null
+  type = object({
     name  = string
-    value = string    
+    value = string
   })
   description = <<-EOD
   A map that consists of the newly created secret name and its value. This secret will be used for
@@ -65,10 +65,10 @@ variable "proxy_private_key" {
 }
 
 variable "mitmproxy_ca_certificate" {
-  default     = null
-  type        = object({
+  default = null
+  type = object({
     name  = string
-    value = string    
+    value = string
   })
   description = <<-EOD
   A map that consists of the newly created secret name and its value. This secret value is the Base64
@@ -79,10 +79,10 @@ variable "mitmproxy_ca_certificate" {
 }
 
 variable "mitmproxy_ca_private_key" {
-  default     = null
-  type        = object({
+  default = null
+  type = object({
     name  = string
-    value = string    
+    value = string
   })
   description = <<-EOD
   A map that consists of the newly created secret name and its value. This secret value is the Base64
@@ -92,10 +92,10 @@ variable "mitmproxy_ca_private_key" {
 }
 
 variable "bastion_public_key" {
-  default     = null
-  type        = object({
+  default = null
+  type = object({
     name  = string
-    value = string    
+    value = string
   })
   description = <<-EOD
   A map that consists of the newly created secret name and its value. This secret will be used for
@@ -105,10 +105,10 @@ variable "bastion_public_key" {
 }
 
 variable "bastion_private_key" {
-  default     = null
-  type        = object({
+  default = null
+  type = object({
     name  = string
-    value = string    
+    value = string
   })
   description = <<-EOD
   A map that consists of the newly created secret name and its value. This secret will be used for
