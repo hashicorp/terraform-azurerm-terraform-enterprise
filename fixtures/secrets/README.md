@@ -21,13 +21,12 @@ module "secrets" {
   }
 
   # examples of when the value is in a file
-  wildcard_private_key_pem = {
-    name  = "my-wildcard-private-key-pem"
+  private_key_pem = {
+    name  = "my-private-key-pem"
     value = file("/path/to/private-key.pem")
   }
-
-  wildcard_chained_certificate_pem = {
-    name  = "my-wildcard-chained-cert-pem"
+  chained_certificate_pem = {
+    name  = "my-chained-cert-pem"
     value = file("/path/to/chained-certificate.pem")
   }
 
