@@ -17,7 +17,7 @@ module "standalone_external" {
   domain_name             = "team-private-terraform-enterprise.azure.ptfedev.com"
   friendly_name_prefix    = local.friendly_name_prefix
   location                = "Central US"
-  resource_group_name_dns = "ptfeacc-rg"
+  resource_group_name_dns = "ptfedev-com-dns-tls"
 
   # Bootstrapping resources
   load_balancer_certificate = data.azurerm_key_vault_certificate.load_balancer
