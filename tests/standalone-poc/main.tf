@@ -17,7 +17,7 @@ module "standalone_poc" {
   domain_name             = "team-private-terraform-enterprise.azure.ptfedev.com"
   friendly_name_prefix    = local.friendly_name_prefix
   location                = "Central US"
-  resource_group_name_dns = "ptfeacc-rg"
+  resource_group_name_dns = "ptfedev-com-dns-tls"
 
   # Bootstrapping resources
   load_balancer_certificate = data.azurerm_key_vault_certificate.load_balancer
@@ -33,9 +33,22 @@ module "standalone_poc" {
   load_balancer_public        = true
   load_balancer_type          = "application_gateway"
   user_data_installation_type = "poc"
-  redis_enable_authentication = false
-  user_data_redis_use_tls     = false
 
-  create_bastion = false
+  redis = {
+    family                          = "P"
+    sku_name                        = "Premium"
+    size                            = "3"
+    enable_non_ssl_port             = false
+    enable_authentication           = false
+    rdb_backup_enabled              = false
+    rdb_backup_frequency            = null
+    rdb_backup_max_snapshot_count   = null
+    rdb_existing_storage_account    = null
+    rdb_existing_storage_account_rg = null
+    use_tls                         = false
+    minimum_tls_version             = "1.2"
+  }
+
+  create_bastion = true
   tags           = local.common_tags
 }

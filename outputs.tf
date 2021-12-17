@@ -6,7 +6,7 @@ output "tfe_application_url" {
 }
 
 output "login_url" {
-  value       = "https://${module.load_balancer.fqdn}/admin/account/new?token=${module.user_data.user_token.value}"
+  value       = "https://${module.load_balancer.fqdn}/admin/account/new?token=${module.settings.user_token.value}"
   description = "Login URL to setup the TFE instance once it is initialized"
 }
 
@@ -72,12 +72,12 @@ output "bastion_host_dns_name" {
 # User_data
 # ---------
 output "tfe_userdata_base64_encoded" {
-  value       = module.user_data.tfe_userdata_base64_encoded
+  value       = module.tfe_init.tfe_userdata_base64_encoded
   description = "The Base64 encoded User Data script built from modules/user_data/templates/tfe.sh.tpl"
 }
 
 output "tfe_console_password" {
-  value       = module.user_data.tfe_console_password
+  value       = module.settings.tfe_console_password
   description = "The password for the TFE console"
 }
 

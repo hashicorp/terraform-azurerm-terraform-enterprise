@@ -1,5 +1,5 @@
 resource "azurerm_storage_account" "tfe_redis_storage_account" {
-  count = var.redis_rdb_backup_enabled == true && var.redis_rdb_existing_storage_account == null ? 1 : 0
+  count = var.redis.rdb_backup_enabled == true && var.redis.rdb_existing_storage_account == null ? 1 : 0
 
   name                = substr(random_pet.tfe_redis_random_pet.id, 0, 24)
   location            = var.location
