@@ -314,20 +314,20 @@ variable "redis" {
     use_tls                         = bool
     minimum_tls_version             = string
   })
-  default = {
-    family                          = "P"
-    sku_name                        = "Premium"
-    size                            = "3"
-    enable_non_ssl_port             = false
-    enable_authentication           = true
-    rdb_backup_enabled              = false
-    rdb_backup_frequency            = null
-    rdb_backup_max_snapshot_count   = null
-    rdb_existing_storage_account    = null
-    rdb_existing_storage_account_rg = null
-    use_tls                         = true
-    minimum_tls_version             = "1.2"
-  }
+  // default = {
+  //   family                          = "P"
+  //   sku_name                        = "Premium"
+  //   size                            = "3"
+  //   enable_non_ssl_port             = false
+  //   enable_authentication           = true
+  //   rdb_backup_enabled              = false
+  //   rdb_backup_frequency            = null
+  //   rdb_backup_max_snapshot_count   = null
+  //   rdb_existing_storage_account    = null
+  //   rdb_existing_storage_account_rg = null
+  //   use_tls                         = true
+  //   minimum_tls_version             = "1.2"
+  // }
   description = <<-EOD
   family                          - (Required) The SKU family/pricing group to use. Valid values are "C" (for Basic/Standard SKU family) and "P" (for Premium)
   sku_name                        - (Required) The SKU of Redis to use. Possible values are "Basic", "Standard", and "Premium".

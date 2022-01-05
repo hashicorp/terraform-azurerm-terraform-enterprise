@@ -84,17 +84,17 @@ output "tfe_console_password" {
 # Redis
 # -----
 output "redis_hostname" {
-  value       = local.active_active == true ? module.redis[0].redis_hostname : null
+  value       = local.active_active == true ? module.redis[0].host : null
   description = "The Hostname of the Redis Instance"
 }
 
 output "redis_ssl_port" {
-  value       = local.active_active == true ? module.redis[0].redis_ssl_port : null
+  value       = local.active_active == true ? module.redis[0].ssl_port : null
   description = "The SSL Port of the Redis Instance"
 }
 
 output "redis_pass" {
-  value       = local.active_active == true ? module.redis[0].redis_pass : null
+  value       = local.active_active == true ? module.redis[0].pass : null
   description = "The Primary Access Key for the Redis Instance"
 }
 

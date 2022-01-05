@@ -203,7 +203,7 @@ module "settings" {
   }
 
   # Redis
-  redis = {
+  redis_settings = {
     host                  = local.redis.host
     pass                  = local.redis.pass
     enable_non_ssl_port   = var.redis.enable_non_ssl_port
@@ -341,4 +341,10 @@ module "vm" {
   key_secret            = var.vm_key_secret
 
   tags = var.tags
+}
+
+resource "null_resource" "test" {
+  provisioner "local-exec" {
+    command = "echo ${var.redis.enable_non_ssl_port} *************************************"
+  }
 }
