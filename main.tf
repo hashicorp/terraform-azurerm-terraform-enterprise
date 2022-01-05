@@ -226,9 +226,9 @@ module "tfe_init" {
   source = "/Users/anniehedgpeth/source/terraform-random-tfe-utility/modules/tfe_init"
 
   # Replicated Configuration data
-  fqdn                        = module.load_balancer.fqdn
-  active_active               = local.active_active
-  
+  fqdn          = module.load_balancer.fqdn
+  active_active = local.active_active
+
   replicated_configuration    = module.settings.replicated_configuration
   tfe_configuration           = module.settings.tfe_configuration
   tfe_license_pathname        = module.settings.tfe_license_pathname

@@ -26,6 +26,7 @@ module "public_active_active" {
   vm_image_id                 = "ubuntu"
   load_balancer_public        = true
   load_balancer_type          = "application_gateway"
+  user_data_installation_type = "production"
 
   redis = {
     family                          = "P"
@@ -41,7 +42,6 @@ module "public_active_active" {
     use_tls                         = false
     minimum_tls_version             = "1.2"
   }
-  user_data_installation_type = "production"
 
   tags = local.common_tags
 }
