@@ -183,7 +183,7 @@ module "database" {
 # TFE and Replicated settings to pass to the tfe_init module
 # ----------------------------------------------------------
 module "settings" {
-  source = "/Users/anniehedgpeth/source/terraform-random-tfe-utility/modules/settings"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings"
 
   # Replicated Base Configuration
   fqdn                        = module.load_balancer.fqdn
@@ -223,7 +223,7 @@ module "settings" {
 # Azure user data / cloud init used to install and configure TFE on instance(s)
 # -----------------------------------------------------------------------------
 module "tfe_init" {
-  source = "/Users/anniehedgpeth/source/terraform-random-tfe-utility/modules/tfe_init"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init"
 
   # Replicated Configuration data
   fqdn          = module.load_balancer.fqdn
