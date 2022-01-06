@@ -186,7 +186,7 @@ module "settings" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=main"
 
   # TFE Base Configuration
-  iact_subnet_list  = var.user_data_iact_subnet_list
+  iact_subnet_list = var.user_data_iact_subnet_list
 
   # Replicated Base Configuration
   fqdn                        = module.load_balancer.fqdn
