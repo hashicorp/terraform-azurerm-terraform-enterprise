@@ -172,12 +172,15 @@ module "database" {
   resource_group_name  = module.resource_groups.resource_group_name
   location             = var.location
 
-  database_machine_type        = var.database_machine_type
-  database_private_dns_zone_id = local.network.database_private_dns_zone.id
-  database_size_mb             = var.database_size_mb
-  database_subnet_id           = local.network.database_subnet.id
-  database_user                = var.database_user
-  database_version             = var.database_version
+  database_machine_type          = var.database_machine_type
+  database_private_dns_zone_id   = local.network.database_private_dns_zone.id
+  database_size_mb               = var.database_size_mb
+  database_subnet_id             = local.network.database_subnet.id
+  database_user                  = var.database_user
+  database_version               = var.database_version
+  database_backup_retention_days = var.database_backup_retention_days
+  database_availability_zone     = var.database_availability_zone
+
 
   tags = var.tags
 }
