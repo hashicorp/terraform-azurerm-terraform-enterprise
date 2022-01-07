@@ -251,6 +251,17 @@ variable "database_availability_zone" {
   }
 }
 
+variable "pg_extra_params" {
+  default     = null
+  type        = string
+  description = <<-EOF
+  Parameter keywords of the form param1=value1&param2=value2 to support additional options that
+  may be necessary for your specific PostgreSQL server. Allowed values are documented on the
+  PostgreSQL site. An additional restriction on the sslmode parameter is that only the require,
+  verify-full, verify-ca, and disable values are allowed.
+  EOF
+}
+
 # Load Balancer
 # -------------
 variable "load_balancer_type" {
@@ -565,7 +576,7 @@ variable "tags" {
 }
 
 #################################################################
-variable "tfe_license_pathname" {
+variable "tfe_license_file_location" {
   default     = "/etc/terraform-enterprise.rli"
   type        = string
   description = "The path on the TFE instance to put the TFE license."

@@ -196,18 +196,17 @@ module "settings" {
   fqdn                        = module.load_balancer.fqdn
   active_active               = local.active_active
   certificate_secret          = var.vm_certificate_secret
-  tfe_license_pathname        = var.tfe_license_pathname
+  tfe_license_file_location        = var.tfe_license_file_location
   tls_bootstrap_cert_pathname = var.tls_bootstrap_cert_pathname
   tls_bootstrap_key_pathname  = var.tls_bootstrap_key_pathname
   release_sequence            = var.user_data_release_sequence
 
   # Database
-  postgres = {
-    dbname   = local.database.name
-    netloc   = local.database.address
-    user     = local.database.server.administrator_login
-    password = local.database.server.administrator_password
-  }
+  pg_dbname       = local.database.name
+  pg_netloc       = local.database.address
+  pg_user         = local.database.server.administrator_login
+  pg_password     = local.database.server.administrator_password
+  pg_extra_params = var.pg_extra_params
 
   # Redis
   redis_host                = local.redis.host
@@ -237,7 +236,7 @@ module "tfe_init" {
 
   replicated_configuration    = module.settings.replicated_configuration
   tfe_configuration           = module.settings.tfe_configuration
-  tfe_license_pathname        = module.settings.tfe_license_pathname
+  tfe_license_file_location        = module.settings.tfe_license_file_location
   tls_bootstrap_cert_pathname = module.settings.tls_bootstrap_cert_pathname
   tls_bootstrap_key_pathname  = module.settings.tls_bootstrap_key_pathname
 
