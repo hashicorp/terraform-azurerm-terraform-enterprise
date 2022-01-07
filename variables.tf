@@ -336,7 +336,7 @@ variable "redis" {
     sku_name                        = string
     size                            = string
     enable_non_ssl_port             = bool
-    enable_authentication           = bool
+    use_password_auth               = bool
     rdb_backup_enabled              = bool
     rdb_backup_frequency            = number
     rdb_backup_max_snapshot_count   = number
@@ -350,7 +350,7 @@ variable "redis" {
   #   sku_name                        = "Premium"
   #   size                            = "3"
   #   enable_non_ssl_port             = false
-  #   enable_authentication           = true
+  #   use_password_auth               = true
   #   rdb_backup_enabled              = false
   #   rdb_backup_frequency            = null
   #   rdb_backup_max_snapshot_count   = null
@@ -364,7 +364,7 @@ variable "redis" {
   sku_name                        - (Required) The SKU of Redis to use. Possible values are "Basic", "Standard", and "Premium".
   size                            - (Required) The size of the Redis cache to deploy. Valid values for a SKU family of C (Basic/Standard) are "0", "1", "2", "3", "4", "5", "6", and for P (Premium) family are "1", "2", "3", "4".
   enable_non_ssl_port             - (Required) Boolean to determine whether or not to enable the non-SSL port (6379)
-  enable_authentication           - (Required) If set to false, the Redis instance will be accessible without authentication. enable_authentication can only be set to false if a subnet_id is specified; and only works if there aren't existing instances within the subnet with enable_authentication set to true.
+  use_password_auth               - (Required) If set to false, the Redis instance will be accessible without authentication. use_password_auth can only be set to false if a subnet_id is specified; and only works if there aren't existing instances within the subnet with use_password_auth set to true.
   rdb_backup_enabled              - (Optional) Is Backup Enabled? Only supported on Premium SKU's. If rdb_backup_enabled is true and redis_rdb_storage_connection_string is null, a new, Premium storage account will be created.
   rdb_backup_frequency            - (Optional) The Backup Frequency in Minutes. Only supported on Premium SKU's. Possible values are: 15, 30, 60, 360, 720 and 1440.
   rdb_backup_max_snapshot_count   - (Optional) The maximum number of snapshots to create as a backup. Only supported for Premium SKU's.

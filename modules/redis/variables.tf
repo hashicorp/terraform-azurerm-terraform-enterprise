@@ -84,7 +84,7 @@ variable "redis" {
     sku_name                        = string
     size                            = string
     enable_non_ssl_port             = bool
-    enable_authentication           = bool
+    use_password_auth               = bool
     rdb_backup_enabled              = bool
     rdb_backup_frequency            = number
     rdb_backup_max_snapshot_count   = number

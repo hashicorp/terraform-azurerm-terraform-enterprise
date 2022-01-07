@@ -18,7 +18,7 @@ resource "azurerm_redis_cache" "tfe_redis" {
   minimum_tls_version = var.redis.minimum_tls_version
 
   redis_configuration {
-    enable_authentication         = var.redis.enable_authentication
+    enable_authentication         = var.redis.use_password_auth
     rdb_backup_enabled            = var.redis.rdb_backup_enabled
     rdb_backup_frequency          = var.redis.rdb_backup_frequency
     rdb_backup_max_snapshot_count = var.redis.rdb_backup_max_snapshot_count

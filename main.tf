@@ -186,7 +186,8 @@ module "database" {
 # TFE and Replicated settings to pass to the tfe_init module
 # ----------------------------------------------------------
 module "settings" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=main"
+  // source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=main"
+  source = "/Users/anniehedgpeth/source/terraform-random-tfe-utility/modules/settings"
 
   # TFE Base Configuration
   iact_subnet_list = var.user_data_iact_subnet_list
@@ -209,14 +210,12 @@ module "settings" {
   }
 
   # Redis
-  redis_settings = {
-    host                  = local.redis.host
-    pass                  = local.redis.pass
-    enable_non_ssl_port   = var.redis.enable_non_ssl_port
-    use_tls               = var.redis.use_tls
-    enable_authentication = var.redis.enable_authentication
-  }
-
+  redis_host                = local.redis.host
+  redis_pass                = local.redis.pass
+  redis_enable_non_ssl_port = var.redis.enable_non_ssl_port
+  redis_use_tls             = var.redis.use_tls
+  redis_use_password_auth   = var.redis.use_password_auth
+  
   # Azure
   user_data_azure_account_key    = local.object_storage.storage_account_key
   user_data_azure_account_name   = local.object_storage.storage_account_name
@@ -229,7 +228,8 @@ module "settings" {
 # Azure user data / cloud init used to install and configure TFE on instance(s)
 # -----------------------------------------------------------------------------
 module "tfe_init" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=main"
+  // source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=main"
+  source = "/Users/anniehedgpeth/source/terraform-random-tfe-utility/modules/tfe_init"
 
   # Replicated Configuration data
   fqdn          = module.load_balancer.fqdn

@@ -33,7 +33,7 @@ module "public_active_active" {
     sku_name                        = "Premium"
     size                            = "3"
     enable_non_ssl_port             = true
-    enable_authentication           = false
+    use_password_auth               = false
     rdb_backup_enabled              = false
     rdb_backup_frequency            = null
     rdb_backup_max_snapshot_count   = null
