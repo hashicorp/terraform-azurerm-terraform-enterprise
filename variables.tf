@@ -356,20 +356,6 @@ variable "redis" {
     use_tls                         = bool
     minimum_tls_version             = string
   })
-  # default = {
-  #   family                          = "P"
-  #   sku_name                        = "Premium"
-  #   size                            = "3"
-  #   enable_non_ssl_port             = false
-  #   use_password_auth               = true
-  #   rdb_backup_enabled              = false
-  #   rdb_backup_frequency            = null
-  #   rdb_backup_max_snapshot_count   = null
-  #   rdb_existing_storage_account    = null
-  #   rdb_existing_storage_account_rg = null
-  #   use_tls                         = true
-  #   minimum_tls_version             = "1.2"
-  # }
   description = <<-EOD
   family                          - (Required) The SKU family/pricing group to use. Valid values are "C" (for Basic/Standard SKU family) and "P" (for Premium)
   sku_name                        - (Required) The SKU of Redis to use. Possible values are "Basic", "Standard", and "Premium".
@@ -457,6 +443,24 @@ variable "vm_vmss_scale_in_policy" {
 
 # User Data
 # ---------
+variable "tfe_license_file_location" {
+  default     = "/etc/terraform-enterprise.rli"
+  type        = string
+  description = "The path on the TFE instance to put the TFE license."
+}
+
+variable "tls_bootstrap_cert_pathname" {
+  default     = "/var/lib/terraform-enterprise/certificate.pem"
+  type        = string
+  description = "The path on the TFE instance to put the certificate."
+}
+
+variable "tls_bootstrap_key_pathname" {
+  default     = "/var/lib/terraform-enterprise/key.pem"
+  type        = string
+  description = "The path on the TFE instance to put the key."
+}
+
 variable "user_data_installation_type" {
   default     = "production"
   type        = string
@@ -477,12 +481,6 @@ variable "user_data_release_sequence" {
   type        = string
   description = "Terraform Enterprise release sequence"
 }
-
-# variable "user_data_redis_use_tls" {
-#   default     = true
-#   type        = bool
-#   description = "Boolean to determine if TLS should be used"
-# }
 
 variable "user_data_iact_subnet_list" {
   default     = []
@@ -573,23 +571,4 @@ variable "tags" {
   default     = {}
   type        = map(string)
   description = "Map of tags for resource"
-}
-
-#################################################################
-variable "tfe_license_file_location" {
-  default     = "/etc/terraform-enterprise.rli"
-  type        = string
-  description = "The path on the TFE instance to put the TFE license."
-}
-
-variable "tls_bootstrap_cert_pathname" {
-  default     = "/var/lib/terraform-enterprise/certificate.pem"
-  type        = string
-  description = "The path on the TFE instance to put the certificate."
-}
-
-variable "tls_bootstrap_key_pathname" {
-  default     = "/var/lib/terraform-enterprise/key.pem"
-  type        = string
-  description = "The path on the TFE instance to put the key."
 }
