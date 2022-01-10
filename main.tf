@@ -129,7 +129,7 @@ module "settings" {
   fqdn                        = module.load_balancer.fqdn
   active_active               = local.active_active
   certificate_secret          = var.vm_certificate_secret
-  tfe_license_file_location        = var.tfe_license_file_location
+  tfe_license_file_location   = var.tfe_license_file_location
   tls_bootstrap_cert_pathname = var.tls_bootstrap_cert_pathname
   tls_bootstrap_key_pathname  = var.tls_bootstrap_key_pathname
   release_sequence            = var.user_data_release_sequence
@@ -147,7 +147,7 @@ module "settings" {
   redis_enable_non_ssl_port = var.redis.enable_non_ssl_port
   redis_use_tls             = var.redis.use_tls
   redis_use_password_auth   = var.redis.use_password_auth
-  
+
   # Azure
   user_data_azure_account_key    = local.object_storage.storage_account_key
   user_data_azure_account_name   = local.object_storage.storage_account_name
@@ -170,7 +170,7 @@ module "tfe_init" {
 
   replicated_configuration    = module.settings.replicated_configuration
   tfe_configuration           = module.settings.tfe_configuration
-  tfe_license_file_location        = module.settings.tfe_license_file_location
+  tfe_license_file_location   = module.settings.tfe_license_file_location
   tls_bootstrap_cert_pathname = module.settings.tls_bootstrap_cert_pathname
   tls_bootstrap_key_pathname  = module.settings.tls_bootstrap_key_pathname
 
