@@ -9,7 +9,7 @@ rule "terraform_deprecated_index" {
 }
 
 rule "terraform_unused_declarations" {
-  enabled = false
+  enabled = true
 }
 
 rule "terraform_comment_syntax" {
@@ -46,8 +46,4 @@ rule "terraform_unused_required_providers" {
 
 rule "terraform_standard_module_structure" {
   enabled = true
-}
-
-rule "terraform_module_pinned_source" {
-  enabled = false
 }
