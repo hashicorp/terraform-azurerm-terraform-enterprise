@@ -20,34 +20,16 @@ module "public_active_active" {
   vm_key_secret             = data.azurerm_key_vault_secret.vm_key
 
   # Public Active / Active Scenario
-  iact_subnet_list     = var.iact_subnet_list
-  vm_node_count        = 2
-  vm_sku               = "Standard_D4_v3"
-  vm_image_id          = "ubuntu"
-  load_balancer_public = true
-  load_balancer_type   = "application_gateway"
-  installation_type    = "production"
-
-  redis = {
-    family                          = "P"
-    sku_name                        = "Premium"
-    size                            = "3"
-    enable_non_ssl_port             = true
-    use_password_auth               = false
-    rdb_backup_enabled              = false
-    rdb_backup_frequency            = null
-    rdb_backup_max_snapshot_count   = null
-    rdb_existing_storage_account    = null
-    rdb_existing_storage_account_rg = null
-    use_tls                         = false
-    minimum_tls_version             = "1.2"
-  }
+  installation_type         = "production"
+  iact_subnet_list          = var.iact_subnet_list
+  vm_node_count             = 2
+  vm_sku                    = "Standard_D4_v3"
+  vm_image_id               = "ubuntu"
+  load_balancer_public      = true
+  load_balancer_type        = "application_gateway"
+  redis_enable_non_ssl_port = true
+  redis_use_password_auth   = false
+  redis_use_tls             = false
 
   tags = local.common_tags
-}
-
-module "user_settings" {
-  redis_enable_non_ssl_port = var.redis.enable_non_ssl_port
-  redis_use_tls             = var.redis.use_tls
-  redis_use_password_auth   = var.redis.use_password_auth
 }
