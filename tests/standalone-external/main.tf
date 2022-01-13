@@ -26,13 +26,13 @@ module "standalone_external" {
   vm_key_secret             = data.azurerm_key_vault_secret.vm_key
 
   # Standalone Demo Mode Scenario
-  user_data_iact_subnet_list  = ["0.0.0.0/0"]
-  vm_node_count               = 1
-  vm_sku                      = "Standard_D4_v3"
-  vm_image_id                 = "ubuntu"
-  load_balancer_public        = true
-  load_balancer_type          = "application_gateway"
-  user_data_installation_type = "production"
+  iact_subnet_list     = ["0.0.0.0/0"]
+  vm_node_count        = 1
+  vm_sku               = "Standard_D4_v3"
+  vm_image_id          = "ubuntu"
+  load_balancer_public = true
+  load_balancer_type   = "application_gateway"
+  installation_type    = "production"
 
   redis = {
     family                          = "P"

@@ -11,9 +11,9 @@ module "private_active_active" {
   location             = var.location
   friendly_name_prefix = local.friendly_name_prefix
 
-  resource_group_name_dns    = var.resource_group_name_dns
-  domain_name                = var.domain_name
-  user_data_iact_subnet_list = ["${azurerm_linux_virtual_machine.vm_bastion.private_ip_address}/32"]
+  resource_group_name_dns = var.resource_group_name_dns
+  domain_name             = var.domain_name
+  iact_subnet_list        = ["${azurerm_linux_virtual_machine.vm_bastion.private_ip_address}/32"]
 
   # Bootstrapping resources
   load_balancer_certificate = data.azurerm_key_vault_certificate.load_balancer
@@ -35,8 +35,8 @@ module "private_active_active" {
   load_balancer_sku_tier      = "WAF_v2"
   redis_enable_non_ssl_port   = true
   redis_enable_authentication = true
-  user_data_redis_use_tls     = false
-  user_data_installation_type = "production"
+  redis_use_tls               = false
+  installation_type           = "production"
 
   create_bastion = false
   tags           = local.common_tags

@@ -341,35 +341,76 @@ variable "load_balancer_waf_max_request_body_size_kb" {
 
 # Redis
 # -----
-variable "redis" {
-  type = object({
-    family                          = string
-    sku_name                        = string
-    size                            = string
-    enable_non_ssl_port             = bool
-    use_password_auth               = bool
-    rdb_backup_enabled              = bool
-    rdb_backup_frequency            = number
-    rdb_backup_max_snapshot_count   = number
-    rdb_existing_storage_account    = bool
-    rdb_existing_storage_account_rg = bool
-    use_tls                         = bool
-    minimum_tls_version             = string
-  })
-  description = <<-EOD
-  family                          - (Required) The SKU family/pricing group to use. Valid values are "C" (for Basic/Standard SKU family) and "P" (for Premium)
-  sku_name                        - (Required) The SKU of Redis to use. Possible values are "Basic", "Standard", and "Premium".
-  size                            - (Required) The size of the Redis cache to deploy. Valid values for a SKU family of C (Basic/Standard) are "0", "1", "2", "3", "4", "5", "6", and for P (Premium) family are "1", "2", "3", "4".
-  enable_non_ssl_port             - (Required) Boolean to determine whether or not to enable the non-SSL port (6379)
-  use_password_auth               - (Required) If set to false, the Redis instance will be accessible without authentication. use_password_auth can only be set to false if a subnet_id is specified; and only works if there aren't existing instances within the subnet with use_password_auth set to true.
-  rdb_backup_enabled              - (Optional) Is Backup Enabled? Only supported on Premium SKU's. If rdb_backup_enabled is true and redis_rdb_storage_connection_string is null, a new, Premium storage account will be created.
-  rdb_backup_frequency            - (Optional) The Backup Frequency in Minutes. Only supported on Premium SKU's. Possible values are: 15, 30, 60, 360, 720 and 1440.
-  rdb_backup_max_snapshot_count   - (Optional) The maximum number of snapshots to create as a backup. Only supported for Premium SKU's.
-  rdb_existing_storage_account    - (Optional) Name of an existing Premium Storage Account for data encryption at rest. If value is null, a new, Premium storage account will be created.
-  rdb_existing_storage_account_rg - (Optional) Name of the resource group that contains the existing Premium Storage Account for data encryption at rest.
-  use_tls                         - Boolean to determine if TLS should be used.
-  minimum_tls_version             - (Optional) The minimum TLS version. "1.2" is suggested.
-  EOD
+variable "redis_family" {
+  default     = "P"
+  type        = string
+  description = "The SKU family/pricing group to use. Valid values are C (for Basic/Standard SKU family) and P (for Premium)"
+}
+
+variable "redis_sku_name" {
+  default     = "Premium"
+  type        = string
+  description = "The SKU of Redis to use. Possible values are Basic, Standard and Premium."
+}
+
+variable "redis_size" {
+  default     = "3"
+  type        = string
+  description = "The size of the Redis cache to deploy. Valid values for a SKU family of C (Basic/Standard) are 0, 1, 2, 3, 4, 5, 6, and for P (Premium) family are 1, 2, 3, 4."
+}
+
+variable "redis_enable_non_ssl_port" {
+  default     = false
+  type        = bool
+  description = "Enable the non-SSL port (6379)"
+}
+
+variable "redis_use_password_auth" {
+  default     = true
+  type        = bool
+  description = "If set to false, the Redis instance will be accessible without authentication. enable_authentication can only be set to false if a subnet_id is specified; and only works if there aren't existing instances within the subnet with enable_authentication set to true."
+}
+
+variable "redis_rdb_backup_enabled" {
+  default     = false
+  type        = bool
+  description = "Is Backup Enabled? Only supported on Premium SKU's. If rdb_backup_enabled is true and redis_rdb_storage_connection_string is null, a new, Premium storage account will be created."
+}
+
+variable "redis_rdb_backup_frequency" {
+  default     = null
+  type        = number
+  description = "The Backup Frequency in Minutes. Only supported on Premium SKU's. Possible values are: 15, 30, 60, 360, 720 and 1440."
+}
+
+variable "redis_rdb_backup_max_snapshot_count" {
+  default     = null
+  type        = number
+  description = "The maximum number of snapshots to create as a backup. Only supported for Premium SKU's."
+}
+
+variable "redis_rdb_existing_storage_account" {
+  default     = null
+  type        = string
+  description = "Name of an existing Premium Storage Account for data encryption at rest. If value is null, a new, Premium storage account will be created."
+}
+
+variable "redis_rdb_existing_storage_account_rg" {
+  default     = null
+  type        = string
+  description = "Name of the resource group that contains the existing Premium Storage Account for data encryption at rest."
+}
+
+variable "redis_use_tls" {
+  default     = false
+  type        = bool
+  description = "Boolean to determine if TLS should be used."
+}
+
+variable "redis_minimum_tls_version" {
+  default     = "1.2"
+  type        = string
+  description = "The minimum TLS version. '1.2' is suggested."
 }
 
 # VM
@@ -461,28 +502,28 @@ variable "tls_bootstrap_key_pathname" {
   description = "The path on the TFE instance to put the key."
 }
 
-variable "user_data_installation_type" {
+variable "installation_type" {
   default     = "production"
   type        = string
   description = "Installation type for Terraform Enterprise"
 
   validation {
     condition = (
-      var.user_data_installation_type == "poc" ||
-      var.user_data_installation_type == "production"
+      var.installation_type == "poc" ||
+      var.installation_type == "production"
     )
 
     error_message = "The installation type must be 'production' (recommended) or 'poc' (only used for demo-mode proofs of concept)."
   }
 }
 
-variable "user_data_release_sequence" {
+variable "release_sequence" {
   default     = null
   type        = string
   description = "Terraform Enterprise release sequence"
 }
 
-variable "user_data_iact_subnet_list" {
+variable "iact_subnet_list" {
   default     = []
   description = <<-EOD
   A list of IP address ranges which will be authorized to access the IACT. The ranges must be expressed
@@ -491,7 +532,7 @@ variable "user_data_iact_subnet_list" {
   type        = list(string)
 }
 
-variable "user_data_trusted_proxies" {
+variable "trusted_proxies" {
   default     = []
   description = <<-EOD
   A list of IP address ranges which will be considered safe to ignore when evaluating the IP addresses of requests like

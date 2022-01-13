@@ -20,13 +20,13 @@ module "public_active_active" {
   vm_key_secret             = data.azurerm_key_vault_secret.vm_key
 
   # Public Active / Active Scenario
-  user_data_iact_subnet_list  = var.iact_subnet_list
-  vm_node_count               = 2
-  vm_sku                      = "Standard_D4_v3"
-  vm_image_id                 = "ubuntu"
-  load_balancer_public        = true
-  load_balancer_type          = "application_gateway"
-  user_data_installation_type = "production"
+  iact_subnet_list     = var.iact_subnet_list
+  vm_node_count        = 2
+  vm_sku               = "Standard_D4_v3"
+  vm_image_id          = "ubuntu"
+  load_balancer_public = true
+  load_balancer_type   = "application_gateway"
+  installation_type    = "production"
 
   redis = {
     family                          = "P"
@@ -44,4 +44,10 @@ module "public_active_active" {
   }
 
   tags = local.common_tags
+}
+
+module "user_settings" {
+  redis_enable_non_ssl_port = var.redis.enable_non_ssl_port
+  redis_use_tls             = var.redis.use_tls
+  redis_use_password_auth   = var.redis.use_password_auth
 }

@@ -84,9 +84,21 @@ module "redis" {
 
   resource_group_name = module.resource_groups.resource_group_name
   location            = var.location
+  redis_subnet_id     = local.network.redis_subnet.id
 
-  redis           = var.redis
-  redis_subnet_id = local.network.redis_subnet.id
+  redis = {
+    family                          = var.redis_family
+    sku_name                        = var.redis_sku_name
+    size                            = var.redis_size
+    enable_non_ssl_port             = var.redis_enable_non_ssl_port
+    use_password_auth               = var.redis_use_password_auth
+    rdb_backup_enabled              = var.redis_rdb_backup_enabled
+    rdb_backup_frequency            = var.redis_rdb_backup_frequency
+    rdb_backup_max_snapshot_count   = var.redis_rdb_backup_max_snapshot_count
+    rdb_existing_storage_account    = var.redis_rdb_existing_storage_account
+    rdb_existing_storage_account_rg = var.redis_rdb_existing_storage_account_rg
+    minimum_tls_version             = var.redis_minimum_tls_version
+  }
 
   tags = var.tags
 }
@@ -120,41 +132,38 @@ module "database" {
 # -----------------------------------------------------------------------------
 module "settings" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=ah-poc-2"
-  // source = "/Users/anniehedgpeth/source/terraform-random-tfe-utility/modules/settings"
-
   # TFE Base Configuration
-  iact_subnet_list = var.user_data_iact_subnet_list
+  installation_type = var.installation_type
+  iact_subnet_list  = var.iact_subnet_list
+  trusted_proxies   = local.trusted_proxies
+  release_sequence  = var.release_sequence
+  pg_extra_params   = var.pg_extra_params
 
   # Replicated Base Configuration
   fqdn                        = module.load_balancer.fqdn
   active_active               = local.active_active
-  certificate_secret          = var.vm_certificate_secret
   tfe_license_file_location   = var.tfe_license_file_location
   tls_bootstrap_cert_pathname = var.tls_bootstrap_cert_pathname
   tls_bootstrap_key_pathname  = var.tls_bootstrap_key_pathname
-  release_sequence            = var.user_data_release_sequence
+  certificate_secret          = var.vm_certificate_secret
 
   # Database
-  pg_dbname       = local.database.name
-  pg_netloc       = local.database.address
-  pg_user         = local.database.server.administrator_login
-  pg_password     = local.database.server.administrator_password
-  pg_extra_params = var.pg_extra_params
+  pg_dbname   = local.database.name
+  pg_netloc   = local.database.address
+  pg_user     = local.database.server.administrator_login
+  pg_password = local.database.server.administrator_password
 
   # Redis
   redis_host                = local.redis.host
   redis_pass                = local.redis.pass
-  redis_enable_non_ssl_port = var.redis.enable_non_ssl_port
-  redis_use_tls             = var.redis.use_tls
-  redis_use_password_auth   = var.redis.use_password_auth
+  redis_enable_non_ssl_port = local.redis.enable_non_ssl_port
+  redis_use_tls             = local.redis.use_tls
+  redis_use_password_auth   = local.redis.use_password_auth
 
   # Azure
-  user_data_azure_account_key    = local.object_storage.storage_account_key
-  user_data_azure_account_name   = local.object_storage.storage_account_name
-  user_data_azure_container_name = local.object_storage.storage_account_container_name
-
-  user_data_trusted_proxies   = local.trusted_proxies
-  user_data_installation_type = var.user_data_installation_type
+  azure_account_key    = local.object_storage.storage_account_key
+  azure_account_name   = local.object_storage.storage_account_name
+  azure_container_name = local.object_storage.storage_account_container_name
 }
 
 # -----------------------------------------------------------------------------
@@ -162,17 +171,15 @@ module "settings" {
 # -----------------------------------------------------------------------------
 module "tfe_init" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=ah-poc-2"
-  // source = "/Users/anniehedgpeth/source/terraform-random-tfe-utility/modules/tfe_init"
 
   # Replicated Configuration data
   fqdn          = module.load_balancer.fqdn
   active_active = local.active_active
 
-  replicated_configuration    = module.settings.replicated_configuration
-  tfe_configuration           = module.settings.tfe_configuration
-  tfe_license_file_location   = module.settings.tfe_license_file_location
-  tls_bootstrap_cert_pathname = module.settings.tls_bootstrap_cert_pathname
-  tls_bootstrap_key_pathname  = module.settings.tls_bootstrap_key_pathname
+  configuration               = module.settings.config
+  tfe_license_file_location   = module.settings.config.replicated_configuration.LicenseFileLocation
+  tls_bootstrap_cert_pathname = module.settings.config.replicated_configuration.TlsBootstrapCert
+  tls_bootstrap_key_pathname  = module.settings.config.replicated_configuration.TlsBootstrapKey
 
   # Secrets
   ca_certificate_secret = var.ca_certificate_secret

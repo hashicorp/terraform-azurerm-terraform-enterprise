@@ -5,7 +5,7 @@ locals {
   # ----------------
   # Determine whether or not TFE in active-active mode based on node count, by default standalone is assumed
   active_active = var.vm_node_count >= 2 ? true : false
-  demo_mode     = var.user_data_installation_type == "poc" ? true : false
+  demo_mode     = var.installation_type == "poc" ? true : false
 
   # Network
   # -------
@@ -38,15 +38,18 @@ locals {
   redis = try(
     module.redis[0],
     {
-      host = null
-      pass = null
+      host                = null
+      pass                = null
+      enable_non_ssl_port = null
+      use_tls             = null
+      use_password_auth   = null
     }
   )
 
   # User Data
   # ---------
   trusted_proxies = concat(
-    var.user_data_trusted_proxies,
+    var.trusted_proxies,
     [var.network_frontend_subnet_cidr]
   )
 

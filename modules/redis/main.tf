@@ -14,7 +14,6 @@ resource "azurerm_redis_cache" "tfe_redis" {
   sku_name  = var.redis.sku_name
 
   enable_non_ssl_port = var.redis.enable_non_ssl_port
-
   minimum_tls_version = var.redis.minimum_tls_version
 
   redis_configuration {
