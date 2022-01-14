@@ -404,7 +404,7 @@ variable "redis_rdb_existing_storage_account_rg" {
 variable "redis_use_tls" {
   default     = false
   type        = bool
-  description = "Boolean to determine if TLS should be used."
+  description = "Boolean to determine if the Redis service requires TLS."
 }
 
 variable "redis_minimum_tls_version" {

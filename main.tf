@@ -98,6 +98,7 @@ module "redis" {
     rdb_existing_storage_account    = var.redis_rdb_existing_storage_account
     rdb_existing_storage_account_rg = var.redis_rdb_existing_storage_account_rg
     minimum_tls_version             = var.redis_minimum_tls_version
+    use_tls                         = var.redis_use_tls
   }
 
   tags = var.tags
@@ -132,6 +133,7 @@ module "database" {
 # -----------------------------------------------------------------------------
 module "settings" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=ah-poc-2"
+  
   # TFE Base Configuration
   installation_type = var.installation_type
   iact_subnet_list  = var.iact_subnet_list

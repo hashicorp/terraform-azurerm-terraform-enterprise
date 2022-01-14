@@ -22,3 +22,8 @@ output "use_password_auth" {
   value       = var.redis.use_password_auth
   description = "Redis service requires a password."
 }
+
+output "use_tls" {
+  value       = var.redis.use_tls
+  description = "Redis service requires a password."
+}

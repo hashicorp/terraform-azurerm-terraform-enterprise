@@ -30,6 +30,7 @@ variable "redis" {
     rdb_existing_storage_account    = string
     rdb_existing_storage_account_rg = string
     minimum_tls_version             = string
+    use_tls                         = bool
   })
   description = <<-EOD
   family                          - The SKU family/pricing group to use. Valid values are "C" (for Basic/Standard SKU family) and "P" (for Premium)
@@ -43,6 +44,7 @@ variable "redis" {
   rdb_existing_storage_account    - Name of an existing Premium Storage Account for data encryption at rest. If value is null, a new, Premium storage account will be created.
   rdb_existing_storage_account_rg - Name of the resource group that contains the existing Premium Storage Account for data encryption at rest.
   minimum_tls_version             - The minimum TLS version. "1.2" is suggested.
+  use_tls                         - Redis service requires TLS.
   EOD
 }
 
