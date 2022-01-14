@@ -87,19 +87,19 @@ module "redis" {
   redis_subnet_id     = local.network.redis_subnet.id
 
   redis = {
-    family                          = var.redis_family
-    sku_name                        = var.redis_sku_name
-    size                            = var.redis_size
-    enable_non_ssl_port             = var.redis_enable_non_ssl_port
-    use_password_auth               = var.redis_use_password_auth
-    rdb_backup_enabled              = var.redis_rdb_backup_enabled
-    rdb_backup_frequency            = var.redis_rdb_backup_frequency
-    rdb_backup_max_snapshot_count   = var.redis_rdb_backup_max_snapshot_count
-    rdb_existing_storage_account    = var.redis_rdb_existing_storage_account
-    rdb_existing_storage_account_rg = var.redis_rdb_existing_storage_account_rg
-    minimum_tls_version             = var.redis_minimum_tls_version
-    use_tls                         = var.redis_use_tls
+    family                        = var.redis_family
+    sku_name                      = var.redis_sku_name
+    size                          = var.redis_size
+    enable_non_ssl_port           = var.redis_enable_non_ssl_port
+    use_password_auth             = var.redis_use_password_auth
+    rdb_backup_enabled            = var.redis_rdb_backup_enabled
+    rdb_backup_frequency          = var.redis_rdb_backup_frequency
+    rdb_backup_max_snapshot_count = var.redis_rdb_backup_max_snapshot_count
+    rdb_existing_storage_account  = var.redis_rdb_existing_storage_account != null ? data.azurerm_storage_account.tfe_redis_existing_storage_account[0].primary_blob_connection_string : null
+    minimum_tls_version           = var.redis_minimum_tls_version
+    use_tls                       = var.redis_use_tls
   }
+
 
   tags = var.tags
 }

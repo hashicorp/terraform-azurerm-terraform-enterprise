@@ -19,18 +19,17 @@ variable "redis_subnet_id" {
 
 variable "redis" {
   type = object({
-    family                          = string
-    sku_name                        = string
-    size                            = string
-    enable_non_ssl_port             = bool
-    use_password_auth               = bool
-    rdb_backup_enabled              = bool
-    rdb_backup_frequency            = number
-    rdb_backup_max_snapshot_count   = number
-    rdb_existing_storage_account    = string
-    rdb_existing_storage_account_rg = string
-    minimum_tls_version             = string
-    use_tls                         = bool
+    family                        = string
+    sku_name                      = string
+    size                          = string
+    enable_non_ssl_port           = bool
+    use_password_auth             = bool
+    rdb_backup_enabled            = bool
+    rdb_backup_frequency          = number
+    rdb_backup_max_snapshot_count = number
+    rdb_existing_storage_account  = string
+    minimum_tls_version           = string
+    use_tls                       = bool
   })
   description = <<-EOD
   family                          - The SKU family/pricing group to use. Valid values are "C" (for Basic/Standard SKU family) and "P" (for Premium)
@@ -42,7 +41,6 @@ variable "redis" {
   rdb_backup_frequency            - The Backup Frequency in Minutes. Only supported on Premium SKU's. Possible values are: 15, 30, 60, 360, 720 and 1440.
   rdb_backup_max_snapshot_count   - The maximum number of snapshots to create as a backup. Only supported for Premium SKU's.
   rdb_existing_storage_account    - Name of an existing Premium Storage Account for data encryption at rest. If value is null, a new, Premium storage account will be created.
-  rdb_existing_storage_account_rg - Name of the resource group that contains the existing Premium Storage Account for data encryption at rest.
   minimum_tls_version             - The minimum TLS version. "1.2" is suggested.
   use_tls                         - Redis service requires TLS.
   EOD
