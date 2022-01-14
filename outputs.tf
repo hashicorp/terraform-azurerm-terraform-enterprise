@@ -73,7 +73,7 @@ output "bastion_host_dns_name" {
 # ---------
 output "tfe_userdata_base64_encoded" {
   value       = module.tfe_init.tfe_userdata_base64_encoded
-  description = "The Base64 encoded User Data script built from modules/user_data/templates/tfe.sh.tpl"
+  description = "The Base64 encoded User Data script built from terraform-random-tfe-utility/modules/tfe_init/templates/tfe.sh.tpl"
 }
 
 output "tfe_console_password" {
