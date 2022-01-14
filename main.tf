@@ -133,7 +133,7 @@ module "database" {
 # -----------------------------------------------------------------------------
 module "settings" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=ah-poc-2"
-  
+
   # TFE Base Configuration
   installation_type = var.installation_type
   iact_subnet_list  = var.iact_subnet_list
