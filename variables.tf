@@ -541,6 +541,12 @@ variable "trusted_proxies" {
   type        = list(string)
 }
 
+variable "bypass_preflight_checks" {
+  default = false
+  type = bool
+  description = "Allow the TFE application to start without preflight checks." 
+}
+
 # TLS Certificates
 # ----------------
 variable "ca_certificate_secret" {

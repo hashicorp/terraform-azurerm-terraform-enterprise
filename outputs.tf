@@ -6,7 +6,7 @@ output "tfe_application_url" {
 }
 
 output "login_url" {
-  value       = "https://${module.load_balancer.fqdn}/admin/account/new?token=${module.settings.config.tfe_configuration.user_token.value}"
+  value       = "https://${module.load_balancer.fqdn}/admin/account/new?token=${module.settings.tfe_configuration.user_token.value}"
   description = "Login URL to setup the TFE instance once it is initialized"
 }
 
@@ -77,7 +77,7 @@ output "tfe_userdata_base64_encoded" {
 }
 
 output "tfe_console_password" {
-  value       = module.settings.config.replicated_configuration.DaemonAuthenticationPassword
+  value       = module.settings.replicated_configuration.DaemonAuthenticationPassword
   description = "The password for the TFE console"
 }
 
