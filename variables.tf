@@ -343,7 +343,7 @@ variable "redis_sku_name" {
 }
 
 variable "redis_size" {
-  default     = "3"
+  default     = "1"
   type        = string
   description = "The size of the Redis cache to deploy. Valid values for a SKU family of C (Basic/Standard) are 0, 1, 2, 3, 4, 5, 6, and for P (Premium) family are 1, 2, 3, 4."
 }
