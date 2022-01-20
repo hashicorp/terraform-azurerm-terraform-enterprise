@@ -15,7 +15,6 @@ module "bastion_vm" {
   network_allow_range  = var.network_allow_range
   bastion_subnet_cidr  = "10.0.16.0/20"
   ssh_public_key       = data.azurerm_key_vault_secret.bastion_public_ssh_key.value
-  source_port_range    = "*"
   bastion_user         = "bastionuser"
 
   tags = local.common_tags

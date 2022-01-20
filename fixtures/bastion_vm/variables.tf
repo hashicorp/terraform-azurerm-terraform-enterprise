@@ -27,11 +27,6 @@ variable "bastion_user" {
   description = "Admin user for the Bastion virtual machine."
 }
 
-variable "source_port_range" {
-  type        = string
-  description = "Source Port or Range. Integer or range between 0 and 65535 or * to match any."
-}
-
 variable "ssh_public_key" {
   type        = string
   description = "The public SSH key for the Bastion virtual machine."
