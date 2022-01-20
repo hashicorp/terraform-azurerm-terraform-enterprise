@@ -17,4 +17,5 @@ resource "azurerm_postgresql_flexible_server" "tfe_pg" {
   storage_mb             = var.database_size_mb
   tags                   = var.tags
   version                = var.database_version
+  zone                   = var.database_availability_zone
 }
