@@ -21,6 +21,7 @@ module "public_active_active" {
 
   # Public Active / Active Scenario
   installation_type         = "production"
+  production_type           = "external"
   iact_subnet_list          = var.iact_subnet_list
   vm_node_count             = 2
   vm_sku                    = "Standard_D4_v3"

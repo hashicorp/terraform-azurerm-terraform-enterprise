@@ -37,6 +37,7 @@ module "private_active_active" {
   redis_use_password_auth   = true
   redis_use_tls             = false
   installation_type         = "production"
+  production_type           = "external"
 
   create_bastion = false
   tags           = local.common_tags

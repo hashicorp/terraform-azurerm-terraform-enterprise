@@ -25,8 +25,9 @@ module "standalone_external" {
   vm_certificate_secret     = data.azurerm_key_vault_secret.vm_certificate
   vm_key_secret             = data.azurerm_key_vault_secret.vm_key
 
-  # Standalone Demo Mode Scenario
+  # Standalone Demo External Scenario
   installation_type    = "production"
+  production_type      = "external"
   iact_subnet_list     = ["0.0.0.0/0"]
   vm_node_count        = 1
   vm_sku               = "Standard_D4_v3"

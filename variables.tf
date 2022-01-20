@@ -517,6 +517,21 @@ variable "installation_type" {
   }
 }
 
+variable "production_type" {
+  default     = "external"
+  type        = string
+  description = "If you have chosen 'production' for the installation_type, production_type is required: external or disk"
+
+  validation {
+    condition = (
+      var.production_type == "external" ||
+      var.production_type == "disk"
+    )
+
+    error_message = "The production type must be 'external' or 'disk'."
+  }
+}
+
 variable "release_sequence" {
   default     = null
   type        = string

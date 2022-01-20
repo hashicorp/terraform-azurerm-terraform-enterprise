@@ -136,14 +136,25 @@ module "settings" {
 
   # TFE Base Configuration
   installation_type = var.installation_type
+  production_type   = var.production_type
   iact_subnet_list  = var.iact_subnet_list
   trusted_proxies   = local.trusted_proxies
   release_sequence  = var.release_sequence
   pg_extra_params   = var.pg_extra_params
 
+  extra_no_proxy = [
+    "127.0.0.1",
+    "169.254.169.254",
+    ".azure.com",
+    ".windows.net",
+    ".microsoft.com",
+    module.load_balancer.fqdn,
+    var.network_cidr
+  ]
+
   # Replicated Base Configuration
-  fqdn                        = module.load_balancer.fqdn
-  active_active               = local.active_active
+  hostname                    = module.load_balancer.fqdn
+  enable_active_active        = local.active_active
   tfe_license_file_location   = var.tfe_license_file_location
   tls_bootstrap_cert_pathname = var.tls_bootstrap_cert_pathname
   tls_bootstrap_key_pathname  = var.tls_bootstrap_key_pathname
@@ -175,10 +186,7 @@ module "settings" {
 module "tfe_init" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=ah-poc-2"
 
-  # Replicated Configuration data
-  fqdn          = module.load_balancer.fqdn
-  active_active = local.active_active
-
+  # TFE & Replicated Configuration data
   tfe_configuration           = module.settings.tfe_configuration
   replicated_configuration    = module.settings.replicated_configuration
   tfe_license_file_location   = module.settings.replicated_configuration.LicenseFileLocation
@@ -194,15 +202,6 @@ module "tfe_init" {
   # Proxy information
   proxy_ip   = var.proxy_ip
   proxy_port = var.proxy_port
-  no_proxy = [
-    "127.0.0.1",
-    "169.254.169.254",
-    ".azure.com",
-    ".windows.net",
-    ".microsoft.com",
-    module.load_balancer.fqdn,
-    var.network_cidr
-  ]
 }
 
 # -----------------------------------------------------------------------------
