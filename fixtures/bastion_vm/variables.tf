@@ -42,7 +42,6 @@ variable "network_allow_range" {
   description = "Network range to allow access to Bastion virtual machine."
 }
 
-
 # Tagging
 # -------
 variable "tags" {
