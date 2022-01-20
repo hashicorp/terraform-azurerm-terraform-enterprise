@@ -18,7 +18,7 @@ module "bastion_vm" {
   source_port_range    = "*"
   bastion_user         = "bastionuser"
 
-  tags                 = local.common_tags
+  tags = local.common_tags
 }
 
 module "private_tcp_active_active" {
