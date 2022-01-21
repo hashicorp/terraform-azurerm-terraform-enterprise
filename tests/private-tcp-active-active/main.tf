@@ -5,6 +5,21 @@ resource "random_string" "friendly_name" {
   special = false
 }
 
+module "bastion_vm" {
+  source               = "../../fixtures/bastion_vm"
+  friendly_name_prefix = local.friendly_name_prefix
+
+  location             = var.location
+  resource_group_name  = local.resource_group_name
+  virtual_network_name = module.private_tcp_active_active.network.network.name
+  network_allow_range  = var.network_allow_range
+  bastion_subnet_cidr  = "10.0.16.0/20"
+  ssh_public_key       = data.azurerm_key_vault_secret.bastion_public_ssh_key.value
+  bastion_user         = "bastionuser"
+
+  tags = local.common_tags
+}
+
 module "private_tcp_active_active" {
   source = "../../"
 
@@ -13,7 +28,7 @@ module "private_tcp_active_active" {
 
   resource_group_name_dns = var.resource_group_name_dns
   domain_name             = var.domain_name
-  iact_subnet_list        = ["${azurerm_linux_virtual_machine.vm_bastion.private_ip_address}/32"]
+  iact_subnet_list        = ["${module.bastion_vm.private_ip}/32"]
 
   # Bootstrapping resources
   tfe_license_secret          = data.azurerm_key_vault_secret.tfe_license

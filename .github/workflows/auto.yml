@@ -80,3 +80,12 @@ jobs:
             --config ${{ github.workspace }}/.tflint.hcl \
             ${{ github.workspace }}/${m}
         done
+
+    - name: Lint fixtures directory in a loop
+      run: |
+        for m in $(ls -1d fixtures/*/)
+        do
+          tflint \
+            --config ${{ github.workspace }}/.tflint.hcl \
+            ${{ github.workspace }}/${m}
+        done
