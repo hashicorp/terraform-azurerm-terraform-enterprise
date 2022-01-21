@@ -186,8 +186,8 @@ module "tfe_init" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=ah-poc-2"
 
   # TFE & Replicated Configuration data
-  tfe_configuration           = module.settings.tfe_configuration
-  replicated_configuration    = module.settings.replicated_configuration
+  tfe_configuration        = module.settings.tfe_configuration
+  replicated_configuration = module.settings.replicated_configuration
 
   # Secrets
   ca_certificate_secret = var.ca_certificate_secret
