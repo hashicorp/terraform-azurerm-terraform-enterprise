@@ -518,14 +518,15 @@ variable "installation_type" {
 }
 
 variable "production_type" {
-  default     = "external"
+  default     = null
   type        = string
   description = "If you have chosen 'production' for the installation_type, production_type is required: external or disk"
 
   validation {
     condition = (
       var.production_type == "external" ||
-      var.production_type == "disk"
+      var.production_type == "disk" ||
+      var.production_type == null
     )
 
     error_message = "The production type must be 'external' or 'disk'."
