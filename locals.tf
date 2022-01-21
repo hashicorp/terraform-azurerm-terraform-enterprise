@@ -48,14 +48,6 @@ locals {
 
   # User Data
   # ---------
-  tls_bootstrap_paths = var.vm_certificate_secret == null ? {
-    TlsBootstrapCert = null
-    TlsBootstrapKey  = null
-    } : {
-    TlsBootstrapCert = module.settings.replicated_configuration.TlsBootstrapCert
-    TlsBootstrapKey  = module.settings.replicated_configuration.TlsBootstrapKey
-  }
-
   trusted_proxies = concat(
     var.trusted_proxies,
     [var.network_frontend_subnet_cidr]
