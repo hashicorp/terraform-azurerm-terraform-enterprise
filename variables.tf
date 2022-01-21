@@ -535,7 +535,7 @@ variable "production_type" {
 
 variable "release_sequence" {
   default     = null
-  type        = string
+  type        = number
   description = "Terraform Enterprise release sequence"
 }
 
