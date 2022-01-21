@@ -16,9 +16,11 @@ module "private_tcp_active_active" {
   iact_subnet_list        = ["${azurerm_linux_virtual_machine.vm_bastion.private_ip_address}/32"]
 
   # Bootstrapping resources
-  tfe_license_secret    = data.azurerm_key_vault_secret.tfe_license
-  vm_certificate_secret = data.azurerm_key_vault_secret.vm_certificate
-  vm_key_secret         = data.azurerm_key_vault_secret.vm_key
+  tfe_license_secret          = data.azurerm_key_vault_secret.tfe_license
+  vm_certificate_secret       = data.azurerm_key_vault_secret.vm_certificate
+  vm_key_secret               = data.azurerm_key_vault_secret.vm_key
+  tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"
+  tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
 
   # Behind proxy information
   ca_certificate_secret = data.azurerm_key_vault_secret.ca_certificate

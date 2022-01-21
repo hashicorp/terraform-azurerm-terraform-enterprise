@@ -20,10 +20,12 @@ module "standalone_external" {
   resource_group_name_dns = "ptfedev-com-dns-tls"
 
   # Bootstrapping resources
-  load_balancer_certificate = data.azurerm_key_vault_certificate.load_balancer
-  tfe_license_secret        = azurerm_key_vault_secret.tfe_license
-  vm_certificate_secret     = data.azurerm_key_vault_secret.vm_certificate
-  vm_key_secret             = data.azurerm_key_vault_secret.vm_key
+  load_balancer_certificate   = data.azurerm_key_vault_certificate.load_balancer
+  tfe_license_secret          = azurerm_key_vault_secret.tfe_license
+  vm_certificate_secret       = data.azurerm_key_vault_secret.vm_certificate
+  vm_key_secret               = data.azurerm_key_vault_secret.vm_key
+  tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"
+  tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
 
   # Standalone Demo External Scenario
   installation_type    = "production"
