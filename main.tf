@@ -188,9 +188,6 @@ module "tfe_init" {
   # TFE & Replicated Configuration data
   tfe_configuration           = module.settings.tfe_configuration
   replicated_configuration    = module.settings.replicated_configuration
-  tfe_license_file_location   = module.settings.replicated_configuration.LicenseFileLocation
-  tls_bootstrap_cert_pathname = local.tls_bootstrap_paths.TlsBootstrapCert
-  tls_bootstrap_key_pathname  = local.tls_bootstrap_paths.TlsBootstrapKey
 
   # Secrets
   ca_certificate_secret = var.ca_certificate_secret
