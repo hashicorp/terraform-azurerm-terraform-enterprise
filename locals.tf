@@ -38,8 +38,8 @@ locals {
   redis = try(
     module.redis[0].redis_cache,
     {
-      hostname            = null
-      primary_access_key  = null
+      hostname           = null
+      primary_access_key = null
     }
   )
 
