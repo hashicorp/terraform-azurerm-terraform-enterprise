@@ -32,7 +32,7 @@ module "standalone_external" {
   tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"
   tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
 
-  # Standalone Demo External Scenario
+  # Standalone External Scenario
   installation_type    = "production"
   production_type      = "external"
   iact_subnet_list     = ["0.0.0.0/0"]
