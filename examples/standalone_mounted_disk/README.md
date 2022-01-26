@@ -19,7 +19,7 @@ This test assumes the following resources exist.
 - an Azure Key Vault in which the following are stored:
   - TFE CA certificate (certificate)
   - Key Vault secret which contains the Base64 encoded version of a PEM encoded public
-    certificate of a certificate authority (CA) to be trusted by the Virtual Machine Scale Set
+    certificate for the Virtual Machine Scale Set
   - Key Vault secret which contains the Base64 encoded version of a PEM encoded private
-    key of a certificate authority (CA) to be trusted by the Virtual Machine Scale Set.
+    key for the Virtual Machine Scale Set.
 - TFE license on a filepath accessible by tests
