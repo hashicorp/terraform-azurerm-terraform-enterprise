@@ -5,10 +5,15 @@ resource "random_string" "friendly_name" {
   special = false
 }
 
-resource "azurerm_key_vault_secret" "tfe_license" {
-  name         = "tfe-license-${local.friendly_name_prefix}"
-  value        = filebase64(var.license_file)
+module "secrets" {
+  source = "../../fixtures/secrets"
+
   key_vault_id = var.key_vault_id
+
+  tfe_license = {
+    name = "tfe-license-${local.friendly_name_prefix}"
+    path = var.license_file
+  }
 }
 
 module "standalone_poc" {
@@ -21,7 +26,7 @@ module "standalone_poc" {
 
   # Bootstrapping resources
   load_balancer_certificate = data.azurerm_key_vault_certificate.load_balancer
-  tfe_license_secret        = azurerm_key_vault_secret.tfe_license
+  tfe_license_secret        = module.secrets.tfe_license
   vm_certificate_secret     = data.azurerm_key_vault_secret.vm_certificate
   vm_key_secret             = data.azurerm_key_vault_secret.vm_key
 
