@@ -28,7 +28,7 @@ resource "tls_private_key" "tfe_ssh" {
 # -----------------------------------------------------------------------------
 module "object_storage" {
   source = "./modules/object_storage"
-  count  = local.demo_mode == true ? 0 : 1
+  count  = local.disk_mode == true ? 0 : 1
 
   friendly_name_prefix = var.friendly_name_prefix
   resource_group_name  = module.resource_groups.resource_group_name
@@ -67,7 +67,7 @@ module "network" {
   network_redis_subnet_cidr    = var.network_redis_subnet_cidr
 
   create_bastion = var.create_bastion
-  demo_mode      = local.demo_mode
+  disk_mode      = local.disk_mode
 
   load_balancer_type   = var.load_balancer_type
   load_balancer_public = var.load_balancer_public
@@ -109,7 +109,7 @@ module "redis" {
 # -----------------------------------------------------------------------------
 module "database" {
   source = "./modules/database"
-  count  = local.demo_mode == true ? 0 : 1
+  count  = local.disk_mode == true ? 0 : 1
 
   friendly_name_prefix = var.friendly_name_prefix
   resource_group_name  = module.resource_groups.resource_group_name
@@ -137,6 +137,7 @@ module "settings" {
   # TFE Base Configuration
   installation_type = var.installation_type
   production_type   = var.production_type
+  disk_path         = var.disk_path
   iact_subnet_list  = var.iact_subnet_list
   trusted_proxies   = local.trusted_proxies
   release_sequence  = var.release_sequence

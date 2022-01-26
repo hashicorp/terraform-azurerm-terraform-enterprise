@@ -11,9 +11,9 @@ variable "active_active" {
   description = "True if TFE running in active-active configuration"
 }
 
-variable "demo_mode" {
+variable "disk_mode" {
   type        = bool
-  description = "Is the installation type for Terraform Enterprise 'poc'?"
+  description = "Is the production type for Terraform Enterprise 'disk'?"
 }
 
 # Provider

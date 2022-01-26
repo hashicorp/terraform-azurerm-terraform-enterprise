@@ -1,12 +1,12 @@
-# TEST: Standalone POC Mode Terraform Enterprise
+# EXAMPLE: Standalone Mounted Disk Mode Terraform Enterprise
 
-## About this test
+## About this example
 
-This test for Terraform Enterprise creates a TFE
+This example for Terraform Enterprise creates a TFE
 installation with the following traits.
 
 - Standalone
-- POC / Demo-mode
+- Mounted Disk production mode
 - a small VM machine type (Standard_D4_v3)
 - Ubuntu 20.04 as the VM image
 - a publicly accessible HTTP load balancer with TLS termination
@@ -23,8 +23,3 @@ This test assumes the following resources exist.
   - Key Vault secret which contains the Base64 encoded version of a PEM encoded private
     key of a certificate authority (CA) to be trusted by the Virtual Machine Scale Set.
 - TFE license on a filepath accessible by tests
-
-## How this test is used
-
-This test is leveraged by the integration tests in the [`ptfe-replicated`](https://github.com/hashicorp/ptfe-replicated/blob/master/.circleci/config.yml)
-repository.

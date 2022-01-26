@@ -533,6 +533,12 @@ variable "production_type" {
   }
 }
 
+variable "disk_path" {
+  default     = null
+  type        = string
+  description = "Absolute path to a directory on the instance to store Terraform Enteprise data. Valid for mounted disk installations."
+}
+
 variable "release_sequence" {
   default     = null
   type        = number
