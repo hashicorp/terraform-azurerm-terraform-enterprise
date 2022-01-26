@@ -1,73 +1,6 @@
-# Local variables and conditionals
-# --------------------------------
-locals {
-  # TFE Architecture
-  # ----------------
-  # Determine whether or not TFE in active-active mode based on node count, by default standalone is assumed
-  active_active = var.vm_node_count >= 2 ? true : false
-  demo_mode     = var.user_data_installation_type == "poc" ? true : false
-
-  # Network
-  # -------
-  network = try(
-    module.network[0],
-    {
-      bastion_subnet = {
-        id = var.network_bastion_subnet_id
-      }
-      database_private_dns_zone = {
-        id = var.network_database_private_dns_zone_id
-      }
-      database_subnet = {
-        id = var.network_database_subnet_id
-      }
-      frontend_subnet = {
-        id = var.network_frontend_subnet_id
-      }
-      private_subnet = {
-        id = var.network_private_subnet_id
-      }
-      redis_subnet = {
-        id = var.network_redis_subnet_id
-      }
-    }
-  )
-
-  # Redis
-  # -----
-  redis_port = var.redis_enable_non_ssl_port == true ? "6379" : "6380"
-
-  # User Data
-  # ---------
-  trusted_proxies = concat(
-    var.user_data_trusted_proxies,
-    [var.network_frontend_subnet_cidr]
-  )
-
-  database = try(
-    module.database[0],
-    {
-      name    = null
-      address = null
-      server = {
-        administrator_login    = null
-        administrator_password = null
-      }
-    }
-  )
-
-  object_storage = try(
-    module.object_storage[0],
-    {
-      storage_account_key            = null
-      storage_account_name           = null
-      storage_account_container_name = null
-    }
-  )
-}
-
+# -----------------------------------------------------------------------------
 # Azure resource groups
-# ---------------------
+# -----------------------------------------------------------------------------
 module "resource_groups" {
   source = "./modules/resource_groups"
 
@@ -80,8 +13,9 @@ module "resource_groups" {
   tags = var.tags
 }
 
+# -----------------------------------------------------------------------------
 # SSH for instances
-# -----------------
+# -----------------------------------------------------------------------------
 resource "tls_private_key" "tfe_ssh" {
   count = var.vm_public_key == null ? 1 : 0
 
@@ -89,8 +23,9 @@ resource "tls_private_key" "tfe_ssh" {
   rsa_bits  = 4096
 }
 
+# -----------------------------------------------------------------------------
 # Azure storage container and storage blob for TFE license file
-# -------------------------------------------------------------
+# -----------------------------------------------------------------------------
 module "object_storage" {
   source = "./modules/object_storage"
   count  = local.demo_mode == true ? 0 : 1
@@ -110,8 +45,9 @@ module "object_storage" {
   tags = var.tags
 }
 
+# -----------------------------------------------------------------------------
 # Azure virtual network, subnet, and security group
-# -------------------------------------------------
+# -----------------------------------------------------------------------------
 module "network" {
   source = "./modules/network"
   count  = var.network_private_subnet_id == null ? 1 : 0
@@ -139,31 +75,37 @@ module "network" {
   tags = var.tags
 }
 
+# -----------------------------------------------------------------------------
 # Azure cache
-# -----------
+# -----------------------------------------------------------------------------
 module "redis" {
   source = "./modules/redis"
   count  = local.active_active == true ? 1 : 0
 
   resource_group_name = module.resource_groups.resource_group_name
   location            = var.location
+  redis_subnet_id     = local.network.redis_subnet.id
 
-  redis_family                        = var.redis_family
-  redis_sku_name                      = var.redis_sku_name
-  redis_size                          = var.redis_size
-  redis_subnet_id                     = local.network.redis_subnet.id
-  redis_enable_authentication         = var.redis_enable_authentication
-  redis_enable_non_ssl_port           = var.redis_enable_non_ssl_port
-  redis_rdb_backup_enabled            = var.redis_rdb_backup_enabled
-  redis_rdb_backup_frequency          = var.redis_rdb_backup_frequency
-  redis_rdb_backup_max_snapshot_count = var.redis_rdb_backup_max_snapshot_count
-  redis_rdb_existing_storage_account  = var.redis_rdb_existing_storage_account != null ? data.azurerm_storage_account.tfe_redis_existing_storage_account[0].primary_blob_connection_string : null
+  redis = {
+    family                        = var.redis_family
+    sku_name                      = var.redis_sku_name
+    size                          = var.redis_size
+    use_password_auth             = var.redis_use_password_auth
+    rdb_backup_enabled            = var.redis_rdb_backup_enabled
+    rdb_backup_frequency          = var.redis_rdb_backup_frequency
+    rdb_backup_max_snapshot_count = var.redis_rdb_backup_max_snapshot_count
+    rdb_existing_storage_account  = var.redis_rdb_existing_storage_account != null ? data.azurerm_storage_account.tfe_redis_existing_storage_account[0].primary_blob_connection_string : null
+    minimum_tls_version           = var.redis_minimum_tls_version
+    use_tls                       = var.redis_use_tls
+  }
+
 
   tags = var.tags
 }
 
+# -----------------------------------------------------------------------------
 # Azure postgres
-# --------------
+# -----------------------------------------------------------------------------
 module "database" {
   source = "./modules/database"
   count  = local.demo_mode == true ? 0 : 1
@@ -185,53 +127,80 @@ module "database" {
   tags = var.tags
 }
 
-# Azure user data / cloud init used to install and configure TFE on instance(s)
 # -----------------------------------------------------------------------------
-module "user_data" {
-  source = "./modules/user_data"
+# TFE and Replicated settings to pass to the tfe_init module
+# -----------------------------------------------------------------------------
+module "settings" {
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=main"
 
-  # General
-  fqdn          = module.load_balancer.fqdn
-  active_active = local.active_active
+  # TFE Base Configuration
+  installation_type = var.installation_type
+  production_type   = var.production_type
+  iact_subnet_list  = var.iact_subnet_list
+  trusted_proxies   = local.trusted_proxies
+  release_sequence  = var.release_sequence
+  pg_extra_params   = var.pg_extra_params
+
+  extra_no_proxy = [
+    "127.0.0.1",
+    "169.254.169.254",
+    ".azure.com",
+    ".windows.net",
+    ".microsoft.com",
+    module.load_balancer.fqdn,
+    var.network_cidr
+  ]
+
+  # Replicated Base Configuration
+  hostname                    = module.load_balancer.fqdn
+  enable_active_active        = local.active_active
+  tfe_license_file_location   = var.tfe_license_file_location
+  tls_bootstrap_cert_pathname = var.tls_bootstrap_cert_pathname
+  tls_bootstrap_key_pathname  = var.tls_bootstrap_key_pathname
+  bypass_preflight_checks     = var.bypass_preflight_checks
 
   # Database
-  user_data_pg_dbname   = local.database.name
-  user_data_pg_netloc   = local.database.address
-  user_data_pg_user     = local.database.server.administrator_login
-  user_data_pg_password = local.database.server.administrator_password
+  pg_dbname   = local.database.name
+  pg_netloc   = local.database.address
+  pg_user     = local.database.server.administrator_login
+  pg_password = local.database.server.administrator_password
 
   # Redis
-  user_data_redis_host        = local.active_active == true ? module.redis[0].redis_hostname : null
-  user_data_redis_port        = local.active_active == true ? local.redis_port : null
-  user_data_redis_pass        = local.active_active == true ? module.redis[0].redis_pass : null
-  user_data_redis_use_tls     = local.active_active == true ? var.user_data_redis_use_tls : true
-  redis_enable_authentication = local.active_active == true ? var.redis_enable_authentication : true
+  redis_host              = local.redis.hostname
+  redis_pass              = local.redis.primary_access_key
+  redis_use_tls           = local.redis.hostname == null ? null : var.redis_use_tls
+  redis_use_password_auth = local.redis.hostname == null ? null : var.redis_use_password_auth
 
   # Azure
-  user_data_azure_account_key    = local.object_storage.storage_account_key
-  user_data_azure_account_name   = local.object_storage.storage_account_name
-  user_data_azure_container_name = local.object_storage.storage_account_container_name
+  azure_account_key    = local.object_storage.storage_account_key
+  azure_account_name   = local.object_storage.storage_account_name
+  azure_container_name = local.object_storage.storage_account_container_name
+}
 
-  # TFE
-  user_data_release_sequence  = var.user_data_release_sequence
-  tfe_license_secret          = var.tfe_license_secret
-  user_data_iact_subnet_list  = var.user_data_iact_subnet_list
-  user_data_trusted_proxies   = local.trusted_proxies
-  user_data_installation_type = var.user_data_installation_type
+# -----------------------------------------------------------------------------
+# Azure user data / cloud init used to install and configure TFE on instance(s)
+# -----------------------------------------------------------------------------
+module "tfe_init" {
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=main"
 
-  # Certificates
+  # TFE & Replicated Configuration data
+  tfe_configuration        = module.settings.tfe_configuration
+  replicated_configuration = module.settings.replicated_configuration
+
+  # Secrets
   ca_certificate_secret = var.ca_certificate_secret
   certificate_secret    = var.vm_certificate_secret
   key_secret            = var.vm_key_secret
+  tfe_license_secret    = var.tfe_license_secret
 
-  # Proxy
+  # Proxy information
   proxy_ip   = var.proxy_ip
   proxy_port = var.proxy_port
-  no_proxy   = [module.load_balancer.fqdn, var.network_cidr]
 }
 
+# -----------------------------------------------------------------------------
 # Azure bastion service used to connect to TFE instance(s)
-# --------------------------------------------------------
+# -----------------------------------------------------------------------------
 module "bastion" {
   source = "./modules/bastion"
   count  = var.create_bastion == true ? 1 : 0
@@ -245,8 +214,9 @@ module "bastion" {
   tags = var.tags
 }
 
+# -----------------------------------------------------------------------------
 # Azure load balancer
-# -------------------
+# -----------------------------------------------------------------------------
 module "load_balancer" {
   source = "./modules/load_balancer"
 
@@ -285,8 +255,9 @@ module "load_balancer" {
   tags = var.tags
 }
 
+# -----------------------------------------------------------------------------
 # Azure virtual machine scale set
-# -------------------------------
+# -----------------------------------------------------------------------------
 module "vm" {
   source = "./modules/vm"
 
@@ -302,7 +273,7 @@ module "vm" {
   vm_subnet_id            = local.network.private_subnet.id
   vm_user                 = var.vm_user
   vm_public_key           = var.vm_public_key == null ? tls_private_key.tfe_ssh[0].public_key_openssh : var.vm_public_key
-  vm_userdata_script      = module.user_data.tfe_userdata_base64_encoded
+  vm_userdata_script      = module.tfe_init.tfe_userdata_base64_encoded
   vm_node_count           = var.vm_node_count
   vm_vmss_scale_in_policy = var.vm_vmss_scale_in_policy
 

@@ -251,6 +251,17 @@ variable "database_availability_zone" {
   }
 }
 
+variable "pg_extra_params" {
+  default     = null
+  type        = string
+  description = <<-EOF
+  Parameter keywords of the form param1=value1&param2=value2 to support additional options that
+  may be necessary for your specific PostgreSQL server. Allowed values are documented on the
+  PostgreSQL site. An additional restriction on the sslmode parameter is that only the require,
+  verify-full, verify-ca, and disable values are allowed.
+  EOF
+}
+
 # Load Balancer
 # -------------
 variable "load_balancer_type" {
@@ -333,13 +344,13 @@ variable "load_balancer_waf_max_request_body_size_kb" {
 variable "redis_family" {
   default     = "P"
   type        = string
-  description = "(Required) The SKU family/pricing group to use. Valid values are C (for Basic/Standard SKU family) and P (for Premium)"
+  description = "The SKU family/pricing group to use. Valid values are C (for Basic/Standard SKU family) and P (for Premium)"
 }
 
 variable "redis_sku_name" {
   default     = "Premium"
   type        = string
-  description = "(Required) The SKU of Redis to use. Possible values are Basic, Standard and Premium."
+  description = "The SKU of Redis to use. Possible values are Basic, Standard and Premium."
 }
 
 variable "redis_size" {
@@ -348,13 +359,7 @@ variable "redis_size" {
   description = "The size of the Redis cache to deploy. Valid values for a SKU family of C (Basic/Standard) are 0, 1, 2, 3, 4, 5, 6, and for P (Premium) family are 1, 2, 3, 4."
 }
 
-variable "redis_enable_non_ssl_port" {
-  default     = false
-  type        = bool
-  description = "Enable the non-SSL port (6379)"
-}
-
-variable "redis_enable_authentication" {
+variable "redis_use_password_auth" {
   default     = true
   type        = bool
   description = "If set to false, the Redis instance will be accessible without authentication. enable_authentication can only be set to false if a subnet_id is specified; and only works if there aren't existing instances within the subnet with enable_authentication set to true."
@@ -363,31 +368,43 @@ variable "redis_enable_authentication" {
 variable "redis_rdb_backup_enabled" {
   default     = false
   type        = bool
-  description = "(Optional) Is Backup Enabled? Only supported on Premium SKU's. If rdb_backup_enabled is true and redis_rdb_storage_connection_string is null, a new, Premium storage account will be created."
+  description = "Is Backup Enabled? Only supported on Premium SKU's. If rdb_backup_enabled is true and redis_rdb_storage_connection_string is null, a new, Premium storage account will be created."
 }
 
 variable "redis_rdb_backup_frequency" {
   default     = null
   type        = number
-  description = "(Optional) The Backup Frequency in Minutes. Only supported on Premium SKU's. Possible values are: 15, 30, 60, 360, 720 and 1440."
+  description = "The Backup Frequency in Minutes. Only supported on Premium SKU's. Possible values are: 15, 30, 60, 360, 720 and 1440."
 }
 
 variable "redis_rdb_backup_max_snapshot_count" {
   default     = null
   type        = number
-  description = "(Optional) The maximum number of snapshots to create as a backup. Only supported for Premium SKU's."
+  description = "The maximum number of snapshots to create as a backup. Only supported for Premium SKU's."
 }
 
 variable "redis_rdb_existing_storage_account" {
   default     = null
   type        = string
-  description = "(Optional) Name of an existing Premium Storage Account for data encryption at rest. If value is null, a new, Premium storage account will be created."
+  description = "Name of an existing Premium Storage Account for data encryption at rest. If value is null, a new, Premium storage account will be created."
 }
 
 variable "redis_rdb_existing_storage_account_rg" {
   default     = null
   type        = string
-  description = "(Optional) Name of the resource group that contains the existing Premium Storage Account for data encryption at rest."
+  description = "Name of the resource group that contains the existing Premium Storage Account for data encryption at rest."
+}
+
+variable "redis_use_tls" {
+  default     = false
+  type        = bool
+  description = "Boolean to determine if the Redis service requires TLS."
+}
+
+variable "redis_minimum_tls_version" {
+  default     = "1.2"
+  type        = string
+  description = "The minimum TLS version. '1.2' is suggested."
 }
 
 # VM
@@ -461,34 +478,62 @@ variable "vm_vmss_scale_in_policy" {
 
 # User Data
 # ---------
-variable "user_data_installation_type" {
+variable "tfe_license_file_location" {
+  default     = "/etc/terraform-enterprise.rli"
+  type        = string
+  description = "The path on the TFE instance to put the TFE license."
+}
+
+variable "tls_bootstrap_cert_pathname" {
+  default     = null
+  type        = string
+  description = "The path on the TFE instance to put the certificate. ex. '/var/lib/terraform-enterprise/certificate.pem'"
+}
+
+variable "tls_bootstrap_key_pathname" {
+  default     = null
+  type        = string
+  description = "The path on the TFE instance to put the key. ex. '/var/lib/terraform-enterprise/key.pem'"
+}
+
+variable "installation_type" {
   default     = "production"
   type        = string
   description = "Installation type for Terraform Enterprise"
 
   validation {
     condition = (
-      var.user_data_installation_type == "poc" ||
-      var.user_data_installation_type == "production"
+      var.installation_type == "poc" ||
+      var.installation_type == "production"
     )
 
     error_message = "The installation type must be 'production' (recommended) or 'poc' (only used for demo-mode proofs of concept)."
   }
 }
 
-variable "user_data_release_sequence" {
+variable "production_type" {
   default     = null
   type        = string
+  description = "If you have chosen 'production' for the installation_type, production_type is required: external or disk"
+
+  validation {
+    condition = (
+      var.production_type == "external" ||
+      var.production_type == "disk" ||
+      var.production_type == null
+    )
+
+    error_message = "The production type must be 'external' or 'disk'."
+  }
+}
+
+variable "release_sequence" {
+  default     = null
+  type        = number
   description = "Terraform Enterprise release sequence"
 }
 
-variable "user_data_redis_use_tls" {
-  default     = true
-  type        = bool
-  description = "Boolean to determine if TLS should be used"
-}
-
-variable "user_data_iact_subnet_list" {
+variable "iact_subnet_list" {
   default     = []
   description = <<-EOD
   A list of IP address ranges which will be authorized to access the IACT. The ranges must be expressed
@@ -497,13 +542,19 @@ variable "user_data_iact_subnet_list" {
   type        = list(string)
 }
 
-variable "user_data_trusted_proxies" {
+variable "trusted_proxies" {
   default     = []
   description = <<-EOD
   A list of IP address ranges which will be considered safe to ignore when evaluating the IP addresses of requests like
   those made to the IACT endpoint.
   EOD
   type        = list(string)
+}
+
+variable "bypass_preflight_checks" {
+  default     = false
+  type        = bool
+  description = "Allow the TFE application to start without preflight checks."
 }
 
 # TLS Certificates

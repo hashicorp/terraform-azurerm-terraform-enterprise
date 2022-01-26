@@ -25,22 +25,23 @@ module "standalone_external" {
   resource_group_name_dns = "ptfedev-com-dns-tls"
 
   # Bootstrapping resources
-  load_balancer_certificate = data.azurerm_key_vault_certificate.load_balancer
-  tfe_license_secret        = module.secrets.tfe_license
-  vm_certificate_secret     = data.azurerm_key_vault_secret.vm_certificate
-  vm_key_secret             = data.azurerm_key_vault_secret.vm_key
+  load_balancer_certificate   = data.azurerm_key_vault_certificate.load_balancer
+  tfe_license_secret          = module.secrets.tfe_license
+  vm_certificate_secret       = data.azurerm_key_vault_secret.vm_certificate
+  vm_key_secret               = data.azurerm_key_vault_secret.vm_key
+  tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"
+  tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
 
-  # Standalone Demo Mode Scenario
-  user_data_iact_subnet_list  = ["0.0.0.0/0"]
-  vm_node_count               = 1
-  vm_sku                      = "Standard_D4_v3"
-  vm_image_id                 = "ubuntu"
-  load_balancer_public        = true
-  load_balancer_type          = "application_gateway"
-  user_data_installation_type = "production"
-  redis_enable_authentication = false
-  user_data_redis_use_tls     = false
+  # Standalone Demo External Scenario
+  installation_type    = "production"
+  production_type      = "external"
+  iact_subnet_list     = ["0.0.0.0/0"]
+  vm_node_count        = 1
+  vm_sku               = "Standard_D4_v3"
+  vm_image_id          = "ubuntu"
+  load_balancer_public = true
+  load_balancer_type   = "application_gateway"
 
-  create_bastion = false
+  create_bastion = true
   tags           = local.common_tags
 }

@@ -99,13 +99,13 @@ resource "azurerm_key_vault_access_policy" "tfe_kv_acl" {
   object_id    = azurerm_user_assigned_identity.tfe_ag_msi[0].principal_id
 
   certificate_permissions = [
-    "get",
-    "list"
+    "Get",
+    "List"
   ]
 
   secret_permissions = [
-    "get",
-    "list"
+    "Get",
+    "List"
   ]
 }
 

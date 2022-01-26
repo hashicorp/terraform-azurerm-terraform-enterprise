@@ -6,7 +6,7 @@ output "tfe_application_url" {
 }
 
 output "login_url" {
-  value       = "https://${module.load_balancer.fqdn}/admin/account/new?token=${module.user_data.user_token.value}"
+  value       = "https://${module.load_balancer.fqdn}/admin/account/new?token=${module.settings.tfe_configuration.user_token.value}"
   description = "Login URL to setup the TFE instance once it is initialized"
 }
 
@@ -72,29 +72,29 @@ output "bastion_host_dns_name" {
 # User_data
 # ---------
 output "tfe_userdata_base64_encoded" {
-  value       = module.user_data.tfe_userdata_base64_encoded
-  description = "The Base64 encoded User Data script built from modules/user_data/templates/tfe.sh.tpl"
+  value       = module.tfe_init.tfe_userdata_base64_encoded
+  description = "The Base64 encoded User Data script built from terraform-random-tfe-utility/modules/tfe_init/templates/tfe.sh.tpl"
 }
 
 output "tfe_console_password" {
-  value       = module.user_data.tfe_console_password
+  value       = module.settings.replicated_configuration.DaemonAuthenticationPassword
   description = "The password for the TFE console"
 }
 
 # Redis
 # -----
 output "redis_hostname" {
-  value       = local.active_active == true ? module.redis[0].redis_hostname : null
+  value       = local.active_active == true ? module.redis[0].redis_cache.hostname : null
   description = "The Hostname of the Redis Instance"
 }
 
 output "redis_ssl_port" {
-  value       = local.active_active == true ? module.redis[0].redis_ssl_port : null
+  value       = local.active_active == true ? module.redis[0].redis_cache.ssl_port : null
   description = "The SSL Port of the Redis Instance"
 }
 
 output "redis_pass" {
-  value       = local.active_active == true ? module.redis[0].redis_pass : null
+  value       = local.active_active == true ? module.redis[0].redis_cache.primary_access_key : null
   description = "The Primary Access Key for the Redis Instance"
 }
 
