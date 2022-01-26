@@ -90,7 +90,6 @@ module "redis" {
     family                        = var.redis_family
     sku_name                      = var.redis_sku_name
     size                          = var.redis_size
-    enable_non_ssl_port           = var.redis_enable_non_ssl_port
     use_password_auth             = var.redis_use_password_auth
     rdb_backup_enabled            = var.redis_rdb_backup_enabled
     rdb_backup_frequency          = var.redis_rdb_backup_frequency
@@ -167,11 +166,10 @@ module "settings" {
   pg_password = local.database.server.administrator_password
 
   # Redis
-  redis_host                = local.redis.host
-  redis_pass                = local.redis.pass
-  redis_enable_non_ssl_port = local.redis.enable_non_ssl_port
-  redis_use_tls             = local.redis.use_tls
-  redis_use_password_auth   = local.redis.use_password_auth
+  redis_host              = local.redis.hostname
+  redis_pass              = local.redis.primary_access_key
+  redis_use_tls           = local.redis.hostname == null ? null : var.redis_use_tls
+  redis_use_password_auth = local.redis.hostname == null ? null : var.redis_use_password_auth
 
   # Azure
   azure_account_key    = local.object_storage.storage_account_key

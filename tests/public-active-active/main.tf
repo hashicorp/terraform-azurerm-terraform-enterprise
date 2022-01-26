@@ -30,7 +30,6 @@ module "public_active_active" {
   vm_image_id               = "ubuntu"
   load_balancer_public      = true
   load_balancer_type        = "application_gateway"
-  redis_enable_non_ssl_port = true
   redis_use_password_auth   = false
   redis_use_tls             = false
 

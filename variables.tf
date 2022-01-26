@@ -359,12 +359,6 @@ variable "redis_size" {
   description = "The size of the Redis cache to deploy. Valid values for a SKU family of C (Basic/Standard) are 0, 1, 2, 3, 4, 5, 6, and for P (Premium) family are 1, 2, 3, 4."
 }
 
-variable "redis_enable_non_ssl_port" {
-  default     = false
-  type        = bool
-  description = "Enable the non-SSL port (6379)"
-}
-
 variable "redis_use_password_auth" {
   default     = true
   type        = bool

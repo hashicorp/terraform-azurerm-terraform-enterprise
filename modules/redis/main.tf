@@ -13,7 +13,7 @@ resource "azurerm_redis_cache" "tfe_redis" {
   family    = var.redis.family
   sku_name  = var.redis.sku_name
 
-  enable_non_ssl_port = var.redis.enable_non_ssl_port
+  enable_non_ssl_port = var.redis.use_tls == true ? false : true
   minimum_tls_version = var.redis.minimum_tls_version
 
   redis_configuration {

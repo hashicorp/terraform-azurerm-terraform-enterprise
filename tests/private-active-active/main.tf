@@ -50,7 +50,6 @@ module "private_active_active" {
   load_balancer_type        = "application_gateway"
   load_balancer_sku_name    = "WAF_v2"
   load_balancer_sku_tier    = "WAF_v2"
-  redis_enable_non_ssl_port = true
   redis_use_password_auth   = true
   redis_use_tls             = false
   installation_type         = "production"

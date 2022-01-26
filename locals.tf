@@ -36,13 +36,10 @@ locals {
   # Redis
   # -----
   redis = try(
-    module.redis[0],
+    module.redis[0].redis_cache,
     {
-      host                = null
-      pass                = null
-      enable_non_ssl_port = null
-      use_tls             = null
-      use_password_auth   = null
+      hostname            = null
+      primary_access_key  = null
     }
   )
 
