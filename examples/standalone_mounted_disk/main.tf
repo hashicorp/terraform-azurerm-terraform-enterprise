@@ -11,18 +11,18 @@ module "secrets" {
   key_vault_id = var.key_vault_id
 
   tfe_license = {
-    name = "tfe-license-${local.friendly_name_prefix}"
+    name = "tfe-license-${random_string.friendly_name.id}"
     path = var.license_file
   }
 }
 
-module "standalone_external" {
+module "standalone_mounted_disk" {
   source = "../../"
 
-  domain_name             = "team-private-terraform-enterprise.azure.ptfedev.com"
-  friendly_name_prefix    = local.friendly_name_prefix
-  location                = "Central US"
-  resource_group_name_dns = "ptfedev-com-dns-tls"
+  domain_name             = var.domain_name
+  friendly_name_prefix    = random_string.friendly_name.id
+  location                = var.location
+  resource_group_name_dns = var.resource_group_name_dns
 
   # Bootstrapping resources
   load_balancer_certificate   = data.azurerm_key_vault_certificate.load_balancer
@@ -32,16 +32,16 @@ module "standalone_external" {
   tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"
   tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
 
-  # Standalone External Scenario
+  # Standalone Mounted Disk Mode Example
   installation_type    = "production"
-  production_type      = "external"
-  iact_subnet_list     = ["0.0.0.0/0"]
+  production_type      = "disk"
+  disk_path            = "/opt/hashicorp/data"
+  iact_subnet_list     = var.iact_subnet_list
   vm_node_count        = 1
   vm_sku               = "Standard_D4_v3"
   vm_image_id          = "ubuntu"
   load_balancer_public = true
   load_balancer_type   = "application_gateway"
 
-  create_bastion = true
-  tags           = local.common_tags
+  tags = var.tags
 }

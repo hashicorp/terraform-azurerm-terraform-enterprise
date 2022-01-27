@@ -240,7 +240,7 @@ resource "azurerm_subnet" "tfe_network_bastion_subnet" {
 # Redis subnet
 # -------------
 resource "azurerm_subnet" "tfe_network_redis_subnet" {
-  count = var.active_active == true && var.demo_mode == false ? 1 : 0
+  count = var.active_active == true && var.disk_mode == false ? 1 : 0
 
   name                = "${var.friendly_name_prefix}-redis-subnet"
   resource_group_name = var.resource_group_name
@@ -252,14 +252,14 @@ resource "azurerm_subnet" "tfe_network_redis_subnet" {
 # Database private DNS zone and subnet
 # -----------------
 resource "azurerm_private_dns_zone" "database" {
-  count = var.demo_mode == true ? 0 : 1
+  count = var.disk_mode == true ? 0 : 1
 
   name                = "${var.friendly_name_prefix}.postgres.database.azure.com"
   resource_group_name = var.resource_group_name
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "database" {
-  count = var.demo_mode == true ? 0 : 1
+  count = var.disk_mode == true ? 0 : 1
 
   name                  = "${var.friendly_name_prefix}-database"
   private_dns_zone_name = azurerm_private_dns_zone.database[0].name
@@ -268,7 +268,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "database" {
 }
 
 resource "azurerm_subnet" "database" {
-  count = var.demo_mode == true ? 0 : 1
+  count = var.disk_mode == true ? 0 : 1
 
   name                 = "${var.friendly_name_prefix}-database-subnet"
   resource_group_name  = var.resource_group_name

@@ -5,7 +5,7 @@ locals {
   # ----------------
   # Determine whether or not TFE in active-active mode based on node count, by default standalone is assumed
   active_active = var.vm_node_count >= 2 ? true : false
-  demo_mode     = var.installation_type == "poc" ? true : false
+  disk_mode     = var.production_type == "disk" ? true : false
 
   # Network
   # -------
