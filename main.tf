@@ -28,7 +28,7 @@ resource "tls_private_key" "tfe_ssh" {
 # -----------------------------------------------------------------------------
 module "object_storage" {
   source = "./modules/object_storage"
-  count  = local.disk_mode == true ? 0 : 1
+  count  = local.disk_mode == true || var.installation_type == "poc" ? 0 : 1
 
   friendly_name_prefix = var.friendly_name_prefix
   resource_group_name  = module.resource_groups.resource_group_name
@@ -108,7 +108,7 @@ module "redis" {
 # -----------------------------------------------------------------------------
 module "database" {
   source = "./modules/database"
-  count  = local.disk_mode == true ? 0 : 1
+  count  = local.disk_mode == true || var.installation_type == "poc" ? 0 : 1
 
   friendly_name_prefix = var.friendly_name_prefix
   resource_group_name  = module.resource_groups.resource_group_name
