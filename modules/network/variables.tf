@@ -16,6 +16,11 @@ variable "disk_mode" {
   description = "Is the production type for Terraform Enterprise 'disk'?"
 }
 
+variable "enable_ssh" {
+  type        = bool
+  description = "Enable SSH access on port 22 to the VM instance (standalone, load_balancer deployments only, not App GW). This is ***NOT RECOMMENDED*** for production deployments."
+}
+
 # Provider
 # --------
 variable "location" {
@@ -97,6 +102,7 @@ variable "load_balancer_public" {
 }
 
 # Tagging
+# -------
 variable "tags" {
   default     = {}
   type        = map(string)

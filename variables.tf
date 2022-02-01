@@ -67,6 +67,12 @@ variable "create_bastion" {
 
 # Network
 # -------
+variable "enable_ssh" {
+  default     = false
+  type        = bool
+  description = "Enable SSH access on port 22 to the VM instance (standalone, load_balancer deployments only, not App GW). This is ***NOT RECOMMENDED*** for production deployments."
+}
+
 variable "network_private_subnet_id" {
   default     = null
   type        = string

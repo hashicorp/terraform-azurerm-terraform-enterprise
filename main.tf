@@ -57,6 +57,7 @@ module "network" {
   location             = var.location
 
   active_active = local.active_active
+  enable_ssh    = var.enable_ssh
 
   network_allow_range          = var.network_allow_range
   network_bastion_subnet_cidr  = var.network_bastion_subnet_cidr
@@ -234,6 +235,7 @@ module "load_balancer" {
   dns_create_record       = var.dns_create_record
   tenant_id               = data.azurerm_client_config.current.tenant_id
   dns_external_fqdn       = var.dns_external_fqdn
+  enable_ssh              = var.enable_ssh
 
   # Secrets
   ca_certificate_secret = var.ca_certificate_secret

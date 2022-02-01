@@ -406,3 +406,29 @@ resource "azurerm_lb_rule" "tfe_load_balancer_rule_app" {
   backend_address_pool_id        = azurerm_lb_backend_address_pool.tfe_load_balancer_be[0].id
   backend_port                   = 443
 }
+
+resource "azurerm_lb_probe" "tfe_load_balancer_probe_ssh" {
+  count = var.enable_ssh && var.load_balancer_type == "load_balancer" ? 1 : 0
+
+  name                = "${var.friendly_name_prefix}-lb-probe-ssh"
+  resource_group_name = var.resource_group_name
+
+  loadbalancer_id = azurerm_lb.tfe_load_balancer[0].id
+  protocol        = "Tcp"
+  port            = 22
+}
+
+resource "azurerm_lb_rule" "tfe_load_balancer_rule_ssh" {
+  count = var.enable_ssh && var.load_balancer_type == "load_balancer" ? 1 : 0
+
+  name                = "${var.friendly_name_prefix}-lb-rule-ssh"
+  resource_group_name = var.resource_group_name
+
+  loadbalancer_id                = azurerm_lb.tfe_load_balancer[0].id
+  probe_id                       = azurerm_lb_probe.tfe_load_balancer_probe_ssh[0].id
+  protocol                       = "Tcp"
+  frontend_ip_configuration_name = "${var.friendly_name_prefix}-lb-fe"
+  frontend_port                  = 22
+  backend_address_pool_id        = azurerm_lb_backend_address_pool.tfe_load_balancer_be[0].id
+  backend_port                   = 22
+}

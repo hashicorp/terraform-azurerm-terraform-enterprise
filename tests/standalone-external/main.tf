@@ -40,8 +40,9 @@ module "standalone_external" {
   vm_sku               = "Standard_D4_v3"
   vm_image_id          = "ubuntu"
   load_balancer_public = true
-  load_balancer_type   = "application_gateway"
+  load_balancer_type   = "load_balancer"
 
-  create_bastion = true
+  enable_ssh     = true
+  create_bastion = false
   tags           = local.common_tags
 }
