@@ -34,12 +34,6 @@ output "fqdn" {
   description = "The FQDN of the TFE instance(s)."
 }
 
-output "vmss" {
-  value       = module.vm.vmss
-  description = "The Virtual Machine Scale Set on which TFE runs."
-  sensitive   = true
-}
-
 # Service Accounts
 # ----------------
 output "storage_account_name" {
