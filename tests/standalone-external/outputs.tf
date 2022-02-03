@@ -29,9 +29,3 @@ output "ssh_private_key" {
 
   description = "The pathname of the private SSH key."
 }
-
-output "vmss" {
-  value       = module.standalone_external.vmss
-  description = "The Virtual Machine Scale Set on which TFE runs."
-  sensitive   = true
-}
