@@ -34,15 +34,3 @@ output "database_private_dns_zone" {
 
   description = "The private DNS zone dedicated to the database."
 }
-
-output "tfe_network_private_nsg" {
-  value = azurerm_network_security_group.tfe_network_private_nsg
-
-  description = "The network security group for the private subnet."
-}
-
-output "tfe_network_frontend_nsg" {
-  value = azurerm_network_security_group.tfe_network_frontend_nsg
-
-  description = "The network security group for the private subnet."
-}
