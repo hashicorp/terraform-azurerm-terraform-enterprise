@@ -22,6 +22,11 @@ variable "active_active" {
   description = "True if TFE running in active-active configuration"
 }
 
+variable "enable_ssh" {
+  type        = bool
+  description = "Enable SSH access on port 22 to the VM instance (standalone, load_balancer deployments only, not App GW). This is ***NOT RECOMMENDED*** for production deployments."
+}
+
 # DNS
 # ---
 variable "dns_create_record" {
@@ -112,7 +117,6 @@ variable "load_balancer_enable_http2" {
   type        = bool
   description = "Determine if HTTP2 enabled on Application Gateway"
 }
-
 
 variable "load_balancer_sku_name" {
   default     = "Standard_v2"

@@ -29,6 +29,11 @@ output "network" {
   description = "The virtual network used for all resources"
 }
 
+output "fqdn" {
+  value       = module.load_balancer.fqdn
+  description = "The FQDN of the TFE instance(s)."
+}
+
 # Service Accounts
 # ----------------
 output "storage_account_name" {

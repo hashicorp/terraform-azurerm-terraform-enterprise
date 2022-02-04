@@ -68,7 +68,7 @@ resource "azurerm_network_security_group" "tfe_network_private_nsg" {
 
   # Allow inbound SSH from bastion subnet
   dynamic "security_rule" {
-    for_each = var.create_bastion == true ? [1] : []
+    for_each = var.create_bastion || var.enable_ssh && var.load_balancer_type == "load_balancer" ? [1] : []
 
     content {
       name      = "allow-private-inbound-ssh"
@@ -77,7 +77,7 @@ resource "azurerm_network_security_group" "tfe_network_private_nsg" {
       access    = "Allow"
       protocol  = "Tcp"
 
-      source_address_prefix = var.network_bastion_subnet_cidr
+      source_address_prefix = var.enable_ssh ? var.network_allow_range : var.network_bastion_subnet_cidr
       source_port_range     = "*"
 
       destination_port_range     = "22"
