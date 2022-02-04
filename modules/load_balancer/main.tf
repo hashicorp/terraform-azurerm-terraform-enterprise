@@ -408,7 +408,7 @@ resource "azurerm_lb_rule" "tfe_load_balancer_rule_app" {
 }
 
 resource "azurerm_lb_probe" "tfe_load_balancer_probe_ssh" {
-  count = var.enable_ssh && var.load_balancer_type == "load_balancer" ? 1 : 0
+  count = var.enable_ssh && var.load_balancer_type == "load_balancer" && !var.active_active ? 1 : 0
 
   name                = "${var.friendly_name_prefix}-lb-probe-ssh"
   resource_group_name = var.resource_group_name
@@ -419,7 +419,7 @@ resource "azurerm_lb_probe" "tfe_load_balancer_probe_ssh" {
 }
 
 resource "azurerm_lb_rule" "tfe_load_balancer_rule_ssh" {
-  count = var.enable_ssh && var.load_balancer_type == "load_balancer" ? 1 : 0
+  count = var.enable_ssh && var.load_balancer_type == "load_balancer" && !var.active_active ? 1 : 0
 
   name                = "${var.friendly_name_prefix}-lb-rule-ssh"
   resource_group_name = var.resource_group_name
