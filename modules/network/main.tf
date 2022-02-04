@@ -68,7 +68,7 @@ resource "azurerm_network_security_group" "tfe_network_private_nsg" {
 
   # Allow inbound SSH from bastion subnet
   dynamic "security_rule" {
-    for_each = var.create_bastion || var.enable_ssh && var.load_balancer_type == "load_balancer" ? [1] : []
+    for_each = var.create_bastion || var.enable_ssh && var.load_balancer_type == "load_balancer" && !var.active_active ? [1] : []
 
     content {
       name      = "allow-private-inbound-ssh"
