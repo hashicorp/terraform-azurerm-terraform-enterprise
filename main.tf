@@ -183,7 +183,7 @@ module "settings" {
 # Azure user data / cloud init used to install and configure TFE on instance(s)
 # -----------------------------------------------------------------------------
 module "tfe_init" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=more-settings"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=more-settings"
 
   # TFE & Replicated Configuration data
   tfe_configuration        = module.settings.tfe_configuration
