@@ -174,9 +174,9 @@ module "settings" {
   redis_use_password_auth = local.redis.hostname == null ? null : var.redis_use_password_auth
 
   # Azure
-  azure_account_key    = local.object_storage.storage_account_key
-  azure_account_name   = local.object_storage.storage_account_name
-  azure_container_name = local.object_storage.storage_account_container_name
+  azure_account_key  = local.object_storage.storage_account_key
+  azure_account_name = local.object_storage.storage_account_name
+  azure_container    = local.object_storage.storage_account_container_name
 }
 
 # -----------------------------------------------------------------------------
