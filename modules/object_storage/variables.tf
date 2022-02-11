@@ -30,15 +30,28 @@ variable "storage_account_container_name" {
 }
 
 variable "storage_account_tier" {
-  default     = "Standard"
   type        = string
   description = "Storage account tier Standard or Premium"
 }
 
 variable "storage_account_replication_type" {
-  default     = "ZRS"
   type        = string
-  description = "Storage account type LRS, GRS, RAGRS, ZRS"
+  description = <<-EOD
+  Storage account type LRS, GRS, RAGRS, ZRS. NOTE: This is defaulted to 'GRS' because of a known
+  intermittent error sited here: https://github.com/hashicorp/terraform-provider-azurerm/issues/5299
+  EOD
+
+  validation {
+    condition = (
+      var.storage_account_replication_type == "LRS" ||
+      var.storage_account_replication_type == "GRS" ||
+      var.storage_account_replication_type == "RAGRS" ||
+      var.storage_account_replication_type == "ZRS" ||
+      var.storage_account_replication_type == null
+    )
+
+    error_message = "Supported values for storage_account_replication_type are 'LRS', 'GRS', 'RAGRS', and 'ZRS'."
+  }
 }
 
 variable "storage_account_key" {
@@ -54,7 +67,6 @@ variable "storage_account_primary_blob_connection_string" {
 # Tagging
 # -------
 variable "tags" {
-  default     = {}
   type        = map(string)
   description = "Map of tags for resource"
 }

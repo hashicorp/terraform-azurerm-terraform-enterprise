@@ -195,9 +195,24 @@ variable "storage_account_tier" {
 }
 
 variable "storage_account_replication_type" {
-  default     = "ZRS"
+  default     = "GRS"
   type        = string
-  description = "Storage account type LRS, GRS, RAGRS, ZRS"
+  description = <<-EOD
+  Storage account type LRS, GRS, RAGRS, ZRS. NOTE: This is defaulted to 'GRS' because of a known
+  intermittent error sited here: https://github.com/hashicorp/terraform-provider-azurerm/issues/5299
+  EOD
+
+  validation {
+    condition = (
+      var.storage_account_replication_type == "LRS" ||
+      var.storage_account_replication_type == "GRS" ||
+      var.storage_account_replication_type == "RAGRS" ||
+      var.storage_account_replication_type == "ZRS" ||
+      var.storage_account_replication_type == null
+    )
+
+    error_message = "Supported values for storage_account_replication_type are 'LRS', 'GRS', 'RAGRS', and 'ZRS'."
+  }
 }
 
 # Database
