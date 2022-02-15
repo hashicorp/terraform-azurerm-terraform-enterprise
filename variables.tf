@@ -160,6 +160,30 @@ variable "tfe_license_secret" {
   description = "The Key Vault secret under which the Base64 encoded TFE license is stored."
 }
 
+variable "airgap_url" {
+  default     = null
+  type        = string
+  description = "(Optional) The URL of a Replicated airgap package for Terraform Enterprise."
+}
+
+variable "tfe_license_bootstrap_airgap_package_path" {
+  default     = "/var/lib/ptfe/ptfe.airgap"
+  type        = string
+  description = <<-EOD
+  (Required if airgap_url is not null) The URL of a Replicated airgap package for Terraform
+  Enterprise.
+  EOD
+}
+
+variable "bootstrap_airgap_installation" {
+  default     = null
+  type        = bool
+  description = <<-EOD
+  (Optional if airgap_url is not null) A boolean to determine if the prerequisites for an airgapped
+  installation should be installed.
+  EOD
+}
+
 # Object Storage
 # --------------
 variable "storage_account_name" {
