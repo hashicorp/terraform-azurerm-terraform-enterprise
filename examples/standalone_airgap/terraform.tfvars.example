@@ -1,0 +1,19 @@
+license_file = "/full/path/to/my/tfe/license.rli"
+key_vault_id = "/subscriptions/*******-my-azure-sub-id-*****/resourceGroups/my-rg/providers/Microsoft.KeyVault/vaults/my-kv"
+airgap_url   = "https://an-accessible-place-to-get-my-airgap-bundle.com/v202201-1.airgap"
+
+domain_name             = "my.domain.com"
+location                = "Central US"
+resource_group_name_dns = "existing-dns-rg-name"
+iact_subnet_list        = ["0.0.0.0/0"] # uh-oh, this is only for short-lived dev environments
+
+vm_certificate_secret_name     = "my-certificate-pem"
+vm_key_secret_name             = "my-private-key-pem"
+
+tags = {
+  Owner       = "Your Name"
+  Environment = "standalone-airgap"
+  Description = "Standalone, Mounted Disk, Airgapped scenario"
+  Repository  = "hashicorp/terraform-azurerm-terraform-enterprise"
+  Team        = "Your Team Name"
+}

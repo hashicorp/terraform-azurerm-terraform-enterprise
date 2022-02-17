@@ -28,7 +28,6 @@ module "standalone_airgap" {
   airgap_url                                = var.airgap_url
   bootstrap_airgap_installation             = true
   tfe_license_bootstrap_airgap_package_path = "/var/lib/ptfe/ptfe.airgap"
-  load_balancer_certificate                 = data.azurerm_key_vault_certificate.load_balancer
   tfe_license_secret                        = module.secrets.tfe_license
   vm_certificate_secret                     = data.azurerm_key_vault_secret.vm_certificate
   vm_key_secret                             = data.azurerm_key_vault_secret.vm_key

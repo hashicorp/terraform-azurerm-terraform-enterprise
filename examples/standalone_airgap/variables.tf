@@ -36,11 +36,6 @@ variable "iact_subnet_list" {
   type        = list(string)
 }
 
-variable "load_balancer_certificate_name" {
-  type        = string
-  description = "The name of a Key Vault certificate which will be attached to the application gateway."
-}
-
 variable "vm_certificate_secret_name" {
   type        = string
   description = <<-EOD
