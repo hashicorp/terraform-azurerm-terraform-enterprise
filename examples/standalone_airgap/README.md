@@ -20,7 +20,6 @@ this example assumes that the following resources exist:
 
 - a DNS zone
 - an Azure Key Vault in which the following are stored:
-  - TFE CA certificate (certificate)
   - Key Vault secret which contains the Base64 encoded version of a PEM encoded public
     certificate for the Virtual Machine Scale Set
   - Key Vault secret which contains the Base64 encoded version of a PEM encoded private
