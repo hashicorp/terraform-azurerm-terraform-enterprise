@@ -14,7 +14,9 @@ installation with the following traits.
 
 ## Pre-requisites
 
-This test assumes the following resources exist.
+This example assumes that the user wishes for the prerequisites to be installed, too,
+by setting the boolean variable `bootstrap_airgap_installation` to `true`. When `true`,
+this example assumes that the following resources exist:
 
 - a DNS zone
 - an Azure Key Vault in which the following are stored:
