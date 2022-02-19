@@ -5,7 +5,18 @@ resource "random_string" "friendly_name" {
   special = false
 }
 
-module "standalone_airgap" {
+module "secrets" {
+  source = "../../fixtures/secrets"
+
+  key_vault_id = var.key_vault_id
+
+  tfe_license = {
+    name = "tfe-license-${random_string.friendly_name.id}"
+    path = var.license_file
+  }
+}
+
+module "standalone_airgap_dev" {
   source = "../../"
 
   domain_name             = var.domain_name
@@ -14,7 +25,9 @@ module "standalone_airgap" {
   resource_group_name_dns = var.resource_group_name_dns
 
   # Bootstrapping resources
+  airgap_url                                = var.airgap_url
   tfe_license_bootstrap_airgap_package_path = "/var/lib/ptfe/ptfe.airgap"
+  tfe_license_secret                        = module.secrets.tfe_license
   tls_bootstrap_cert_pathname               = "/var/lib/terraform-enterprise/certificate.pem"
   tls_bootstrap_key_pathname                = "/var/lib/terraform-enterprise/key.pem"
 
@@ -25,7 +38,7 @@ module "standalone_airgap" {
   iact_subnet_list     = var.iact_subnet_list
   vm_node_count        = 1
   vm_sku               = "Standard_D4_v3"
-  vm_image_id          = var.vm_image_id
+  vm_image_id          = "ubuntu"
   load_balancer_public = true
   load_balancer_type   = "load_balancer"
 

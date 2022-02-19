@@ -132,7 +132,8 @@ module "database" {
 # TFE and Replicated settings to pass to the tfe_init module
 # -----------------------------------------------------------------------------
 module "settings" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=main"
+  # source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=ah-airgap-function"
+  source = "/Users/anniehedgpeth/source/terraform-random-tfe-utility/modules/settings"
 
   # TFE Base Configuration
   installation_type = var.installation_type
@@ -156,7 +157,6 @@ module "settings" {
   # Replicated Base Configuration
   hostname                                  = module.load_balancer.fqdn
   enable_active_active                      = local.active_active
-  is_airgap                                 = var.airgap_url != null ? true : false
   tfe_license_bootstrap_airgap_package_path = var.tfe_license_bootstrap_airgap_package_path
   tfe_license_file_location                 = var.tfe_license_file_location
   tls_bootstrap_cert_pathname               = var.tls_bootstrap_cert_pathname
@@ -185,14 +185,13 @@ module "settings" {
 # Azure user data / cloud init used to install and configure TFE on instance(s)
 # -----------------------------------------------------------------------------
 module "tfe_init" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=main"
-
+  # source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=ah-airgap-function"
+  source = "/Users/anniehedgpeth/source/terraform-random-tfe-utility/modules/tfe_init"
   # TFE & Replicated Configuration data
   cloud                         = "azurerm"
   tfe_configuration             = module.settings.tfe_configuration
   replicated_configuration      = module.settings.replicated_configuration
-  airgap_url                    = var.airgap_url != null ? var.airgap_url : null
-  bootstrap_airgap_installation = var.bootstrap_airgap_installation
+  airgap_url                    = var.airgap_url
 
   # Secrets
   ca_certificate_secret = var.ca_certificate_secret

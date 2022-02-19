@@ -1,18 +1,3 @@
-variable "airgap_url" {
-  description = "The URL of a Replicated airgap package for Terraform Enterprise."
-  type        = string
-}
-
-variable "key_vault_id" {
-  type        = string
-  description = "The identity of the Key Vault which contains secrets and certificates."
-}
-
-variable "license_file" {
-  type        = string
-  description = "The local path to the Terraform Enterprise license to be provided by CI."
-}
-
 variable "domain_name" {
   type        = string
   description = "(Required) Domain to create Terraform Enterprise subdomain within"
@@ -36,20 +21,12 @@ variable "iact_subnet_list" {
   type        = list(string)
 }
 
-variable "vm_certificate_secret_name" {
-  type        = string
+variable "vm_image_id" {
   description = <<-EOD
-  The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a
-  certificate authority (CA) to be trusted by the Virtual Machine Scale Set.
+  The resource ID of the base image you would like to use for the airgapped TFE installation.
   EOD
-}
+  type        = string
 
-variable "vm_key_secret_name" {
-  type        = string
-  description = <<-EOD
-  The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded private key of a
-  certificate authority (CA) to be trusted by the Virtual Machine Scale Set.
-  EOD
 }
 
 variable "tags" {

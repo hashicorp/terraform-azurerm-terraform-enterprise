@@ -14,15 +14,20 @@ installation with the following traits.
 
 ## Pre-requisites
 
-This example assumes that the user wishes for the prerequisites to be installed, too,
-by setting the boolean variable `bootstrap_airgap_installation` to `true`. When `true`,
-this example assumes that the following resources exist:
+This example assumes that it is being run in a completely air-gapped environment and that the
+user has already prepared the virtual machine (vm) image with the prerequisites for an airgapped
+installation. This requires the following:
 
 - a DNS zone
-- an Azure Key Vault in which the following are stored:
-  - Key Vault secret which contains the Base64 encoded version of a PEM encoded public
-    certificate for the Virtual Machine Scale Set
-  - Key Vault secret which contains the Base64 encoded version of a PEM encoded private
-    key for the Virtual Machine Scale Set.
-- TFE license on a filepath accessible by tests
-- The URL of an airgap package
+- The vm image is prepared according to the [documentation](https://www.terraform.io/enterprise/install/interactive/installer#prepare-the-instance).
+- TFE license is on a filepath defined by `var.tfe_license_file_location`.
+- The airgap package is on a filepath defined by `var.tfe_license_bootstrap_airgap_package_path`.
+- The extracted Replicated package from 
+https://s3.amazonaws.com/replicated-airgap-work/replicated.tar.gz is at
+`/tmp/replicated/replicated.tar.gz`.
+- Certificate and key data is present on the vm image at the following paths (when applicable):
+  - `vm_certificate` value at the path defined by `var.tls_bootstrap_cert_pathname` (`0600` access permissions)
+  - `vm_key` value at the path defined by `var.tls_bootstrap_key_pathname` (`0600` access permissions)
+  - `ca_certificate` value at the path:
+    - for Red Hat - `/usr/share/pki/ca-trust-source/anchors/tfe-ca-certificate.crt`
+    - for Ubuntu - `/usr/local/share/ca-certificates/extra/tfe-ca-certificate.crt`
