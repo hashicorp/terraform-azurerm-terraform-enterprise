@@ -30,6 +30,8 @@ module "standalone_airgap_dev" {
   tfe_license_secret                        = module.secrets.tfe_license
   tls_bootstrap_cert_pathname               = "/var/lib/terraform-enterprise/certificate.pem"
   tls_bootstrap_key_pathname                = "/var/lib/terraform-enterprise/key.pem"
+  vm_certificate_secret                     = data.azurerm_key_vault_secret.vm_certificate
+  vm_key_secret                             = data.azurerm_key_vault_secret.vm_key
 
   # Standalone, Mounted Disk Mode, Airgapped Installation Example
   installation_type    = "production"
