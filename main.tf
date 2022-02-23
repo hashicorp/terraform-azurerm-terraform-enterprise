@@ -187,10 +187,10 @@ module "tfe_init" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=ah-airgap-function"
 
   # TFE & Replicated Configuration data
-  cloud                         = "azurerm"
-  tfe_configuration             = module.settings.tfe_configuration
-  replicated_configuration      = module.settings.replicated_configuration
-  airgap_url                    = var.airgap_url
+  cloud                    = "azurerm"
+  tfe_configuration        = module.settings.tfe_configuration
+  replicated_configuration = module.settings.replicated_configuration
+  airgap_url               = var.airgap_url
 
   # Secrets
   ca_certificate_secret = var.ca_certificate_secret
