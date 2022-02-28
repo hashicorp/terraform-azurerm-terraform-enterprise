@@ -154,10 +154,33 @@ variable "network_allow_range" {
 # TFE License
 # -----------
 variable "tfe_license_secret" {
+  default = null
   type = object({
     id = string
   })
   description = "The Key Vault secret under which the Base64 encoded TFE license is stored."
+}
+
+# Air-gapped Installations ONLY
+# -----------------------------
+variable "tfe_license_bootstrap_airgap_package_path" {
+  default     = null
+  type        = string
+  description = <<-EOD
+  (Required if air-gapped installation) The URL of a Replicated airgap package for Terraform
+  Enterprise. The suggested path is "/var/lib/ptfe/ptfe.airgap".
+  EOD
+}
+
+variable "airgap_url" {
+  default     = null
+  type        = string
+  description = <<-EOD
+  (Optional) The URL of a Replicated airgap package for Terraform Enterprise.
+  NOTE: The airgap_url package is expected to be on the tfe_license_bootstrap_airgap_package_path
+  already in true airgapped deployments. This variable is used in dev and test scenarios when
+  the user wants to also install the prerequisistes for an airgapped deployment.
+  EOD
 }
 
 # Object Storage

@@ -154,12 +154,13 @@ module "settings" {
   ]
 
   # Replicated Base Configuration
-  hostname                    = module.load_balancer.fqdn
-  enable_active_active        = local.active_active
-  tfe_license_file_location   = var.tfe_license_file_location
-  tls_bootstrap_cert_pathname = var.tls_bootstrap_cert_pathname
-  tls_bootstrap_key_pathname  = var.tls_bootstrap_key_pathname
-  bypass_preflight_checks     = var.bypass_preflight_checks
+  hostname                                  = module.load_balancer.fqdn
+  enable_active_active                      = local.active_active
+  tfe_license_bootstrap_airgap_package_path = var.tfe_license_bootstrap_airgap_package_path
+  tfe_license_file_location                 = var.tfe_license_file_location
+  tls_bootstrap_cert_pathname               = var.tls_bootstrap_cert_pathname
+  tls_bootstrap_key_pathname                = var.tls_bootstrap_key_pathname
+  bypass_preflight_checks                   = var.bypass_preflight_checks
 
   # Database
   pg_dbname   = local.database.name
@@ -186,8 +187,10 @@ module "tfe_init" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=main"
 
   # TFE & Replicated Configuration data
+  cloud                    = "azurerm"
   tfe_configuration        = module.settings.tfe_configuration
   replicated_configuration = module.settings.replicated_configuration
+  airgap_url               = var.airgap_url
 
   # Secrets
   ca_certificate_secret = var.ca_certificate_secret
