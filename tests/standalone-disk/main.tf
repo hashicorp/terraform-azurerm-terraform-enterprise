@@ -16,7 +16,7 @@ module "secrets" {
   }
 }
 
-module "standalone_poc" {
+module "standalone_disk" {
   source = "../../"
 
   domain_name             = "team-private-terraform-enterprise.azure.ptfedev.com"
@@ -33,9 +33,8 @@ module "standalone_poc" {
   tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"
   tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
 
-  # Standalone Demo Mode Scenario
+  # Standalone Mounted Disk Mode Scenario
   distribution         = "ubuntu"
-  installation_type    = "poc"
   vm_node_count        = 1
   vm_sku               = "Standard_D4_v3"
   vm_image_id          = "ubuntu"

@@ -557,34 +557,23 @@ variable "tls_bootstrap_key_pathname" {
   description = "The path on the TFE instance to put the key. ex. '/var/lib/terraform-enterprise/key.pem'"
 }
 
-variable "installation_type" {
-  default     = "production"
-  type        = string
-  description = "Installation type for Terraform Enterprise"
-
-  validation {
-    condition = (
-      var.installation_type == "poc" ||
-      var.installation_type == "production"
-    )
-
-    error_message = "The installation type must be 'production' (recommended) or 'poc' (only used for demo-mode proofs of concept)."
-  }
-}
-
 variable "production_type" {
-  default     = null
+  default     = "disk"
   type        = string
-  description = "If you have chosen 'production' for the installation_type, production_type is required: external or disk"
+  description = <<-EOD
+	Where Terraform Enterprise application data will be stored. One of `external`
+	or `disk`. Choose `external` when storing application data in an external
+	object storage service and database. Choose `disk` when storing application
+	data in a directory on the Terraform Enterprise instance itself.
+  EOD
 
   validation {
     condition = (
       var.production_type == "external" ||
-      var.production_type == "disk" ||
-      var.production_type == null
+      var.production_type == "disk"
     )
 
-    error_message = "The production type must be 'external' or 'disk'."
+    error_message = "The production_type must be 'external' or 'disk'."
   }
 }
 

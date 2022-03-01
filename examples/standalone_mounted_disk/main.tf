@@ -34,7 +34,6 @@ module "standalone_mounted_disk" {
 
   # Standalone Mounted Disk Mode Example
   distribution         = "ubuntu"
-  installation_type    = "production"
   production_type      = "disk"
   disk_path            = "/opt/hashicorp/data"
   iact_subnet_list     = var.iact_subnet_list
@@ -46,3 +45,4 @@ module "standalone_mounted_disk" {
 
   tags = var.tags
 }
+

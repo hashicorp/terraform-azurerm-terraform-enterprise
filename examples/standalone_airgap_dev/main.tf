@@ -35,7 +35,6 @@ module "standalone_airgap_dev" {
 
   # Standalone, Mounted Disk Mode, Airgapped Installation Example
   distribution         = "ubuntu"
-  installation_type    = "production"
   production_type      = "disk"
   disk_path            = "/opt/hashicorp/data"
   iact_subnet_list     = var.iact_subnet_list
