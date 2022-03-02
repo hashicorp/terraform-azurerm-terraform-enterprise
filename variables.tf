@@ -240,6 +240,12 @@ variable "storage_account_replication_type" {
 
 # Database
 # --------
+variable "database_name" {
+  type        = string
+  default     = "tfe_db"
+  description = "The name of the PostgreSQL database."
+}
+
 variable "database_user" {
   default     = "tfeuser"
   type        = string
