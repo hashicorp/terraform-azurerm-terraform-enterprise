@@ -252,6 +252,16 @@ variable "database_user" {
   description = "Postgres username"
 }
 
+variable "database_extensions" {
+  default = [
+    "CITEXT",
+    "HSTORE",
+    "UUID-OSSP",
+  ]
+  type        = list(string)
+  description = "A list of PostgreSQL extensions to enable."
+}
+
 variable "database_machine_type" {
   default     = "GP_Standard_D4s_v3"
   type        = string

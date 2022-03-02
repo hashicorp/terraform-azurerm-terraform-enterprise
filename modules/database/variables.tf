@@ -29,6 +29,11 @@ variable "database_user" {
   description = "Postgres username"
 }
 
+variable "database_extensions" {
+  type        = list(string)
+  description = "A list of PostgreSQL extensions to enable."
+}
+
 variable "database_machine_type" {
   type        = string
   description = "Postgres sku short name: tier + family + cores"

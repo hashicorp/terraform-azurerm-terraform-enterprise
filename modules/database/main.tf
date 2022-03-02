@@ -21,14 +21,9 @@ resource "azurerm_postgresql_flexible_server" "tfe" {
 }
 
 resource "azurerm_postgresql_flexible_server_configuration" "tfe" {
-  for_each = {
-    "hstore"    = "on",
-    "uuid-ossp" = "on",
-    "citext"    = "on",
-  }
-  name      = each.key
+  name      = "azure.extensions"
   server_id = azurerm_postgresql_flexible_server.tfe.id
-  value     = each.value
+  value     = join(",", var.database_extensions)
 }
 
 resource "azurerm_postgresql_flexible_server_database" "tfe" {
