@@ -3,7 +3,7 @@ resource "random_string" "tfe_pg_password" {
   special = true
 }
 
-resource "azurerm_postgresql_flexible_server" "tfe_pg" {
+resource "azurerm_postgresql_flexible_server" "tfe" {
   location            = var.location
   name                = "${var.friendly_name_prefix}-pg"
   resource_group_name = var.resource_group_name
@@ -18,4 +18,17 @@ resource "azurerm_postgresql_flexible_server" "tfe_pg" {
   tags                   = var.tags
   version                = var.database_version
   zone                   = var.database_availability_zone
+}
+
+resource "azurerm_postgresql_flexible_server_configuration" "tfe" {
+  name      = "azure.extensions"
+  server_id = azurerm_postgresql_flexible_server.tfe.id
+  value     = join(",", var.database_extensions)
+}
+
+resource "azurerm_postgresql_flexible_server_database" "tfe" {
+  name      = var.database_name
+  server_id = azurerm_postgresql_flexible_server.tfe.id
+  collation = "en_US.utf8"
+  charset   = "utf8"
 }

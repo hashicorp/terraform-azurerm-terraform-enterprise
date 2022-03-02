@@ -19,9 +19,19 @@ variable "resource_group_name" {
 
 # Database
 # --------
+variable "database_name" {
+  type        = string
+  description = "The name of the PostgreSQL database."
+}
+
 variable "database_user" {
   type        = string
   description = "Postgres username"
+}
+
+variable "database_extensions" {
+  type        = list(string)
+  description = "A list of PostgreSQL extensions to enable."
 }
 
 variable "database_machine_type" {
