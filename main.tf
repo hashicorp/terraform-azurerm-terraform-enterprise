@@ -121,6 +121,7 @@ module "database" {
   database_subnet_id             = local.network.database_subnet.id
   database_name                  = var.database_name
   database_user                  = var.database_user
+  database_extensions            = var.database_extensions
   database_version               = var.database_version
   database_backup_retention_days = var.database_backup_retention_days
   database_availability_zone     = var.database_availability_zone
