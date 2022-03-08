@@ -5,7 +5,8 @@ output "address" {
 }
 
 output "name" {
-  # This is the name of the default database created with the server.
+  # This is the name of the default database created with the server. We must use the default database
+  # until this issue is addressed: https://github.com/hashicorp/terraform-provider-azurerm/issues/15728
   value = "postgres"
 
   description = "The name of the PostgreSQL database."
