@@ -3,8 +3,10 @@ output "address" {
 
   description = "The address of the PostgreSQL database."
 }
+
 output "name" {
-  value = azurerm_postgresql_flexible_server_database.tfe.name
+  # This is the name of the default database created with the server.
+  value = "postgres"
 
   description = "The name of the PostgreSQL database."
 }

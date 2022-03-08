@@ -25,10 +25,3 @@ resource "azurerm_postgresql_flexible_server_configuration" "tfe" {
   server_id = azurerm_postgresql_flexible_server.tfe.id
   value     = join(",", var.database_extensions)
 }
-
-resource "azurerm_postgresql_flexible_server_database" "tfe" {
-  name      = var.database_name
-  server_id = azurerm_postgresql_flexible_server.tfe.id
-  collation = "en_US.utf8"
-  charset   = "utf8"
-}
