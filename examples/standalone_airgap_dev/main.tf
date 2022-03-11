@@ -27,7 +27,7 @@ module "standalone_airgap_dev" {
   # Bootstrapping resources
   airgap_url                                = var.airgap_url
   tfe_license_bootstrap_airgap_package_path = "/var/lib/ptfe/ptfe.airgap"
-  tfe_license_secret                        = module.secrets.tfe_license
+  tfe_license_secret_id                     = module.secrets.tfe_license_secret_id
   tls_bootstrap_cert_pathname               = "/var/lib/terraform-enterprise/certificate.pem"
   tls_bootstrap_key_pathname                = "/var/lib/terraform-enterprise/key.pem"
   vm_certificate_secret                     = data.azurerm_key_vault_secret.vm_certificate

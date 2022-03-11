@@ -133,7 +133,7 @@ module "database" {
 # TFE and Replicated settings to pass to the tfe_init module
 # -----------------------------------------------------------------------------
 module "settings" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=main"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=ah-change-secret-input"
 
   # TFE Base Configuration
   installation_type = var.installation_type
@@ -185,7 +185,7 @@ module "settings" {
 # Azure user data / cloud init used to install and configure TFE on instance(s)
 # -----------------------------------------------------------------------------
 module "tfe_init" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=main"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=ah-change-secret-input"
 
   # TFE & Replicated Configuration data
   cloud                    = "azurerm"
@@ -194,10 +194,10 @@ module "tfe_init" {
   airgap_url               = var.airgap_url
 
   # Secrets
-  ca_certificate_secret = var.ca_certificate_secret
-  certificate_secret    = var.vm_certificate_secret
-  key_secret            = var.vm_key_secret
-  tfe_license_secret    = var.tfe_license_secret
+  ca_certificate_secret_id = var.ca_certificate_secret == null ? null : var.ca_certificate_secret.id
+  certificate_secret_id    = var.vm_certificate_secret == null ? null : var.vm_certificate_secret.id
+  key_secret_id            = var.vm_key_secret == null ? null : var.vm_key_secret.id
+  tfe_license_secret_id    = var.tfe_license_secret_id
 
   # Proxy information
   proxy_ip   = var.proxy_ip

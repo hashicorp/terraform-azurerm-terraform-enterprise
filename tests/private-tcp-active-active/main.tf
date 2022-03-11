@@ -31,7 +31,7 @@ module "private_tcp_active_active" {
   iact_subnet_list        = ["${module.bastion_vm.private_ip}/32"]
 
   # Bootstrapping resources
-  tfe_license_secret          = data.azurerm_key_vault_secret.tfe_license
+  tfe_license_secret_id       = data.azurerm_key_vault_secret.tfe_license.id
   vm_certificate_secret       = data.azurerm_key_vault_secret.vm_certificate
   vm_key_secret               = data.azurerm_key_vault_secret.vm_key
   tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"
