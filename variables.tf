@@ -153,12 +153,10 @@ variable "network_allow_range" {
 
 # TFE License
 # -----------
-variable "tfe_license_secret" {
-  default = null
-  type = object({
-    id = string
-  })
-  description = "The Key Vault secret under which the Base64 encoded TFE license is stored."
+variable "tfe_license_secret_id" {
+  default     = null
+  type        = string
+  description = "The Key Vault secret ID under which the Base64 encoded TFE license is stored."
 }
 
 # Air-gapped Installations ONLY
