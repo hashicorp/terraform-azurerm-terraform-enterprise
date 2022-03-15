@@ -34,11 +34,6 @@ variable "proxy_user" {
   description = "User that have access to the proxy server"
 }
 
-variable "proxy_port" {
-  type        = string
-  description = "Port that the proxy server will use"
-}
-
 variable "proxy_subnet_cidr" {
   type        = string
   description = "proxy subnet"
