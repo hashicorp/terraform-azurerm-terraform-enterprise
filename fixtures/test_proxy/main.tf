@@ -79,6 +79,7 @@ module "test_proxy_init" {
 
   mitmproxy_ca_certificate_secret = var.mitmproxy_ca_certificate_secret
   mitmproxy_ca_private_key_secret = var.mitmproxy_ca_private_key_secret
+  cloud                           = "azurerm"
 }
 
 # Create the proxy virtual machine
