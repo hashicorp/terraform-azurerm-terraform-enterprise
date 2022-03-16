@@ -29,7 +29,6 @@ module "test_proxy" {
   virtual_network_name             = module.private_tcp_active_active.network.network.name
   proxy_subnet_cidr                = local.network_proxy_subnet_cidr
   proxy_user                       = local.proxy_user
-  proxy_port                       = local.proxy_port
   proxy_public_ssh_key_secret_name = data.azurerm_key_vault_secret.proxy_public_ssh_key.value
   key_vault_id                     = var.key_vault_id
   mitmproxy_ca_certificate_secret  = data.azurerm_key_vault_secret.ca_certificate.id
