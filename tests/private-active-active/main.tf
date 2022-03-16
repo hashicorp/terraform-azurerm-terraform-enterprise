@@ -26,6 +26,7 @@ module "test_proxy" {
 
   location                         = var.location
   resource_group_name              = local.resource_group_name
+  key_vault_id                     = var.key_vault_id
   virtual_network_name             = module.private_active_active.network.network.name
   proxy_subnet_cidr                = local.network_proxy_subnet_cidr
   proxy_user                       = local.proxy_user
