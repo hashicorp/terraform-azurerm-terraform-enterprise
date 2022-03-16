@@ -1,4 +1,5 @@
 data "azurerm_client_config" "current" {}
+
 # Create a subnet for proxy
 # -------------------------
 resource "azurerm_subnet" "proxy" {
