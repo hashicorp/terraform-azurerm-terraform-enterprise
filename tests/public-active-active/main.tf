@@ -22,6 +22,7 @@ module "public_active_active" {
   tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
 
   # Public Active / Active Scenario
+  distribution            = "ubuntu"
   installation_type       = "production"
   production_type         = "external"
   iact_subnet_list        = var.iact_subnet_list

@@ -43,6 +43,7 @@ module "private_active_active" {
   proxy_port = local.proxy_port
 
   # Private Active / Active Scenario
+  distribution            = "rhel"
   vm_node_count           = 2
   vm_sku                  = "Standard_D16as_v4"
   vm_image_id             = "rhel"

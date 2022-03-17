@@ -34,6 +34,7 @@ module "standalone_poc" {
   tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
 
   # Standalone Demo Mode Scenario
+  distribution         = "ubuntu"
   installation_type    = "poc"
   vm_node_count        = 1
   vm_sku               = "Standard_D4_v3"

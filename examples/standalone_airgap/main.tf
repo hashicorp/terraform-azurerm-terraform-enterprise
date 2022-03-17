@@ -22,6 +22,7 @@ module "standalone_airgap" {
   installation_type    = "production"
   production_type      = "disk"
   disk_path            = "/opt/hashicorp/data"
+  distribution         = "ubuntu"
   iact_subnet_list     = var.iact_subnet_list
   vm_node_count        = 1
   vm_sku               = "Standard_D4_v3"
