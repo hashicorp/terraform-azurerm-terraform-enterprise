@@ -20,6 +20,22 @@ module "bastion_vm" {
   tags = local.common_tags
 }
 
+module "test_proxy" {
+  source               = "../../fixtures/test_proxy"
+  friendly_name_prefix = local.friendly_name_prefix
+
+  location                         = var.location
+  resource_group_name              = local.resource_group_name
+  key_vault_id                     = var.key_vault_id
+  virtual_network_name             = module.private_active_active.network.network.name
+  proxy_subnet_cidr                = local.network_proxy_subnet_cidr
+  proxy_user                       = local.proxy_user
+  proxy_public_ssh_key_secret_name = data.azurerm_key_vault_secret.proxy_public_ssh_key.value
+
+  tags = local.common_tags
+
+}
+
 module "private_active_active" {
   source = "../../"
 
@@ -39,7 +55,7 @@ module "private_active_active" {
   tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
 
   # Behind proxy information
-  proxy_ip   = azurerm_linux_virtual_machine.proxy.private_ip_address
+  proxy_ip   = module.test_proxy.private_ip
   proxy_port = local.proxy_port
 
   # Private Active / Active Scenario
