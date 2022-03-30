@@ -1,4 +1,4 @@
-# TEST: Standalone Disk Mode Terraform Enterprise
+# TEST: Standalone Mounted Disk Mode Terraform Enterprise
 
 ## About this test
 
