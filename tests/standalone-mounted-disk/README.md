@@ -1,4 +1,4 @@
-# TEST: Standalone POC Mode Terraform Enterprise
+# TEST: Standalone Mounted Disk Mode Terraform Enterprise
 
 ## About this test
 
@@ -6,7 +6,7 @@ This test for Terraform Enterprise creates a TFE
 installation with the following traits.
 
 - Standalone
-- POC / Demo-mode
+- Mounted Disk mode
 - a small VM machine type (Standard_D4_v3)
 - Ubuntu 20.04 as the VM image
 - a publicly accessible HTTP load balancer with TLS termination
