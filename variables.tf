@@ -575,7 +575,14 @@ variable "installation_type" {
 variable "production_type" {
   default     = null
   type        = string
-  description = "If you have chosen 'production' for the installation_type, production_type is required: external or disk"
+  description = <<-EOD
+	Where Terraform Enterprise application data will be stored. Valid values are
+	`external`, `disk`, or `null`. Choose `external` when storing application
+	data in an external object storage service and database. Choose `disk` when
+	storing application data in a directory on the Terraform Enterprise instance
+	itself. Leave it `null` when you want Terraform Enterprise to use its own
+	default.
+  EOD
 
   validation {
     condition = (
@@ -584,7 +591,7 @@ variable "production_type" {
       var.production_type == null
     )
 
-    error_message = "The production type must be 'external' or 'disk'."
+    error_message = "The production_type must be 'external', 'disk', or omitted."
   }
 }
 

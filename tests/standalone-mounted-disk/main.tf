@@ -16,7 +16,7 @@ module "secrets" {
   }
 }
 
-module "standalone_poc" {
+module "standalone_mounted_disk" {
   source = "../../"
 
   domain_name             = "team-private-terraform-enterprise.azure.ptfedev.com"
@@ -35,7 +35,9 @@ module "standalone_poc" {
 
   # Standalone Demo Mode Scenario
   distribution         = "ubuntu"
-  installation_type    = "poc"
+  installation_type    = "production"
+  production_type      = "disk"
+  disk_path            = "/opt/hashicorp/data"
   vm_node_count        = 1
   vm_sku               = "Standard_D4_v3"
   vm_image_id          = "ubuntu"
