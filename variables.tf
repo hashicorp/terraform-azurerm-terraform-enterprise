@@ -575,14 +575,14 @@ variable "installation_type" {
 variable "production_type" {
   default     = null
   type        = string
-  description = <<-EOD
-	Where Terraform Enterprise application data will be stored. Valid values are
-	`external`, `disk`, or `null`. Choose `external` when storing application
-	data in an external object storage service and database. Choose `disk` when
-	storing application data in a directory on the Terraform Enterprise instance
-	itself. Leave it `null` when you want Terraform Enterprise to use its own
-	default.
-  EOD
+  description = <<-EOF
+  Where Terraform Enterprise application data will be stored. Valid values are
+  `external`, `disk`, or `null`. Choose `external` when storing application
+  data in an external object storage service and database. Choose `disk` when
+  storing application data in a directory on the Terraform Enterprise instance
+  itself. Leave it `null` when you want Terraform Enterprise to use its own
+  default.
+  EOF
 
   validation {
     condition = (
