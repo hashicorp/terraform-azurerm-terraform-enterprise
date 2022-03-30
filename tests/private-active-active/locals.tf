@@ -8,13 +8,6 @@ locals {
     OkToDelete  = "True"
   }
 
-  proxy_script = templatefile(
-    "${path.module}/templates/squidproxy.sh.tpl",
-    {
-      http_proxy_port = local.proxy_port
-    }
-  )
-
   friendly_name_prefix      = random_string.friendly_name.id
   resource_group_name       = module.private_active_active.resource_group_name
   proxy_user                = "proxyuser"
