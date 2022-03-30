@@ -34,6 +34,7 @@ module "standalone_airgap_dev" {
   vm_key_secret                             = data.azurerm_key_vault_secret.vm_key
 
   # Standalone, Mounted Disk Mode, Airgapped Installation Example
+  distribution         = "ubuntu"
   installation_type    = "production"
   production_type      = "disk"
   disk_path            = "/opt/hashicorp/data"

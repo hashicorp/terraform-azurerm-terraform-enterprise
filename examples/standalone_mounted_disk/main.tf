@@ -33,6 +33,7 @@ module "standalone_mounted_disk" {
   tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
 
   # Standalone Mounted Disk Mode Example
+  distribution         = "ubuntu"
   installation_type    = "production"
   production_type      = "disk"
   disk_path            = "/opt/hashicorp/data"
