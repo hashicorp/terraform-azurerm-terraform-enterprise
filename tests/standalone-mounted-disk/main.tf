@@ -16,7 +16,7 @@ module "secrets" {
   }
 }
 
-module "standalone_disk" {
+module "standalone_mounted_disk" {
   source = "../../"
 
   domain_name             = "team-private-terraform-enterprise.azure.ptfedev.com"
@@ -35,6 +35,7 @@ module "standalone_disk" {
 
   # Standalone Mounted Disk Mode Scenario
   distribution         = "ubuntu"
+  production_type      = "disk"
   disk_path            = "/opt/hashicorp/data"
   vm_node_count        = 1
   vm_sku               = "Standard_D4_v3"

@@ -2,7 +2,7 @@
 resource "local_file" "private_key_pem" {
   filename = "${path.module}/work/private-key.pem"
 
-  content         = module.standalone_disk.instance_private_key
+  content         = module.standalone_mounted_disk.instance_private_key
   file_permission = "0600"
 }
 
@@ -11,8 +11,8 @@ resource "local_file" "ssh_config" {
 
   content = <<__eof
 Host default
-    Hostname ${module.standalone_disk.fqdn}
-    User ${module.standalone_disk.instance_user_name}
+    Hostname ${module.standalone_mounted_disk.fqdn}
+    User ${module.standalone_mounted_disk.instance_user_name}
     Port 22
     UserKnownHostsFile /dev/null
     StrictHostKeyChecking no

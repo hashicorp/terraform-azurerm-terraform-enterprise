@@ -558,7 +558,7 @@ variable "tls_bootstrap_key_pathname" {
 }
 
 variable "production_type" {
-  default     = "disk"
+  default     = null
   type        = string
   description = <<-EOD
 	Where Terraform Enterprise application data will be stored. Valid values are
@@ -572,10 +572,10 @@ variable "production_type" {
   validation {
     condition = (
       var.production_type == "external" ||
-      var.production_type == "disk"
+      var.production_type == "disk" ||
+      var.production_type == null
     )
-
-    error_message = "The production_type must be 'external' or 'disk'."
+    error_message = "The production_type must be 'external', 'disk', or omitted."
   }
 }
 

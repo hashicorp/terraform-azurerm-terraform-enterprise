@@ -1,7 +1,7 @@
 locals {
   common_tags = {
     Terraform   = "False"
-    Environment = "${local.friendly_name_prefix}-test-standalone-disk"
+    Environment = "${local.friendly_name_prefix}-test-standalone-mounted-disk"
     Description = "Standalone, Mounted Disk Mode scenario deployed from CircleCI"
     Repository  = "hashicorp/terraform-azurerm-terraform-enterprise"
     Team        = "Terraform Enterprise on Prem"
