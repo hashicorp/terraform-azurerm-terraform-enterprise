@@ -75,6 +75,18 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
     disk_size_gb         = var.vm_os_disk_disk_size_gb
   }
 
+  dynamic "data_disk" {
+    for_each = var.disk_mode ? [1] : [0]
+
+    content {
+      caching              = var.vm_data_disk_caching
+      create_option        = var.vm_data_disk_create_option
+      disk_size_gb         = var.vm_data_disk_disk_size_gb
+      lun                  = var.vm_data_disk_lun
+      storage_account_type = var.vm_data_disk_storage_account_type
+    }
+  }
+
   network_interface {
     name    = "${var.friendly_name_prefix}-nic"
     primary = true

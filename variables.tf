@@ -518,7 +518,7 @@ variable "vm_sku" {
 variable "vm_os_disk_disk_size_gb" {
   default     = 100
   type        = number
-  description = "The size of the Data Disk which should be created"
+  description = "The size of the OS Disk which should be created"
 }
 
 variable "vm_vmss_scale_in_policy" {
@@ -535,6 +535,142 @@ variable "vm_vmss_scale_in_policy" {
 
     error_message = "The vm_vmss_scale_in_policy value must be 'Default', 'NewestVM', or 'OldestVM'."
   }
+}
+
+variable "vm_overprovision" {
+  default     = false
+  type        = bool
+  description = "Should Azure over-provision Virtual Machines in this Scale Set?"
+}
+
+variable "vm_upgrade_mode" {
+  default     = "Manual"
+  type        = string
+  description = "Specifies how Upgrades (e.g. changing the Image/SKU) should be performed to Virtual Machine Instances."
+
+  validation {
+    condition = (
+      var.vm_upgrade_mode == "Automatic" ||
+      var.vm_upgrade_mode == "Manual" ||
+      var.vm_upgrade_mode == "Rolling"
+    )
+
+    error_message = "The vm_upgrade_mode value must be 'Automatic', 'Manual', or 'Rolling'."
+  }
+}
+
+variable "vm_identity_type" {
+  default     = "UserAssigned"
+  type        = string
+  description = "The type of Managed Identity which should be assigned to the Linux Virtual Machine Scale Set."
+
+  validation {
+    condition = (
+      var.vm_identity_type == "SystemAssigned" ||
+      var.vm_identity_type == "UserAssigned"
+    )
+
+    error_message = "The vm_identity_type value must be 'SystemAssigned' or 'UserAssigned'."
+  }
+}
+
+variable "vm_os_disk_storage_account_type" {
+  default     = "StandardSSD_LRS"
+  type        = string
+  description = "The Type of Storage Account which should back this OS Disk."
+  validation {
+    condition = (
+      var.vm_os_disk_storage_account_type == "Standard_LRS" ||
+      var.vm_os_disk_storage_account_type == "StandardSSD_LRS" ||
+      var.vm_os_disk_storage_account_type == "Premium_LRS" ||
+      var.vm_os_disk_storage_account_type == "UltraSSD_LRS"
+    )
+
+    error_message = "The vm_os_disk_storage_account_type value must be 'Standard_LRS', 'StandardSSD_LRS', 'Premium_LRS' or 'UltraSSD_LRS'."
+  }
+}
+
+variable "vm_os_disk_caching" {
+  default     = "ReadWrite"
+  type        = string
+  description = "The type of Caching which should be used for this OS Disk."
+
+  validation {
+    condition = (
+      var.vm_os_disk_caching == "None" ||
+      var.vm_os_disk_caching == "ReadOnly" ||
+      var.vm_os_disk_caching == "ReadWrite"
+    )
+
+    error_message = "The vm_os_disk_caching value must be 'None', 'ReadOnly', or 'ReadWrite'."
+  }
+}
+
+variable "vm_zone_balance" {
+  default     = true
+  type        = bool
+  description = "Should the Virtual Machines in this Scale Set be strictly evenly distributed across Availability Zones? Defaults to false. Changing this forces a new resource to be created."
+}
+
+# Mounted Disk Mode
+variable "vm_data_disk_caching" {
+  default     = "ReadWrite"
+  type        = string
+  description = "The type of Caching which should be used for this Data Disk."
+
+  validation {
+    condition = (
+      var.vm_data_disk_caching == "None" ||
+      var.vm_data_disk_caching == "ReadOnly" ||
+      var.vm_data_disk_caching == "ReadWrite"
+    )
+
+    error_message = "The vm_data_disk_caching value must be 'None', 'ReadOnly', or 'ReadWrite'."
+  }
+}
+
+variable "vm_data_disk_create_option" {
+  default     = "Empty"
+  type        = string
+  description = "(Optional) The create option which should be used for this Data Disk. (FromImage should only be used if the source image includes data disks)."
+
+  validation {
+    condition = (
+      var.vm_data_disk_create_option == "Empty" ||
+      var.vm_data_disk_create_option == "FromImage"
+    )
+
+    error_message = "The vm_data_disk_create_option value must be 'None', 'ReadOnly', or 'ReadWrite'."
+  }
+}
+
+variable "vm_data_disk_storage_account_type" {
+  default     = "StandardSSD_LRS"
+  type        = string
+  description = "The Type of Storage Account which should back this Data Disk."
+
+  validation {
+    condition = (
+      var.vm_data_disk_storage_account_type == "Standard_LRS" ||
+      var.vm_data_disk_storage_account_type == "StandardSSD_LRS" ||
+      var.vm_data_disk_storage_account_type == "Premium_LRS" ||
+      var.vm_data_disk_storage_account_type == "UltraSSD_LRS"
+    )
+
+    error_message = "The vm_data_disk_storage_account_type value must be 'Standard_LRS', 'StandardSSD_LRS', 'Premium_LRS' or 'UltraSSD_LRS'."
+  }
+}
+
+variable "vm_data_disk_lun" {
+  default     = 0
+  type        = number
+  description = "The Logical Unit Number of the Data Disk, which must be unique within the Virtual Machine."
+}
+
+variable "vm_data_disk_disk_size_gb" {
+  default     = 100
+  type        = number
+  description = "The size of the Data Disk which should be created"
 }
 
 # User Data
