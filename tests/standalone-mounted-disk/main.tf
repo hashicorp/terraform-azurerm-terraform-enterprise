@@ -33,7 +33,7 @@ module "standalone_mounted_disk" {
   tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"
   tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
 
-  # Standalone Demo Mode Scenario
+  # Standalone Disk Mode Scenario
   distribution         = "ubuntu"
   installation_type    = "production"
   production_type      = "disk"
@@ -43,6 +43,13 @@ module "standalone_mounted_disk" {
   vm_image_id          = "ubuntu"
   load_balancer_public = true
   load_balancer_type   = "load_balancer"
+
+  # VM Data Disk
+  vm_data_disk_caching              = "ReadWrite"
+  vm_data_disk_create_option        = "Empty"
+  vm_data_disk_storage_account_type = "StandardSSD_LRS"
+  vm_data_disk_lun                  = 0
+  vm_data_disk_disk_size_gb         = 100
 
   enable_ssh     = true
   create_bastion = false

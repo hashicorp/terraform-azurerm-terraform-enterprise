@@ -191,7 +191,7 @@ module "tfe_init" {
   cloud                    = "azurerm"
   distribution             = var.distribution
   disk_path                = var.disk_path
-  disk_device_name         = var.production_type == "disk" ? "sdc" : null
+  disk_device_name         = var.production_type == "disk" ? "disk/azure/scsi1/lun${var.vm_data_disk_lun}" : null
   tfe_configuration        = module.settings.tfe_configuration
   replicated_configuration = module.settings.replicated_configuration
   airgap_url               = var.airgap_url
