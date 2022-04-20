@@ -29,7 +29,7 @@ These commands will be run by Maintainers manually after initial review:
 
 ## TFE Integration Testing with CircleCI
 
-TFE integration testing is perfomed via CircleCI inside the [`ptfe-replicated`](https://github.com/hashicorp/ptfe-replicated/blob/master/.circleci/config.yml)
+TFE integration testing is perfomed via CircleCI inside the [`ptfe-replicated`](https://github.com/hashicorp/ptfe-replicated/blob/main/.circleci/config.yml)
 repository. Various environment scenarios are created via this module's TTMs as well as that
 of [AWS's](https://github.com/hashicorp/terraform-aws-terraform-enterprise/tree/main/tests) and [GCP's](https://github.com/hashicorp/terraform-aws-terraform-enterprise/tree/main/tests). The TFE
 release under test is used to install TFE onto said environment, and integration tests are perfomed.

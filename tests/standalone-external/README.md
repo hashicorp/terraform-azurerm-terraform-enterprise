@@ -29,5 +29,5 @@ This test assumes the following resources exist.
 
 ## How this test is used
 
-This test is leveraged by the integration tests in the [`ptfe-replicated`](https://github.com/hashicorp/ptfe-replicated/blob/master/.circleci/config.yml)
+This test is leveraged by the integration tests in the [`ptfe-replicated`](https://github.com/hashicorp/ptfe-replicated/blob/main/.circleci/config.yml)
 repository.
