@@ -136,12 +136,14 @@ module "settings" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=tf-440"
 
   # TFE Base Configuration
-  production_type  = var.production_type
+  custom_image_tag = var.custom_image_tag
   disk_path        = var.disk_path
   iact_subnet_list = var.iact_subnet_list
-  trusted_proxies  = local.trusted_proxies
-  release_sequence = var.release_sequence
   pg_extra_params  = var.pg_extra_params
+  production_type  = var.production_type
+  release_sequence = var.release_sequence
+  tbw_image        = var.tbw_image
+  trusted_proxies  = local.trusted_proxies
 
   extra_no_proxy = [
     "127.0.0.1",
@@ -189,6 +191,8 @@ module "tfe_init" {
   # TFE & Replicated Configuration data
   cloud                    = "azurerm"
   distribution             = var.distribution
+  disk_path                = var.disk_path
+  disk_device_name         = var.production_type == "disk" ? "disk/azure/scsi1/lun${var.vm_data_disk_lun}" : null
   tfe_configuration        = module.settings.tfe_configuration
   replicated_configuration = module.settings.replicated_configuration
   airgap_url               = var.airgap_url
@@ -274,15 +278,28 @@ module "vm" {
   tenant_id            = data.azurerm_client_config.current.tenant_id
 
   # VM
-  vm_sku                  = var.vm_sku
-  vm_image_id             = var.vm_image_id
-  vm_os_disk_disk_size_gb = var.vm_os_disk_disk_size_gb
-  vm_subnet_id            = local.network.private_subnet.id
-  vm_user                 = var.vm_user
-  vm_public_key           = var.vm_public_key == null ? tls_private_key.tfe_ssh[0].public_key_openssh : var.vm_public_key
-  vm_userdata_script      = module.tfe_init.tfe_userdata_base64_encoded
-  vm_node_count           = var.vm_node_count
-  vm_vmss_scale_in_policy = var.vm_vmss_scale_in_policy
+  disk_mode                         = local.disk_mode
+  vm_data_disk_caching              = var.vm_data_disk_caching
+  vm_data_disk_create_option        = var.vm_data_disk_create_option
+  vm_data_disk_disk_size_gb         = var.vm_data_disk_disk_size_gb
+  vm_data_disk_lun                  = var.vm_data_disk_lun
+  vm_data_disk_storage_account_type = var.vm_data_disk_storage_account_type
+  vm_identity_type                  = var.vm_identity_type
+  vm_image_id                       = var.vm_image_id
+  vm_node_count                     = var.vm_node_count
+  vm_os_disk_caching                = var.vm_os_disk_caching
+  vm_os_disk_disk_size_gb           = var.vm_os_disk_disk_size_gb
+  vm_os_disk_storage_account_type   = var.vm_os_disk_storage_account_type
+  vm_overprovision                  = var.vm_overprovision
+  vm_public_key                     = var.vm_public_key == null ? tls_private_key.tfe_ssh[0].public_key_openssh : var.vm_public_key
+  vm_sku                            = var.vm_sku
+  vm_subnet_id                      = local.network.private_subnet.id
+  vm_upgrade_mode                   = var.vm_upgrade_mode
+  vm_user                           = var.vm_user
+  vm_userdata_script                = module.tfe_init.tfe_userdata_base64_encoded
+  vm_vmss_scale_in_policy           = var.vm_vmss_scale_in_policy
+  vm_zone_balance                   = var.vm_zone_balance
+  zones                             = var.zones
 
   # Load balancer
   load_balancer_type       = var.load_balancer_type

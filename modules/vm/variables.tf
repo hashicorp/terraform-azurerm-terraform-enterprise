@@ -18,7 +18,6 @@ variable "tenant_id" {
 }
 
 variable "zones" {
-  default     = ["1", "2", "3"]
   type        = list(string)
   description = "Azure zones to use for applicable resources"
 }
@@ -29,7 +28,6 @@ variable "resource_group_name" {
 }
 
 variable "load_balancer_type" {
-  default     = "application_gateway"
   type        = string
   description = "Expected value of 'application_gateway' or 'load_balancer'"
   validation {
@@ -50,7 +48,6 @@ variable "load_balancer_backend_id" {
 }
 
 variable "load_balancer_public" {
-  default     = true
   type        = bool
   description = "Load balancer will use public IP if true"
 }
@@ -58,7 +55,6 @@ variable "load_balancer_public" {
 # Vm
 # --
 variable "vm_node_count" {
-  default     = 1
   type        = number
   description = "The number of instances to create for TFE environment"
 
@@ -89,7 +85,6 @@ variable "vm_public_key" {
 }
 
 variable "vm_image_id" {
-  default     = "ubuntu"
   type        = string
   description = "Virtual machine image id - may be 'ubuntu' (default), 'rhel', or custom image resource id"
 
@@ -149,58 +144,79 @@ variable "key_secret" {
   EOD
 }
 
-# Optional variables not currently specified in root module
 variable "vm_overprovision" {
-  default     = false
   type        = bool
   description = "Should Azure over-provision Virtual Machines in this Scale Set?"
 }
 
 variable "vm_sku" {
-  default     = "Standard_D4_v3"
   type        = string
   description = "Azure virtual machine sku"
 }
 
 variable "vm_upgrade_mode" {
-  default     = "Manual"
   type        = string
   description = "Specifies how Upgrades (e.g. changing the Image/SKU) should be performed to Virtual Machine Instances. Possible values are Automatic, Manual and Rolling. Defaults to Manual."
 }
 
 variable "vm_zone_balance" {
-  default     = true
   type        = bool
   description = "Should the Virtual Machines in this Scale Set be strictly evenly distributed across Availability Zones? Defaults to false. Changing this forces a new resource to be created."
 }
 
 variable "vm_os_disk_caching" {
-  default     = "ReadWrite"
   type        = string
   description = "The type of Caching which should be used for this Data Disk. Possible values are None, ReadOnly and ReadWrite."
 }
 
 variable "vm_os_disk_storage_account_type" {
-  default     = "StandardSSD_LRS"
   type        = string
   description = "The Type of Storage Account which should back this Data Disk. Possible values include Standard_LRS, StandardSSD_LRS, Premium_LRS and UltraSSD_LRS."
 }
 
 variable "vm_os_disk_disk_size_gb" {
-  default     = 100
   type        = number
   description = "The size of the Data Disk which should be created"
 }
 
 variable "vm_identity_type" {
-  default     = "UserAssigned"
   type        = string
   description = "The type of Managed Identity which should be assigned to the Linux Virtual Machine Scale Set. Possible values are SystemAssigned, UserAssigned and SystemAssigned, UserAssigned."
 }
 
+# Mounted Disk Mode
+variable "disk_mode" {
+  type        = bool
+  description = "Is the production type for Terraform Enterprise 'disk'?"
+}
+
+variable "vm_data_disk_caching" {
+  type        = string
+  description = "The type of Caching which should be used for this Data Disk. Possible values are None, ReadOnly and ReadWrite."
+}
+
+variable "vm_data_disk_create_option" {
+  type        = string
+  description = "(Optional) The create option which should be used for this Data Disk. Possible values are Empty and FromImage. (FromImage should only be used if the source image includes data disks)."
+}
+
+variable "vm_data_disk_disk_size_gb" {
+  type        = number
+  description = "The size of the Data Disk which should be created"
+}
+
+variable "vm_data_disk_lun" {
+  type        = number
+  description = "The Logical Unit Number of the Data Disk, which must be unique within the Virtual Machine."
+}
+
+variable "vm_data_disk_storage_account_type" {
+  type        = string
+  description = "The Type of Storage Account which should back this Data Disk. Possible values include Standard_LRS, StandardSSD_LRS, Premium_LRS and UltraSSD_LRS."
+}
+
 # Tagging
 variable "tags" {
-  default     = {}
   type        = map(string)
   description = "Map of tags for resource"
 }
