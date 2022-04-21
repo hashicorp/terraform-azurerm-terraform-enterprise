@@ -54,6 +54,7 @@ resource "azurerm_public_ip" "tfe_pip" {
   sku               = "Standard"
   allocation_method = "Static"
   domain_name_label = var.domain_name == null ? local.tfe_subdomain : null
+  zones             = var.zones
 
   tags = var.tags
 }
