@@ -69,8 +69,8 @@ resource "azurerm_key_vault_access_policy" "proxy" {
   tenant_id    = data.azurerm_client_config.current.tenant_id
 
   secret_permissions = [
-    "get",
-    "list"
+    "Get",
+    "List"
   ]
 }
 
