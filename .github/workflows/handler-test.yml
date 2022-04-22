@@ -52,7 +52,7 @@ jobs:
         with:
           cli_config_credentials_hostname: 'app.terraform.io'
           cli_config_credentials_token: ${{ secrets.PUBLIC_ACTIVE_ACTIVE_TFC_TOKEN }}
-          terraform_version: 0.14.8
+          terraform_version: 1.0.9
           terraform_wrapper: true
 
       # Run Terraform commands between these comments vvv
@@ -233,7 +233,7 @@ jobs:
         with:
           cli_config_credentials_hostname: 'app.terraform.io'
           cli_config_credentials_token: ${{ secrets.PRIVATE_ACTIVE_ACTIVE_TFC_TOKEN }}
-          terraform_version: 0.14.8
+          terraform_version: 1.0.9
           terraform_wrapper: true
 
       # Run Terraform commands between these comments vvv
@@ -444,7 +444,7 @@ jobs:
         with:
           cli_config_credentials_hostname: 'app.terraform.io'
           cli_config_credentials_token: ${{ secrets.PRIVATE_TCP_ACTIVE_ACTIVE_TFC_TOKEN }}
-          terraform_version: 0.14.8
+          terraform_version: 1.0.9
           terraform_wrapper: true
 
       # Run Terraform commands between these comments vvv
