@@ -27,7 +27,7 @@ resource "azurerm_network_interface" "vm_bastion" {
     name                          = "ipconfig"
     subnet_id                     = azurerm_subnet.vm_bastion.id
     public_ip_address_id          = azurerm_public_ip.vm_bastion.id
-    private_ip_address_allocation = "dynamic"
+    private_ip_address_allocation = "Dynamic"
   }
 
   tags = var.tags
