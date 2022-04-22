@@ -54,6 +54,7 @@ resource "azurerm_public_ip" "tfe_pip" {
   sku               = "Standard"
   allocation_method = "Static"
   domain_name_label = var.domain_name == null ? local.tfe_subdomain : null
+  zones             = var.zones
 
   tags = var.tags
 }
@@ -356,8 +357,7 @@ resource "azurerm_lb_backend_address_pool" "tfe_load_balancer_be" {
 resource "azurerm_lb_probe" "tfe_load_balancer_probe_console" {
   count = var.load_balancer_type == "load_balancer" && var.active_active == false ? 1 : 0
 
-  name                = "${var.friendly_name_prefix}-lb-probe-console"
-  resource_group_name = var.resource_group_name
+  name = "${var.friendly_name_prefix}-lb-probe-console"
 
   loadbalancer_id = azurerm_lb.tfe_load_balancer[0].id
   protocol        = "Https"
@@ -368,23 +368,21 @@ resource "azurerm_lb_probe" "tfe_load_balancer_probe_console" {
 resource "azurerm_lb_rule" "tfe_load_balancer_rule_console" {
   count = var.load_balancer_type == "load_balancer" && var.active_active == false ? 1 : 0
 
-  name                = "${var.friendly_name_prefix}-lb-rule-console"
-  resource_group_name = var.resource_group_name
+  name = "${var.friendly_name_prefix}-lb-rule-console"
 
   loadbalancer_id                = azurerm_lb.tfe_load_balancer[0].id
   probe_id                       = azurerm_lb_probe.tfe_load_balancer_probe_console[0].id
   protocol                       = "Tcp"
   frontend_ip_configuration_name = "${var.friendly_name_prefix}-lb-fe"
   frontend_port                  = 8800
-  backend_address_pool_id        = azurerm_lb_backend_address_pool.tfe_load_balancer_be[0].id
+  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.tfe_load_balancer_be[0].id]
   backend_port                   = 8800
 }
 
 resource "azurerm_lb_probe" "tfe_load_balancer_probe_app" {
   count = var.load_balancer_type == "load_balancer" ? 1 : 0
 
-  name                = "${var.friendly_name_prefix}-lb-probe-app"
-  resource_group_name = var.resource_group_name
+  name = "${var.friendly_name_prefix}-lb-probe-app"
 
   loadbalancer_id = azurerm_lb.tfe_load_balancer[0].id
   protocol        = "Https"
@@ -395,23 +393,21 @@ resource "azurerm_lb_probe" "tfe_load_balancer_probe_app" {
 resource "azurerm_lb_rule" "tfe_load_balancer_rule_app" {
   count = var.load_balancer_type == "load_balancer" ? 1 : 0
 
-  name                = "${var.friendly_name_prefix}-lb-rule-app"
-  resource_group_name = var.resource_group_name
+  name = "${var.friendly_name_prefix}-lb-rule-app"
 
   loadbalancer_id                = azurerm_lb.tfe_load_balancer[0].id
   probe_id                       = azurerm_lb_probe.tfe_load_balancer_probe_app[0].id
   protocol                       = "Tcp"
   frontend_ip_configuration_name = "${var.friendly_name_prefix}-lb-fe"
   frontend_port                  = 443
-  backend_address_pool_id        = azurerm_lb_backend_address_pool.tfe_load_balancer_be[0].id
+  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.tfe_load_balancer_be[0].id]
   backend_port                   = 443
 }
 
 resource "azurerm_lb_probe" "tfe_load_balancer_probe_ssh" {
   count = var.enable_ssh && var.load_balancer_type == "load_balancer" && !var.active_active ? 1 : 0
 
-  name                = "${var.friendly_name_prefix}-lb-probe-ssh"
-  resource_group_name = var.resource_group_name
+  name = "${var.friendly_name_prefix}-lb-probe-ssh"
 
   loadbalancer_id = azurerm_lb.tfe_load_balancer[0].id
   protocol        = "Tcp"
@@ -421,14 +417,14 @@ resource "azurerm_lb_probe" "tfe_load_balancer_probe_ssh" {
 resource "azurerm_lb_rule" "tfe_load_balancer_rule_ssh" {
   count = var.enable_ssh && var.load_balancer_type == "load_balancer" && !var.active_active ? 1 : 0
 
-  name                = "${var.friendly_name_prefix}-lb-rule-ssh"
-  resource_group_name = var.resource_group_name
+  name = "${var.friendly_name_prefix}-lb-rule-ssh"
 
   loadbalancer_id                = azurerm_lb.tfe_load_balancer[0].id
   probe_id                       = azurerm_lb_probe.tfe_load_balancer_probe_ssh[0].id
   protocol                       = "Tcp"
   frontend_ip_configuration_name = "${var.friendly_name_prefix}-lb-fe"
   frontend_port                  = 22
-  backend_address_pool_id        = azurerm_lb_backend_address_pool.tfe_load_balancer_be[0].id
+  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.tfe_load_balancer_be[0].id]
   backend_port                   = 22
 }
+

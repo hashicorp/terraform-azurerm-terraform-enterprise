@@ -20,8 +20,8 @@ resource "azurerm_key_vault_access_policy" "tfe_vmss_kv_access" {
   tenant_id    = var.tenant_id
 
   secret_permissions = [
-    "get",
-    "list"
+    "Get",
+    "List"
   ]
 }
 
