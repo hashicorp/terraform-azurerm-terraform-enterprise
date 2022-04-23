@@ -71,7 +71,6 @@ module "private_tcp_active_active" {
   redis_use_tls              = true
   redis_rdb_backup_enabled   = true
   redis_rdb_backup_frequency = 60
-  installation_type          = "production"
   production_type            = "external"
 
   create_bastion = false

@@ -35,7 +35,6 @@ module "standalone_mounted_disk" {
 
   # Standalone Mounted Disk Mode Scenario
   distribution         = "ubuntu"
-  installation_type    = "production"
   production_type      = "disk"
   disk_path            = "/opt/hashicorp/data"
   vm_node_count        = 1

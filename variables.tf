@@ -704,21 +704,6 @@ variable "tls_bootstrap_key_pathname" {
   description = "The path on the TFE instance to put the key. ex. '/var/lib/terraform-enterprise/key.pem'"
 }
 
-variable "installation_type" {
-  default     = "production"
-  type        = string
-  description = "Installation type for Terraform Enterprise"
-
-  validation {
-    condition = (
-      var.installation_type == "poc" ||
-      var.installation_type == "production"
-    )
-
-    error_message = "The installation type must be 'production' (recommended) or 'poc' (only used for demo-mode proofs of concept)."
-  }
-}
-
 variable "production_type" {
   default     = null
   type        = string

@@ -23,7 +23,6 @@ module "public_active_active" {
 
   # Public Active / Active Scenario
   distribution            = "ubuntu"
-  installation_type       = "production"
   production_type         = "external"
   iact_subnet_list        = var.iact_subnet_list
   vm_node_count           = 2
@@ -36,3 +35,4 @@ module "public_active_active" {
 
   tags = local.common_tags
 }
+
