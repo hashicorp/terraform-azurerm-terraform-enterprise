@@ -34,7 +34,7 @@ module "existing_network" {
   network_private_subnet_id            = var.network_private_subnet_id
   network_redis_subnet_id              = var.network_redis_subnet_id
   resource_group_name                  = var.resource_group_name
-  resource_group_name_dns              = var.resource_group_name_dn
+  resource_group_name_dns              = var.resource_group_name_dns
 
   # Bootstrapping resources
   load_balancer_certificate   = data.azurerm_key_vault_certificate.load_balancer
