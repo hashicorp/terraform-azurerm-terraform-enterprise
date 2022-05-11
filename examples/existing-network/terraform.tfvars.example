@@ -1,0 +1,30 @@
+domain_name                          = "my.domain.com"
+iact_subnet_list                     = ["0.0.0.0/0"] # careful, this is only for short-lived dev environments
+key_vault_id                         = "/subscriptions/<subscription_id>/resourceGroups/my-rg/providers/Microsoft.KeyVault/vaults/<key_vault_name>"
+license_file                         = "/full/path/to/my/tfe/license.rli"
+load_balancer_certificate_name       = "<key-vault-load-balancer-certificate-name>"
+location                             = "<region>"
+network_bastion_subnet_id            = "/subscriptions/<subscription_id>/resourceGroups/enpc-rg/providers/Microsoft.Network/virtualNetworks/enpc-network/subnets/<subnet_name>"
+network_database_private_dns_zone_id = "/subscriptions/<subscription_id>/resourceGroups/enpc-rg/providers/Microsoft.Network/privateDnsZones/<enpc.postgres.database.azure.com>"
+network_database_subnet_id           = "/subscriptions/<subscription_id>/resourceGroups/enpc-rg/providers/Microsoft.Network/virtualNetworks/enpc-network/subnets/<subnet_name>"
+network_frontend_subnet_id           = "/subscriptions/<subscription_id>/resourceGroups/enpc-rg/providers/Microsoft.Network/virtualNetworks/enpc-network/subnets/<subnet_name>"
+network_private_subnet_id            = "/subscriptions/<subscription_id>/resourceGroups/enpc-rg/providers/Microsoft.Network/virtualNetworks/enpc-network/subnets/<subnet_name>"
+network_redis_subnet_id              = "/subscriptions/<subscription_id>/resourceGroups/enpc-rg/providers/Microsoft.Network/virtualNetworks/enpc-network/subnets/<subnet_name>"
+resource_group_name_dns              = "<existing-dns-rg-name>"
+resource_group_name                  = "<existing-network-rg-name>"
+vm_certificate_secret_name           = "<my-certificate-pem>"
+vm_key_secret_name                   = "<my-private-key-pem>"
+tags                                 = {
+                                         Owner       = "Your Name"
+                                         Environment = "existing-network"
+                                         Description = "Active-Active, External, Existing Network"
+                                         Repository  = "hashicorp/terraform-azurerm-terraform-enterprise"
+                                         Team        = "Your Team Name"
+}
+
+
+
+
+
+
+
