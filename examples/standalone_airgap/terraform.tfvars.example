@@ -1,13 +1,13 @@
 domain_name             = "my.domain.com"
-location                = "Central US"
-resource_group_name_dns = "existing-dns-rg-name"
 iact_subnet_list        = ["0.0.0.0/0"] # careful, this is only for short-lived dev environments
-vm_image_id             = "/subscriptions/*******-my-azure-sub-id-*****/resourceGroups/my-rg/providers/Microsoft.Compute/galleries/my_image_gallery/images/airgapimage/versions/0.0.3"
+location                = "region"
+resource_group_name_dns = "existing-dns-rg-name"
+tags                    = {
+                           Owner       = "Your Name"
+                           Environment = "standalone-airgap"
+                           Description = "Standalone, Mounted Disk, Airgapped scenario"
+                           Repository  = "hashicorp/terraform-azurerm-terraform-enterprise"
+                           Team        = "Your Team Name"
+                          }
+vm_image_id             = "/subscriptions/1a2s3d4f-1a2s-1q2w-4r5t6-1a2s3d4f/resourceGroups/my-rg/providers/Microsoft.Compute/galleries/my_image_gallery/images/airgapimage/versions/0.0.3"
 
-tags = {
-  Owner       = "Your Name"
-  Environment = "standalone-airgap"
-  Description = "Standalone, Mounted Disk, Airgapped scenario"
-  Repository  = "hashicorp/terraform-azurerm-terraform-enterprise"
-  Team        = "Your Team Name"
-}

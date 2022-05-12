@@ -1,3 +1,5 @@
+# Random String for unique names
+# ------------------------------
 resource "random_string" "friendly_name" {
   length  = 4
   upper   = false
@@ -5,6 +7,8 @@ resource "random_string" "friendly_name" {
   special = false
 }
 
+# Standalone Airgapped
+# --------------------
 module "standalone_airgap" {
   source = "../../"
 
@@ -19,16 +23,15 @@ module "standalone_airgap" {
   tls_bootstrap_key_pathname                = "/var/lib/terraform-enterprise/key.pem"
 
   # Standalone, Mounted Disk Mode, Airgapped Installation Example
-  production_type      = "disk"
   disk_path            = "/opt/hashicorp/data"
   distribution         = "ubuntu"
   iact_subnet_list     = var.iact_subnet_list
+  production_type      = "disk"
+  load_balancer_public = true
+  load_balancer_type   = "load_balancer"
   vm_node_count        = 1
   vm_sku               = "Standard_D4_v3"
   vm_image_id          = var.vm_image_id
-  load_balancer_public = true
-  load_balancer_type   = "load_balancer"
-
   tags = var.tags
 }
 
