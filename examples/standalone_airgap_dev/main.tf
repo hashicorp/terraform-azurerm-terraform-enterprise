@@ -48,5 +48,5 @@ module "standalone_airgap_dev" {
   vm_node_count        = 1
   vm_sku               = "Standard_D4_v3"
   vm_image_id          = "ubuntu"
-  tags = var.tags
+  tags                 = var.tags
 }
