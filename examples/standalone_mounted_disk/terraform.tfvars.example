@@ -7,8 +7,8 @@ location                       = "region"
 resource_group_name_dns        = "existing-dns-rg-name"
 tags                           = {
                                   Owner       = "Your Name"
-                                  Environment = "standalone-airgap"
-                                  Description = "Standalone, Mounted Disk, Airgapped scenario"
+                                  Environment = "standalone"
+                                  Description = "Standalone, Mounted Disk"
                                   Repository  = "hashicorp/terraform-azurerm-terraform-enterprise"
                                   Team        = "Your Team Name"
                                  }
