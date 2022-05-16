@@ -42,7 +42,7 @@ module "standalone_airgap_dev" {
   # Standalone External Scenario
   distribution         = "ubuntu"
   production_type      = "external"
-  iact_subnet_list     = ["0.0.0.0/0"]
+  iact_subnet_list     = var.iact_subnet_list
   vm_node_count        = 1
   vm_sku               = "Standard_D4_v3"
   vm_image_id          = "ubuntu"
