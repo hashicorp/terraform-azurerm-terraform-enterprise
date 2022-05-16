@@ -1,5 +1,3 @@
-# Random String for unique names
-# ------------------------------
 resource "random_string" "friendly_name" {
   length  = 4
   upper   = false
@@ -7,21 +5,17 @@ resource "random_string" "friendly_name" {
   special = false
 }
 
-# Store TFE License as secret
-# ---------------------------
 module "secrets" {
   source = "../../fixtures/secrets"
 
   key_vault_id = var.key_vault_id
   tfe_license = {
-    name = "tfe-license-${random_string.friendly_name.id}"
+    name = "tfe-license-${local.friendly_name_prefix}"
     path = var.license_file
   }
 }
 
-# Standalone Airgapped - DEV (bootstrap prerequisites)
-# ----------------------------------------------------
-module "standalone_airgap_dev" {
+module "standalone_external" {
   source = "../../"
 
   domain_name             = var.domain_name
@@ -30,12 +24,10 @@ module "standalone_airgap_dev" {
   resource_group_name_dns = var.resource_group_name_dns
 
   # Bootstrapping resources
-  airgap_url                  = var.airgap_url
   load_balancer_certificate   = data.azurerm_key_vault_certificate.load_balancer
   tfe_license_secret_id       = module.secrets.tfe_license_secret_id
   vm_certificate_secret       = data.azurerm_key_vault_secret.vm_certificate
   vm_key_secret               = data.azurerm_key_vault_secret.vm_key
-  tfe_license_bootstrap_airgap_package_path = "/var/lib/ptfe/ptfe.airgap"
   tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"
   tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
 

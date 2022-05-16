@@ -26,6 +26,11 @@ variable "license_file" {
   description = "The local path to the Terraform Enterprise license to be provided by CI."
 }
 
+variable "load_balancer_certificate_name" {
+  type        = string
+  description = "The name of a Key Vault certificate which will be attached to the application gateway."
+}
+
 variable "location" {
   type        = string
   description = "(Required) Azure location name e.g. East US"

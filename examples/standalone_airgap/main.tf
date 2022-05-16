@@ -23,10 +23,9 @@ module "standalone_airgap" {
   tls_bootstrap_key_pathname                = "/var/lib/terraform-enterprise/key.pem"
 
   # Standalone, Mounted Disk Mode, Airgapped Installation Example
-  disk_path            = "/opt/hashicorp/data"
   distribution         = "ubuntu"
   iact_subnet_list     = var.iact_subnet_list
-  production_type      = "disk"
+  production_type      = "external"
   load_balancer_public = true
   load_balancer_type   = "load_balancer"
   vm_node_count        = 1
@@ -34,4 +33,3 @@ module "standalone_airgap" {
   vm_image_id          = var.vm_image_id
   tags                 = var.tags
 }
-

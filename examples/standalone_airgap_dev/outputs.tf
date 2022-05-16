@@ -13,6 +13,18 @@ output "ptfe_health_check" {
   description = "Terraform Enterprise Health Check URL"
 }
 
+output "ssh_config_file" {
+  value = local_file.ssh_config.filename
+
+  description = "The pathname of the SSH configuration file that grants access to the compute instance."
+}
+
+output "ssh_private_key" {
+  value = local_file.private_key_pem.filename
+
+  description = "The pathname of the private SSH key."
+}
+
 output "tfe_console_password" {
   value       = module.standalone_airgap_dev.tfe_console_password
   description = "The password for the TFE console"
