@@ -49,6 +49,6 @@ module "standalone_airgap_dev" {
   load_balancer_public = true
   load_balancer_type   = "load_balancer"
 
-  enable_ssh = true
+  create_bastion = true
   tags       = var.tags
 }
