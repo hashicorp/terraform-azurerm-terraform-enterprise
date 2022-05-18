@@ -50,5 +50,5 @@ module "standalone_airgap_dev" {
   load_balancer_type   = "load_balancer"
 
   create_bastion = true
-  tags       = var.tags
+  tags           = var.tags
 }
