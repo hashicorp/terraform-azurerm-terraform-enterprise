@@ -1,11 +1,11 @@
-# EXAMPLE: Standalone Mounted Airgapped Installation of Terraform Enterprise
+# EXAMPLE: Standalone External Airgapped Installation of Terraform Enterprise
 
 ## About This Example
 
 This example for Terraform Enterprise creates a TFE installation with the following traits:
 
 - Standalone
-- Mounted Disk production type
+- External Services production type
 - Air gapped
 - Standard_D4_v3 virtual machine type
 - Ubuntu 20.04
@@ -26,11 +26,6 @@ This example assumes that the following resources exist:
   - The airgap package is on a filepath defined by `var.tfe_license_bootstrap_airgap_package_path`.
   - The extracted Replicated package from https://install.terraform.io/airgap/latest.tar.gz is at `/tmp/replicated/replicated.tar.gz`.
 - A DNS zone
-- Valid managed SSL certificate to use with load balancer:
-  - An Azure Key Vault in which the following are stored:
-    - TFE CA certificate (certificate)
-    - Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate for the Virtual Machine Scale Set
-    - Key Vault secret which contains the Base64 encoded version of a PEM encoded private key for the Virtual Machine Scale Set.
 
 ## How to Use This Module
 

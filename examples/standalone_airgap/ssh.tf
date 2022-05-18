@@ -1,4 +1,5 @@
-# Create files for SSH config.
+# Create files for SSH config
+#----------------------------
 resource "local_file" "private_key_pem" {
   filename = "${path.module}/work/private-key.pem"
 

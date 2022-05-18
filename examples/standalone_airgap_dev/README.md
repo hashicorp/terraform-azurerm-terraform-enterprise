@@ -1,11 +1,11 @@
-# EXAMPLE: Standalone Mounted Airgapped Installation of Terraform Enterprise
+# EXAMPLE: Standalone External Airgapped Installation of Terraform Enterprise
 
 ## About This Example
 
 This example for Terraform Enterprise creates a TFE installation with the following traits:
 
 - Standalone
-- Mounted Disk production type
+- External Services production type
 - Air gapped (mocked)
 - This example merely tests that the `airgap_url` package is able to install TFE. It does not, however, assume that the environment is air gapped, and it therefore installs the prerequisites for an air gapped installation, too. 
 - Standard_D4_v3 virtual machine type

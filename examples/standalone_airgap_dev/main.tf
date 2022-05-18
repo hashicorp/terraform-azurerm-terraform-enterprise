@@ -32,12 +32,12 @@ module "standalone_airgap_dev" {
   # Bootstrapping resources
   airgap_url                                = var.airgap_url
   load_balancer_certificate                 = data.azurerm_key_vault_certificate.load_balancer
-  tfe_license_secret_id                     = module.secrets.tfe_license_secret_id
-  vm_certificate_secret                     = data.azurerm_key_vault_secret.vm_certificate
-  vm_key_secret                             = data.azurerm_key_vault_secret.vm_key
-  tfe_license_bootstrap_airgap_package_path = "/var/lib/ptfe/ptfe.airgap"
   tls_bootstrap_cert_pathname               = "/var/lib/terraform-enterprise/certificate.pem"
   tls_bootstrap_key_pathname                = "/var/lib/terraform-enterprise/key.pem"
+  tfe_license_secret_id                     = module.secrets.tfe_license_secret_id
+  tfe_license_bootstrap_airgap_package_path = "/var/lib/ptfe/ptfe.airgap"
+  vm_certificate_secret                     = data.azurerm_key_vault_secret.vm_certificate
+  vm_key_secret                             = data.azurerm_key_vault_secret.vm_key
 
   # Standalone External Scenario
   distribution         = "ubuntu"
@@ -50,6 +50,5 @@ module "standalone_airgap_dev" {
   load_balancer_type   = "load_balancer"
 
   enable_ssh     = true
-  create_bastion = true
   tags           = var.tags
 }

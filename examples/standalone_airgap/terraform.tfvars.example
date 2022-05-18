@@ -10,4 +10,3 @@ tags                    = {
                            Team        = "Your Team Name"
                           }
 vm_image_id             = "/subscriptions/1a2s3d4f-1a2s-1q2w-4r5t6-1a2s3d4f/resourceGroups/my-rg/providers/Microsoft.Compute/galleries/my_image_gallery/images/airgapimage/versions/0.0.3"
-
