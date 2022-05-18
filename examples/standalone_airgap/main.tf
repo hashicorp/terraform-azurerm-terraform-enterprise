@@ -23,7 +23,6 @@ module "standalone_airgap" {
   tls_bootstrap_key_pathname                = "/var/lib/terraform-enterprise/key.pem"
 
   # Standalone, External Mode, Airgapped Installation Example
-  # ---------------------------------------------------------
   distribution         = "ubuntu"
   iact_subnet_list     = var.iact_subnet_list
   production_type      = "external"
