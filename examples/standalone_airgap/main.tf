@@ -7,8 +7,8 @@ resource "random_string" "friendly_name" {
   special = false
 }
 
-# Standalone Airgapped
-# --------------------
+# Run TFE root module for Standalone Airgapped External Mode
+# ----------------------------------------------------------
 module "standalone_airgap" {
   source = "../../"
 
