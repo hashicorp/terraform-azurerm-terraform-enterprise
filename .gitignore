@@ -25,4 +25,5 @@ examples/*/*.lock*
 *.cer*
 *.key*
 *.rli*
+*id_rsa*
 work
