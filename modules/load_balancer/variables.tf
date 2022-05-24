@@ -178,6 +178,19 @@ variable "load_balancer_sku_capacity" {
   description = "The Capacity of the SKU to use for Application Gateway (1 to 125)"
 }
 
+variable "load_balancer_request_routing_rule_minimum_priority" {
+  default     = 1000
+  type        = number
+  description = "The minimum priority for request routing rule. Lower priotity numbered rules take precedence over higher priotity number rules."
+  validation {
+    condition = (
+      var.load_balancer_request_routing_rule_minimum_priority > 1 &&
+      var.load_balancer_request_routing_rule_minimum_priority < 19000
+    )
+    error_message = "Request routing rules priority must be between 1 and 19,000."
+  }
+}
+
 # Network
 # -------
 variable "network_frontend_subnet_id" {

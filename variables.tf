@@ -346,6 +346,19 @@ variable "load_balancer_public" {
   description = "Load balancer will use public IP if true"
 }
 
+variable "load_balancer_request_routing_rule_minimum_priority" {
+  default     = 1000
+  type        = number
+  description = "The minimum priority for request routing rule. Lower priotity numbered rules take precedence over higher priotity number rules."
+  validation {
+    condition = (
+      var.load_balancer_request_routing_rule_minimum_priority > 1 &&
+      var.load_balancer_request_routing_rule_minimum_priority < 19000
+    )
+    error_message = "Request routing rules priority must be between 1 and 19,000."
+  }
+}
+
 variable "load_balancer_sku_name" {
   default     = "Standard_v2"
   type        = string
