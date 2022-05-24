@@ -187,7 +187,7 @@ variable "load_balancer_request_routing_rule_minimum_priority" {
       var.load_balancer_request_routing_rule_minimum_priority > 1 &&
       var.load_balancer_request_routing_rule_minimum_priority < 19000
     )
-    error_message = "request routing rules priority must be between 1 and 19,000"
+    error_message = "Request routing rules priority must be between 1 and 19,000."
   }
 }
 
