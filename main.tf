@@ -254,14 +254,15 @@ module "load_balancer" {
   network_frontend_subnet_id   = local.network.frontend_subnet.id
 
   # Load balancer
-  load_balancer_type                         = var.load_balancer_type
-  load_balancer_public                       = var.load_balancer_public
-  load_balancer_sku_name                     = var.load_balancer_sku_name
-  load_balancer_sku_tier                     = var.load_balancer_sku_tier
-  load_balancer_waf_firewall_mode            = var.load_balancer_waf_firewall_mode
-  load_balancer_waf_rule_set_version         = var.load_balancer_waf_rule_set_version
-  load_balancer_waf_file_upload_limit_mb     = var.load_balancer_waf_file_upload_limit_mb
-  load_balancer_waf_max_request_body_size_kb = var.load_balancer_waf_max_request_body_size_kb
+  load_balancer_type                                  = var.load_balancer_type
+  load_balancer_public                                = var.load_balancer_public
+  load_balancer_request_routing_rule_minimum_priority = var.load_balancer_request_routing_rule_minimum_priority
+  load_balancer_sku_name                              = var.load_balancer_sku_name
+  load_balancer_sku_tier                              = var.load_balancer_sku_tier
+  load_balancer_waf_firewall_mode                     = var.load_balancer_waf_firewall_mode
+  load_balancer_waf_rule_set_version                  = var.load_balancer_waf_rule_set_version
+  load_balancer_waf_file_upload_limit_mb              = var.load_balancer_waf_file_upload_limit_mb
+  load_balancer_waf_max_request_body_size_kb          = var.load_balancer_waf_max_request_body_size_kb
 
   tags = var.tags
 }
