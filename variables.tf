@@ -346,6 +346,19 @@ variable "load_balancer_public" {
   description = "Load balancer will use public IP if true"
 }
 
+variable "load_balancer_request_routing_rule_minimum_priority" {
+  default     = 1000
+  type        = number
+  description = "The minimum priority for request routing rule. Lower priotity numbered rules take precedence over higher priotity number rules."
+  validation {
+    condition = (
+      var.load_balancer_request_routing_rule_minimum_priority > 1 &&
+      var.load_balancer_request_routing_rule_minimum_priority < 19000
+    )
+    error_message = "Request routing rules priority must be between 1 and 19,000."
+  }
+}
+
 variable "load_balancer_sku_name" {
   default     = "Standard_v2"
   type        = string
@@ -702,21 +715,6 @@ variable "tls_bootstrap_key_pathname" {
   default     = null
   type        = string
   description = "The path on the TFE instance to put the key. ex. '/var/lib/terraform-enterprise/key.pem'"
-}
-
-variable "installation_type" {
-  default     = "production"
-  type        = string
-  description = "Installation type for Terraform Enterprise"
-
-  validation {
-    condition = (
-      var.installation_type == "poc" ||
-      var.installation_type == "production"
-    )
-
-    error_message = "The installation type must be 'production' (recommended) or 'poc' (only used for demo-mode proofs of concept)."
-  }
 }
 
 variable "production_type" {

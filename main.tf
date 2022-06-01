@@ -28,7 +28,7 @@ resource "tls_private_key" "tfe_ssh" {
 # -----------------------------------------------------------------------------
 module "object_storage" {
   source = "./modules/object_storage"
-  count  = local.disk_mode == true || var.installation_type == "poc" ? 0 : 1
+  count  = local.disk_mode == true ? 0 : 1
 
   friendly_name_prefix = var.friendly_name_prefix
   resource_group_name  = module.resource_groups.resource_group_name
@@ -109,7 +109,7 @@ module "redis" {
 # -----------------------------------------------------------------------------
 module "database" {
   source = "./modules/database"
-  count  = local.disk_mode == true || var.installation_type == "poc" ? 0 : 1
+  count  = local.disk_mode == true ? 0 : 1
 
   friendly_name_prefix = var.friendly_name_prefix
   resource_group_name  = module.resource_groups.resource_group_name
@@ -136,15 +136,14 @@ module "settings" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=main"
 
   # TFE Base Configuration
-  custom_image_tag  = var.custom_image_tag
-  installation_type = var.installation_type
-  production_type   = var.production_type
-  disk_path         = var.disk_path
-  iact_subnet_list  = var.iact_subnet_list
-  trusted_proxies   = local.trusted_proxies
-  release_sequence  = var.release_sequence
-  pg_extra_params   = var.pg_extra_params
-  tbw_image         = var.tbw_image
+  custom_image_tag = var.custom_image_tag
+  disk_path        = var.disk_path
+  iact_subnet_list = var.iact_subnet_list
+  pg_extra_params  = var.pg_extra_params
+  production_type  = var.production_type
+  release_sequence = var.release_sequence
+  tbw_image        = var.tbw_image
+  trusted_proxies  = local.trusted_proxies
 
   extra_no_proxy = [
     "127.0.0.1",
@@ -255,14 +254,15 @@ module "load_balancer" {
   network_frontend_subnet_id   = local.network.frontend_subnet.id
 
   # Load balancer
-  load_balancer_type                         = var.load_balancer_type
-  load_balancer_public                       = var.load_balancer_public
-  load_balancer_sku_name                     = var.load_balancer_sku_name
-  load_balancer_sku_tier                     = var.load_balancer_sku_tier
-  load_balancer_waf_firewall_mode            = var.load_balancer_waf_firewall_mode
-  load_balancer_waf_rule_set_version         = var.load_balancer_waf_rule_set_version
-  load_balancer_waf_file_upload_limit_mb     = var.load_balancer_waf_file_upload_limit_mb
-  load_balancer_waf_max_request_body_size_kb = var.load_balancer_waf_max_request_body_size_kb
+  load_balancer_type                                  = var.load_balancer_type
+  load_balancer_public                                = var.load_balancer_public
+  load_balancer_request_routing_rule_minimum_priority = var.load_balancer_request_routing_rule_minimum_priority
+  load_balancer_sku_name                              = var.load_balancer_sku_name
+  load_balancer_sku_tier                              = var.load_balancer_sku_tier
+  load_balancer_waf_firewall_mode                     = var.load_balancer_waf_firewall_mode
+  load_balancer_waf_rule_set_version                  = var.load_balancer_waf_rule_set_version
+  load_balancer_waf_file_upload_limit_mb              = var.load_balancer_waf_file_upload_limit_mb
+  load_balancer_waf_max_request_body_size_kb          = var.load_balancer_waf_max_request_body_size_kb
 
   tags = var.tags
 }

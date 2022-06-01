@@ -2,18 +2,19 @@
 # ------------------
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest
 terraform {
-  required_version = ">= 0.13"
+  required_version = "~> 1.0"
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 2.79"
+      version = "~> 3.2"
     }
     tls = {
       source  = "hashicorp/tls"
-      version = "~> 3.1.0"
+      version = "~> 3.3"
     }
   }
 }
 provider "azurerm" {
   features {}
 }
+

@@ -69,7 +69,6 @@ module "private_active_active" {
   load_balancer_sku_tier  = "WAF_v2"
   redis_use_password_auth = true
   redis_use_tls           = false
-  installation_type       = "production"
   production_type         = "external"
 
   create_bastion = false

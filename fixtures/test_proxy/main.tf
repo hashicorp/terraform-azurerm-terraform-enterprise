@@ -44,7 +44,7 @@ resource "azurerm_network_interface" "proxy" {
   ip_configuration {
     name                          = "ipconfig"
     subnet_id                     = azurerm_subnet.proxy.id
-    private_ip_address_allocation = "dynamic"
+    private_ip_address_allocation = "Dynamic"
   }
 
   tags = var.tags
@@ -69,8 +69,8 @@ resource "azurerm_key_vault_access_policy" "proxy" {
   tenant_id    = data.azurerm_client_config.current.tenant_id
 
   secret_permissions = [
-    "get",
-    "list"
+    "Get",
+    "List"
   ]
 }
 
