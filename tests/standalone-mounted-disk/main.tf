@@ -19,10 +19,10 @@ module "secrets" {
 module "standalone_mounted_disk" {
   source = "../../"
 
-  domain_name             = "team-private-terraform-enterprise.azure.ptfedev.com"
+  domain_name             = var.domain_name
   friendly_name_prefix    = local.friendly_name_prefix
   location                = "Central US"
-  resource_group_name_dns = "ptfedev-com-dns-tls"
+  resource_group_name_dns = var.resource_group_name_dns
   iact_subnet_list        = ["0.0.0.0/0"]
 
   # Bootstrapping resources
