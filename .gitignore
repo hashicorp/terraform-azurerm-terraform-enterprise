@@ -11,6 +11,10 @@
 # terraform lock files
 .terraform.lock*
 
+# CI / Testing Intermediate Files
+.env.sh
+payload.json
+
 # Examples
 examples/*/*.tfstate
 examples/*/*.tfstate.*
