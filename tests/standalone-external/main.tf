@@ -42,6 +42,7 @@ module "standalone_external" {
   vm_image_id          = "ubuntu"
   load_balancer_public = true
   load_balancer_type   = "load_balancer"
+  database_version     = 13
 
   enable_ssh     = true
   create_bastion = false
