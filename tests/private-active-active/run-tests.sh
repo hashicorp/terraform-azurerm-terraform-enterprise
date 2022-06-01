@@ -9,9 +9,9 @@ bind_to_localhost=""
 Help()
 {
    # Display Help
-   echo "Add description of the script functions here."
+   echo "This script bootstraps the k6 / tfe-load-test environment and executes a smoke-test against an active TFE instance deployed with the terraform-azure-terraform-enterprise module."
    echo
-   echo "Syntax: run-tests.sh [-h|k|t]"
+   echo "Syntax: run-tests.sh [-h|k|t|b|s|l]"
    echo "options:"
    echo "h     Print this Help."
    echo "k     (required) The path to the k6 binary."
