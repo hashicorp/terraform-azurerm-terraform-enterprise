@@ -43,8 +43,8 @@ scripts assume:
 
 1. You have k6 installed on your system on a known path
 1. The tfe-load-test repository is cloned on your local filesystem
-1. For instances requiring a ssh proxy you must have a local copy of the bastion
-   ssh private key.
+1. For instances requiring an SSH proxy you must have a local copy of the bastion
+   SSH private key.
 
 Usage:
 
