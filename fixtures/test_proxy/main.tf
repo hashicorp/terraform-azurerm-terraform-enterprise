@@ -75,7 +75,7 @@ resource "azurerm_key_vault_access_policy" "proxy" {
 }
 
 module "test_proxy_init" {
-  source = "github.com/hashicorp/terraform-random-tfe-utility//fixtures/test_proxy_init?ref=sudomateo/template"
+  source = "github.com/hashicorp/terraform-random-tfe-utility//fixtures/test_proxy_init?ref=remove-template-provider"
 
   mitmproxy_ca_certificate_secret = var.mitmproxy_ca_certificate_secret
   mitmproxy_ca_private_key_secret = var.mitmproxy_ca_private_key_secret
