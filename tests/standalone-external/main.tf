@@ -6,8 +6,8 @@ resource "random_string" "friendly_name" {
 }
 
 module "secrets" {
-  count  = local.utility_module_test ? 0 : 1
-  source = "../../fixtures/secrets"
+  count        = local.utility_module_test ? 0 : 1
+  source       = "../../fixtures/secrets"
   key_vault_id = var.key_vault_id
 
   tfe_license = {
