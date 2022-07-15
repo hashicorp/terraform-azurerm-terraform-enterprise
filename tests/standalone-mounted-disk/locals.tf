@@ -8,5 +8,6 @@ locals {
     OkToDelete  = "True"
   }
 
+  utility_module_test  = var.license_file == null
   friendly_name_prefix = random_string.friendly_name.id
 }

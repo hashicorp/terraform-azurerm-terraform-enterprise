@@ -6,8 +6,8 @@ resource "random_string" "friendly_name" {
 }
 
 module "secrets" {
-  source = "../../fixtures/secrets"
-
+  count        = local.utility_module_test ? 0 : 1
+  source       = "../../fixtures/secrets"
   key_vault_id = var.key_vault_id
 
   tfe_license = {
@@ -26,7 +26,7 @@ module "standalone_external" {
 
   # Bootstrapping resources
   load_balancer_certificate   = data.azurerm_key_vault_certificate.load_balancer
-  tfe_license_secret_id       = module.secrets.tfe_license_secret_id
+  tfe_license_secret_id       = try(module.secrets[0].tfe_license_secret_id, var.tfe_license_secret_id)
   vm_certificate_secret       = data.azurerm_key_vault_secret.vm_certificate
   vm_key_secret               = data.azurerm_key_vault_secret.vm_key
   tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"
