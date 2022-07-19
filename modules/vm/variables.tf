@@ -99,6 +99,16 @@ variable "vm_image_id" {
   }
 }
 
+variable "vm_image_reference" {
+  type = object({
+    publisher = string
+    offer     = string
+    sku       = string
+    version   = string
+  })
+  description = "An image reference block as defined in the azurerm_linux_virtual_machine resource documentation."
+}
+
 variable "vm_vmss_scale_in_policy" {
   description = "The scale-in policy to use for the virtual machine scale set."
   type        = string
