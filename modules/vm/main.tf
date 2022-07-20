@@ -54,7 +54,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
 
   # Source image reference will be used if vm_image_id is 'ubuntu' or 'rhel'
   dynamic "source_image_reference" {
-    for_each = var.vm_image_id == "ubuntu" || var.vm_image_id == "rhel" ? [1] : []
+    for_each = var.vm_image_id == "ubuntu" || var.vm_image_id == "rhel" || var.vm_image_id == "rhel8" ? [1] : []
 
     content {
       publisher = var.vm_image_id == "ubuntu" ? "Canonical" : "RedHat"
