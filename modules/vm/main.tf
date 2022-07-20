@@ -50,29 +50,17 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
   }
 
   # Source image id will be used if vm_image_id anything other than 'ubuntu' or 'rhel'
-  source_image_id = var.vm_image_id == "ubuntu" || var.vm_image_id == "rhel" || var.vm_image_id == "rhel8" || var.vm_image_reference != null ? null : var.vm_image_id
+  source_image_id = var.vm_image_id == "ubuntu" || var.vm_image_id == "rhel" || var.vm_image_id == "rhel8" ? null : var.vm_image_id
 
   # Source image reference will be used if vm_image_id is 'ubuntu' or 'rhel'
   dynamic "source_image_reference" {
-    for_each = var.vm_image_reference == null && (var.vm_image_id == "ubuntu" || var.vm_image_id == "rhel") ? [1] : []
+    for_each = var.vm_image_id == "ubuntu" || var.vm_image_id == "rhel" ? [1] : []
 
     content {
       publisher = var.vm_image_id == "ubuntu" ? "Canonical" : "RedHat"
       offer     = var.vm_image_id == "ubuntu" ? "0001-com-ubuntu-server-focal" : "RHEL"
       sku       = var.vm_image_id == "ubuntu" ? "20_04-lts" : local.rhel_release
       version   = var.vm_image_id == "ubuntu" ? "latest" : "latest"
-    }
-  }
-
-  # Source image reference will be used and populated from the vm_image_reference variable if it is present
-  dynamic "source_image_reference" {
-    for_each = var.vm_image_reference != null ? [1] : []
-
-    content {
-      publisher = var.vm_image_reference.publisher
-      offer     = var.vm_image_reference.offer
-      sku       = var.vm_image_reference.sku
-      version   = var.vm_image_reference.version
     }
   }
 
