@@ -133,7 +133,7 @@ module "database" {
 # TFE and Replicated settings to pass to the tfe_init module
 # -----------------------------------------------------------------------------
 module "settings" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=main"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=support_rhel_8_6"
 
   # TFE Base Configuration
   custom_image_tag = var.custom_image_tag
@@ -186,7 +186,7 @@ module "settings" {
 # Azure user data / cloud init used to install and configure TFE on instance(s)
 # -----------------------------------------------------------------------------
 module "tfe_init" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=main"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=support_rhel_8_6"
 
   # TFE & Replicated Configuration data
   cloud                    = "azurerm"
@@ -287,7 +287,6 @@ module "vm" {
   vm_data_disk_storage_account_type = var.vm_data_disk_storage_account_type
   vm_identity_type                  = var.vm_identity_type
   vm_image_id                       = var.vm_image_id
-  vm_image_reference                = var.vm_image_reference
   vm_node_count                     = var.vm_node_count
   vm_os_disk_caching                = var.vm_os_disk_caching
   vm_os_disk_disk_size_gb           = var.vm_os_disk_disk_size_gb

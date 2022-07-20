@@ -92,6 +92,7 @@ variable "vm_image_id" {
     condition = (
       var.vm_image_id == "ubuntu" ||
       var.vm_image_id == "rhel" ||
+      var.vm_image_id == "rhel8" ||
       substr(var.vm_image_id, 0, 14) == "/subscriptions"
     )
 

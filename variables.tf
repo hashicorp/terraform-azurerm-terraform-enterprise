@@ -9,8 +9,8 @@ variable "distribution" {
   type        = string
   description = "(Required) What is the OS distribution of the instance on which Terraoform Enterprise will be deployed?"
   validation {
-    condition     = contains(["rhel", "ubuntu"], var.distribution)
-    error_message = "Supported values for distribution are 'rhel' or 'ubuntu'."
+    condition     = contains(["rhel", "rhel8", "ubuntu"], var.distribution)
+    error_message = "Supported values for distribution are 'rhel', 'rhel8', or 'ubuntu'."
   }
 }
 
@@ -515,21 +515,12 @@ variable "vm_image_id" {
     condition = (
       var.vm_image_id == "ubuntu" ||
       var.vm_image_id == "rhel" ||
+      var.vm_image_id == "rhel8" ||
       substr(var.vm_image_id, 0, 14) == "/subscriptions"
     )
 
-    error_message = "The vm_image_id value must be 'ubuntu', 'rhel', or an Azure image resource ID beginning with \"/subscriptions\"."
+    error_message = "The vm_image_id value must be 'ubuntu', 'rhel', 'rhel8', or an Azure image resource ID beginning with \"/subscriptions\"."
   }
-}
-
-variable "vm_image_reference" {
-  type = object({
-      publisher = string
-      offer     = string
-      sku       = string
-      version   = string
-    })
-  description = "An image reference block as defined in the azurerm_linux_virtual_machine resource documentation."
 }
 
 variable "vm_sku" {
