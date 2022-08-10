@@ -65,7 +65,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
   }
 
   dynamic "source_image_reference" {
-    for_each = var.vm_image_id == null ? [1] : []
+    for_each = var.vm_image_id == "manual" ? [1] : []
 
     content {
       publisher = var.vm_image_publisher
