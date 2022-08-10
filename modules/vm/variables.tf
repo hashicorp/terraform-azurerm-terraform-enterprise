@@ -92,10 +92,11 @@ variable "vm_image_id" {
     condition = (
       var.vm_image_id == "ubuntu" ||
       var.vm_image_id == "rhel" ||
+      var.vm_image_id == "manual" ||
       substr(var.vm_image_id, 0, 14) == "/subscriptions"
     )
 
-    error_message = "The vm_image_id value must be 'ubuntu', 'rhel', or an Azure image resource ID beginning with \"/subscriptions\"."
+    error_message = "The vm_image_id value must be 'ubuntu', 'rhel', 'manual', or an Azure image resource ID beginning with \"/subscriptions\"."
   }
 }
 
