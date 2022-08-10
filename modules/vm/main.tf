@@ -50,7 +50,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
   }
 
   # Source image id will be used if vm_image_id anything other than 'ubuntu' or 'rhel'
-  source_image_id = var.vm_image_id == "ubuntu" || var.vm_image_id == "rhel" ? null : var.vm_image_id
+  source_image_id = var.vm_image_id == "ubuntu" || var.vm_image_id == "rhel" || var.vm_image_id == "manual" ? null : var.vm_image_id
 
   # Source image reference will be used if vm_image_id is 'ubuntu' or 'rhel'
   dynamic "source_image_reference" {
