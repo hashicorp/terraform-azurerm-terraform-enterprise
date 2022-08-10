@@ -64,6 +64,17 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
     }
   }
 
+  dynamic "source_image_reference" {
+    for_each = var.vm_image_id == null ? [1] : []
+
+    content {
+      publisher = var.vm_image_publisher
+      offer     = var.vm_image_offer
+      sku       = var.vm_image_sku
+      version   = var.vm_image_version
+    }
+  }
+
   admin_ssh_key {
     username   = var.vm_user
     public_key = var.vm_public_key
