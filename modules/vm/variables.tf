@@ -107,7 +107,7 @@ variable "vm_image_publisher" {
   vm_image_offer, vm_image_sku, and vm_image_version to determine the image to install from the public markeplace when
   vm_image_id is not provided.
   EOD
-  default = null
+  default     = null
 }
 
 variable "vm_image_offer" {
@@ -117,7 +117,7 @@ variable "vm_image_offer" {
   vm_image_publisher, vm_image_sku, and vm_image_version to determine the image to install from the public markeplace
   when vm_image_id is not provided.
   EOD
-  default = null
+  default     = null
 }
 
 variable "vm_image_sku" {
@@ -127,7 +127,7 @@ variable "vm_image_sku" {
   vm_image_publisher, vm_image_offer, and vm_image_version to determine the image to install from the public markeplace
   when vm_image_id is not provided.
   EOD
-  default = null
+  default     = null
 }
 
 variable "vm_image_version" {
@@ -137,7 +137,7 @@ variable "vm_image_version" {
   vm_image_publisher, vm_image_offer, and vm_image_sku to determine the image to install from the public markeplace
   when vm_image_id is not provided.
   EOD
-  default = null
+  default     = null
 }
 
 variable "vm_vmss_scale_in_policy" {
