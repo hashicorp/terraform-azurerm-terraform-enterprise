@@ -68,6 +68,6 @@ variable "vm_image_version" {
 }
 
 variable "distribution" {
-  type        = string
-  default     = "ubuntu"
+  type    = string
+  default = "ubuntu"
 }
