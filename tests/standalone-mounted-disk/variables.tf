@@ -68,6 +68,11 @@ variable "vm_image_version" {
 }
 
 variable "distribution" {
-  type    = string
+  type        = string
+  description = "(Required) What is the OS distribution of the instance on which Terraoform Enterprise will be deployed?"
+  validation {
+    condition     = contains(["rhel", "ubuntu"], var.distribution)
+    error_message = "Supported values for distribution are 'rhel' or 'ubuntu'."
+  }
   default = "ubuntu"
 }
