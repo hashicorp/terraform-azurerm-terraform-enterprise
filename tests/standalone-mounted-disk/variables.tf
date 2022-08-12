@@ -66,3 +66,8 @@ variable "vm_image_version" {
   EOD
   default     = null
 }
+
+variable "distribution" {
+  type        = string
+  default     = "ubuntu"
+}
