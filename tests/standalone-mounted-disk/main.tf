@@ -34,12 +34,16 @@ module "standalone_mounted_disk" {
   tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
 
   # Standalone Mounted Disk Mode Scenario
-  distribution         = "ubuntu"
+  distribution         = var.distribution
   production_type      = "disk"
   disk_path            = "/opt/hashicorp/data"
   vm_node_count        = 1
   vm_sku               = "Standard_D4_v3"
-  vm_image_id          = "ubuntu"
+  vm_image_id          = local.vm_image_id
+  vm_image_publisher   = local.vm_image_publisher
+  vm_image_offer       = local.vm_image_offer
+  vm_image_sku         = local.vm_image_sku
+  vm_image_version     = local.vm_image_version
   load_balancer_public = true
   load_balancer_type   = "load_balancer"
 

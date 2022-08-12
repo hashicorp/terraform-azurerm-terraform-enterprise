@@ -287,6 +287,10 @@ module "vm" {
   vm_data_disk_storage_account_type = var.vm_data_disk_storage_account_type
   vm_identity_type                  = var.vm_identity_type
   vm_image_id                       = var.vm_image_id
+  vm_image_publisher                = var.vm_image_publisher
+  vm_image_offer                    = var.vm_image_offer
+  vm_image_sku                      = var.vm_image_sku
+  vm_image_version                  = var.vm_image_version
   vm_node_count                     = var.vm_node_count
   vm_os_disk_caching                = var.vm_os_disk_caching
   vm_os_disk_disk_size_gb           = var.vm_os_disk_disk_size_gb
