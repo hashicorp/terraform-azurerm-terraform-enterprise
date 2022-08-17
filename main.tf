@@ -180,6 +180,11 @@ module "settings" {
   azure_account_key  = local.object_storage.storage_account_key
   azure_account_name = local.object_storage.storage_account_name
   azure_container    = local.object_storage.storage_account_container_name
+
+  # Metrics
+  metrics_endpoint_enabled    = var.metrics_endpoint_enabled
+  metrics_endpoint_port_http  = var.metrics_endpoint_port_http
+  metrics_endpoint_port_https = var.metrics_endpoint_port_https
 }
 
 # -----------------------------------------------------------------------------
