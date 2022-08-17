@@ -802,6 +802,36 @@ variable "iact_subnet_list" {
   type        = list(string)
 }
 
+variable "metrics_endpoint_enabled" {
+  default     = null
+  type        = bool
+  description = <<-EOD
+  (Optional) Metrics are used to understand the behavior of Terraform Enterprise and to
+  troubleshoot and tune performance. Enable an endpoint to expose container metrics.
+  Defaults to false.
+  EOD
+}
+
+variable "metrics_endpoint_port_http" {
+  default     = null
+  type        = number
+  description = <<-EOD
+  (Optional when metrics_endpoint_enabled is true.) Defines the TCP port on which HTTP metrics
+  requests will be handled.
+  Defaults to 9090.
+  EOD
+}
+
+variable "metrics_endpoint_port_https" {
+  default     = null
+  type        = string
+  description = <<-EOD
+  (Optional when metrics_endpoint_enabled is true.) Defines the TCP port on which HTTPS metrics
+  requests will be handled.
+  Defaults to 9091.
+  EOD
+}
+
 variable "tbw_image" {
   default     = null
   type        = string
