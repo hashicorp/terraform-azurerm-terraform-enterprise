@@ -55,5 +55,6 @@ module "standalone_mounted_disk" {
   vm_data_disk_lun                  = 0
   vm_data_disk_disk_size_gb         = 100
 
-  tags = var.tags
+  create_bastion = true
+  tags           = var.tags
 }
