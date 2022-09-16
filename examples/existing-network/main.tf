@@ -55,5 +55,7 @@ module "existing_network" {
   load_balancer_type      = "application_gateway"
   redis_use_password_auth = false
   redis_use_tls           = false
-  tags                    = var.tags
+
+  create_bastion = true
+  tags           = var.tags
 }
