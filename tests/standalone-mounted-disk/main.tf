@@ -32,6 +32,7 @@ module "standalone_mounted_disk" {
   vm_key_secret               = data.azurerm_key_vault_secret.vm_key
   tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"
   tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
+  bypass_preflight_checks     = var.bypass_preflight_checks
 
   # Standalone Mounted Disk Mode Scenario
   distribution         = var.distribution
