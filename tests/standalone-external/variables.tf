@@ -16,6 +16,12 @@ variable "license_file" {
   description = "The local path to the Terraform Enterprise license to be provided by CI."
 }
 
+variable "database_version" {
+  default     = 12
+  type        = number
+  description = "Postgres version"
+}
+
 variable "resource_group_name_dns" {
   type        = string
   default     = "ptfedev-com-dns-tls"
