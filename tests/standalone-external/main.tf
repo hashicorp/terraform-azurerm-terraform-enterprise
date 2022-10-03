@@ -34,6 +34,7 @@ module "standalone_external" {
 
   # Standalone External Scenario
   distribution         = "ubuntu"
+  database_version     = var.database_version
   production_type      = "external"
   iact_subnet_list     = ["0.0.0.0/0"]
   vm_node_count        = 1
