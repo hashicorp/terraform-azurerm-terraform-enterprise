@@ -1,0 +1,15 @@
+name: Create Jira Issue
+
+on:
+  issues:
+    types: [opened, closed, deleted, reopened]
+  pull_request_target:
+    types: [opened, closed, reopened]
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+
+jobs:
+  create-jira-issue:
+    uses: hashicorp/tf-enterprise-workflows/.github/workflows/create-jira-issue.yml@v0.1.2
+    secrets: inherit
