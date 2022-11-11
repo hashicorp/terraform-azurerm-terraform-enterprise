@@ -8,5 +8,5 @@ on:
 
 jobs:
   create-jira-issue:
-    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/create-jira-issue.yml
+    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/create-jira-issue.yml@main
     secrets: inherit
