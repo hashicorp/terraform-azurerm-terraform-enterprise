@@ -5,9 +5,8 @@ on:
     types: [opened, closed, deleted, reopened]
   issue_comment:
     types: [created]
-  workflow_dispatch:
 
 jobs:
   create-jira-issue:
-    uses: hashicorp/tf-enterprise-workflows/.github/workflows/create-jira-issue.yml@main
+    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/create-jira-issue.yml
     secrets: inherit
