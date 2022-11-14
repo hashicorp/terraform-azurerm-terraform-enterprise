@@ -13,6 +13,9 @@ resource "azurerm_bastion_host" "bastion_host" {
   location            = var.location
   resource_group_name = var.resource_group_name
 
+  sku               = var.bastion_sku
+  tunneling_enabled = var.bastion_sku == "Standard" ? var.bastion_tunneling_enabled : false
+
   ip_configuration {
     name                 = "tfebastion"
     subnet_id            = var.bastion_subnet_id
