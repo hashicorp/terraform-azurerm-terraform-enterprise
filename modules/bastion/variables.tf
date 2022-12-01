@@ -34,7 +34,13 @@ variable "bastion_allocation_method" {
 variable "bastion_sku" {
   default     = "Standard"
   type        = string
-  description = "The SKU of the Public IP. Accepted values are Basic and Standard"
+  description = "The SKU of the Public IP and Host. Accepted values are Basic and Standard"
+}
+
+variable "bastion_tunneling_enabled" {
+  default     = true
+  type        = bool
+  description = "Is Tunneling feature enabled for the Bastion Host."
 }
 
 # Tagging
