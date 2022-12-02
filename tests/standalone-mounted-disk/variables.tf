@@ -1,3 +1,10 @@
+
+variable "bypass_preflight_checks" {
+  default     = true
+  type        = bool
+  description = "Allow the TFE application to start without preflight checks."
+}
+
 variable "domain_name" {
   type        = string
   default     = "team-private-terraform-enterprise.azure.ptfedev.com"
