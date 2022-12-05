@@ -515,11 +515,52 @@ variable "vm_image_id" {
     condition = (
       var.vm_image_id == "ubuntu" ||
       var.vm_image_id == "rhel" ||
+      var.vm_image_id == "manual" ||
       substr(var.vm_image_id, 0, 14) == "/subscriptions"
     )
 
-    error_message = "The vm_image_id value must be 'ubuntu', 'rhel', or an Azure image resource ID beginning with \"/subscriptions\"."
+    error_message = "The vm_image_id value must be 'ubuntu', 'rhel', 'manual', or an Azure image resource ID beginning with \"/subscriptions\"."
   }
+}
+
+variable "vm_image_publisher" {
+  type        = string
+  description = <<-EOD
+  The image publisher of the base image to install Terraform Enterprise on.  This is used in conjunction with
+  vm_image_offer, vm_image_sku, and vm_image_version to determine the image to install from the public markeplace when
+  vm_image_id is not provided.
+  EOD
+  default     = null
+}
+
+variable "vm_image_offer" {
+  type        = string
+  description = <<-EOD
+  The image offer of the base image to install Terraform Enterprise on.  This is used in conjunction with
+  vm_image_publisher, vm_image_sku, and vm_image_version to determine the image to install from the public markeplace
+  when vm_image_id is not provided.
+  EOD
+  default     = null
+}
+
+variable "vm_image_sku" {
+  type        = string
+  description = <<-EOD
+  The image sku of the base image to install Terraform Enterprise on.  This is used in conjunction with
+  vm_image_publisher, vm_image_offer, and vm_image_version to determine the image to install from the public markeplace
+  when vm_image_id is not provided.
+  EOD
+  default     = null
+}
+
+variable "vm_image_version" {
+  type        = string
+  description = <<-EOD
+  The image version of the base image to install Terraform Enterprise on.  This is used in conjunction with
+  vm_image_publisher, vm_image_offer, and vm_image_sku to determine the image to install from the public markeplace
+  when vm_image_id is not provided.
+  EOD
+  default     = null
 }
 
 variable "vm_sku" {
@@ -759,6 +800,36 @@ variable "iact_subnet_list" {
   in CIDR notation.
   EOD
   type        = list(string)
+}
+
+variable "metrics_endpoint_enabled" {
+  default     = null
+  type        = bool
+  description = <<-EOD
+  (Optional) Metrics are used to understand the behavior of Terraform Enterprise and to
+  troubleshoot and tune performance. Enable an endpoint to expose container metrics.
+  Defaults to false.
+  EOD
+}
+
+variable "metrics_endpoint_port_http" {
+  default     = null
+  type        = number
+  description = <<-EOD
+  (Optional when metrics_endpoint_enabled is true.) Defines the TCP port on which HTTP metrics
+  requests will be handled.
+  Defaults to 9090.
+  EOD
+}
+
+variable "metrics_endpoint_port_https" {
+  default     = null
+  type        = string
+  description = <<-EOD
+  (Optional when metrics_endpoint_enabled is true.) Defines the TCP port on which HTTPS metrics
+  requests will be handled.
+  Defaults to 9091.
+  EOD
 }
 
 variable "tbw_image" {

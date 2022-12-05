@@ -1,4 +1,10 @@
 
+variable "bypass_preflight_checks" {
+  default     = true
+  type        = bool
+  description = "Allow the TFE application to start without preflight checks."
+}
+
 variable "domain_name" {
   type        = string
   default     = "team-private-terraform-enterprise.azure.ptfedev.com"
@@ -12,11 +18,24 @@ variable "key_vault_id" {
 
 variable "license_file" {
   type        = string
+  default     = null
   description = "The local path to the Terraform Enterprise license to be provided by CI."
+}
+
+variable "database_version" {
+  default     = 12
+  type        = number
+  description = "Postgres version"
 }
 
 variable "resource_group_name_dns" {
   type        = string
   default     = "ptfedev-com-dns-tls"
   description = "Name of resource group which contains desired DNS zone"
+}
+
+variable "tfe_license_secret_id" {
+  default     = null
+  type        = string
+  description = "The Key Vault secret id under which the Base64 encoded Terraform Enterprise license is stored."
 }

@@ -6,8 +6,8 @@ resource "random_string" "friendly_name" {
 }
 
 module "secrets" {
-  source = "../../fixtures/secrets"
-
+  source       = "../../fixtures/secrets"
+  count        = local.utility_module_test ? 0 : 1
   key_vault_id = var.key_vault_id
 
   tfe_license = {
@@ -27,19 +27,24 @@ module "standalone_mounted_disk" {
 
   # Bootstrapping resources
   load_balancer_certificate   = data.azurerm_key_vault_certificate.load_balancer
-  tfe_license_secret_id       = module.secrets.tfe_license_secret_id
+  tfe_license_secret_id       = try(module.secrets[0].tfe_license_secret_id, var.tfe_license_secret_id)
   vm_certificate_secret       = data.azurerm_key_vault_secret.vm_certificate
   vm_key_secret               = data.azurerm_key_vault_secret.vm_key
   tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"
   tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
+  bypass_preflight_checks     = var.bypass_preflight_checks
 
   # Standalone Mounted Disk Mode Scenario
-  distribution         = "ubuntu"
+  distribution         = var.distribution
   production_type      = "disk"
   disk_path            = "/opt/hashicorp/data"
   vm_node_count        = 1
   vm_sku               = "Standard_D4_v3"
-  vm_image_id          = "ubuntu"
+  vm_image_id          = local.vm_image_id
+  vm_image_publisher   = local.vm_image_publisher
+  vm_image_offer       = local.vm_image_offer
+  vm_image_sku         = local.vm_image_sku
+  vm_image_version     = local.vm_image_version
   load_balancer_public = true
   load_balancer_type   = "load_balancer"
 

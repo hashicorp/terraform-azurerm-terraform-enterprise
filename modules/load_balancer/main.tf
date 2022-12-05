@@ -298,7 +298,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
 
     content {
       name                       = local.console_request_routing_rule_name
-      priority                   = (load_balancer_request_routing_rule_minimum_priority + 1)
+      priority                   = (var.load_balancer_request_routing_rule_minimum_priority + 1)
       rule_type                  = "Basic"
       http_listener_name         = local.console_frontend_http_listener_name
       backend_address_pool_name  = local.backend_address_pool_name

@@ -92,11 +92,52 @@ variable "vm_image_id" {
     condition = (
       var.vm_image_id == "ubuntu" ||
       var.vm_image_id == "rhel" ||
+      var.vm_image_id == "manual" ||
       substr(var.vm_image_id, 0, 14) == "/subscriptions"
     )
 
-    error_message = "The vm_image_id value must be 'ubuntu', 'rhel', or an Azure image resource ID beginning with \"/subscriptions\"."
+    error_message = "The vm_image_id value must be 'ubuntu', 'rhel', 'manual', or an Azure image resource ID beginning with \"/subscriptions\"."
   }
+}
+
+variable "vm_image_publisher" {
+  type        = string
+  description = <<-EOD
+  The image publisher of the base image to install Terraform Enterprise on.  This is used in conjunction with
+  vm_image_offer, vm_image_sku, and vm_image_version to determine the image to install from the public markeplace when
+  vm_image_id is not provided.
+  EOD
+  default     = null
+}
+
+variable "vm_image_offer" {
+  type        = string
+  description = <<-EOD
+  The image offer of the base image to install Terraform Enterprise on.  This is used in conjunction with
+  vm_image_publisher, vm_image_sku, and vm_image_version to determine the image to install from the public markeplace
+  when vm_image_id is not provided.
+  EOD
+  default     = null
+}
+
+variable "vm_image_sku" {
+  type        = string
+  description = <<-EOD
+  The image sku of the base image to install Terraform Enterprise on.  This is used in conjunction with
+  vm_image_publisher, vm_image_offer, and vm_image_version to determine the image to install from the public markeplace
+  when vm_image_id is not provided.
+  EOD
+  default     = null
+}
+
+variable "vm_image_version" {
+  type        = string
+  description = <<-EOD
+  The image version of the base image to install Terraform Enterprise on.  This is used in conjunction with
+  vm_image_publisher, vm_image_offer, and vm_image_sku to determine the image to install from the public markeplace
+  when vm_image_id is not provided.
+  EOD
+  default     = null
 }
 
 variable "vm_vmss_scale_in_policy" {
