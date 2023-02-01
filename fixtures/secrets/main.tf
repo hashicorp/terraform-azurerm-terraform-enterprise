@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 # Store the Base64 Encoded TFE License as a Secret
 # ------------------------------------------------
 resource "azurerm_key_vault_secret" "tfe_license" {

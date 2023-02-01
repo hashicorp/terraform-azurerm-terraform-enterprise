@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 output "fqdn" {
   value       = azurerm_public_ip.vm_bastion.fqdn
   description = "The FQDN of the bastion host vm"

@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 locals {
   # Determine private IP address based on CIDR range if not already supplied and if load balancer public is false
   private_ip_address = var.network_private_ip == null && var.load_balancer_public == false ? cidrhost(var.network_frontend_subnet_cidr, 16) : var.network_private_ip

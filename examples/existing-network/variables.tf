@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 variable "domain_name" {
   type        = string
   description = "Domain to create Terraform Enterprise subdomain within"

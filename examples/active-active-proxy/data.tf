@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 data "azurerm_key_vault_secret" "bastion_public_ssh_key" {
   name         = var.bastion_public_ssh_key_secret_name
   key_vault_id = var.key_vault_id

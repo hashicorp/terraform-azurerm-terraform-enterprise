@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 resource "azurerm_public_ip" "bastion_pip" {
   name                = "${var.friendly_name_prefix}-bastion-pip"
   location            = var.location

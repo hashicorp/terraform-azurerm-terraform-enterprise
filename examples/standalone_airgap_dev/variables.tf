@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 variable "airgap_url" {
   description = "The URL of a Replicated airgap package for Terraform Enterprise."
   type        = string
