@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 resource "random_pet" "tfe_redis_random_pet" {
   length    = 3
   separator = ""

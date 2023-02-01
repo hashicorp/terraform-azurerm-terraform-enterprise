@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 data "azurerm_key_vault_certificate" "load_balancer" {
   name         = "wildcard"
   key_vault_id = var.key_vault_id

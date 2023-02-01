@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 output "storage_account_name" {
   value       = local.storage_account_name
   description = "The name of the storage account used by TFE"

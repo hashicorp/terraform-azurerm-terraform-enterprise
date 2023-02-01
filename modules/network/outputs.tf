@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 output "network" {
   value       = azurerm_virtual_network.tfe_network
   description = "The virtual network used for all resources"

@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 output "replicated_console_password" {
   value       = module.standalone_mounted_disk.tfe_console_password
   description = "The password for the TFE console"

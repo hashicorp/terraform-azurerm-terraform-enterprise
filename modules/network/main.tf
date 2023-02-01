@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 # Virtual network
 # ---------------
 resource "azurerm_virtual_network" "tfe_network" {

@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 # Required Providers
 # ------------------
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest

@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 variable "bastion_public_ssh_key_secret_name" {
   type        = string
   description = "The name of the public SSH key secret for the bastion."

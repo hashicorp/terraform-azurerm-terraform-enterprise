@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 data "azurerm_client_config" "current" {}
 
 data "azurerm_storage_account" "tfe_redis_existing_storage_account" {

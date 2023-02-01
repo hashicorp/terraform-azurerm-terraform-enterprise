@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 locals {
   storage_account_container_name                 = var.storage_account_container_name == null ? azurerm_storage_container.storage_account_container[0].name : var.storage_account_container_name
   storage_account_name                           = var.storage_account_name == null ? azurerm_storage_account.tfe_storage_account[0].name : var.storage_account_name
