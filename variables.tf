@@ -752,26 +752,6 @@ variable "custom_image_tag" {
   EOD
 }
 
-variable "run_pipeline_mode" {
-  default     = null
-  type        = string
-  description = <<-EOD
-  When 'legacy', Terraform Build Workers will be used for all workspaces. If you have configured an
-  alternative worker image, that will be used. If not, a default image will be used. When "agent",
-  Terraform Task Worker will be used for all workspaces. If you have configured a custom agent image,
-  that will be used. If not, a default image will be used.
-  EOD
-
-  validation {
-    condition = (
-      var.run_pipeline_mode == "agent" ||
-      var.run_pipeline_mode == "legacy" ||
-      var.run_pipeline_mode == null
-    )
-    error_message = "The run_pipeline_mode must be 'agent', 'legacy', or omitted."
-  }
-}
-
 variable "tfe_license_file_location" {
   default     = "/etc/terraform-enterprise.rli"
   type        = string

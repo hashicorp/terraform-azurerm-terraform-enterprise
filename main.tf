@@ -146,7 +146,6 @@ module "settings" {
   pg_extra_params        = var.pg_extra_params
   production_type        = var.production_type
   release_sequence       = var.release_sequence
-  run_pipeline_mode      = var.run_pipeline_mode
   trusted_proxies        = local.trusted_proxies
 
   extra_no_proxy = [
