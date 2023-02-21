@@ -23,8 +23,6 @@ module "public_active_active" {
   vm_key_secret               = data.azurerm_key_vault_secret.vm_key
   tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"
   tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
-  custom_agent_image_tag      = "hashicorp/tfc-agent"
-  run_pipeline_mode           = "agent"
 
   # Public Active / Active Scenario
   distribution            = "ubuntu"
