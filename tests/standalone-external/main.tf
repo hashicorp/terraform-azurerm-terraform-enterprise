@@ -35,6 +35,8 @@ module "standalone_external" {
   tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"
   tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
   bypass_preflight_checks     = var.bypass_preflight_checks
+  custom_agent_image_tag      = "ghcr.io/hashicorp/tsccr-tfc-agent-latest:latest"
+  run_pipeline_mode           = "agent"
 
   # Standalone External Scenario
   distribution         = "ubuntu"

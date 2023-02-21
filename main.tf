@@ -136,7 +136,7 @@ module "database" {
 # TFE and Replicated settings to pass to the tfe_init module
 # -----------------------------------------------------------------------------
 module "settings" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=main"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=TF-4642-add-custom-image-setting"
 
   # TFE Base Configuration
   custom_image_tag       = var.custom_image_tag
@@ -147,8 +147,7 @@ module "settings" {
   production_type        = var.production_type
   release_sequence       = var.release_sequence
   run_pipeline_mode      = var.run_pipeline_mode
-  tbw_image              = var.tbw_image
-  trusted_proxies  = local.trusted_proxies
+  trusted_proxies        = local.trusted_proxies
 
   extra_no_proxy = [
     "127.0.0.1",
