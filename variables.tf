@@ -738,7 +738,7 @@ variable "custom_agent_image_tag" {
   description = <<-EOD
   Configure the docker image for handling job execution within TFE. This can either be the
   standard image that ships with TFE or a custom image that includes extra tools not present
-  in the default one.
+  in the default one. Should be in the format <name>:<tag>.
   EOD
 }
 
@@ -746,9 +746,8 @@ variable "custom_image_tag" {
   default     = null
   type        = string
   description = <<-EOD
-  (Required if tbw_image is 'custom_image'.) The name and tag for your alternative Terraform
-  build worker image in the format <name>:<tag>. Default is 'hashicorp/build-worker:now'.
-  If this variable is used, the 'tbw_image' variable must be 'custom_image'.
+  The name and tag for your alternative Terraform build worker image in the format <name>:<tag>.
+  Default is 'hashicorp/build-worker:now'.
   EOD
 }
 
