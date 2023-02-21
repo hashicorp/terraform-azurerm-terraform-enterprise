@@ -139,13 +139,15 @@ module "settings" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=main"
 
   # TFE Base Configuration
-  custom_image_tag = var.custom_image_tag
-  disk_path        = var.disk_path
-  iact_subnet_list = var.iact_subnet_list
-  pg_extra_params  = var.pg_extra_params
-  production_type  = var.production_type
-  release_sequence = var.release_sequence
-  tbw_image        = var.tbw_image
+  custom_image_tag       = var.custom_image_tag
+  custom_agent_image_tag = var.custom_agent_image_tag
+  disk_path              = var.disk_path
+  iact_subnet_list       = var.iact_subnet_list
+  pg_extra_params        = var.pg_extra_params
+  production_type        = var.production_type
+  release_sequence       = var.release_sequence
+  run_pipeline_mode      = var.run_pipeline_mode
+  tbw_image              = var.tbw_image
   trusted_proxies  = local.trusted_proxies
 
   extra_no_proxy = [

@@ -733,6 +733,15 @@ variable "vm_data_disk_disk_size_gb" {
 
 # User Data
 # ---------
+variable "custom_agent_image_tag" {
+  type        = string
+  description = <<-EOD
+  Configure the docker image for handling job execution within TFE. This can either be the
+  standard image that ships with TFE or a custom image that includes extra tools not present
+  in the default one.
+  EOD
+}
+
 variable "custom_image_tag" {
   default     = null
   type        = string
@@ -741,6 +750,26 @@ variable "custom_image_tag" {
   build worker image in the format <name>:<tag>. Default is 'hashicorp/build-worker:now'.
   If this variable is used, the 'tbw_image' variable must be 'custom_image'.
   EOD
+}
+
+variable "run_pipeline_mode" {
+  default     = null
+  type        = string
+  description = <<-EOD
+  When 'legacy', Terraform Build Workers will be used for all workspaces. If you have configured an
+  alternative worker image, that will be used. If not, a default image will be used. When "agent",
+  Terraform Task Worker will be used for all workspaces. If you have configured a custom agent image,
+  that will be used. If not, a default image will be used.
+  EOD
+
+  validation {
+    condition = (
+      var.run_pipeline_mode == "agent" ||
+      var.run_pipeline_mode == "legacy" ||
+      var.run_pipeline_mode == null
+    )
+    error_message = "The run_pipeline_mode must be 'agent', 'legacy', or omitted."
+  }
 }
 
 variable "tfe_license_file_location" {
