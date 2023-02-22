@@ -733,13 +733,22 @@ variable "vm_data_disk_disk_size_gb" {
 
 # User Data
 # ---------
+variable "custom_agent_image_tag" {
+  default     = null
+  type        = string
+  description = <<-EOD
+  Configure the docker image for handling job execution within TFE. This can either be the
+  standard image that ships with TFE or a custom image that includes extra tools not present
+  in the default one. Should be in the format <name>:<tag>.
+  EOD
+}
+
 variable "custom_image_tag" {
   default     = null
   type        = string
   description = <<-EOD
-  (Required if tbw_image is 'custom_image'.) The name and tag for your alternative Terraform
-  build worker image in the format <name>:<tag>. Default is 'hashicorp/build-worker:now'.
-  If this variable is used, the 'tbw_image' variable must be 'custom_image'.
+  The name and tag for your alternative Terraform build worker image in the format <name>:<tag>.
+  Default is 'hashicorp/build-worker:now'.
   EOD
 }
 
@@ -833,25 +842,6 @@ variable "metrics_endpoint_port_https" {
   requests will be handled.
   Defaults to 9091.
   EOD
-}
-
-variable "tbw_image" {
-  default     = null
-  type        = string
-  description = <<-EOD
-  Set this to 'custom_image' if you want to use an alternative Terraform build worker image,
-  and use the 'custom_image_tag' variable to define its name and tag.
-  Default is 'default_image'. 
-  EOD
-
-  validation {
-    condition = (
-      var.tbw_image == "default_image" ||
-      var.tbw_image == "custom_image" ||
-      var.tbw_image == null
-    )
-    error_message = "The tbw_image must be 'default_image', 'custom_image', or null. If left unset, TFE will default to 'default_image'."
-  }
 }
 
 variable "trusted_proxies" {
