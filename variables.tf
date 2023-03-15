@@ -733,6 +733,12 @@ variable "vm_data_disk_disk_size_gb" {
 
 # User Data
 # ---------
+variable "consolidated_services" {
+  default     = true
+  type        = bool
+  description = "(Required) True if TFE uses consolidated services."
+}
+
 variable "custom_agent_image_tag" {
   default     = null
   type        = string
