@@ -62,8 +62,8 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
     content {
       publisher = var.vm_image_id == "ubuntu" ? "Canonical" : "RedHat"
       offer     = var.vm_image_id == "ubuntu" ? "0001-com-ubuntu-server-focal" : "RHEL"
-      sku       = var.vm_image_id == "ubuntu" ? "20_04-lts" : "7.8"
-      version   = var.vm_image_id == "ubuntu" ? "latest" : "latest"
+      sku       = var.vm_image_id == "ubuntu" ? "20_04-lts" : "8_7"
+      version   = var.vm_image_id == "ubuntu" ? "latest" : "8.7.2023022801"
     }
   }
 
