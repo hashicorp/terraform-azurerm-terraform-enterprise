@@ -2,6 +2,14 @@
 # SPDX-License-Identifier: MPL-2.0
 
 terraform {
+  cloud {
+    hostname = "app.terraform.io"
+    organization = "hashi-annie"
+
+    workspaces {
+      name = "azure-standalone-mounted-disk"
+    }
+  }
   required_version = "~> 1.0"
   required_providers {
     azurerm = {
