@@ -33,11 +33,10 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
   location            = var.location
   resource_group_name = var.resource_group_name
 
-  overprovision   = var.vm_overprovision
-  instances       = var.vm_node_count
-  sku             = var.vm_sku
-  admin_username  = var.vm_user
-  scale_in_policy = var.vm_vmss_scale_in_policy
+  overprovision  = var.vm_overprovision
+  instances      = var.vm_node_count
+  sku            = var.vm_sku
+  admin_username = var.vm_user
 
   upgrade_mode = var.vm_upgrade_mode
 
@@ -54,6 +53,11 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
 
   # Source image id will be used if vm_image_id anything other than 'ubuntu' or 'rhel'
   source_image_id = var.vm_image_id == "ubuntu" || var.vm_image_id == "rhel" || var.vm_image_id == "manual" ? null : var.vm_image_id
+
+  scale_in {
+    rule                   = var.vm_vmss_scale_in_rule
+    force_deletion_enabled = var.vm_vmss_scale_in_force_deletion_enabled
+  }
 
   # Source image reference will be used if vm_image_id is 'ubuntu' or 'rhel'
   dynamic "source_image_reference" {
