@@ -144,7 +144,6 @@ variable "vm_image_version" {
 }
 
 variable "vm_vmss_scale_in_rule" {
-  default     = "Default"
   type        = string
   description = "The scale-in rule to use for the virtual machine scale set."
 
@@ -160,7 +159,6 @@ variable "vm_vmss_scale_in_rule" {
 }
 
 variable "vm_vmss_scale_in_force_deletion_enabled" {
-  default     = false
   type        = bool
   description = "Should the virtual machines chosen for removal be force deleted when the virtual machine scale set is being scaled-in?"
 }
