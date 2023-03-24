@@ -8,7 +8,7 @@ resource "azurerm_key_vault_secret" "tfe_license" {
 
   name         = var.tfe_license.name
   value        = filebase64(var.tfe_license.path)
-  key_vault_id = var.key_vault_id
+  key_vault_id = local.key_vault_id
 
   tags = var.tags
 }
@@ -20,7 +20,7 @@ resource "azurerm_key_vault_secret" "private_key_pem" {
 
   name         = var.private_key_pem.name
   value        = base64encode(var.private_key_pem.value)
-  key_vault_id = var.key_vault_id
+  key_vault_id = local.key_vault_id
 
   tags = var.tags
 }
@@ -30,7 +30,7 @@ resource "azurerm_key_vault_secret" "chained_certificate_pem" {
 
   name         = var.chained_certificate_pem.name
   value        = base64encode(var.chained_certificate_pem.value)
-  key_vault_id = var.key_vault_id
+  key_vault_id = local.key_vault_id
 
   tags = var.tags
 }
@@ -42,7 +42,7 @@ resource "azurerm_key_vault_secret" "proxy_public_key" {
 
   name         = var.proxy_public_key.name
   value        = var.proxy_public_key.value
-  key_vault_id = var.key_vault_id
+  key_vault_id = local.key_vault_id
 
   tags = var.tags
 }
@@ -52,7 +52,7 @@ resource "azurerm_key_vault_secret" "proxy_private_key" {
 
   name         = var.proxy_private_key.name
   value        = var.proxy_private_key.value
-  key_vault_id = var.key_vault_id
+  key_vault_id = local.key_vault_id
 
   tags = var.tags
 }
@@ -62,7 +62,7 @@ resource "azurerm_key_vault_secret" "bastion_public_key" {
 
   name         = var.bastion_public_key.name
   value        = var.bastion_public_key.value
-  key_vault_id = var.key_vault_id
+  key_vault_id = local.key_vault_id
 
   tags = var.tags
 }
@@ -72,7 +72,7 @@ resource "azurerm_key_vault_secret" "bastion_private_key" {
 
   name         = var.bastion_private_key.name
   value        = var.bastion_private_key.value
-  key_vault_id = var.key_vault_id
+  key_vault_id = local.key_vault_id
 
   tags = var.tags
 }
@@ -84,7 +84,7 @@ resource "azurerm_key_vault_secret" "ca_certificate" {
 
   name         = var.ca_certificate.name
   value        = base64encode(var.ca_certificate.value)
-  key_vault_id = var.key_vault_id
+  key_vault_id = local.key_vault_id
 
   tags = var.tags
 }
@@ -94,7 +94,7 @@ resource "azurerm_key_vault_secret" "ca_private_key" {
 
   name         = var.ca_private_key.name
   value        = base64encode(var.ca_private_key.value)
-  key_vault_id = var.key_vault_id
+  key_vault_id = local.key_vault_id
 
   tags = var.tags
 }

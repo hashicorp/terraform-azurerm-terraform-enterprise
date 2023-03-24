@@ -4,8 +4,22 @@
 # Key Vault
 # ---------
 variable "key_vault_id" {
+  default     = null
   type        = string
-  description = "The identity of the Key Vault which contains secrets and certificates."
+  description = "The identity of the Key Vault which contains secrets and certificates. Leave null if you wish to create a new Key Vault."
+}
+
+variable "key_vault_name" {
+  default     = null
+  type        = string
+  description = "If you're not using an existing Key Vault, then choose a name for the new Key Vault to create which will contain secrets and certificates."
+}
+
+
+variable "location" {
+  default     = "Central US"
+  type        = string
+  description = "Azure location name in which you wish to create the new Key Vault. e.g. East US."
 }
 
 # Secrets
