@@ -1,5 +1,6 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
+
+set -e -u -o pipefail
 
 i=0
 %{ for config in ssh_config ~}
