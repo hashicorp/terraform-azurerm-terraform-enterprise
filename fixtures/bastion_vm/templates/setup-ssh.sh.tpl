@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
 i=0
 %{ for config in ssh_config ~}
   ((i=i+1))
