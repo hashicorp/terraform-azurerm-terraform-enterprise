@@ -120,11 +120,6 @@ output "load_balancer_ip" {
 
 # VM
 # --
-output "vmss" {
-  value       = module.vm
-  description = "The TFE virtual machine scale set module"
-}
-
 output "instance_user_name" {
   value       = var.vm_user
   description = "The admin user on the TFE instance(s)"
