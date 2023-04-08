@@ -66,6 +66,12 @@ variable "tfe_private_key_data_base64" {
   description = "The SSH private key data to use on the bastion VM in order to SSH to the TFE instance."
 }
 
+variable "tfe_ssh_config_path" {
+  default     = null
+  type        = string
+  description = "The path to put the ssh-config file for the TFE instance. This will be iterated based on how many instances there are."
+}
+
 # Tagging
 # -------
 variable "tags" {

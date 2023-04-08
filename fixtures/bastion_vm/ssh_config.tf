@@ -9,5 +9,6 @@ locals {
     ssh_config       = local.tfe_ssh_config
     private_key_data = var.tfe_private_key_data_base64
     private_key_path = var.tfe_private_key_path
+    ssh_config_path  = var.tfe_ssh_config_path
   })
 }
