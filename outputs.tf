@@ -121,7 +121,7 @@ output "load_balancer_ip" {
 # VM
 # --
 output "vmss" {
-  value = module.vm
+  value       = module.vm
   description = "The TFE virtual machine scale set module"
 }
 
