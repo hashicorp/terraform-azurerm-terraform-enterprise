@@ -1,0 +1,10 @@
+Host default
+    Hostname ${instance_ip_address}
+    User ${instance_user_name}
+    Port 22
+    UserKnownHostsFile /dev/null
+    StrictHostKeyChecking no
+    PasswordAuthentication no
+    IdentityFile ${private_key_path}
+    IdentitiesOnly yes
+    LogLevel FATAL

@@ -75,6 +75,8 @@ resource "azurerm_linux_virtual_machine" "vm_bastion" {
   size                  = "Standard_D1_v2"
   admin_username        = "bastionuser"
 
+  custom_data = base64encode(local.setup_ssh)
+
   source_image_reference {
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-focal"
