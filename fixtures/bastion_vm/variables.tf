@@ -43,7 +43,7 @@ variable "network_allow_range" {
 variable "bastion_custom_data" {
   type        = string
   description = "A Base64 encoded string to use for the cloud-init custom data of the bastion vm."
-  default     = null  
+  default     = null
 }
 
 # Tagging
