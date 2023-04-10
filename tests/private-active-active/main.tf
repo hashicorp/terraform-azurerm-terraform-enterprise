@@ -50,6 +50,7 @@ module "private_active_active" {
   iact_subnet_list        = ["${module.bastion_vm.private_ip}/32"]
 
   # Bootstrapping resources
+  bypass_preflight_checks     = true
   load_balancer_certificate   = data.azurerm_key_vault_certificate.load_balancer
   tfe_license_secret_id       = data.azurerm_key_vault_secret.tfe_license.id
   vm_certificate_secret       = data.azurerm_key_vault_secret.vm_certificate
