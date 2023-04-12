@@ -58,8 +58,7 @@ module "standalone_mounted_disk" {
   vm_data_disk_lun                  = 0
   vm_data_disk_disk_size_gb         = 100
 
-  consolidated_services = var.consolidated_services
-  enable_ssh            = true
-  create_bastion        = false
-  tags                  = local.common_tags
+  enable_ssh     = true
+  create_bastion = false
+  tags           = local.common_tags
 }

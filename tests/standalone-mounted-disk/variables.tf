@@ -86,9 +86,3 @@ variable "distribution" {
   }
   default = "ubuntu"
 }
-
-variable "consolidated_services" {
-  default     = false
-  type        = bool
-  description = "(Required) True if TFE uses consolidated services."
-}
