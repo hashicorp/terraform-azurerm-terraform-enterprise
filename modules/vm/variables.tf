@@ -143,19 +143,24 @@ variable "vm_image_version" {
   default     = null
 }
 
-variable "vm_vmss_scale_in_policy" {
-  description = "The scale-in policy to use for the virtual machine scale set."
+variable "vm_vmss_scale_in_rule" {
   type        = string
+  description = "The scale-in rule to use for the virtual machine scale set."
 
   validation {
     condition = (
-      var.vm_vmss_scale_in_policy == "Default" ||
-      var.vm_vmss_scale_in_policy == "NewestVM" ||
-      var.vm_vmss_scale_in_policy == "OldestVM"
+      var.vm_vmss_scale_in_rule == "Default" ||
+      var.vm_vmss_scale_in_rule == "NewestVM" ||
+      var.vm_vmss_scale_in_rule == "OldestVM"
     )
 
     error_message = "The vm_vmss_scale_in_policy value must be 'Default', 'NewestVM', or 'OldestVM'."
   }
+}
+
+variable "vm_vmss_scale_in_force_deletion_enabled" {
+  type        = bool
+  description = "Should the virtual machines chosen for removal be force deleted when the virtual machine scale set is being scaled-in?"
 }
 
 variable "ca_certificate_secret" {
