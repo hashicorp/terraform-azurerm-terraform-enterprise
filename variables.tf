@@ -740,7 +740,7 @@ variable "vm_data_disk_disk_size_gb" {
 # User Data
 # ---------
 variable "consolidated_services" {
-  default     = true
+  default     = false
   type        = bool
   description = "(Required) True if TFE uses consolidated services."
 }
