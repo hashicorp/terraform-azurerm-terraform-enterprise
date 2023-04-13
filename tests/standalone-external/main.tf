@@ -48,7 +48,8 @@ module "standalone_external" {
   load_balancer_public = true
   load_balancer_type   = "load_balancer"
 
-  enable_ssh     = true
-  create_bastion = false
-  tags           = local.common_tags
+  consolidated_services = var.consolidated_services
+  enable_ssh            = true
+  create_bastion        = false
+  tags                  = local.common_tags
 }
