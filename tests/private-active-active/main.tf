@@ -63,6 +63,7 @@ module "private_active_active" {
   proxy_port = local.proxy_port
 
   # Private Active / Active Scenario
+  consolidated_services   = var.consolidated_services
   distribution            = "rhel"
   vm_node_count           = 2
   vm_sku                  = "Standard_D16as_v4"
