@@ -25,6 +25,7 @@ module "public_active_active" {
   tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
 
   # Public Active / Active Scenario
+  consolidated_services   = var.consolidated_services
   distribution            = "ubuntu"
   production_type         = "external"
   iact_subnet_list        = var.iact_subnet_list
