@@ -76,6 +76,10 @@ module "network" {
   load_balancer_type   = var.load_balancer_type
   load_balancer_public = var.load_balancer_public
 
+  metrics_endpoint_enabled    = var.metrics_endpoint_enabled
+  metrics_endpoint_port_http  = var.metrics_endpoint_port_http
+  metrics_endpoint_port_https = var.metrics_endpoint_port_https
+
   tags = var.tags
 }
 
@@ -253,6 +257,11 @@ module "load_balancer" {
   tenant_id               = data.azurerm_client_config.current.tenant_id
   dns_external_fqdn       = var.dns_external_fqdn
   enable_ssh              = var.enable_ssh
+
+  # Metrics
+  metrics_endpoint_enabled    = var.metrics_endpoint_enabled
+  metrics_endpoint_port_http  = var.metrics_endpoint_port_http
+  metrics_endpoint_port_https = var.metrics_endpoint_port_https
 
   # Secrets
   ca_certificate_secret = var.ca_certificate_secret

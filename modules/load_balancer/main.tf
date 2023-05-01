@@ -14,7 +14,6 @@ locals {
   is_legacy_rule_set_version = var.load_balancer_waf_rule_set_version == "2.2.9"
 
   # Application Gateway
-  # -------------------
   gateway_ip_configuration_name          = "tfe-ag-gateway-ip-config"
   frontend_ip_configuration_name_public  = "tfe-ag-frontend-ip-config-pub"
   frontend_ip_configuration_name_private = "tfe-ag-frontend-ip-config-priv"
@@ -33,6 +32,18 @@ locals {
   console_frontend_http_listener_name = "tfe-ag-http-listener-frontend-port-console"
   console_backend_http_settings_name  = "tfe-ag-backend-http-settings-console"
   console_request_routing_rule_name   = "tfe-ag-routing-rule-console"
+
+  # TFE Metrics HTTP Configuration
+  metrics_http_frontend_port_name          = "tfe-ag-frontend-port-metrics-http"
+  metrics_http_frontend_http_listener_name = "tfe-ag-http-listener-frontend-port-metrics-http"
+  metrics_http_backend_http_settings_name  = "tfe-ag-backend-http-settings-metrics-http"
+  metrics_http_request_routing_rule_name   = "tfe-ag-routing-rule-metrics-http"
+
+  # TFE Metrics HTTP Configuration
+  metrics_https_frontend_port_name          = "tfe-ag-frontend-port-metrics-https"
+  metrics_https_frontend_http_listener_name = "tfe-ag-http-listener-frontend-port-metrics-https"
+  metrics_https_backend_http_settings_name  = "tfe-ag-backend-http-settings-metrics-https"
+  metrics_https_request_routing_rule_name   = "tfe-ag-routing-rule-metrics-https"
 
   trusted_root_certificates      = var.ca_certificate_secret == null ? {} : { (var.ca_certificate_secret.name) = var.ca_certificate_secret.value }
   trusted_root_certificate_names = keys(local.trusted_root_certificates)
@@ -309,6 +320,108 @@ resource "azurerm_application_gateway" "tfe_ag" {
     }
   }
 
+  # TFE Metrics HTTP
+  dynamic "frontend_port" {
+    for_each = var.metrics_endpoint_enabled == true ? [1] : []
+
+    content {
+      name = local.metrics_http_frontend_port_name
+      port = var.metrics_endpoint_port_http != null ? var.metrics_endpoint_port_http : "9090"
+    }
+  }
+
+  dynamic "http_listener" {
+    for_each = var.metrics_endpoint_enabled == true ? [1] : []
+
+    content {
+      name                           = local.metrics_http_frontend_http_listener_name
+      frontend_ip_configuration_name = local.frontend_ip_configuration_name
+      frontend_port_name             = local.metrics_http_frontend_port_name
+      protocol                       = "Http"
+      ssl_certificate_name           = var.certificate.name
+    }
+  }
+
+  dynamic "backend_http_settings" {
+    for_each = var.metrics_endpoint_enabled == true ? [1] : []
+
+    content {
+      name                  = local.metrics_http_backend_http_settings_name
+      cookie_based_affinity = "Disabled"
+      path                  = ""
+      protocol              = "Http"
+      port                  = var.metrics_endpoint_port_http != null ? var.metrics_endpoint_port_http : "9090"
+      request_timeout       = 60
+      host_name             = local.fqdn
+
+      trusted_root_certificate_names = local.trusted_root_certificate_names
+    }
+  }
+
+  dynamic "request_routing_rule" {
+    for_each = var.metrics_endpoint_enabled == true ? [1] : []
+
+    content {
+      name                       = local.metrics_http_request_routing_rule_name
+      priority                   = (var.load_balancer_request_routing_rule_minimum_priority + 1)
+      rule_type                  = "Basic"
+      http_listener_name         = local.metrics_http_frontend_http_listener_name
+      backend_address_pool_name  = local.backend_address_pool_name
+      backend_http_settings_name = local.metrics_http_backend_http_settings_name
+    }
+  }
+
+  # TFE Metrics HTTPS
+  dynamic "frontend_port" {
+    for_each = var.metrics_endpoint_enabled == true ? [1] : []
+
+    content {
+      name = local.metrics_https_frontend_port_name
+      port = var.metrics_endpoint_port_https != null ? var.metrics_endpoint_port_https : "9091"
+    }
+  }
+
+  dynamic "http_listener" {
+    for_each = var.metrics_endpoint_enabled == true ? [1] : []
+
+    content {
+      name                           = local.metrics_https_frontend_http_listener_name
+      frontend_ip_configuration_name = local.frontend_ip_configuration_name
+      frontend_port_name             = local.metrics_https_frontend_port_name
+      protocol                       = "Https"
+      ssl_certificate_name           = var.certificate.name
+    }
+  }
+
+  dynamic "backend_http_settings" {
+    for_each = var.metrics_endpoint_enabled == true ? [1] : []
+
+    content {
+      name                  = local.metrics_https_backend_https_settings_name
+      cookie_based_affinity = "Disabled"
+      path                  = ""
+      protocol              = "Https"
+      port                  = var.metrics_endpoint_port_https != null ? var.metrics_endpoint_port_https : "9091"
+      request_timeout       = 60
+      host_name             = local.fqdn
+
+      trusted_root_certificate_names = local.trusted_root_certificate_names
+    }
+  }
+
+  dynamic "request_routing_rule" {
+    for_each = var.metrics_endpoint_enabled == true ? [1] : []
+
+    content {
+      name                       = local.metrics_https_request_routing_rule_name
+      priority                   = (var.load_balancer_request_routing_rule_minimum_priority + 1)
+      rule_type                  = "Basic"
+      http_listener_name         = local.metrics_https_frontend_http_listener_name
+      backend_address_pool_name  = local.backend_address_pool_name
+      backend_http_settings_name = local.metrics_https_backend_http_settings_name
+    }
+  }
+
   lifecycle {
     ignore_changes = [identity[0].identity_ids]
   }
@@ -433,3 +546,52 @@ resource "azurerm_lb_rule" "tfe_load_balancer_rule_ssh" {
   backend_port                   = 22
 }
 
+resource "azurerm_lb_probe" "tfe_load_balancer_probe_metrics_http" {
+  count = var.load_balancer_type == "load_balancer" && var.metrics_endpoint_enabled == true ? 1 : 0
+
+  name = "${var.friendly_name_prefix}-lb-probe-metrics-http"
+
+  loadbalancer_id = azurerm_lb.tfe_load_balancer[0].id
+  protocol        = "Http"
+  request_path    = "/metrics"
+  port            = var.metrics_endpoint_port_http != null ? var.metrics_endpoint_port_http : "9090"
+}
+
+resource "azurerm_lb_rule" "tfe_load_balancer_rule_metrics_http" {
+  count = var.load_balancer_type == "load_balancer" && var.metrics_endpoint_enabled == true ? 1 : 0
+
+  name = "${var.friendly_name_prefix}-lb-rule-metrics-http"
+
+  loadbalancer_id                = azurerm_lb.tfe_load_balancer[0].id
+  probe_id                       = azurerm_lb_probe.tfe_load_balancer_probe_metrics_http[0].id
+  protocol                       = "Tcp"
+  frontend_ip_configuration_name = "${var.friendly_name_prefix}-lb-fe"
+  frontend_port                  = var.metrics_endpoint_port_http != null ? var.metrics_endpoint_port_http : "9090"
+  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.tfe_load_balancer_be[0].id]
+  backend_port                   = var.metrics_endpoint_port_http != null ? var.metrics_endpoint_port_http : "9090"
+}
+
+resource "azurerm_lb_probe" "tfe_load_balancer_probe_metrics_https" {
+  count = var.load_balancer_type == "load_balancer" && var.metrics_endpoint_enabled == true ? 1 : 0
+
+  name = "${var.friendly_name_prefix}-lb-probe-metrics-https"
+
+  loadbalancer_id = azurerm_lb.tfe_load_balancer[0].id
+  protocol        = "Https"
+  request_path    = "/metrics"
+  port            = var.metrics_endpoint_port_https != null ? var.metrics_endpoint_port_https : "9091"
+}
+
+resource "azurerm_lb_rule" "tfe_load_balancer_rule_metrics_https" {
+  count = var.load_balancer_type == "load_balancer" && var.metrics_endpoint_enabled == true ? 1 : 0
+
+  name = "${var.friendly_name_prefix}-lb-rule-metrics-https"
+
+  loadbalancer_id                = azurerm_lb.tfe_load_balancer[0].id
+  probe_id                       = azurerm_lb_probe.tfe_load_balancer_probe_metrics_https[0].id
+  protocol                       = "Tcp"
+  frontend_ip_configuration_name = "${var.friendly_name_prefix}-lb-fe"
+  frontend_port                  = var.metrics_endpoint_port_https != null ? var.metrics_endpoint_port_https : "9091"
+  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.tfe_load_balancer_be[0].id]
+  backend_port                   = var.metrics_endpoint_port_https != null ? var.metrics_endpoint_port_https : "9091"
+}

@@ -4,7 +4,7 @@
 resource "random_string" "friendly_name" {
   length  = 4
   upper   = false
-  number  = false
+  numeric = false
   special = false
 }
 
@@ -38,18 +38,20 @@ module "standalone_mounted_disk" {
   bypass_preflight_checks     = var.bypass_preflight_checks
 
   # Standalone Mounted Disk Mode Scenario
-  distribution         = var.distribution
-  production_type      = "disk"
-  disk_path            = "/opt/hashicorp/data"
-  vm_node_count        = 1
-  vm_sku               = "Standard_D4_v3"
-  vm_image_id          = local.vm_image_id
-  vm_image_publisher   = local.vm_image_publisher
-  vm_image_offer       = local.vm_image_offer
-  vm_image_sku         = local.vm_image_sku
-  vm_image_version     = local.vm_image_version
-  load_balancer_public = true
-  load_balancer_type   = "load_balancer"
+  consolidated_services    = var.consolidated_services
+  distribution             = var.distribution
+  production_type          = "disk"
+  disk_path                = "/opt/hashicorp/data"
+  vm_node_count            = 1
+  vm_sku                   = "Standard_D4_v3"
+  vm_image_id              = local.vm_image_id
+  vm_image_publisher       = local.vm_image_publisher
+  vm_image_offer           = local.vm_image_offer
+  vm_image_sku             = local.vm_image_sku
+  vm_image_version         = local.vm_image_version
+  load_balancer_public     = true
+  load_balancer_type       = "load_balancer"
+  metrics_endpoint_enabled = true
 
   # VM Data Disk
   vm_data_disk_caching              = "ReadWrite"
@@ -60,5 +62,11 @@ module "standalone_mounted_disk" {
 
   enable_ssh     = true
   create_bastion = false
-  tags           = local.common_tags
+  tags           = local.tags
+}
+
+locals {
+  email = "annie@hashicorp.com"
+  user  = "Annie Hedgpeth"
+  tags  = merge(local.common_tags, { "Owner" = local.user, "Email" = local.email })
 }

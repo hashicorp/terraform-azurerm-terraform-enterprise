@@ -3,6 +3,12 @@
 
 # General
 # -------
+variable "consolidated_services" {
+  default     = false
+  type        = bool
+  description = "(Required) True if TFE uses consolidated services."
+}
+
 variable "location" {
   type        = string
   description = "Azure location name e.g. East US"
