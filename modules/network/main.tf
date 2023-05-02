@@ -106,42 +106,6 @@ resource "azurerm_network_security_group" "tfe_network_private_nsg" {
     }
   }
 
-  dynamic "security_rule" {
-    for_each = var.metrics_endpoint_enabled == true ? [1] : []
-
-    content {
-      name      = "allow-frontend-inbound-metrics-http"
-      priority  = 180
-      direction = "Inbound"
-      access    = "Allow"
-      protocol  = "Tcp"
-
-      source_address_prefix = var.load_balancer_type == "application_gateway" ? var.network_frontend_subnet_cidr : var.network_allow_range
-      source_port_range     = "*"
-
-      destination_port_range     = var.metrics_endpoint_port_http != null ? var.metrics_endpoint_port_http : "9090"
-      destination_address_prefix = var.network_frontend_subnet_cidr
-    }
-  }
-
-  dynamic "security_rule" {
-    for_each = var.metrics_endpoint_enabled == true ? [1] : []
-
-    content {
-      name      = "allow-frontend-inbound-metrics-https"
-      priority  = 190
-      direction = "Inbound"
-      access    = "Allow"
-      protocol  = "Tcp"
-
-      source_address_prefix = var.load_balancer_type == "application_gateway" ? var.network_frontend_subnet_cidr : var.network_allow_range
-      source_port_range     = "*"
-
-      destination_port_range     = var.metrics_endpoint_port_https != null ? var.metrics_endpoint_port_https : "9091"
-      destination_address_prefix = var.network_frontend_subnet_cidr
-    }
-  }
-
   # Allow inbound SSH from bastion subnet
   dynamic "security_rule" {
     for_each = var.create_bastion || var.enable_ssh && var.load_balancer_type == "load_balancer" && !var.active_active ? [1] : []
@@ -270,6 +234,43 @@ resource "azurerm_network_security_group" "tfe_network_frontend_nsg" {
 
       destination_port_range     = "*"
       destination_address_prefix = "*"
+    }
+  }
+
+
+  dynamic "security_rule" {
+    for_each = var.metrics_endpoint_enabled == true ? [1] : []
+
+    content {
+      name      = "allow-frontend-inbound-metrics-http"
+      priority  = 310
+      direction = "Inbound"
+      access    = "Allow"
+      protocol  = "Tcp"
+
+      source_address_prefix = var.load_balancer_type == "application_gateway" ? var.network_frontend_subnet_cidr : var.network_allow_range
+      source_port_range     = "*"
+
+      destination_port_range     = var.metrics_endpoint_port_http != null ? var.metrics_endpoint_port_http : "9090"
+      destination_address_prefix = var.network_frontend_subnet_cidr
+    }
+  }
+
+  dynamic "security_rule" {
+    for_each = var.metrics_endpoint_enabled == true ? [1] : []
+
+    content {
+      name      = "allow-frontend-inbound-metrics-https"
+      priority  = 320
+      direction = "Inbound"
+      access    = "Allow"
+      protocol  = "Tcp"
+
+      source_address_prefix = var.load_balancer_type == "application_gateway" ? var.network_frontend_subnet_cidr : var.network_allow_range
+      source_port_range     = "*"
+
+      destination_port_range     = var.metrics_endpoint_port_https != null ? var.metrics_endpoint_port_https : "9091"
+      destination_address_prefix = var.network_frontend_subnet_cidr
     }
   }
 
