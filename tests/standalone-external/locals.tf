@@ -5,7 +5,7 @@ locals {
   common_tags = {
     Terraform   = "False"
     Environment = "${local.friendly_name_prefix}-test-standalone-external"
-    Description = "Standalone, External Services scenario deployed from CircleCI"
+    Description = "Standalone, External Services scenario deployed from GHA"
     Repository  = "hashicorp/terraform-azurerm-terraform-enterprise"
     Team        = "Terraform Enterprise on Prem"
     OkToDelete  = "True"

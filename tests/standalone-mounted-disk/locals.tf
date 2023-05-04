@@ -5,7 +5,7 @@ locals {
   common_tags = {
     Terraform   = "False"
     Environment = "${local.friendly_name_prefix}-test-standalone-mounted-disk"
-    Description = "Standalone, Mounted Disk scenario deployed from CircleCI"
+    Description = "Standalone, Mounted Disk scenario deployed from GHA"
     Repository  = "hashicorp/terraform-azurerm-terraform-enterprise"
     Team        = "Terraform Enterprise on Prem"
     OkToDelete  = "True"

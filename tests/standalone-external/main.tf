@@ -52,11 +52,5 @@ module "standalone_external" {
 
   enable_ssh     = true
   create_bastion = false
-  tags           = local.tags
-}
-
-locals {
-  email = "annie@hashicorp.com"
-  user  = "Annie Hedgpeth"
-  tags  = merge(local.common_tags, { "Owner" = local.user, "Email" = local.email })
+  tags           = local.common_tags
 }
