@@ -25,17 +25,18 @@ module "public_active_active" {
   tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
 
   # Public Active / Active Scenario
-  consolidated_services   = var.consolidated_services
-  distribution            = "ubuntu"
-  production_type         = "external"
-  iact_subnet_list        = var.iact_subnet_list
-  vm_node_count           = 2
-  vm_sku                  = "Standard_D4_v3"
-  vm_image_id             = "ubuntu"
-  load_balancer_public    = true
-  load_balancer_type      = "application_gateway"
-  redis_use_password_auth = false
-  redis_use_tls           = false
+  consolidated_services    = var.consolidated_services
+  distribution             = "ubuntu"
+  production_type          = "external"
+  iact_subnet_list         = var.iact_subnet_list
+  vm_node_count            = 2
+  vm_sku                   = "Standard_D4_v3"
+  vm_image_id              = "ubuntu"
+  metrics_endpoint_enabled = true
+  load_balancer_public     = true
+  load_balancer_type       = "application_gateway"
+  redis_use_password_auth  = false
+  redis_use_tls            = false
 
   tags = local.common_tags
 }

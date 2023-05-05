@@ -63,18 +63,19 @@ module "private_active_active" {
   proxy_port = local.proxy_port
 
   # Private Active / Active Scenario
-  consolidated_services   = var.consolidated_services
-  distribution            = "rhel"
-  vm_node_count           = 2
-  vm_sku                  = "Standard_D16as_v4"
-  vm_image_id             = "rhel"
-  load_balancer_public    = false
-  load_balancer_type      = "application_gateway"
-  load_balancer_sku_name  = "WAF_v2"
-  load_balancer_sku_tier  = "WAF_v2"
-  redis_use_password_auth = true
-  redis_use_tls           = false
-  production_type         = "external"
+  consolidated_services    = var.consolidated_services
+  distribution             = "rhel"
+  vm_node_count            = 2
+  vm_sku                   = "Standard_D16as_v4"
+  vm_image_id              = "rhel"
+  load_balancer_public     = false
+  load_balancer_type       = "application_gateway"
+  load_balancer_sku_name   = "WAF_v2"
+  load_balancer_sku_tier   = "WAF_v2"
+  metrics_endpoint_enabled = true
+  redis_use_password_auth  = true
+  redis_use_tls            = false
+  production_type          = "external"
 
   create_bastion = false
   tags           = local.common_tags

@@ -72,6 +72,7 @@ module "private_tcp_active_active" {
   vm_image_id                = "rhel"
   load_balancer_public       = false
   load_balancer_type         = "load_balancer"
+  metrics_endpoint_enabled   = true
   redis_use_password_auth    = true
   redis_use_tls              = true
   redis_rdb_backup_enabled   = true
