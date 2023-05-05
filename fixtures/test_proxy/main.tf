@@ -78,7 +78,7 @@ resource "azurerm_key_vault_access_policy" "proxy" {
 }
 
 module "test_proxy_init" {
-  source = "github.com/hashicorp/terraform-random-tfe-utility//fixtures/test_proxy_init?ref=main"
+  source = "github.com/hashicorp/terraform-random-tfe-utility//fixtures/test_proxy_init?ref=TF-5770-metrics"
 
   metrics_endpoint_enabled    = var.metrics_endpoint_enabled != null ? var.metrics_endpoint_enabled : null
   metrics_endpoint_port_http  = var.metrics_endpoint_port_http != null ? tostring(var.metrics_endpoint_port_http) : "9090"
