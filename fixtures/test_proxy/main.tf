@@ -80,6 +80,10 @@ resource "azurerm_key_vault_access_policy" "proxy" {
 module "test_proxy_init" {
   source = "github.com/hashicorp/terraform-random-tfe-utility//fixtures/test_proxy_init?ref=main"
 
+  metrics_endpoint_enabled    = var.metrics_endpoint_enabled != null ? var.metrics_endpoint_enabled : null
+  metrics_endpoint_port_http  = var.metrics_endpoint_port_http != null ? tostring(var.metrics_endpoint_port_http) : "9090"
+  metrics_endpoint_port_https = var.metrics_endpoint_port_https != null ? tostring(var.metrics_endpoint_port_https) : "9091"
+
   mitmproxy_ca_certificate_secret = var.mitmproxy_ca_certificate_secret
   mitmproxy_ca_private_key_secret = var.mitmproxy_ca_private_key_secret
   cloud                           = "azurerm"
