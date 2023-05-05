@@ -397,7 +397,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
     for_each = var.metrics_endpoint_enabled == true ? [1] : []
 
     content {
-      name                  = local.metrics_https_backend_https_settings_name
+      name                  = local.metrics_https_backend_http_settings_name
       cookie_based_affinity = "Disabled"
       path                  = ""
       protocol              = "Https"
