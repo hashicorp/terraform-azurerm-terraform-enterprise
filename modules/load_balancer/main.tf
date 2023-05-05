@@ -363,7 +363,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
 
     content {
       name                       = local.metrics_http_request_routing_rule_name
-      priority                   = (var.load_balancer_request_routing_rule_minimum_priority + 1)
+      priority                   = (var.load_balancer_request_routing_rule_minimum_priority + 2)
       rule_type                  = "Basic"
       http_listener_name         = local.metrics_http_frontend_http_listener_name
       backend_address_pool_name  = local.backend_address_pool_name
@@ -414,7 +414,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
 
     content {
       name                       = local.metrics_https_request_routing_rule_name
-      priority                   = (var.load_balancer_request_routing_rule_minimum_priority + 1)
+      priority                   = (var.load_balancer_request_routing_rule_minimum_priority + 3)
       rule_type                  = "Basic"
       http_listener_name         = local.metrics_https_frontend_http_listener_name
       backend_address_pool_name  = local.backend_address_pool_name
