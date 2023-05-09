@@ -143,6 +143,7 @@ module "settings" {
   custom_image_tag       = var.custom_image_tag
   custom_agent_image_tag = var.custom_agent_image_tag
   disk_path              = var.disk_path
+  hairpin_addressing     = var.hairpin_addressing
   iact_subnet_list       = var.iact_subnet_list
   pg_extra_params        = var.pg_extra_params
   production_type        = var.production_type
