@@ -39,6 +39,16 @@ module "test_proxy" {
 
 }
 
+module "secrets" {
+  source       = "../../fixtures/secrets"
+  key_vault_id = var.key_vault_id
+
+  tfe_license = {
+    name = "tfe-license-${local.friendly_name_prefix}"
+    path = "licenses/tfedev_Theo_Skolnik.rli"
+  }
+}
+
 module "private_active_active" {
   source = "../../"
 
@@ -52,7 +62,7 @@ module "private_active_active" {
   # Bootstrapping resources
   bypass_preflight_checks     = true
   load_balancer_certificate   = data.azurerm_key_vault_certificate.load_balancer
-  tfe_license_secret_id       = data.azurerm_key_vault_secret.tfe_license.id
+  tfe_license_secret_id       = module.secrets.tfe_license_secret_id
   vm_certificate_secret       = data.azurerm_key_vault_secret.vm_certificate
   vm_key_secret               = data.azurerm_key_vault_secret.vm_key
   tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"
@@ -63,7 +73,7 @@ module "private_active_active" {
   proxy_port = local.proxy_port
 
   # Private Active / Active Scenario
-  consolidated_services   = var.consolidated_services
+  consolidated_services   = true
   distribution            = "rhel"
   vm_node_count           = 2
   vm_sku                  = "Standard_D16as_v4"

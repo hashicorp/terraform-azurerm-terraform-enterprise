@@ -31,3 +31,8 @@ examples/*/*.lock*
 *.rli*
 *id_rsa*
 work
+
+# IDE
+.idea
+**/admin.sh
+**/envs

@@ -53,3 +53,9 @@ module "standalone_external" {
   create_bastion = false
   tags           = local.common_tags
 }
+
+locals {
+  email = "theo.skolnik@hashicorp.com"
+  user  = "Theo Skolnik"
+  tags  = merge(local.common_tags, { "Owner" = local.user, "Email" = local.email })
+}

@@ -2,13 +2,13 @@
 # SPDX-License-Identifier: MPL-2.0
 
 terraform {
-  backend "remote" {
-    organization = "terraform-enterprise-modules-test"
-
-    workspaces {
-      name = "azure-private-active-active"
-    }
-  }
+#  backend "remote" {
+#    organization = "terraform-enterprise-modules-test"
+#
+#    workspaces {
+#      name = "azure-private-active-active"
+#    }
+#  }
 
   required_version = "~> 1.0"
 

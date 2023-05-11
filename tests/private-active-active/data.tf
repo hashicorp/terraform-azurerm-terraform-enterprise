@@ -16,10 +16,10 @@ data "azurerm_key_vault_secret" "vm_key" {
   key_vault_id = var.key_vault_id
 }
 
-data "azurerm_key_vault_secret" "tfe_license" {
-  name         = var.tfe_license_secret_name
-  key_vault_id = var.key_vault_id
-}
+#data "azurerm_key_vault_secret" "tfe_license" {
+#  name         = var.tfe_license_secret_name
+#  key_vault_id = var.key_vault_id
+#}
 
 data "azurerm_key_vault_secret" "bastion_public_ssh_key" {
   name         = var.bastion_public_ssh_key_secret_name

@@ -8,6 +8,17 @@ resource "random_string" "friendly_name" {
   special = false
 }
 
+module "secrets" {
+  source       = "../../fixtures/secrets"
+  key_vault_id = var.key_vault_id
+
+  tfe_license = {
+    name = "tfe-license-${local.friendly_name_prefix}"
+    path = "licenses/HashiCorp_Internal_Theo_Skolnik.rli"
+  }
+}
+
+
 module "public_active_active" {
   source = "../../"
 
@@ -18,7 +29,7 @@ module "public_active_active" {
 
   # Bootstrapping resources
   load_balancer_certificate   = data.azurerm_key_vault_certificate.load_balancer
-  tfe_license_secret_id       = data.azurerm_key_vault_secret.tfe_license.id
+  tfe_license_secret_id       = module.secrets.tfe_license_secret_id
   vm_certificate_secret       = data.azurerm_key_vault_secret.vm_certificate
   vm_key_secret               = data.azurerm_key_vault_secret.vm_key
   tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"

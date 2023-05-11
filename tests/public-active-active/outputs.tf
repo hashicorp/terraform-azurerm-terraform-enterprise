@@ -9,6 +9,11 @@ output "public_active_active" {
   sensitive = true
 }
 
+output "password" {
+  value = module.public_active_active.tfe_console_password
+  description = "The console password"
+}
+
 output "tfe_url" {
   value       = module.public_active_active.tfe_application_url
   description = "The URL to the TFE application"
