@@ -78,6 +78,6 @@ module "private_tcp_active_active" {
   redis_rdb_backup_frequency = 60
   production_type            = "external"
 
-  create_bastion = false
+  create_bastion = true
   tags           = local.common_tags
 }
