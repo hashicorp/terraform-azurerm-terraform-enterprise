@@ -65,6 +65,7 @@ module "private_tcp_active_active" {
   proxy_port            = local.proxy_port
 
   # Private Active / Active Scenario
+  release_sequence           = 713
   consolidated_services      = var.consolidated_services
   distribution               = "rhel"
   vm_node_count              = 2
