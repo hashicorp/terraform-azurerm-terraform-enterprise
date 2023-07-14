@@ -29,8 +29,8 @@ module "public_active_active" {
   distribution            = "rhel"
   production_type         = "external"
   iact_subnet_list        = ["0.0.0.0/0"]
-  vm_node_count           = 1
-  vm_sku                  = "Standard_D4_v3"
+  vm_node_count           = 2
+  vm_sku                  = "Standard_D32a_v4"
   vm_image_id             = "ubuntu"
   load_balancer_public    = true
   load_balancer_type      = "application_gateway"
