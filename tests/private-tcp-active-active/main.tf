@@ -53,7 +53,7 @@ module "private_tcp_active_active" {
 
   # Bootstrapping resources
   bypass_preflight_checks     = true
-  tfe_license_secret_id       = data.azurerm_key_vault_secret.tfe_license.id
+  tfe_license_secret_id       = "https://azure-modules-test-kv.vault.azure.net/secrets/rc-license/df75a33fe82449b583c0ebe799c24e73"
   vm_certificate_secret       = data.azurerm_key_vault_secret.vm_certificate
   vm_key_secret               = data.azurerm_key_vault_secret.vm_key
   tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"
