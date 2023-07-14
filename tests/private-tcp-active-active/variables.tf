@@ -83,8 +83,8 @@ variable "bastion_public_ssh_key_secret_name" {
   description = "The name of the public SSH key secret for the bastion."
 }
 
-variable "network_allow_range" {
-  default     = null
-  type        = string
-  description = "Network range to allow access to bastion vm"
-}
+# variable "network_allow_range" {
+#   default     = null
+#   type        = string
+#   description = "Network range to allow access to bastion vm"
+# }

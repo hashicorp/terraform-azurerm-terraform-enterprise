@@ -29,7 +29,7 @@ output "initial_admin_user_url" {
   description = "The URL with path to access the TFE instance Initial Admin User"
 }
 
-output "bastion_fqdn" {
-  value       = module.bastion_vm.fqdn
-  description = "The fully qualified domain name of the basion host virtual machine"
-}
+# output "bastion_fqdn" {
+#   value       = module.bastion_vm.fqdn
+#   description = "The fully qualified domain name of the basion host virtual machine"
+# }
