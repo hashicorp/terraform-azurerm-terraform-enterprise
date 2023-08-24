@@ -77,6 +77,12 @@ variable "create_bastion" {
   description = "If true, will create Azure Bastion PaaS and required resources https://azure.microsoft.com/en-us/services/azure-bastion/"
 }
 
+variable "bastion_tunneling_enabled" {
+  default     = true
+  type        = bool
+  description = "Is Tunneling feature enabled for the Bastion Host."
+}
+
 # Network
 # -------
 variable "enable_ssh" {

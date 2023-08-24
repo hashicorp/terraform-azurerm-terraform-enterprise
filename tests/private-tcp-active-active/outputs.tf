@@ -29,7 +29,6 @@ output "initial_admin_user_url" {
   description = "The URL with path to access the TFE instance Initial Admin User"
 }
 
-output "bastion_fqdn" {
-  value       = module.bastion_vm.fqdn
-  description = "The fully qualified domain name of the basion host virtual machine"
+output "bastion_tunneling_command" {
+  value = "az network bastion tunnel --name ${module.private_tcp_active_active.bastion_name} --resource-group ${module.private_tcp_active_active.bastion_resource_group_name} --target-resource-id ${module.private_tcp_active_active.vmss.id}/virtualMachines/1 --resource-port 3128 --port 5000"
 }

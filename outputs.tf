@@ -68,13 +68,23 @@ output "instance_private_key" {
 # Bastion
 # -------
 output "bastion_host_id" {
-  value       = var.create_bastion == true ? module.bastion.*.bastion_host_id : []
+  value       = var.create_bastion == true ? module.bastion[0].bastion_host_id : null
   description = "The resource ID of the Azure bastion host"
 }
 
 output "bastion_host_dns_name" {
-  value       = var.create_bastion == true ? module.bastion.*.bastion_host_dns_name : []
+  value       = var.create_bastion == true ? module.bastion[0].bastion_host_dns_name : null
   description = "The DNS name of the bastion host vm"
+}
+
+output "bastion_name" {
+  value       = var.create_bastion == true ? module.bastion[0].bastion_host.name : null
+  description = "The name of the bastion resource"
+}
+
+output "bastion_resource_group_name" {
+  value       = var.create_bastion == true ? module.bastion[0].bastion_host.resource_group_name : null
+  description = "The resource group name of the bastion resource"
 }
 
 # User_data
@@ -123,4 +133,9 @@ output "load_balancer_ip" {
 output "instance_user_name" {
   value       = var.vm_user
   description = "The admin user on the TFE instance(s)"
+}
+
+output "vmss" {
+  value       = module.vm.vmss
+  description = "The virtual machine scale set for the TFE instance(s)"
 }

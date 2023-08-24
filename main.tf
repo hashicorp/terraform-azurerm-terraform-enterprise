@@ -229,7 +229,8 @@ module "bastion" {
   resource_group_name  = module.resource_groups.resource_group_name
   location             = var.location
 
-  bastion_subnet_id = local.network.bastion_subnet.id
+  bastion_subnet_id         = local.network.bastion_subnet.id
+  bastion_tunneling_enabled = var.bastion_tunneling_enabled
 
   tags = var.tags
 }

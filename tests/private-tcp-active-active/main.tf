@@ -8,20 +8,20 @@ resource "random_string" "friendly_name" {
   special = false
 }
 
-module "bastion_vm" {
-  source               = "../../fixtures/bastion_vm"
-  friendly_name_prefix = local.friendly_name_prefix
+# module "bastion_vm" {
+#   source               = "../../fixtures/bastion_vm"
+#   friendly_name_prefix = local.friendly_name_prefix
 
-  location             = var.location
-  resource_group_name  = local.resource_group_name
-  virtual_network_name = module.private_tcp_active_active.network.network.name
-  network_allow_range  = var.network_allow_range
-  bastion_subnet_cidr  = "10.0.16.0/20"
-  ssh_public_key       = data.azurerm_key_vault_secret.bastion_public_ssh_key.value
-  bastion_user         = "bastionuser"
+#   location             = var.location
+#   resource_group_name  = local.resource_group_name
+#   virtual_network_name = module.private_tcp_active_active.network.network.name
+#   network_allow_range  = var.network_allow_range
+#   bastion_subnet_cidr  = "10.0.16.0/20"
+#   ssh_public_key       = data.azurerm_key_vault_secret.bastion_public_ssh_key.value
+#   bastion_user         = "bastionuser"
 
-  tags = local.common_tags
-}
+#   tags = local.common_tags
+# }
 
 module "test_proxy" {
   source               = "../../fixtures/test_proxy"
@@ -49,7 +49,7 @@ module "private_tcp_active_active" {
 
   resource_group_name_dns = var.resource_group_name_dns
   domain_name             = var.domain_name
-  iact_subnet_list        = ["${module.bastion_vm.private_ip}/32"]
+  iact_subnet_list        = ["${module.test_proxy.private_ip}/32"]
 
   # Bootstrapping resources
   bypass_preflight_checks     = true
@@ -78,6 +78,8 @@ module "private_tcp_active_active" {
   redis_rdb_backup_frequency = 60
   production_type            = "external"
 
-  create_bastion = false
+  create_bastion            = true
+  bastion_tunneling_enabled = true
+
   tags           = local.common_tags
 }

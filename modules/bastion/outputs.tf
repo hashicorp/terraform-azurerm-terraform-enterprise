@@ -11,3 +11,8 @@ output "bastion_host_dns_name" {
   value       = azurerm_bastion_host.bastion_host.dns_name
   description = "The DNS name of the bastion host vm"
 }
+
+output "bastion_host" {
+  value       = azurerm_bastion_host.bastion_host
+  description = "The name of the bastion resource"
+}
