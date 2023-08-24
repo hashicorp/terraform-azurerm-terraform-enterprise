@@ -49,7 +49,7 @@ module "private_tcp_active_active" {
 
   resource_group_name_dns = var.resource_group_name_dns
   domain_name             = var.domain_name
-  iact_subnet_list        = ["${module.test_proxy.private_ip}/32"]
+  iact_subnet_list        = ["${module.test_proxy.instance.private_ip_address}/32"]
 
   # Bootstrapping resources
   bypass_preflight_checks     = true
@@ -61,7 +61,7 @@ module "private_tcp_active_active" {
 
   # Behind proxy information
   ca_certificate_secret = data.azurerm_key_vault_secret.ca_certificate
-  proxy_ip              = module.test_proxy.private_ip
+  proxy_ip              = module.test_proxy.instance.private_ip_address
   proxy_port            = local.proxy_port
 
   # Private Active / Active Scenario

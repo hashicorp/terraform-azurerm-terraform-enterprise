@@ -74,7 +74,7 @@ module "active_active" {
 
   # Behind proxy information
   ca_certificate_secret = data.azurerm_key_vault_secret.ca_certificate
-  proxy_ip              = module.test_proxy.private_ip
+  proxy_ip              = module.test_proxy.instance.private_ip_address
   proxy_port            = local.proxy_port
 
   # Private Active / Active Scenario

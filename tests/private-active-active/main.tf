@@ -59,7 +59,7 @@ module "private_active_active" {
   tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
 
   # Behind proxy information
-  proxy_ip   = module.test_proxy.private_ip
+  proxy_ip   = module.test_proxy.instance.private_ip_address
   proxy_port = local.proxy_port
 
   # Private Active / Active Scenario
