@@ -764,6 +764,17 @@ variable "custom_image_tag" {
   EOD
 }
 
+variable "hairpin_addressing" {
+  default     = null
+  type        = bool
+  description = <<-EOD
+  In some cloud environments, HTTP clients running on instances behind a loadbalancer cannot send
+  requests to the public hostname of that load balancer. Use this setting to configure TFE services
+  to redirect requests for the installation's FQDN to the instance's internal IP address.
+  Defaults to false.
+  EOD
+}
+
 variable "tfe_license_file_location" {
   default     = "/etc/terraform-enterprise.rli"
   type        = string
