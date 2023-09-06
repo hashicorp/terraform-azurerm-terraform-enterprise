@@ -4,7 +4,7 @@
 resource "random_string" "friendly_name" {
   length  = 4
   upper   = false
-  number  = false
+  numeric = false
   special = false
 }
 
@@ -61,5 +61,18 @@ module "standalone_mounted_disk" {
 
   enable_ssh     = true
   create_bastion = false
-  tags           = local.common_tags
+  tags           = local.tags
+
+  # FDO Specific Values
+  is_legacy_deployment = var.is_legacy_deployment
+  hc_license           = var.hc_license
+  tfe_image            = "quay.io/hashicorp/terraform-enterprise:9e3a057"
+  registry_password    = var.registry_password
+  registry_username    = var.registry_username
+}
+
+locals {
+  email = "annie@hashicorp.com"
+  user  = "Annie Hedgpeth"
+  tags  = merge(local.common_tags, { "Owner" = local.user, "Email" = local.email })
 }

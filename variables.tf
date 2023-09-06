@@ -3,6 +3,12 @@
 
 # General
 # -------
+variable "is_legacy_deployment" {
+  type        = bool
+  description = "TFE will be installed using a Replicated license and deployment method."
+  default     = true
+}
+
 variable "friendly_name_prefix" {
   type        = string
   description = "(Required) Name prefix used for resources"
@@ -41,6 +47,37 @@ variable "dns_external_fqdn" {
   default     = null
   type        = string
   description = "External DNS FQDN should be supplied if dns_create_record is false"
+}
+
+# External Vault
+# --------------
+variable "extern_vault_addr" {
+  default     = null
+  type        = string
+  description = "(Required if var.extern_vault_enable = true) URL of external Vault cluster."
+}
+
+variable "extern_vault_namespace" {
+  default     = null
+  type        = string
+  description = "(Optional if var.extern_vault_enable = true) The Vault namespace"
+}
+
+variable "extern_vault_path" {
+  default     = "auth/approle"
+  type        = string
+  description = "(Optional if var.extern_vault_enable = true) Path on the Vault server for the AppRole auth. Defaults to auth/approle."
+}
+variable "extern_vault_role_id" {
+  default     = null
+  type        = string
+  description = "(Required if var.extern_vault_enable = true) AppRole RoleId to use to authenticate with the Vault cluster."
+}
+
+variable "extern_vault_secret_id" {
+  default     = null
+  type        = string
+  description = "(Required if var.extern_vault_enable = true) AppRole SecretId to use to authenticate with the Vault cluster."
 }
 
 # Provider
@@ -165,6 +202,18 @@ variable "network_allow_range" {
 
 # TFE License
 # -----------
+variable "hc_license" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_legacy_deployment is true) The raw TFE license that is validated on application startup."
+}
+
+variable "license_reporting_opt_out" {
+  default     = false
+  type        = bool
+  description = "(Not needed if is_legacy_deployment is true) Whether to opt out of reporting licensing information to HashiCorp. Defaults to false."
+}
+
 variable "tfe_license_secret_id" {
   default     = null
   type        = string
@@ -739,6 +788,24 @@ variable "vm_data_disk_disk_size_gb" {
 
 # User Data
 # ---------
+variable "capacity_cpu" {
+  default = 0
+  description = "Maximum number of CPU cores a Terraform run is allowed to use. Set to `0` for no limit. Defaults to `0` if no value is given."
+  type = number
+}
+
+variable "capacity_concurrency" {
+  default     = 10
+  description = "The maximum number of Terraform runs that will be executed concurrently on each compute instance. Defaults to `10` if no value is given."
+  type        = number
+}
+
+variable "capacity_memory" {
+  default     = 2048
+  type        = number
+  description = "The maximum amount of memory (in megabytes) that a Terraform plan or apply can use on the system; defaults to `512` for legacy mode and `2048` for FDO."
+}
+
 variable "consolidated_services" {
   default     = false
   type        = bool
@@ -764,6 +831,12 @@ variable "custom_image_tag" {
   EOD
 }
 
+variable "enable_monitoring" {
+  default     = null
+  type        = bool
+  description = "Should cloud appropriate monitoring agents be installed as a part of the TFE installation script?"
+}
+
 variable "hairpin_addressing" {
   default     = null
   type        = bool
@@ -773,6 +846,30 @@ variable "hairpin_addressing" {
   to redirect requests for the installation's FQDN to the instance's internal IP address.
   Defaults to false.
   EOD
+}
+
+variable "registry_username" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_legacy_deployment is true) The username for the docker registry from which to source the terraform_enterprise container images."
+}
+
+variable "registry_password" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_legacy_deployment is true) The password for the docker registry from which to source the terraform_enterprise container images."
+}
+
+variable "run_pipeline_image" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_legacy_deployment is true) Container image used to execute Terraform runs. Leave blank to use the default image that comes with Terraform Enterprise. Defaults to \"\"."
+}
+
+variable "tfe_image" {
+  default     = "quay.io/hashicorp/terraform-enterprise:latest"
+  type        = string
+  description = "(Not needed if is_legacy_deployment is true) The registry path, image name, and image version (e.g. \"quay.io/hashicorp/terraform-enterprise:1234567\")"
 }
 
 variable "tfe_license_file_location" {
@@ -791,6 +888,32 @@ variable "tls_bootstrap_key_pathname" {
   default     = null
   type        = string
   description = "The path on the TFE instance to put the key. ex. '/var/lib/terraform-enterprise/key.pem'"
+}
+
+variable "tls_ca_bundle_file" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_legacy_deployment is true) Path to a file containing TLS CA certificates to be added to the OS CA certificates bundle. Leave blank to not add CA certificates to the OS CA certificates bundle. Defaults to `\"\"`."
+}
+
+variable "tls_ciphers" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_legacy_deployment is true) TLS ciphers to use for TLS. Must be valid OpenSSL format. Leave blank to use the default ciphers. Defaults to \"\"."
+}
+
+variable "tls_version" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_legacy_deployment is true) TLS version to use. Leave blank to use both TLS v1.2 and TLS v1.3. Defaults to `\"\"` if no value is given."
+  validation {
+    condition     = (
+      var.tls_version == null ||
+      var.tls_version == "tls_1_2" ||
+      var.tls_version == "tls_1_3"
+    )
+    error_message = "The tls_version value must be 'tls_1_2', 'tls_1_3', or null."
+  }
 }
 
 variable "production_type" {
@@ -830,11 +953,14 @@ variable "release_sequence" {
 
 variable "iact_subnet_list" {
   default     = []
-  description = <<-EOD
-  A list of IP address ranges which will be authorized to access the IACT. The ranges must be expressed
-  in CIDR notation.
-  EOD
+  description = "A list of IP address ranges which will be authorized to access the IACT. The ranges must be expressed in CIDR notation."
   type        = list(string)
+}
+
+variable "iact_subnet_time_limit" {
+  default     = 60
+  description = "The time limit for IP addresses from iact_subnet_list to access the IACT. The value must be expressed in minutes."
+  type        = number
 }
 
 variable "metrics_endpoint_enabled" {
