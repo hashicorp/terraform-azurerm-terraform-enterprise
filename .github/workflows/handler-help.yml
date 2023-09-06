@@ -30,5 +30,7 @@ jobs:
             * private-active-active
             * private-tcp-active-active
             * public-active-active
+            * standalone-external
+            * standalone-mounted-disk
 
           reaction-type: confused
