@@ -2,14 +2,6 @@
 # SPDX-License-Identifier: MPL-2.0
 
 terraform {
-  backend "remote" {
-    organization = "terraform-enterprise-modules-test"
-
-    workspaces {
-      name = "azure-standalone-external"
-    }
-  }
-
   required_version = "~> 1.0"
   required_providers {
     azurerm = {

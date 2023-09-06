@@ -85,7 +85,7 @@ jobs:
       pull_request_comment_id: ${{ github.event.client_payload.github.payload.comment.id }}
       TFC_token_secret_name: PRIVATE_ACTIVE_ACTIVE_TFC_TOKEN
       TFC_workspace_substitution_pattern: s/azure-private-active-active/azure-private-active-active/
-      bastion_ssh_private_key_secret_name: AZURE_PRIVATE_ACTIVE_ACTIVE_BASTION_SSH_KEY_BASE64
+      bastion_ssh_private_key_secret_name: PRIVATE_ACTIVE_ACTIVE_BASTION_SSH_KEY_BASE64
 
   private_tcp_active_active:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml
@@ -103,4 +103,4 @@ jobs:
       pull_request_comment_id: ${{ github.event.client_payload.github.payload.comment.id }}
       TFC_token_secret_name: PRIVATE_TCP_ACTIVE_ACTIVE_TFC_TOKEN
       TFC_workspace_substitution_pattern: s/azure-private-tcp-active-active/azure-private-tcp-active-active/
-      bastion_ssh_private_key_secret_name: AZURE_PRIVATE_TCP_ACTIVE_ACTIVE_BASTION_SSH_KEY_BASE64
+      bastion_ssh_private_key_secret_name: PRIVATE_TCP_ACTIVE_ACTIVE_BASTION_SSH_KEY_BASE64
