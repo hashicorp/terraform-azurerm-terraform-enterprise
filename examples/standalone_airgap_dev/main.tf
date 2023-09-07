@@ -42,9 +42,10 @@ module "standalone_airgap_dev" {
   vm_certificate_secret                     = data.azurerm_key_vault_secret.vm_certificate
   vm_key_secret                             = data.azurerm_key_vault_secret.vm_key
 
-  # Standalone External Scenario
+  # Standalone Disk Scenario
+  disk_path            = "/opt/hashicorp/data"
   distribution         = "ubuntu"
-  production_type      = "external"
+  production_type      = "disk"
   iact_subnet_list     = var.iact_subnet_list
   vm_node_count        = 1
   vm_sku               = "Standard_D4_v3"
@@ -52,6 +53,7 @@ module "standalone_airgap_dev" {
   load_balancer_public = true
   load_balancer_type   = "load_balancer"
 
-  create_bastion = true
+  create_bastion = false
+  enable_ssh     = true
   tags           = var.tags
 }

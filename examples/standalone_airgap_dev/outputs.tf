@@ -25,3 +25,12 @@ output "tfe_console_url" {
   value       = "${module.standalone_airgap_dev.tfe_application_url}:8800"
   description = "Terraform Enterprise Console URL"
 }
+
+output "tfe_module" {
+  value     = module.standalone_airgap_dev
+  sensitive = true
+}
+
+output "ssh_key" {
+  value = module.standalone_airgap_dev.instance_private_key
+}
