@@ -809,7 +809,7 @@ variable "capacity_memory" {
 variable "consolidated_services" {
   default     = false
   type        = bool
-  description = "(Required) True if TFE uses consolidated services."
+  description = "(Required if var.is_legacy_deployment is true) True if TFE uses consolidated services."
 }
 
 variable "custom_agent_image_tag" {

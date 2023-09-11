@@ -14,7 +14,7 @@ output "login_url" {
 }
 
 output "tfe_console_url" {
-  value       = "https://${module.load_balancer.fqdn}:8800"
+  value       = var.is_legacy_deployment ? "https://${module.load_balancer.fqdn}:8800" : "This is only used for legacy deployments."
   description = "Terraform Enterprise Console URL"
 }
 

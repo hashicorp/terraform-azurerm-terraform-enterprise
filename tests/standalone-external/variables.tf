@@ -14,6 +14,18 @@ variable "domain_name" {
   description = "Domain to create Terraform Enterprise subdomain within"
 }
 
+variable "hc_license" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_legacy_deployment is true) The raw TFE license that is validated on application startup."
+}
+
+variable "is_legacy_deployment" {
+  type        = bool
+  description = "TFE will be installed using a Replicated license and deployment method."
+  default     = true
+}
+
 variable "key_vault_id" {
   type        = string
   description = "The identity of the Key Vault which contains secrets and certificates."
@@ -29,6 +41,18 @@ variable "database_version" {
   default     = 12
   type        = number
   description = "Postgres version"
+}
+
+variable "registry_username" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_legacy_deployment is true) The username for the docker registry from which to source the terraform_enterprise container images."
+}
+
+variable "registry_password" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_legacy_deployment is true) The password for the docker registry from which to source the terraform_enterprise container images."
 }
 
 variable "resource_group_name_dns" {

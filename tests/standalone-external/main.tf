@@ -9,7 +9,7 @@ resource "random_string" "friendly_name" {
 }
 
 module "secrets" {
-  count        = local.utility_module_test ? 0 : 1
+  count        = local.utility_module_test || !var.is_legacy_deployment ? 0 : 1
   source       = "../../fixtures/secrets"
   key_vault_id = var.key_vault_id
 
@@ -52,4 +52,11 @@ module "standalone_external" {
   enable_ssh     = true
   create_bastion = false
   tags           = local.common_tags
+
+  # FDO Specific Values
+  is_legacy_deployment = var.is_legacy_deployment
+  hc_license           = var.hc_license
+  tfe_image            = "quay.io/hashicorp/terraform-enterprise:9e3a057"
+  registry_password    = var.registry_password
+  registry_username    = var.registry_username
 }

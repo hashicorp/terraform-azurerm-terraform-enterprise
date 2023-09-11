@@ -177,7 +177,7 @@ module "docker_compose_config" {
   capacity_concurrency      = var.capacity_concurrency
   capacity_cpu              = var.capacity_cpu
   capacity_memory           = var.capacity_memory
-  iact_subnets              = var.iact_subnet_list
+  iact_subnets              = join(",", var.iact_subnet_list)
   iact_time_limit           = var.iact_subnet_time_limit
 
   database_user             = local.database.server.administrator_login
@@ -271,8 +271,8 @@ module "settings" {
 # Azure user data / cloud init used to install and configure TFE on instance(s)
 # -----------------------------------------------------------------------------
 module "tfe_init_legacy" {
-  # source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=ah/tf-5370"
-  source = "../terraform-random-tfe-utility//modules/tfe_init"
+  # source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init_legacy?ref=ah/tf-5370"
+  source = "../terraform-random-tfe-utility//modules/tfe_init_legacy"
   count  = var.is_legacy_deployment ? 1 : 0
 
   # TFE & Replicated Configuration data
