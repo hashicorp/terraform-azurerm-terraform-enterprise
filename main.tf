@@ -56,8 +56,9 @@ module "network" {
   resource_group_name  = module.resource_groups.resource_group_name
   location             = var.location
 
-  active_active = local.active_active
-  enable_ssh    = var.enable_ssh
+  active_active        = local.active_active
+  enable_ssh           = var.enable_ssh
+  is_legacy_deployment = var.is_legacy_deployment
 
   network_allow_range          = var.network_allow_range
   network_bastion_subnet_cidr  = var.network_bastion_subnet_cidr
@@ -133,8 +134,7 @@ module "database" {
 # Azure user data / cloud init used to install and configure TFE on instance(s) using Flexible Deployment Options
 # ---------------------------------------------------------------------------------------------------------------
 module "tfe_init_fdo" {
-  # source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=ah/tf-5370"
-  source = "../terraform-random-tfe-utility//modules/tfe_init"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=ah/tf-5370"
   count  = var.is_legacy_deployment ? 0 : 1
 
   cloud             = "azurerm"
@@ -159,8 +159,7 @@ module "tfe_init_fdo" {
 
 
 module "docker_compose_config" {
-  # source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/docker_compose_config?ref=ah/tf-5370"
-  source = "../terraform-random-tfe-utility//modules/docker_compose_config"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/docker_compose_config?ref=ah/tf-5370"
   count  = var.is_legacy_deployment ? 0 : 1
 
   hostname                  = module.load_balancer.fqdn
@@ -209,8 +208,7 @@ module "docker_compose_config" {
 # TFE and Replicated settings to pass to the tfe_init_legacy module for legacy deployment
 # ---------------------------------------------------------------------------------------
 module "settings" {
-  # source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=ah/tf-5370"
-  source = "../terraform-random-tfe-utility//modules/settings"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=ah/tf-5370"
   count  = var.is_legacy_deployment ? 1 : 0
 
   # TFE Base Configuration
@@ -271,8 +269,7 @@ module "settings" {
 # Azure user data / cloud init used to install and configure TFE on instance(s)
 # -----------------------------------------------------------------------------
 module "tfe_init_legacy" {
-  # source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init_legacy?ref=ah/tf-5370"
-  source = "../terraform-random-tfe-utility//modules/tfe_init_legacy"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init_legacy?ref=ah/tf-5370"
   count  = var.is_legacy_deployment ? 1 : 0
 
   # TFE & Replicated Configuration data

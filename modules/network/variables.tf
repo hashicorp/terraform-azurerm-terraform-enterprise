@@ -24,6 +24,11 @@ variable "enable_ssh" {
   description = "Enable SSH access on port 22 to the VM instance (standalone, load_balancer deployments only, not App GW). This is ***NOT RECOMMENDED*** for production deployments."
 }
 
+variable "is_legacy_deployment" {
+  type        = bool
+  description = "TFE will be installed using a Replicated license and deployment method."
+}
+
 # Provider
 # --------
 variable "location" {

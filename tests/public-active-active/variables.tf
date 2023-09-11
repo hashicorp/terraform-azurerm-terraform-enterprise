@@ -9,9 +9,33 @@ variable "consolidated_services" {
   description = "(Required) True if TFE uses consolidated services."
 }
 
+variable "hc_license" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_legacy_deployment is true) The raw TFE license that is validated on application startup."
+}
+
+variable "is_legacy_deployment" {
+  type        = bool
+  description = "TFE will be installed using a Replicated license and deployment method."
+  default     = true
+}
+
 variable "location" {
   type        = string
   description = "Azure location name e.g. East US"
+}
+
+variable "registry_username" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_legacy_deployment is true) The username for the docker registry from which to source the terraform_enterprise container images."
+}
+
+variable "registry_password" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_legacy_deployment is true) The password for the docker registry from which to source the terraform_enterprise container images."
 }
 
 # Domain
