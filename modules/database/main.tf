@@ -2,8 +2,9 @@
 # SPDX-License-Identifier: MPL-2.0
 
 resource "random_string" "tfe_pg_password" {
-  length  = 24
-  special = true
+  length           = 24
+  special          = true
+  override_special = "$@:"
 }
 
 resource "azurerm_postgresql_flexible_server" "tfe" {

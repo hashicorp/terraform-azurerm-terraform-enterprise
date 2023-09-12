@@ -167,7 +167,7 @@ module "docker_compose_config" {
   license_reporting_opt_out = "true"
   cert_file                 = "/etc/ssl/private/terraform-enterprise/cert.pem"
   key_file                  = "/etc/ssl/private/terraform-enterprise/key.pem"
-  operational_mode          = var.production_type
+  operational_mode          = local.active_active ? "active-active" : var.production_type
   tfe_image                 = var.tfe_image
   tls_ca_bundle_file        = var.tls_ca_bundle_file
   tls_ciphers               = var.tls_ciphers
