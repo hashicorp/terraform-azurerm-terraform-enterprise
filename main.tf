@@ -149,8 +149,17 @@ module "tfe_init_fdo" {
   certificate_secret_id    = var.vm_certificate_secret == null ? null : var.vm_certificate_secret.id
   key_secret_id            = var.vm_key_secret == null ? null : var.vm_key_secret.id
 
-  proxy_ip   = var.proxy_ip
-  proxy_port = var.proxy_port
+  proxy_ip       = var.proxy_ip
+  proxy_port     = var.proxy_port
+  extra_no_proxy = [
+    "127.0.0.1",
+    "169.254.169.254",
+    ".azure.com",
+    ".windows.net",
+    ".microsoft.com",
+    module.load_balancer.fqdn,
+    var.network_cidr
+  ]
 
   registry_username   = var.registry_username
   registry_password   = var.registry_password
