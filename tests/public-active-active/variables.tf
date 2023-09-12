@@ -27,7 +27,7 @@ variable "iact_subnet_list" {
 variable "is_legacy_deployment" {
   type        = bool
   description = "TFE will be installed using a Replicated license and deployment method."
-  default     = true
+  default     = false
 }
 
 variable "location" {
