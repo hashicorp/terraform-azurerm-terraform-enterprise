@@ -8,18 +8,12 @@ variable "bastion_public_ssh_key_secret_name" {
 
 variable "ca_certificate_secret_name" {
   type        = string
-  description = <<-EOD
-  The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a
-  certificate authority (CA) to be trusted by the Virtual Machine Scale Set.
-  EOD
+  description = "The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a certificate authority (CA) to be trusted by the Virtual Machine Scale Set."
 }
 
 variable "ca_key_secret_name" {
   type        = string
-  description = <<-EOD
-  The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded private key of a
-  certificate authority (CA).
-  EOD
+  description = "The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded private key of a certificate authority (CA)."
 }
 
 variable "domain_name" {
@@ -66,16 +60,10 @@ variable "tags" {
 
 variable "vm_certificate_secret_name" {
   type        = string
-  description = <<-EOD
-  The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a
-  certificate authority (CA) to be trusted by the Virtual Machine Scale Set.
-  EOD
+  description = "The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a certificate authority (CA) to be trusted by the Virtual Machine Scale Set."
 }
 
 variable "vm_key_secret_name" {
   type        = string
-  description = <<-EOD
-  The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded private key of a
-  certificate authority (CA) to be trusted by the Virtual Machine Scale Set.
-  EOD
+  description = "The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded private key of a certificate authority (CA) to be trusted by the Virtual Machine Scale Set."
 }

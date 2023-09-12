@@ -42,7 +42,7 @@ module "public_active_active" {
   # FDO Specific Values
   is_legacy_deployment = var.is_legacy_deployment
   hc_license           = var.hc_license
-  tfe_image            = "quay.io/hashicorp/terraform-enterprise:9e3a057"
+  tfe_image            = "quay.io/hashicorp/terraform-enterprise:${var.tfe_image_tag}"
   registry_password    = var.registry_password
   registry_username    = var.registry_username
 }

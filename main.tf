@@ -152,9 +152,9 @@ module "tfe_init_fdo" {
   proxy_ip   = var.proxy_ip
   proxy_port = var.proxy_port
 
-  registry_username              = var.registry_username
-  registry_password              = var.registry_password
-  docker_compose_yaml            = module.docker_compose_config[0].docker_compose_yaml
+  registry_username   = var.registry_username
+  registry_password   = var.registry_password
+  docker_compose_yaml = module.docker_compose_config[0].docker_compose_yaml
 }
 
 
@@ -179,29 +179,29 @@ module "docker_compose_config" {
   iact_subnets              = join(",", var.iact_subnet_list)
   iact_time_limit           = var.iact_subnet_time_limit
 
-  database_user             = local.database.server.administrator_login
-  database_password         = local.database.server.administrator_password
-  database_host             = local.database.address
-  database_name             = local.database.name
-  database_parameters       = "sslmode=require"
+  database_user       = local.database.server.administrator_login
+  database_password   = local.database.server.administrator_password
+  database_host       = local.database.address
+  database_name       = local.database.name
+  database_parameters = "sslmode=require"
 
-  storage_type              = "azure"
+  storage_type = "azure"
 
-  azure_account_key         = local.object_storage.storage_account_key
-  azure_account_name        = local.object_storage.storage_account_name
-  azure_container           = local.object_storage.storage_account_container_name
+  azure_account_key  = local.object_storage.storage_account_key
+  azure_account_name = local.object_storage.storage_account_name
+  azure_container    = local.object_storage.storage_account_container_name
 
-  redis_host                = local.redis.hostname
-  redis_user                = ""
-  redis_password            = local.redis.primary_access_key
-  redis_use_tls             = local.redis.hostname == null ? null : var.redis_use_tls
-  redis_use_auth            = local.redis.hostname == null ? null : var.redis_use_password_auth
+  redis_host     = local.redis.hostname
+  redis_user     = ""
+  redis_password = local.redis.primary_access_key
+  redis_use_tls  = local.redis.hostname == null ? null : var.redis_use_tls
+  redis_use_auth = local.redis.hostname == null ? null : var.redis_use_password_auth
 
-  vault_address             = var.extern_vault_addr
-  vault_namespace           = var.extern_vault_namespace
-  vault_path                = var.extern_vault_path
-  vault_role_id             = var.extern_vault_role_id
-  vault_secret_id           = var.extern_vault_secret_id
+  vault_address   = var.extern_vault_addr
+  vault_namespace = var.extern_vault_namespace
+  vault_path      = var.extern_vault_path
+  vault_role_id   = var.extern_vault_role_id
+  vault_secret_id = var.extern_vault_secret_id
 }
 
 # ---------------------------------------------------------------------------------------

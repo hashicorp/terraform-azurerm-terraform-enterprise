@@ -1,11 +1,22 @@
 # Copyright (c) HashiCorp, Inc.
 # SPDX-License-Identifier: MPL-2.0
 
-
 variable "bypass_preflight_checks" {
   default     = true
   type        = bool
   description = "Allow the TFE application to start without preflight checks."
+}
+
+variable "consolidated_services" {
+  default     = false
+  type        = bool
+  description = "(Required) True if TFE uses consolidated services."
+}
+
+variable "database_version" {
+  default     = 12
+  type        = number
+  description = "Postgres version"
 }
 
 variable "domain_name" {
@@ -37,12 +48,6 @@ variable "license_file" {
   description = "The local path to the Terraform Enterprise license to be provided by CI."
 }
 
-variable "database_version" {
-  default     = 12
-  type        = number
-  description = "Postgres version"
-}
-
 variable "registry_username" {
   default     = null
   type        = string
@@ -61,14 +66,14 @@ variable "resource_group_name_dns" {
   description = "Name of resource group which contains desired DNS zone"
 }
 
+variable "tfe_image_tag" {
+  default     = "latest"
+  type        = string
+  description = "(Not needed if is_legacy_deployment is true) The image version of the terraform-enterprise image (e.g. \"1234567\")"
+}
+
 variable "tfe_license_secret_id" {
   default     = null
   type        = string
   description = "The Key Vault secret id under which the Base64 encoded Terraform Enterprise license is stored."
-}
-
-variable "consolidated_services" {
-  default     = false
-  type        = bool
-  description = "(Required) True if TFE uses consolidated services."
 }

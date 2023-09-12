@@ -91,10 +91,7 @@ variable "ca_certificate_secret" {
     name  = string
     value = string
   })
-  description = <<-EOD
-  A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a
-  certificate authority (CA) to be trusted by the Application Gateway.
-  EOD
+  description = "A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a certificate authority (CA) to be trusted by the Application Gateway."
 }
 
 # Load balancer

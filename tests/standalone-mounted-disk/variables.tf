@@ -14,6 +14,16 @@ variable "consolidated_services" {
   description = "(Required) True if TFE uses consolidated services."
 }
 
+variable "distribution" {
+  type        = string
+  description = "(Required) What is the OS distribution of the instance on which Terraoform Enterprise will be deployed?"
+  validation {
+    condition     = contains(["rhel", "ubuntu"], var.distribution)
+    error_message = "Supported values for distribution are 'rhel' or 'ubuntu'."
+  }
+  default = "ubuntu"
+}
+
 variable "domain_name" {
   type        = string
   default     = "team-private-terraform-enterprise.azure.ptfedev.com"
@@ -43,68 +53,6 @@ variable "license_file" {
   description = "The local path to the Terraform Enterprise license to be provided by CI."
 }
 
-variable "resource_group_name_dns" {
-  type        = string
-  default     = "ptfedev-com-dns-tls"
-  description = "Name of resource group which contains desired DNS zone"
-}
-
-variable "tfe_license_secret_id" {
-  default     = null
-  type        = string
-  description = "The Key Vault secret id under which the Base64 encoded Terraform Enterprise license is stored."
-}
-
-variable "vm_image_publisher" {
-  type        = string
-  description = <<-EOD
-  The image publisher of the base image to install Terraform Enterprise on.  This is used in conjunction with
-  vm_image_offer, vm_image_sku, and vm_image_version to determine the image to install from the public markeplace when
-  vm_image_id is not provided.
-  EOD
-  default     = null
-}
-
-variable "vm_image_offer" {
-  type        = string
-  description = <<-EOD
-  The image offer of the base image to install Terraform Enterprise on.  This is used in conjunction with
-  vm_image_publisher, vm_image_sku, and vm_image_version to determine the image to install from the public markeplace
-  when vm_image_id is not provided.
-  EOD
-  default     = null
-}
-
-variable "vm_image_sku" {
-  type        = string
-  description = <<-EOD
-  The image sku of the base image to install Terraform Enterprise on.  This is used in conjunction with
-  vm_image_publisher, vm_image_offer, and vm_image_version to determine the image to install from the public markeplace
-  when vm_image_id is not provided.
-  EOD
-  default     = null
-}
-
-variable "vm_image_version" {
-  type        = string
-  description = <<-EOD
-  The image version of the base image to install Terraform Enterprise on.  This is used in conjunction with
-  vm_image_publisher, vm_image_offer, and vm_image_sku to determine the image to install from the public markeplace
-  when vm_image_id is not provided.
-  EOD
-  default     = null
-}
-
-variable "distribution" {
-  type        = string
-  description = "(Required) What is the OS distribution of the instance on which Terraoform Enterprise will be deployed?"
-  validation {
-    condition     = contains(["rhel", "ubuntu"], var.distribution)
-    error_message = "Supported values for distribution are 'rhel' or 'ubuntu'."
-  }
-  default = "ubuntu"
-}
-
 variable "registry_username" {
   default     = null
   type        = string
@@ -115,4 +63,46 @@ variable "registry_password" {
   default     = null
   type        = string
   description = "(Not needed if is_legacy_deployment is true) The password for the docker registry from which to source the terraform_enterprise container images."
+}
+
+variable "resource_group_name_dns" {
+  type        = string
+  default     = "ptfedev-com-dns-tls"
+  description = "Name of resource group which contains desired DNS zone"
+}
+
+variable "tfe_image_tag" {
+  default     = "latest"
+  type        = string
+  description = "(Not needed if is_legacy_deployment is true) The image version of the terraform-enterprise image (e.g. \"1234567\")"
+}
+
+variable "tfe_license_secret_id" {
+  default     = null
+  type        = string
+  description = "The Key Vault secret id under which the Base64 encoded Terraform Enterprise license is stored."
+}
+
+variable "vm_image_publisher" {
+  type        = string
+  description = "The image publisher of the base image to install Terraform Enterprise on.  This is used in conjunction with vm_image_offer, vm_image_sku, and vm_image_version to determine the image to install from the public markeplace when vm_image_id is not provided."
+  default     = null
+}
+
+variable "vm_image_offer" {
+  type        = string
+  description = "The image offer of the base image to install Terraform Enterprise on.  This is used in conjunction with vm_image_publisher, vm_image_sku, and vm_image_version to determine the image to install from the public markeplace when vm_image_id is not provided."
+  default     = null
+}
+
+variable "vm_image_sku" {
+  type        = string
+  description = "The image sku of the base image to install Terraform Enterprise on.  This is used in conjunction with vm_image_publisher, vm_image_offer, and vm_image_version to determine the image to install from the public markeplace when vm_image_id is not provided."
+  default     = null
+}
+
+variable "vm_image_version" {
+  type        = string
+  description = "The image version of the base image to install Terraform Enterprise on.  This is used in conjunction with vm_image_publisher, vm_image_offer, and vm_image_sku to determine the image to install from the public markeplace when vm_image_id is not provided."
+  default     = null
 }
