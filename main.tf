@@ -149,8 +149,8 @@ module "tfe_init_fdo" {
   certificate_secret_id    = var.vm_certificate_secret == null ? null : var.vm_certificate_secret.id
   key_secret_id            = var.vm_key_secret == null ? null : var.vm_key_secret.id
 
-  proxy_ip       = var.proxy_ip
-  proxy_port     = var.proxy_port
+  proxy_ip   = var.proxy_ip
+  proxy_port = var.proxy_port
   extra_no_proxy = [
     "127.0.0.1",
     "169.254.169.254",
@@ -173,7 +173,7 @@ module "docker_compose_config" {
 
   hostname                  = module.load_balancer.fqdn
   tfe_license               = var.hc_license
-  license_reporting_opt_out = "true"
+  license_reporting_opt_out = var.license_reporting_opt_out
   cert_file                 = "/etc/ssl/private/terraform-enterprise/cert.pem"
   key_file                  = "/etc/ssl/private/terraform-enterprise/key.pem"
   operational_mode          = local.active_active ? "active-active" : var.production_type
