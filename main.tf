@@ -322,6 +322,7 @@ module "load_balancer" {
   # General
   active_active           = local.active_active
   domain_name             = var.domain_name
+  is_legacy_deployment    = var.is_legacy_deployment
   tfe_subdomain           = var.tfe_subdomain
   resource_group_name_dns = module.resource_groups.resource_group_name_dns
   dns_create_record       = var.dns_create_record
