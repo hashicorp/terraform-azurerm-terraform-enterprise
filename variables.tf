@@ -129,6 +129,12 @@ variable "enable_ssh" {
   description = "Enable SSH access on port 22 to the VM instance (standalone, load_balancer deployments only, not App GW). This is ***NOT RECOMMENDED*** for production deployments."
 }
 
+variable "network_private_ip" {
+  default     = null
+  type        = string
+  description = "(optional) Private IP address to use for LB/AG endpoint"
+}
+
 variable "network_private_subnet_id" {
   default     = null
   type        = string

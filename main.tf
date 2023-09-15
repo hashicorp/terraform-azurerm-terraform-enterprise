@@ -346,6 +346,7 @@ module "load_balancer" {
   # Network
   network_frontend_subnet_cidr = var.network_frontend_subnet_cidr
   network_frontend_subnet_id   = local.network.frontend_subnet.id
+  network_private_ip           = var.network_private_ip
 
   # Load balancer
   load_balancer_type                                  = var.load_balancer_type
