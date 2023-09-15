@@ -402,6 +402,12 @@ variable "load_balancer_request_routing_rule_minimum_priority" {
   }
 }
 
+variable "load_balancer_sku_capacity" {
+  default     = 2
+  type        = number
+  description = "The Capacity of the SKU to use for Application Gateway (1 to 125)"
+}
+
 variable "load_balancer_sku_name" {
   default     = "Standard_v2"
   type        = string
@@ -439,9 +445,9 @@ variable "load_balancer_waf_firewall_mode" {
 }
 
 variable "load_balancer_waf_rule_set_version" {
-  default     = "3.1"
+  default     = "3.2"
   type        = string
-  description = "The Version of the Rule Set used for this Web Application Firewall. Possible values are 2.2.9, 3.0, and 3.1."
+  description = "The Version of the Rule Set used for this Web Application Firewall. Possible values are 2.2.9, 3.0, 3.1, and 3.2."
 }
 
 variable "load_balancer_waf_file_upload_limit_mb" {

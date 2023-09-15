@@ -351,6 +351,7 @@ module "load_balancer" {
   load_balancer_type                                  = var.load_balancer_type
   load_balancer_public                                = var.load_balancer_public
   load_balancer_request_routing_rule_minimum_priority = var.load_balancer_request_routing_rule_minimum_priority
+  load_balancer_sku_capacity                          = var.load_balancer_sku_capacity
   load_balancer_sku_name                              = var.load_balancer_sku_name
   load_balancer_sku_tier                              = var.load_balancer_sku_tier
   load_balancer_waf_firewall_mode                     = var.load_balancer_waf_firewall_mode
