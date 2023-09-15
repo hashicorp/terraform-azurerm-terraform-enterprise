@@ -350,6 +350,7 @@ module "load_balancer" {
 
   # Load balancer
   load_balancer_type                                  = var.load_balancer_type
+  load_balancer_enable_http2                          = var.load_balancer_enable_http2
   load_balancer_public                                = var.load_balancer_public
   load_balancer_request_routing_rule_minimum_priority = var.load_balancer_request_routing_rule_minimum_priority
   load_balancer_sku_capacity                          = var.load_balancer_sku_capacity

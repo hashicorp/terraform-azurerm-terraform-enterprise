@@ -389,6 +389,12 @@ variable "load_balancer_type" {
   }
 }
 
+variable "load_balancer_enable_http2" {
+  default     = true
+  type        = bool
+  description = "Determine if HTTP2 enabled on Application Gateway"
+}
+
 variable "load_balancer_public" {
   default     = true
   type        = bool
