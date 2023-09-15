@@ -36,7 +36,7 @@ variable "hc_license" {
 variable "is_legacy_deployment" {
   type        = bool
   description = "TFE will be installed using a Replicated license and deployment method."
-  default     = false
+  default     = true
 }
 
 variable "location" {
