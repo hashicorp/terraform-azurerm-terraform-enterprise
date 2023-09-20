@@ -166,7 +166,9 @@ module "tfe_init_fdo" {
   docker_compose_yaml = module.docker_compose_config[0].docker_compose_yaml
 }
 
-
+# ------------------------------------------------------------------------------------
+# Docker Compose File Config for TFE on instance(s) using Flexible Deployment Options
+# ------------------------------------------------------------------------------------
 module "docker_compose_config" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/docker_compose_config?ref=ah/tf-5370"
   count  = var.is_legacy_deployment ? 0 : 1
