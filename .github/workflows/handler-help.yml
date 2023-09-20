@@ -27,10 +27,17 @@ jobs:
             
             ## Test Case Names
             
+            FDO:
             * private-active-active
             * private-tcp-active-active
             * public-active-active
             * standalone-external
             * standalone-mounted-disk
 
+            Legacy:
+            * private-active-active-legacy
+            * private-tcp-active-active-legacy
+            * public-active-active-legacy
+            * standalone-external-legacy
+            * standalone-mounted-disk-legacy
           reaction-type: confused
