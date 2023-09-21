@@ -7,7 +7,7 @@ on:
 
 jobs:
   standalone_external:
-    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@ah/tf-5370
+    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Standalone External
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'standalone-external') }}
@@ -31,7 +31,7 @@ jobs:
         }\n/'
 
   standalone_mounted_disk:
-    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@ah/tf-5370
+    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Standalone Mounted Disk
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'standalone-mounted-disk') }}
@@ -55,7 +55,7 @@ jobs:
         }\n/'
 
   public_active_active:
-    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@ah/tf-5370
+    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Public Active/Active
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'public-active-active') }}
@@ -72,7 +72,7 @@ jobs:
       TFC_token_secret_name: PUBLIC_ACTIVE_ACTIVE_TFC_TOKEN
   
   private_active_active:
-    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@ah/tf-5370
+    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Private Active/Active
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'private-active-active') }}
@@ -90,7 +90,7 @@ jobs:
       bastion_ssh_private_key_secret_name: PRIVATE_ACTIVE_ACTIVE_BASTION_SSH_KEY_BASE64
 
   private_tcp_active_active:
-    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@ah/tf-5370
+    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Private TCP Active/Active
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'private-tcp-active-active') }}
@@ -108,7 +108,7 @@ jobs:
       bastion_ssh_private_key_secret_name: PRIVATE_TCP_ACTIVE_ACTIVE_BASTION_SSH_KEY_BASE64
 
   standalone_external_legacy:
-    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@ah/tf-5370
+    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Standalone External (Legacy)
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'standalone-external-legacy') }}
@@ -132,7 +132,7 @@ jobs:
         }\n/'
 
   standalone_mounted_disk_legacy:
-    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@ah/tf-5370
+    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Standalone Mounted Disk (Legacy)
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'standalone-mounted-disk-legacy') }}
@@ -156,7 +156,7 @@ jobs:
         }\n/'
 
   public_active_active_legacy:
-    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@ah/tf-5370
+    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Public Active/Active (Legacy)
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'public-active-active-legacy') }}
@@ -174,7 +174,7 @@ jobs:
       TFC_workspace_substitution_pattern: s/azure-public-active-active/azure-public-active-active-legacy/
   
   private_active_active_legacy:
-    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@ah/tf-5370
+    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Private Active/Active (Legacy)
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'private-active-active-legacy') }}
@@ -193,7 +193,7 @@ jobs:
       bastion_ssh_private_key_secret_name: PRIVATE_ACTIVE_ACTIVE_BASTION_SSH_KEY_BASE64
 
   private_tcp_active_active_legacy:
-    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@ah/tf-5370
+    uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Private TCP Active/Active (Legacy)
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'private-tcp-active-active-legacy') }}
