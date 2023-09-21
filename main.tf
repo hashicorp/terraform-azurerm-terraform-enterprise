@@ -56,8 +56,8 @@ module "network" {
   resource_group_name  = module.resource_groups.resource_group_name
   location             = var.location
 
-  active_active        = local.active_active
-  enable_ssh           = var.enable_ssh
+  active_active            = local.active_active
+  enable_ssh               = var.enable_ssh
   is_replicated_deployment = var.is_replicated_deployment
 
   network_allow_range          = var.network_allow_range
@@ -331,15 +331,15 @@ module "load_balancer" {
   zones                = var.zones
 
   # General
-  active_active           = local.active_active
-  domain_name             = var.domain_name
-  is_replicated_deployment    = var.is_replicated_deployment
-  tfe_subdomain           = var.tfe_subdomain
-  resource_group_name_dns = module.resource_groups.resource_group_name_dns
-  dns_create_record       = var.dns_create_record
-  tenant_id               = data.azurerm_client_config.current.tenant_id
-  dns_external_fqdn       = var.dns_external_fqdn
-  enable_ssh              = var.enable_ssh
+  active_active            = local.active_active
+  domain_name              = var.domain_name
+  is_replicated_deployment = var.is_replicated_deployment
+  tfe_subdomain            = var.tfe_subdomain
+  resource_group_name_dns  = module.resource_groups.resource_group_name_dns
+  dns_create_record        = var.dns_create_record
+  tenant_id                = data.azurerm_client_config.current.tenant_id
+  dns_external_fqdn        = var.dns_external_fqdn
+  enable_ssh               = var.enable_ssh
 
   # Secrets
   ca_certificate_secret = var.ca_certificate_secret

@@ -40,7 +40,7 @@ module "public_active_active" {
   tags = local.common_tags
 
   # FDO Specific Values
-  is_replicated_deployment      = var.is_replicated_deployment
+  is_replicated_deployment  = var.is_replicated_deployment
   hc_license                = var.hc_license
   license_reporting_opt_out = true
   registry_password         = var.registry_password
