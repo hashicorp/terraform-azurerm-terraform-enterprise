@@ -11,7 +11,7 @@ locals {
   dns_internal_fqdn = var.domain_name == null ? azurerm_public_ip.tfe_pip.fqdn : "${local.tfe_subdomain}.${var.domain_name}"
   fqdn              = var.dns_external_fqdn == null ? local.dns_internal_fqdn : var.dns_external_fqdn
 
-  is_legacy_rule_set_version = var.load_balancer_waf_rule_set_version == "2.2.9"
+  is_replicated_rule_set_version = var.load_balancer_waf_rule_set_version == "2.2.9"
 
   # Application Gateway
   # -------------------
@@ -28,7 +28,7 @@ locals {
   app_backend_http_settings_name  = "tfe-ag-backend-http-settings-app"
   app_request_routing_rule_name   = "tfe-ag-routing-rule-app"
 
-  # Legacy TFE Console Configuration (standalone only)
+  # Replicated TFE Console Configuration (standalone only)
   console_frontend_port_name          = "tfe-ag-frontend-port-console"
   console_frontend_http_listener_name = "tfe-ag-http-listener-frontend-port-console"
   console_backend_http_settings_name  = "tfe-ag-backend-http-settings-console"
@@ -162,9 +162,9 @@ resource "azurerm_application_gateway" "tfe_ag" {
 
       # Allow HTTP header "Content-Type: application/vnd.api+json" for API requests
       disabled_rule_group {
-        rule_group_name = local.is_legacy_rule_set_version ? "crs_30_http_policy" : "REQUEST-920-PROTOCOL-ENFORCEMENT"
+        rule_group_name = local.is_replicated_rule_set_version ? "crs_30_http_policy" : "REQUEST-920-PROTOCOL-ENFORCEMENT"
 
-        rules = local.is_legacy_rule_set_version ? [960010] : [920420]
+        rules = local.is_replicated_rule_set_version ? [960010] : [920420]
       }
       file_upload_limit_mb     = var.load_balancer_waf_file_upload_limit_mb
       max_request_body_size_kb = var.load_balancer_waf_max_request_body_size_kb

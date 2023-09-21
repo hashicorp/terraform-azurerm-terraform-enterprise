@@ -215,9 +215,9 @@ module "docker_compose_config" {
   vault_secret_id = var.extern_vault_secret_id
 }
 
-# ---------------------------------------------------------------------------------------
-# TFE and Replicated settings to pass to the tfe_init_legacy module for legacy deployment
-# ---------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------
+# TFE and Replicated settings to pass to the tfe_init_replicated module for Replicated deployment
+# ------------------------------------------------------------------------------------------------
 module "settings" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=main"
   count  = var.is_replicated_deployment ? 1 : 0
@@ -279,8 +279,8 @@ module "settings" {
 # -----------------------------------------------------------------------------
 # Azure user data / cloud init used to install and configure TFE on instance(s)
 # -----------------------------------------------------------------------------
-module "tfe_init_legacy" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init_legacy?ref=main"
+module "tfe_init_replicated" {
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init_replicated?ref=main"
   count  = var.is_replicated_deployment ? 1 : 0
 
   # TFE & Replicated Configuration data
@@ -400,7 +400,7 @@ module "vm" {
   vm_subnet_id                            = local.network.private_subnet.id
   vm_upgrade_mode                         = var.vm_upgrade_mode
   vm_user                                 = var.vm_user
-  vm_userdata_script                      = var.is_replicated_deployment ? module.tfe_init_legacy[0].tfe_userdata_base64_encoded : module.tfe_init_fdo[0].tfe_userdata_base64_encoded
+  vm_userdata_script                      = var.is_replicated_deployment ? module.tfe_init_replicated[0].tfe_userdata_base64_encoded : module.tfe_init_fdo[0].tfe_userdata_base64_encoded
   vm_vmss_scale_in_rule                   = var.vm_vmss_scale_in_rule
   vm_vmss_scale_in_force_deletion_enabled = var.vm_vmss_scale_in_force_deletion_enabled
   vm_zone_balance                         = var.vm_zone_balance

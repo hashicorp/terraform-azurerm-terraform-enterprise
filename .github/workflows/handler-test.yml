@@ -107,11 +107,11 @@ jobs:
       TFC_token_secret_name: PRIVATE_TCP_ACTIVE_ACTIVE_TFC_TOKEN
       bastion_ssh_private_key_secret_name: PRIVATE_TCP_ACTIVE_ACTIVE_BASTION_SSH_KEY_BASE64
 
-  standalone_external_legacy:
+  standalone_external_replicated:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
-    name: Run tf-test on Azure Standalone External (Legacy)
-    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'standalone-external-legacy') }}
+    name: Run tf-test on Azure Standalone External (Replicated)
+    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'standalone-external-replicated') }}
     with:
       test_name: Standalone External
       is_replicated_deployment: true
@@ -122,20 +122,20 @@ jobs:
       pull_request_repo_name: ${{ github.event.client_payload.github.payload.repository.full_name }}
       pull_request_ref: ${{ github.event.client_payload.pull_request.head.sha }}
       pull_request_comment_id: ${{ github.event.client_payload.github.payload.comment.id }}
-      TFC_token_secret_name: STANDALONE_EXTERNAL_LEGACY_TFC_TOKEN
+      TFC_token_secret_name: STANDALONE_EXTERNAL_REPLICATED_TFC_TOKEN
       TFC_workspace_substitution_pattern: 's/terraform {/terraform {\n\
         backend "remote" {\n\
           organization = "terraform-enterprise-modules-test"\n\
           workspaces {\n\
-            name = "azure-standalone-external-legacy"\n\
+            name = "azure-standalone-external-replicated"\n\
           }\n\
         }\n/'
 
-  standalone_mounted_disk_legacy:
+  standalone_mounted_disk_replicated:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
-    name: Run tf-test on Azure Standalone Mounted Disk (Legacy)
-    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'standalone-mounted-disk-legacy') }}
+    name: Run tf-test on Azure Standalone Mounted Disk (Replicated)
+    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'standalone-mounted-disk-replicated') }}
     with:
       test_name: Standalone Mounted Disk
       is_replicated_deployment: true
@@ -146,20 +146,20 @@ jobs:
       pull_request_repo_name: ${{ github.event.client_payload.github.payload.repository.full_name }}
       pull_request_ref: ${{ github.event.client_payload.pull_request.head.sha }}
       pull_request_comment_id: ${{ github.event.client_payload.github.payload.comment.id }}
-      TFC_token_secret_name: STANDALONE_MOUNTED_DISK_LEGACY_TFC_TOKEN
+      TFC_token_secret_name: STANDALONE_MOUNTED_DISK_REPLICATED_TFC_TOKEN
       TFC_workspace_substitution_pattern: 's/terraform {/terraform {\n\
         backend "remote" {\n\
           organization = "terraform-enterprise-modules-test"\n\
           workspaces {\n\
-            name = "azure-standalone-mounted-disk-legacy"\n\
+            name = "azure-standalone-mounted-disk-replicated"\n\
           }\n\
         }\n/'
 
-  public_active_active_legacy:
+  public_active_active_replicated:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
-    name: Run tf-test on Azure Public Active/Active (Legacy)
-    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'public-active-active-legacy') }}
+    name: Run tf-test on Azure Public Active/Active (Replicated)
+    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'public-active-active-replicated') }}
     with:
       test_name: Public Active/Active
       is_replicated_deployment: true
@@ -170,14 +170,14 @@ jobs:
       pull_request_repo_name: ${{ github.event.client_payload.github.payload.repository.full_name }}
       pull_request_ref: ${{ github.event.client_payload.pull_request.head.sha }}
       pull_request_comment_id: ${{ github.event.client_payload.github.payload.comment.id }}
-      TFC_token_secret_name: PUBLIC_ACTIVE_ACTIVE_LEGACY_TFC_TOKEN
-      TFC_workspace_substitution_pattern: s/azure-public-active-active/azure-public-active-active-legacy/
+      TFC_token_secret_name: PUBLIC_ACTIVE_ACTIVE_REPLICATED_TFC_TOKEN
+      TFC_workspace_substitution_pattern: s/azure-public-active-active/azure-public-active-active-replicated/
   
-  private_active_active_legacy:
+  private_active_active_replicated:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
-    name: Run tf-test on Azure Private Active/Active (Legacy)
-    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'private-active-active-legacy') }}
+    name: Run tf-test on Azure Private Active/Active (Replicated)
+    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'private-active-active-replicated') }}
     with:
       test_name: Private Active/Active
       is_replicated_deployment: true
@@ -188,15 +188,15 @@ jobs:
       pull_request_repo_name: ${{ github.event.client_payload.github.payload.repository.full_name }}
       pull_request_ref: ${{ github.event.client_payload.pull_request.head.sha }}
       pull_request_comment_id: ${{ github.event.client_payload.github.payload.comment.id }}
-      TFC_token_secret_name: PRIVATE_ACTIVE_ACTIVE_LEGACY_TFC_TOKEN
-      TFC_workspace_substitution_pattern: s/azure-private-active-active/azure-private-active-active-legacy/
+      TFC_token_secret_name: PRIVATE_ACTIVE_ACTIVE_REPLICATED_TFC_TOKEN
+      TFC_workspace_substitution_pattern: s/azure-private-active-active/azure-private-active-active-replicated/
       bastion_ssh_private_key_secret_name: PRIVATE_ACTIVE_ACTIVE_BASTION_SSH_KEY_BASE64
 
-  private_tcp_active_active_legacy:
+  private_tcp_active_active_replicated:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
-    name: Run tf-test on Azure Private TCP Active/Active (Legacy)
-    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'private-tcp-active-active-legacy') }}
+    name: Run tf-test on Azure Private TCP Active/Active (Replicated)
+    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'private-tcp-active-active-replicated') }}
     with:
       test_name: Private TCP Active/Active
       is_replicated_deployment: true
@@ -207,6 +207,6 @@ jobs:
       pull_request_repo_name: ${{ github.event.client_payload.github.payload.repository.full_name }}
       pull_request_ref: ${{ github.event.client_payload.pull_request.head.sha }}
       pull_request_comment_id: ${{ github.event.client_payload.github.payload.comment.id }}
-      TFC_token_secret_name: PRIVATE_TCP_ACTIVE_ACTIVE_LEGACY_TFC_TOKEN
-      TFC_workspace_substitution_pattern: s/azure-private-tcp-active-active/azure-private-tcp-active-active-legacy/
+      TFC_token_secret_name: PRIVATE_TCP_ACTIVE_ACTIVE_REPLICATED_TFC_TOKEN
+      TFC_workspace_substitution_pattern: s/azure-private-tcp-active-active/azure-private-tcp-active-active-replicated/
       bastion_ssh_private_key_secret_name: PRIVATE_TCP_ACTIVE_ACTIVE_BASTION_SSH_KEY_BASE64

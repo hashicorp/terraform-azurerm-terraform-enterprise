@@ -14,7 +14,7 @@ output "login_url" {
 }
 
 output "tfe_console_url" {
-  value       = var.is_replicated_deployment ? "https://${module.load_balancer.fqdn}:8800" : "This is only used for legacy deployments."
+  value       = var.is_replicated_deployment ? "https://${module.load_balancer.fqdn}:8800" : "This is only used for replicated deployments."
   description = "Terraform Enterprise Console URL"
 }
 
@@ -80,12 +80,12 @@ output "bastion_host_dns_name" {
 # User_data
 # ---------
 output "tfe_userdata_base64_encoded" {
-  value       = var.is_replicated_deployment ? module.tfe_init_legacy[0].tfe_userdata_base64_encoded : module.tfe_init_fdo[0].tfe_userdata_base64_encoded
+  value       = var.is_replicated_deployment ? module.tfe_init_replicated[0].tfe_userdata_base64_encoded : module.tfe_init_fdo[0].tfe_userdata_base64_encoded
   description = "The Base64 encoded User Data script built from terraform-random-tfe-utility/modules/tfe_init"
 }
 
 output "tfe_console_password" {
-  value       = var.is_replicated_deployment ? module.settings[0].replicated_configuration.DaemonAuthenticationPassword : "This is only for legacy deployments."
+  value       = var.is_replicated_deployment ? module.settings[0].replicated_configuration.DaemonAuthenticationPassword : "This is only for replicated deployments."
   description = "The password for the TFE console"
 }
 

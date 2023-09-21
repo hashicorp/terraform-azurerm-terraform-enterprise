@@ -34,10 +34,10 @@ jobs:
             * standalone-external
             * standalone-mounted-disk
 
-            Legacy:
-            * private-active-active-legacy
-            * private-tcp-active-active-legacy
-            * public-active-active-legacy
-            * standalone-external-legacy
-            * standalone-mounted-disk-legacy
+            Replicated:
+            * private-active-active-replicated
+            * private-tcp-active-active-replicated
+            * public-active-active-replicated
+            * standalone-external-replicated
+            * standalone-mounted-disk-replicated
           reaction-type: confused
