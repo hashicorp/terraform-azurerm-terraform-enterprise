@@ -260,7 +260,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
 
   # TFE Console
   dynamic "frontend_port" {
-    for_each = !var.active_active && var.is_legacy_deployment ? [1] : []
+    for_each = !var.active_active && var.is_replicated_deployment ? [1] : []
 
     content {
       name = local.console_frontend_port_name
@@ -269,7 +269,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
   }
 
   dynamic "http_listener" {
-    for_each = !var.active_active && var.is_legacy_deployment ? [1] : []
+    for_each = !var.active_active && var.is_replicated_deployment ? [1] : []
 
     content {
       name                           = local.console_frontend_http_listener_name
@@ -281,7 +281,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
   }
 
   dynamic "backend_http_settings" {
-    for_each = !var.active_active && var.is_legacy_deployment ? [1] : []
+    for_each = !var.active_active && var.is_replicated_deployment ? [1] : []
 
     content {
       name                  = local.console_backend_http_settings_name
@@ -297,7 +297,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
   }
 
   dynamic "request_routing_rule" {
-    for_each = !var.active_active && var.is_legacy_deployment ? [1] : []
+    for_each = !var.active_active && var.is_replicated_deployment ? [1] : []
 
     content {
       name                       = local.console_request_routing_rule_name
@@ -360,7 +360,7 @@ resource "azurerm_lb_backend_address_pool" "tfe_load_balancer_be" {
 }
 
 resource "azurerm_lb_probe" "tfe_load_balancer_probe_console" {
-  count = var.load_balancer_type == "load_balancer" && !var.active_active && var.is_legacy_deployment ? 1 : 0
+  count = var.load_balancer_type == "load_balancer" && !var.active_active && var.is_replicated_deployment ? 1 : 0
 
   name = "${var.friendly_name_prefix}-lb-probe-console"
 
@@ -371,7 +371,7 @@ resource "azurerm_lb_probe" "tfe_load_balancer_probe_console" {
 }
 
 resource "azurerm_lb_rule" "tfe_load_balancer_rule_console" {
-  count = var.load_balancer_type == "load_balancer" && !var.active_active && var.is_legacy_deployment ? 1 : 0
+  count = var.load_balancer_type == "load_balancer" && !var.active_active && var.is_replicated_deployment ? 1 : 0
 
   name = "${var.friendly_name_prefix}-lb-rule-console"
 

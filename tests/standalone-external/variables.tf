@@ -28,10 +28,10 @@ variable "domain_name" {
 variable "hc_license" {
   default     = null
   type        = string
-  description = "(Not needed if is_legacy_deployment is true) The raw TFE license that is validated on application startup."
+  description = "(Not needed if is_replicated_deployment is true) The raw TFE license that is validated on application startup."
 }
 
-variable "is_legacy_deployment" {
+variable "is_replicated_deployment" {
   type        = bool
   description = "TFE will be installed using a Replicated license and deployment method."
   default     = true
@@ -51,13 +51,13 @@ variable "license_file" {
 variable "registry_username" {
   default     = null
   type        = string
-  description = "(Not needed if is_legacy_deployment is true) The username for the docker registry from which to source the terraform_enterprise container images."
+  description = "(Not needed if is_replicated_deployment is true) The username for the docker registry from which to source the terraform_enterprise container images."
 }
 
 variable "registry_password" {
   default     = null
   type        = string
-  description = "(Not needed if is_legacy_deployment is true) The password for the docker registry from which to source the terraform_enterprise container images."
+  description = "(Not needed if is_replicated_deployment is true) The password for the docker registry from which to source the terraform_enterprise container images."
 }
 
 variable "resource_group_name_dns" {
@@ -69,7 +69,7 @@ variable "resource_group_name_dns" {
 variable "tfe_image_tag" {
   default     = "latest"
   type        = string
-  description = "(Not needed if is_legacy_deployment is true) The image version of the terraform-enterprise image (e.g. \"1234567\")"
+  description = "(Not needed if is_replicated_deployment is true) The image version of the terraform-enterprise image (e.g. \"1234567\")"
 }
 
 variable "tfe_license_secret_id" {

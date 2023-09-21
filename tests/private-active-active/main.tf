@@ -72,7 +72,7 @@ module "private_active_active" {
   load_balancer_type                 = "application_gateway"
   load_balancer_sku_name             = "WAF_v2"
   load_balancer_sku_tier             = "WAF_v2"
-  load_balancer_waf_rule_set_version = var.is_legacy_deployment ? "3.1" : "3.2"
+  load_balancer_waf_rule_set_version = var.is_replicated_deployment ? "3.1" : "3.2"
   redis_use_password_auth            = true
   redis_use_tls                      = false
   production_type                    = "external"
@@ -81,7 +81,7 @@ module "private_active_active" {
   tags           = local.common_tags
 
   # FDO Specific Values
-  is_legacy_deployment      = var.is_legacy_deployment
+  is_replicated_deployment      = var.is_replicated_deployment
   hc_license                = var.hc_license
   license_reporting_opt_out = true
   registry_password         = var.registry_password

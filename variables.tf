@@ -3,7 +3,7 @@
 
 # General
 # -------
-variable "is_legacy_deployment" {
+variable "is_replicated_deployment" {
   type        = bool
   description = "TFE will be installed using a Replicated license and deployment method."
   default     = true
@@ -38,7 +38,7 @@ variable "tfe_subdomain" {
 variable "tfe_image" {
   default     = "quay.io/hashicorp/terraform-enterprise:latest"
   type        = string
-  description = "(Not needed if is_legacy_deployment is true) The registry path, image name, and image version (e.g. \"quay.io/hashicorp/terraform-enterprise:1234567\")"
+  description = "(Not needed if is_replicated_deployment is true) The registry path, image name, and image version (e.g. \"quay.io/hashicorp/terraform-enterprise:1234567\")"
 }
 
 # DNS
@@ -218,13 +218,13 @@ variable "network_allow_range" {
 variable "hc_license" {
   default     = null
   type        = string
-  description = "(Not needed if is_legacy_deployment is true) The raw TFE license that is validated on application startup."
+  description = "(Not needed if is_replicated_deployment is true) The raw TFE license that is validated on application startup."
 }
 
 variable "license_reporting_opt_out" {
   default     = false
   type        = bool
-  description = "(Not needed if is_legacy_deployment is true) Whether to opt out of reporting licensing information to HashiCorp. Defaults to false."
+  description = "(Not needed if is_replicated_deployment is true) Whether to opt out of reporting licensing information to HashiCorp. Defaults to false."
 }
 
 variable "tfe_license_secret_id" {
@@ -802,7 +802,7 @@ variable "capacity_memory" {
 variable "consolidated_services" {
   default     = false
   type        = bool
-  description = "(Required if var.is_legacy_deployment is true) True if TFE uses consolidated services."
+  description = "(Required if var.is_replicated_deployment is true) True if TFE uses consolidated services."
 }
 
 variable "custom_agent_image_tag" {
@@ -832,19 +832,19 @@ variable "hairpin_addressing" {
 variable "registry_username" {
   default     = null
   type        = string
-  description = "(Not needed if is_legacy_deployment is true) The username for the docker registry from which to source the terraform_enterprise container images."
+  description = "(Not needed if is_replicated_deployment is true) The username for the docker registry from which to source the terraform_enterprise container images."
 }
 
 variable "registry_password" {
   default     = null
   type        = string
-  description = "(Not needed if is_legacy_deployment is true) The password for the docker registry from which to source the terraform_enterprise container images."
+  description = "(Not needed if is_replicated_deployment is true) The password for the docker registry from which to source the terraform_enterprise container images."
 }
 
 variable "run_pipeline_image" {
   default     = null
   type        = string
-  description = "(Not needed if is_legacy_deployment is true) Container image used to execute Terraform runs. Leave blank to use the default image that comes with Terraform Enterprise. Defaults to ''."
+  description = "(Not needed if is_replicated_deployment is true) Container image used to execute Terraform runs. Leave blank to use the default image that comes with Terraform Enterprise. Defaults to ''."
 }
 
 variable "tfe_license_file_location" {
@@ -868,19 +868,19 @@ variable "tls_bootstrap_key_pathname" {
 variable "tls_ca_bundle_file" {
   default     = null
   type        = string
-  description = "(Not needed if is_legacy_deployment is true) Path to a file containing TLS CA certificates to be added to the OS CA certificates bundle. Leave blank to not add CA certificates to the OS CA certificates bundle. Defaults to ''."
+  description = "(Not needed if is_replicated_deployment is true) Path to a file containing TLS CA certificates to be added to the OS CA certificates bundle. Leave blank to not add CA certificates to the OS CA certificates bundle. Defaults to ''."
 }
 
 variable "tls_ciphers" {
   default     = null
   type        = string
-  description = "(Not needed if is_legacy_deployment is true) TLS ciphers to use for TLS. Must be valid OpenSSL format. Leave blank to use the default ciphers. Defaults to ''"
+  description = "(Not needed if is_replicated_deployment is true) TLS ciphers to use for TLS. Must be valid OpenSSL format. Leave blank to use the default ciphers. Defaults to ''"
 }
 
 variable "tls_version" {
   default     = null
   type        = string
-  description = "(Not needed if is_legacy_deployment is true) TLS version to use. Leave blank to use both TLS v1.2 and TLS v1.3. Defaults to '' if no value is given."
+  description = "(Not needed if is_replicated_deployment is true) TLS version to use. Leave blank to use both TLS v1.2 and TLS v1.3. Defaults to '' if no value is given."
   validation {
     condition = (
       var.tls_version == null ||

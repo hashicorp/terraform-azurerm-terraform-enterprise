@@ -13,7 +13,7 @@ jobs:
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'standalone-external') }}
     with:
       test_name: Standalone External (FDO)
-      is_legacy_deployment: false
+      is_replicated_deployment: false
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       work_dir: ./tests/standalone-external
       k6_work_dir: ./tests/tfe-load-test
@@ -37,7 +37,7 @@ jobs:
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'standalone-mounted-disk') }}
     with:
       test_name: Standalone Mounted Disk (FDO)
-      is_legacy_deployment: false
+      is_replicated_deployment: false
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       work_dir: ./tests/standalone-mounted-disk
       k6_work_dir: ./tests/tfe-load-test
@@ -61,7 +61,7 @@ jobs:
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'public-active-active') }}
     with:
       test_name: Public Active/Active (FDO)
-      is_legacy_deployment: false
+      is_replicated_deployment: false
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       work_dir: ./tests/public-active-active
       k6_work_dir: ./tests/tfe-load-test
@@ -78,7 +78,7 @@ jobs:
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'private-active-active') }}
     with:
       test_name: Private Active/Active (FDO)
-      is_legacy_deployment: false
+      is_replicated_deployment: false
       utility_test: false
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       work_dir: ./tests/private-active-active
@@ -96,7 +96,7 @@ jobs:
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'private-tcp-active-active') }}
     with:
       test_name: Private TCP Active/Active (FDO)
-      is_legacy_deployment: false
+      is_replicated_deployment: false
       utility_test: false
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       work_dir: ./tests/private-tcp-active-active
@@ -114,7 +114,7 @@ jobs:
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'standalone-external-legacy') }}
     with:
       test_name: Standalone External
-      is_legacy_deployment: true
+      is_replicated_deployment: true
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       work_dir: ./tests/standalone-external
       k6_work_dir: ./tests/tfe-load-test
@@ -138,7 +138,7 @@ jobs:
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'standalone-mounted-disk-legacy') }}
     with:
       test_name: Standalone Mounted Disk
-      is_legacy_deployment: true
+      is_replicated_deployment: true
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       work_dir: ./tests/standalone-mounted-disk
       k6_work_dir: ./tests/tfe-load-test
@@ -162,7 +162,7 @@ jobs:
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'public-active-active-legacy') }}
     with:
       test_name: Public Active/Active
-      is_legacy_deployment: true
+      is_replicated_deployment: true
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       work_dir: ./tests/public-active-active
       k6_work_dir: ./tests/tfe-load-test
@@ -180,7 +180,7 @@ jobs:
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'private-active-active-legacy') }}
     with:
       test_name: Private Active/Active
-      is_legacy_deployment: true
+      is_replicated_deployment: true
       utility_test: false
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       work_dir: ./tests/private-active-active
@@ -199,7 +199,7 @@ jobs:
     if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'private-tcp-active-active-legacy') }}
     with:
       test_name: Private TCP Active/Active
-      is_legacy_deployment: true
+      is_replicated_deployment: true
       utility_test: false
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       work_dir: ./tests/private-tcp-active-active

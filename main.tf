@@ -58,7 +58,7 @@ module "network" {
 
   active_active        = local.active_active
   enable_ssh           = var.enable_ssh
-  is_legacy_deployment = var.is_legacy_deployment
+  is_replicated_deployment = var.is_replicated_deployment
 
   network_allow_range          = var.network_allow_range
   network_bastion_subnet_cidr  = var.network_bastion_subnet_cidr
@@ -135,7 +135,7 @@ module "database" {
 # ---------------------------------------------------------------------------------------------------------------
 module "tfe_init_fdo" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=main"
-  count  = var.is_legacy_deployment ? 0 : 1
+  count  = var.is_replicated_deployment ? 0 : 1
 
   cloud             = "azurerm"
   distribution      = var.distribution
@@ -171,7 +171,7 @@ module "tfe_init_fdo" {
 # ------------------------------------------------------------------------------------
 module "docker_compose_config" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/docker_compose_config?ref=main"
-  count  = var.is_legacy_deployment ? 0 : 1
+  count  = var.is_replicated_deployment ? 0 : 1
 
   hostname                  = module.load_balancer.fqdn
   tfe_license               = var.hc_license
@@ -220,7 +220,7 @@ module "docker_compose_config" {
 # ---------------------------------------------------------------------------------------
 module "settings" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=main"
-  count  = var.is_legacy_deployment ? 1 : 0
+  count  = var.is_replicated_deployment ? 1 : 0
 
   # TFE Base Configuration
   consolidated_services  = var.consolidated_services
@@ -281,7 +281,7 @@ module "settings" {
 # -----------------------------------------------------------------------------
 module "tfe_init_legacy" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init_legacy?ref=main"
-  count  = var.is_legacy_deployment ? 1 : 0
+  count  = var.is_replicated_deployment ? 1 : 0
 
   # TFE & Replicated Configuration data
   cloud                    = "azurerm"
@@ -333,7 +333,7 @@ module "load_balancer" {
   # General
   active_active           = local.active_active
   domain_name             = var.domain_name
-  is_legacy_deployment    = var.is_legacy_deployment
+  is_replicated_deployment    = var.is_replicated_deployment
   tfe_subdomain           = var.tfe_subdomain
   resource_group_name_dns = module.resource_groups.resource_group_name_dns
   dns_create_record       = var.dns_create_record
@@ -400,7 +400,7 @@ module "vm" {
   vm_subnet_id                            = local.network.private_subnet.id
   vm_upgrade_mode                         = var.vm_upgrade_mode
   vm_user                                 = var.vm_user
-  vm_userdata_script                      = var.is_legacy_deployment ? module.tfe_init_legacy[0].tfe_userdata_base64_encoded : module.tfe_init_fdo[0].tfe_userdata_base64_encoded
+  vm_userdata_script                      = var.is_replicated_deployment ? module.tfe_init_legacy[0].tfe_userdata_base64_encoded : module.tfe_init_fdo[0].tfe_userdata_base64_encoded
   vm_vmss_scale_in_rule                   = var.vm_vmss_scale_in_rule
   vm_vmss_scale_in_force_deletion_enabled = var.vm_vmss_scale_in_force_deletion_enabled
   vm_zone_balance                         = var.vm_zone_balance

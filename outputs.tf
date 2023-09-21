@@ -9,12 +9,12 @@ output "tfe_application_url" {
 }
 
 output "login_url" {
-  value       = var.is_legacy_deployment ? "https://${module.load_balancer.fqdn}/admin/account/new?token=${module.settings[0].tfe_configuration.user_token.value}" : "On the TFE instance, retrieve the IACT Token with `docker exec -t terraform-enterprise-tfe-1 /bin/bash -c /usr/local/bin/retrieve-iact` and then navigate to https://${module.load_balancer.fqdn}/admin/account/new?token=<IACT_TOKEN>."
+  value       = var.is_replicated_deployment ? "https://${module.load_balancer.fqdn}/admin/account/new?token=${module.settings[0].tfe_configuration.user_token.value}" : "On the TFE instance, retrieve the IACT Token with `docker exec -t terraform-enterprise-tfe-1 /bin/bash -c /usr/local/bin/retrieve-iact` and then navigate to https://${module.load_balancer.fqdn}/admin/account/new?token=<IACT_TOKEN>."
   description = "Login URL to setup the TFE instance once it is initialized"
 }
 
 output "tfe_console_url" {
-  value       = var.is_legacy_deployment ? "https://${module.load_balancer.fqdn}:8800" : "This is only used for legacy deployments."
+  value       = var.is_replicated_deployment ? "https://${module.load_balancer.fqdn}:8800" : "This is only used for legacy deployments."
   description = "Terraform Enterprise Console URL"
 }
 
@@ -80,12 +80,12 @@ output "bastion_host_dns_name" {
 # User_data
 # ---------
 output "tfe_userdata_base64_encoded" {
-  value       = var.is_legacy_deployment ? module.tfe_init_legacy[0].tfe_userdata_base64_encoded : module.tfe_init_fdo[0].tfe_userdata_base64_encoded
+  value       = var.is_replicated_deployment ? module.tfe_init_legacy[0].tfe_userdata_base64_encoded : module.tfe_init_fdo[0].tfe_userdata_base64_encoded
   description = "The Base64 encoded User Data script built from terraform-random-tfe-utility/modules/tfe_init"
 }
 
 output "tfe_console_password" {
-  value       = var.is_legacy_deployment ? module.settings[0].replicated_configuration.DaemonAuthenticationPassword : "This is only for legacy deployments."
+  value       = var.is_replicated_deployment ? module.settings[0].replicated_configuration.DaemonAuthenticationPassword : "This is only for legacy deployments."
   description = "The password for the TFE console"
 }
 

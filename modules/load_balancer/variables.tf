@@ -13,7 +13,7 @@ variable "domain_name" {
   description = "(Required) Domain to create Terraform Enterprise subdomain within"
 }
 
-variable "is_legacy_deployment" {
+variable "is_replicated_deployment" {
   type        = bool
   description = "TFE will be installed using a Replicated license and deployment method."
 }
