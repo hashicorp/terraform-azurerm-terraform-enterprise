@@ -39,10 +39,7 @@ variable "storage_account_tier" {
 
 variable "storage_account_replication_type" {
   type        = string
-  description = <<-EOD
-  Storage account type LRS, GRS, RAGRS, ZRS. NOTE: This is defaulted to 'GRS' because of a known
-  intermittent error sited here: https://github.com/hashicorp/terraform-provider-azurerm/issues/5299
-  EOD
+  description = "Storage account type LRS, GRS, RAGRS, ZRS. NOTE: This is defaulted to 'GRS' because of a known intermittent error sited here: https://github.com/hashicorp/terraform-provider-azurerm/issues/5299."
 
   validation {
     condition = (

@@ -1,6 +1,3 @@
-# Copyright (c) HashiCorp, Inc.
-# SPDX-License-Identifier: MPL-2.0
-
 # -----------------------------------------------------------------------------
 # Azure resource groups
 # -----------------------------------------------------------------------------
@@ -59,8 +56,9 @@ module "network" {
   resource_group_name  = module.resource_groups.resource_group_name
   location             = var.location
 
-  active_active = local.active_active
-  enable_ssh    = var.enable_ssh
+  active_active            = local.active_active
+  enable_ssh               = var.enable_ssh
+  is_replicated_deployment = var.is_replicated_deployment
 
   network_allow_range          = var.network_allow_range
   network_bastion_subnet_cidr  = var.network_bastion_subnet_cidr
@@ -132,11 +130,97 @@ module "database" {
   tags = var.tags
 }
 
-# -----------------------------------------------------------------------------
-# TFE and Replicated settings to pass to the tfe_init module
-# -----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------
+# Azure user data / cloud init used to install and configure TFE on instance(s) using Flexible Deployment Options
+# ---------------------------------------------------------------------------------------------------------------
+module "tfe_init_fdo" {
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=main"
+  count  = var.is_replicated_deployment ? 0 : 1
+
+  cloud             = "azurerm"
+  distribution      = var.distribution
+  disk_path         = var.disk_path
+  disk_device_name  = var.production_type == "disk" ? "disk/azure/scsi1/lun${var.vm_data_disk_lun}" : null
+  operational_mode  = var.production_type
+  custom_image_tag  = var.custom_image_tag
+  enable_monitoring = var.enable_monitoring
+
+  ca_certificate_secret_id = var.ca_certificate_secret == null ? null : var.ca_certificate_secret.id
+  certificate_secret_id    = var.vm_certificate_secret == null ? null : var.vm_certificate_secret.id
+  key_secret_id            = var.vm_key_secret == null ? null : var.vm_key_secret.id
+
+  proxy_ip   = var.proxy_ip
+  proxy_port = var.proxy_port
+  extra_no_proxy = [
+    "127.0.0.1",
+    "169.254.169.254",
+    ".azure.com",
+    ".windows.net",
+    ".microsoft.com",
+    module.load_balancer.fqdn,
+    var.network_cidr
+  ]
+
+  registry_username   = var.registry_username
+  registry_password   = var.registry_password
+  docker_compose_yaml = module.docker_compose_config[0].docker_compose_yaml
+}
+
+# ------------------------------------------------------------------------------------
+# Docker Compose File Config for TFE on instance(s) using Flexible Deployment Options
+# ------------------------------------------------------------------------------------
+module "docker_compose_config" {
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/docker_compose_config?ref=main"
+  count  = var.is_replicated_deployment ? 0 : 1
+
+  hostname                  = module.load_balancer.fqdn
+  tfe_license               = var.hc_license
+  license_reporting_opt_out = var.license_reporting_opt_out
+  cert_file                 = "/etc/ssl/private/terraform-enterprise/cert.pem"
+  key_file                  = "/etc/ssl/private/terraform-enterprise/key.pem"
+  operational_mode          = local.active_active ? "active-active" : var.production_type
+  tfe_image                 = var.tfe_image
+  tls_ca_bundle_file        = var.tls_ca_bundle_file
+  tls_ciphers               = var.tls_ciphers
+  tls_version               = var.tls_version
+  run_pipeline_image        = var.run_pipeline_image
+  capacity_concurrency      = var.capacity_concurrency
+  capacity_cpu              = var.capacity_cpu
+  capacity_memory           = var.capacity_memory
+  iact_subnets              = join(",", var.iact_subnet_list)
+  iact_time_limit           = var.iact_subnet_time_limit
+
+  database_user       = local.database.server.administrator_login
+  database_password   = local.database.server.administrator_password
+  database_host       = local.database.address
+  database_name       = local.database.name
+  database_parameters = "sslmode=require"
+
+  storage_type = "azure"
+
+  azure_account_key  = local.object_storage.storage_account_key
+  azure_account_name = local.object_storage.storage_account_name
+  azure_container    = local.object_storage.storage_account_container_name
+
+  redis_host     = local.redis.hostname
+  redis_user     = ""
+  redis_password = local.redis.primary_access_key
+  redis_use_tls  = local.redis.hostname == null ? null : var.redis_use_tls
+  redis_use_auth = local.redis.hostname == null ? null : var.redis_use_password_auth
+
+  vault_address   = var.extern_vault_addr
+  vault_namespace = var.extern_vault_namespace
+  vault_path      = var.extern_vault_path
+  vault_role_id   = var.extern_vault_role_id
+  vault_secret_id = var.extern_vault_secret_id
+}
+
+# ------------------------------------------------------------------------------------------------
+# TFE and Replicated settings to pass to the tfe_init_replicated module for Replicated deployment
+# ------------------------------------------------------------------------------------------------
 module "settings" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=main"
+  count  = var.is_replicated_deployment ? 1 : 0
 
   # TFE Base Configuration
   consolidated_services  = var.consolidated_services
@@ -195,16 +279,17 @@ module "settings" {
 # -----------------------------------------------------------------------------
 # Azure user data / cloud init used to install and configure TFE on instance(s)
 # -----------------------------------------------------------------------------
-module "tfe_init" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=main"
+module "tfe_init_replicated" {
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init_replicated?ref=main"
+  count  = var.is_replicated_deployment ? 1 : 0
 
   # TFE & Replicated Configuration data
   cloud                    = "azurerm"
   distribution             = var.distribution
   disk_path                = var.disk_path
   disk_device_name         = var.production_type == "disk" ? "disk/azure/scsi1/lun${var.vm_data_disk_lun}" : null
-  tfe_configuration        = module.settings.tfe_configuration
-  replicated_configuration = module.settings.replicated_configuration
+  tfe_configuration        = module.settings[0].tfe_configuration
+  replicated_configuration = module.settings[0].replicated_configuration
   airgap_url               = var.airgap_url
 
   # Secrets
@@ -246,14 +331,15 @@ module "load_balancer" {
   zones                = var.zones
 
   # General
-  active_active           = local.active_active
-  domain_name             = var.domain_name
-  tfe_subdomain           = var.tfe_subdomain
-  resource_group_name_dns = module.resource_groups.resource_group_name_dns
-  dns_create_record       = var.dns_create_record
-  tenant_id               = data.azurerm_client_config.current.tenant_id
-  dns_external_fqdn       = var.dns_external_fqdn
-  enable_ssh              = var.enable_ssh
+  active_active            = local.active_active
+  domain_name              = var.domain_name
+  is_replicated_deployment = var.is_replicated_deployment
+  tfe_subdomain            = var.tfe_subdomain
+  resource_group_name_dns  = module.resource_groups.resource_group_name_dns
+  dns_create_record        = var.dns_create_record
+  tenant_id                = data.azurerm_client_config.current.tenant_id
+  dns_external_fqdn        = var.dns_external_fqdn
+  enable_ssh               = var.enable_ssh
 
   # Secrets
   ca_certificate_secret = var.ca_certificate_secret
@@ -262,11 +348,14 @@ module "load_balancer" {
   # Network
   network_frontend_subnet_cidr = var.network_frontend_subnet_cidr
   network_frontend_subnet_id   = local.network.frontend_subnet.id
+  network_private_ip           = var.network_private_ip
 
   # Load balancer
   load_balancer_type                                  = var.load_balancer_type
+  load_balancer_enable_http2                          = var.load_balancer_enable_http2
   load_balancer_public                                = var.load_balancer_public
   load_balancer_request_routing_rule_minimum_priority = var.load_balancer_request_routing_rule_minimum_priority
+  load_balancer_sku_capacity                          = var.load_balancer_sku_capacity
   load_balancer_sku_name                              = var.load_balancer_sku_name
   load_balancer_sku_tier                              = var.load_balancer_sku_tier
   load_balancer_waf_firewall_mode                     = var.load_balancer_waf_firewall_mode
@@ -311,7 +400,7 @@ module "vm" {
   vm_subnet_id                            = local.network.private_subnet.id
   vm_upgrade_mode                         = var.vm_upgrade_mode
   vm_user                                 = var.vm_user
-  vm_userdata_script                      = module.tfe_init.tfe_userdata_base64_encoded
+  vm_userdata_script                      = var.is_replicated_deployment ? module.tfe_init_replicated[0].tfe_userdata_base64_encoded : module.tfe_init_fdo[0].tfe_userdata_base64_encoded
   vm_vmss_scale_in_rule                   = var.vm_vmss_scale_in_rule
   vm_vmss_scale_in_force_deletion_enabled = var.vm_vmss_scale_in_force_deletion_enabled
   vm_zone_balance                         = var.vm_zone_balance

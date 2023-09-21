@@ -4,12 +4,12 @@
 resource "random_string" "friendly_name" {
   length  = 4
   upper   = false
-  number  = false
+  numeric = false
   special = false
 }
 
 module "secrets" {
-  count        = local.utility_module_test ? 0 : 1
+  count        = local.utility_module_test || !var.is_replicated_deployment ? 0 : 1
   source       = "../../fixtures/secrets"
   key_vault_id = var.key_vault_id
 
@@ -52,4 +52,12 @@ module "standalone_external" {
   enable_ssh     = true
   create_bastion = false
   tags           = local.common_tags
+
+  # FDO Specific Values
+  is_replicated_deployment  = var.is_replicated_deployment
+  hc_license                = var.hc_license
+  license_reporting_opt_out = true
+  registry_password         = var.registry_password
+  registry_username         = var.registry_username
+  tfe_image                 = "quay.io/hashicorp/terraform-enterprise:${var.tfe_image_tag}"
 }

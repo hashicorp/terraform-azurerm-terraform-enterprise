@@ -4,7 +4,7 @@
 resource "random_string" "friendly_name" {
   length  = 4
   upper   = false
-  number  = false
+  numeric = false
   special = false
 }
 
@@ -63,19 +63,28 @@ module "private_active_active" {
   proxy_port = local.proxy_port
 
   # Private Active / Active Scenario
-  consolidated_services   = var.consolidated_services
-  distribution            = "rhel"
-  vm_node_count           = 2
-  vm_sku                  = "Standard_D16as_v4"
-  vm_image_id             = "rhel"
-  load_balancer_public    = false
-  load_balancer_type      = "application_gateway"
-  load_balancer_sku_name  = "WAF_v2"
-  load_balancer_sku_tier  = "WAF_v2"
-  redis_use_password_auth = true
-  redis_use_tls           = false
-  production_type         = "external"
+  consolidated_services              = var.consolidated_services
+  distribution                       = "rhel"
+  vm_node_count                      = 2
+  vm_sku                             = "Standard_D16as_v4"
+  vm_image_id                        = "rhel"
+  load_balancer_public               = false
+  load_balancer_type                 = "application_gateway"
+  load_balancer_sku_name             = "WAF_v2"
+  load_balancer_sku_tier             = "WAF_v2"
+  load_balancer_waf_rule_set_version = var.is_replicated_deployment ? "3.1" : "3.2"
+  redis_use_password_auth            = true
+  redis_use_tls                      = false
+  production_type                    = "external"
 
   create_bastion = false
   tags           = local.common_tags
+
+  # FDO Specific Values
+  is_replicated_deployment  = var.is_replicated_deployment
+  hc_license                = var.hc_license
+  license_reporting_opt_out = true
+  registry_password         = var.registry_password
+  registry_username         = var.registry_username
+  tfe_image                 = "quay.io/hashicorp/terraform-enterprise:${var.tfe_image_tag}"
 }

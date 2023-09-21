@@ -8,10 +8,7 @@ variable "domain_name" {
 
 variable "iact_subnet_list" {
   default     = []
-  description = <<-EOD
-  A list of IP address ranges which will be authorized to access the IACT. The ranges must be expressed
-  in CIDR notation.
-  EOD
+  description = "A list of IP address ranges which will be authorized to access the IACT. The ranges must be expressed in CIDR notation."
   type        = list(string)
 }
 
@@ -77,18 +74,12 @@ variable "resource_group_name_dns" {
 
 variable "vm_certificate_secret_name" {
   type        = string
-  description = <<-EOD
-  The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a
-  certificate authority (CA) to be trusted by the Virtual Machine Scale Set.
-  EOD
+  description = "The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a certificate authority (CA) to be trusted by the Virtual Machine Scale Set."
 }
 
 variable "vm_key_secret_name" {
   type        = string
-  description = <<-EOD
-  The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded private key of a
-  certificate authority (CA) to be trusted by the Virtual Machine Scale Set.
-  EOD
+  description = "The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded private key of a certificate authority (CA) to be trusted by the Virtual Machine Scale Set."
 }
 
 variable "tags" {

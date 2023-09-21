@@ -3,6 +3,12 @@
 
 # General
 # -------
+variable "is_replicated_deployment" {
+  type        = bool
+  description = "TFE will be installed using a Replicated license and deployment method."
+  default     = true
+}
+
 variable "friendly_name_prefix" {
   type        = string
   description = "(Required) Name prefix used for resources"
@@ -29,6 +35,12 @@ variable "tfe_subdomain" {
   description = "Subdomain for TFE"
 }
 
+variable "tfe_image" {
+  default     = "quay.io/hashicorp/terraform-enterprise:latest"
+  type        = string
+  description = "(Not needed if is_replicated_deployment is true) The registry path, image name, and image version (e.g. \"quay.io/hashicorp/terraform-enterprise:1234567\")"
+}
+
 # DNS
 # ---
 variable "dns_create_record" {
@@ -41,6 +53,38 @@ variable "dns_external_fqdn" {
   default     = null
   type        = string
   description = "External DNS FQDN should be supplied if dns_create_record is false"
+}
+
+# External Vault
+# --------------
+variable "extern_vault_addr" {
+  default     = null
+  type        = string
+  description = "(Required if var.extern_vault_enable = true) URL of external Vault cluster."
+}
+
+variable "extern_vault_namespace" {
+  default     = null
+  type        = string
+  description = "(Optional if var.extern_vault_enable = true) The Vault namespace"
+}
+
+variable "extern_vault_path" {
+  default     = "auth/approle"
+  type        = string
+  description = "(Optional if var.extern_vault_enable = true) Path on the Vault server for the AppRole auth. Defaults to auth/approle."
+}
+
+variable "extern_vault_role_id" {
+  default     = null
+  type        = string
+  description = "(Required if var.extern_vault_enable = true) AppRole RoleId to use to authenticate with the Vault cluster."
+}
+
+variable "extern_vault_secret_id" {
+  default     = null
+  type        = string
+  description = "(Required if var.extern_vault_enable = true) AppRole SecretId to use to authenticate with the Vault cluster."
 }
 
 # Provider
@@ -83,6 +127,12 @@ variable "enable_ssh" {
   default     = false
   type        = bool
   description = "Enable SSH access on port 22 to the VM instance (standalone, load_balancer deployments only, not App GW). This is ***NOT RECOMMENDED*** for production deployments."
+}
+
+variable "network_private_ip" {
+  default     = null
+  type        = string
+  description = "(optional) Private IP address to use for LB/AG endpoint"
 }
 
 variable "network_private_subnet_id" {
@@ -165,6 +215,18 @@ variable "network_allow_range" {
 
 # TFE License
 # -----------
+variable "hc_license" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_replicated_deployment is true) The raw TFE license that is validated on application startup."
+}
+
+variable "license_reporting_opt_out" {
+  default     = false
+  type        = bool
+  description = "(Not needed if is_replicated_deployment is true) Whether to opt out of reporting licensing information to HashiCorp. Defaults to false."
+}
+
 variable "tfe_license_secret_id" {
   default     = null
   type        = string
@@ -176,21 +238,13 @@ variable "tfe_license_secret_id" {
 variable "tfe_license_bootstrap_airgap_package_path" {
   default     = null
   type        = string
-  description = <<-EOD
-  (Required if air-gapped installation) The URL of a Replicated airgap package for Terraform
-  Enterprise. The suggested path is "/var/lib/ptfe/ptfe.airgap".
-  EOD
+  description = "(Required if air-gapped installation) The URL of a Replicated airgap package for Terraform Enterprise. The suggested path is '/var/lib/ptfe/ptfe.airgap'."
 }
 
 variable "airgap_url" {
   default     = null
   type        = string
-  description = <<-EOD
-  (Optional) The URL of a Replicated airgap package for Terraform Enterprise.
-  NOTE: The airgap_url package is expected to be on the tfe_license_bootstrap_airgap_package_path
-  already in true airgapped deployments. This variable is used in dev and test scenarios when
-  the user wants to also install the prerequisistes for an airgapped deployment.
-  EOD
+  description = "(Optional) The URL of a Replicated airgap package for Terraform Enterprise. NOTE: The airgap_url package is expected to be on the tfe_license_bootstrap_airgap_package_path already in true airgapped deployments. This variable is used in dev and test scenarios when the user wants to also install the prerequisistes for an airgapped deployment."
 }
 
 # Object Storage
@@ -230,10 +284,7 @@ variable "storage_account_tier" {
 variable "storage_account_replication_type" {
   default     = "GRS"
   type        = string
-  description = <<-EOD
-  Storage account type LRS, GRS, RAGRS, ZRS. NOTE: This is defaulted to 'GRS' because of a known
-  intermittent error sited here: https://github.com/hashicorp/terraform-provider-azurerm/issues/5299
-  EOD
+  description = "Storage account type LRS, GRS, RAGRS, ZRS. NOTE: This is defaulted to 'GRS' because of a known intermittent error sited here: https://github.com/hashicorp/terraform-provider-azurerm/issues/5299"
 
   validation {
     condition = (
@@ -318,12 +369,7 @@ variable "database_availability_zone" {
 variable "pg_extra_params" {
   default     = null
   type        = string
-  description = <<-EOF
-  Parameter keywords of the form param1=value1&param2=value2 to support additional options that
-  may be necessary for your specific PostgreSQL server. Allowed values are documented on the
-  PostgreSQL site. An additional restriction on the sslmode parameter is that only the require,
-  verify-full, verify-ca, and disable values are allowed.
-  EOF
+  description = "Parameter keywords of the form param1=value1&param2=value2 to support additional options that may be necessary for your specific PostgreSQL server. Allowed values are documented on the PostgreSQL site. An additional restriction on the sslmode parameter is that only the require, verify-full, verify-ca, and disable values are allowed."
 }
 
 # Load Balancer
@@ -343,6 +389,12 @@ variable "load_balancer_type" {
   }
 }
 
+variable "load_balancer_enable_http2" {
+  default     = true
+  type        = bool
+  description = "Determine if HTTP2 enabled on Application Gateway"
+}
+
 variable "load_balancer_public" {
   default     = true
   type        = bool
@@ -360,6 +412,12 @@ variable "load_balancer_request_routing_rule_minimum_priority" {
     )
     error_message = "Request routing rules priority must be between 1 and 19,000."
   }
+}
+
+variable "load_balancer_sku_capacity" {
+  default     = 2
+  type        = number
+  description = "The Capacity of the SKU to use for Application Gateway (1 to 125)"
 }
 
 variable "load_balancer_sku_name" {
@@ -399,9 +457,9 @@ variable "load_balancer_waf_firewall_mode" {
 }
 
 variable "load_balancer_waf_rule_set_version" {
-  default     = "3.1"
+  default     = "3.2"
   type        = string
-  description = "The Version of the Rule Set used for this Web Application Firewall. Possible values are 2.2.9, 3.0, and 3.1."
+  description = "The Version of the Rule Set used for this Web Application Firewall. Possible values are 2.2.9, 3.0, 3.1, and 3.2."
 }
 
 variable "load_balancer_waf_file_upload_limit_mb" {
@@ -489,7 +547,7 @@ variable "redis_minimum_tls_version" {
 variable "vm_node_count" {
   default     = 2
   type        = number
-  description = "The number of instances to create for TFE environment"
+  description = "The number of instances to create for TFE environment."
 
   validation {
     condition     = var.vm_node_count <= 5
@@ -500,19 +558,19 @@ variable "vm_node_count" {
 variable "vm_user" {
   default     = "tfeuser"
   type        = string
-  description = "Virtual machine user name"
+  description = "Virtual machine user name."
 }
 
 variable "vm_public_key" {
   default     = null
   type        = string
-  description = "Virtual machine public key for authentication (2048-bit ssh-rsa)"
+  description = "Virtual machine public key for authentication (2048-bit ssh-rsa)."
 }
 
 variable "vm_image_id" {
   default     = "ubuntu"
   type        = string
-  description = "Virtual machine image id - may be 'ubuntu' (default), 'rhel', or custom image resource id"
+  description = "Virtual machine image id - may be 'ubuntu' (default), 'rhel', or custom image resource id."
 
   validation {
     condition = (
@@ -528,54 +586,38 @@ variable "vm_image_id" {
 
 variable "vm_image_publisher" {
   type        = string
-  description = <<-EOD
-  The image publisher of the base image to install Terraform Enterprise on.  This is used in conjunction with
-  vm_image_offer, vm_image_sku, and vm_image_version to determine the image to install from the public markeplace when
-  vm_image_id is not provided.
-  EOD
+  description = "The image publisher of the base image to install Terraform Enterprise on.  This is used in conjunction with vm_image_offer, vm_image_sku, and vm_image_version to determine the image to install from the public markeplace when vm_image_id is not provided."
   default     = null
 }
 
 variable "vm_image_offer" {
   type        = string
-  description = <<-EOD
-  The image offer of the base image to install Terraform Enterprise on.  This is used in conjunction with
-  vm_image_publisher, vm_image_sku, and vm_image_version to determine the image to install from the public markeplace
-  when vm_image_id is not provided.
-  EOD
+  description = "The image offer of the base image to install Terraform Enterprise on.  This is used in conjunction with vm_image_publisher, vm_image_sku, and vm_image_version to determine the image to install from the public markeplace when vm_image_id is not provided."
   default     = null
 }
 
 variable "vm_image_sku" {
   type        = string
-  description = <<-EOD
-  The image sku of the base image to install Terraform Enterprise on.  This is used in conjunction with
-  vm_image_publisher, vm_image_offer, and vm_image_version to determine the image to install from the public markeplace
-  when vm_image_id is not provided.
-  EOD
+  description = "The image sku of the base image to install Terraform Enterprise on.  This is used in conjunction with vm_image_publisher, vm_image_offer, and vm_image_version to determine the image to install from the public markeplace when vm_image_id is not provided."
   default     = null
 }
 
 variable "vm_image_version" {
   type        = string
-  description = <<-EOD
-  The image version of the base image to install Terraform Enterprise on.  This is used in conjunction with
-  vm_image_publisher, vm_image_offer, and vm_image_sku to determine the image to install from the public markeplace
-  when vm_image_id is not provided.
-  EOD
+  description = "The image version of the base image to install Terraform Enterprise on.  This is used in conjunction with vm_image_publisher, vm_image_offer, and vm_image_sku to determine the image to install from the public markeplace when vm_image_id is not provided."
   default     = null
 }
 
 variable "vm_sku" {
   default     = "Standard_D4_v3"
   type        = string
-  description = "Azure virtual machine sku"
+  description = "Azure virtual machine sku."
 }
 
 variable "vm_os_disk_disk_size_gb" {
   default     = 100
   type        = number
-  description = "The size of the OS Disk which should be created"
+  description = "The size of the OS Disk which should be created."
 }
 
 variable "vm_vmss_scale_in_rule" {
@@ -739,40 +781,70 @@ variable "vm_data_disk_disk_size_gb" {
 
 # User Data
 # ---------
+variable "capacity_cpu" {
+  default     = 0
+  description = "Maximum number of CPU cores a Terraform run is allowed to use. Set to `0` for no limit. Defaults to `0` if no value is given."
+  type        = number
+}
+
+variable "capacity_concurrency" {
+  default     = 10
+  description = "The maximum number of Terraform runs that will be executed concurrently on each compute instance. Defaults to `10` if no value is given."
+  type        = number
+}
+
+variable "capacity_memory" {
+  default     = 2048
+  type        = number
+  description = "The maximum amount of memory (in megabytes) that a Terraform plan or apply can use on the system; defaults to `512` for replicated mode and `2048` for FDO."
+}
+
 variable "consolidated_services" {
   default     = false
   type        = bool
-  description = "(Required) True if TFE uses consolidated services."
+  description = "(Required if var.is_replicated_deployment is true) True if TFE uses consolidated services."
 }
 
 variable "custom_agent_image_tag" {
   default     = null
   type        = string
-  description = <<-EOD
-  Configure the docker image for handling job execution within TFE. This can either be the
-  standard image that ships with TFE or a custom image that includes extra tools not present
-  in the default one. Should be in the format <name>:<tag>.
-  EOD
+  description = "Configure the docker image for handling job execution within TFE. This can either be the standard image that ships with TFE or a custom image that includes extra tools not present in the default one. Should be in the format <name>:<tag>."
 }
 
 variable "custom_image_tag" {
   default     = null
   type        = string
-  description = <<-EOD
-  The name and tag for your alternative Terraform build worker image in the format <name>:<tag>.
-  Default is 'hashicorp/build-worker:now'.
-  EOD
+  description = "The name and tag for your alternative Terraform build worker image in the format <name>:<tag>. Default is 'hashicorp/build-worker:now'."
+}
+
+variable "enable_monitoring" {
+  default     = null
+  type        = bool
+  description = "Should cloud appropriate monitoring agents be installed as a part of the TFE installation script?"
 }
 
 variable "hairpin_addressing" {
   default     = null
   type        = bool
-  description = <<-EOD
-  In some cloud environments, HTTP clients running on instances behind a loadbalancer cannot send
-  requests to the public hostname of that load balancer. Use this setting to configure TFE services
-  to redirect requests for the installation's FQDN to the instance's internal IP address.
-  Defaults to false.
-  EOD
+  description = "In some cloud environments, HTTP clients running on instances behind a loadbalancer cannot send requests to the public hostname of that load balancer. Use this setting to configure TFE services to redirect requests for the installation's FQDN to the instance's internal IP address. Defaults to false."
+}
+
+variable "registry_username" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_replicated_deployment is true) The username for the docker registry from which to source the terraform_enterprise container images."
+}
+
+variable "registry_password" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_replicated_deployment is true) The password for the docker registry from which to source the terraform_enterprise container images."
+}
+
+variable "run_pipeline_image" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_replicated_deployment is true) Container image used to execute Terraform runs. Leave blank to use the default image that comes with Terraform Enterprise. Defaults to ''."
 }
 
 variable "tfe_license_file_location" {
@@ -793,17 +865,36 @@ variable "tls_bootstrap_key_pathname" {
   description = "The path on the TFE instance to put the key. ex. '/var/lib/terraform-enterprise/key.pem'"
 }
 
+variable "tls_ca_bundle_file" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_replicated_deployment is true) Path to a file containing TLS CA certificates to be added to the OS CA certificates bundle. Leave blank to not add CA certificates to the OS CA certificates bundle. Defaults to ''."
+}
+
+variable "tls_ciphers" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_replicated_deployment is true) TLS ciphers to use for TLS. Must be valid OpenSSL format. Leave blank to use the default ciphers. Defaults to ''"
+}
+
+variable "tls_version" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_replicated_deployment is true) TLS version to use. Leave blank to use both TLS v1.2 and TLS v1.3. Defaults to '' if no value is given."
+  validation {
+    condition = (
+      var.tls_version == null ||
+      var.tls_version == "tls_1_2" ||
+      var.tls_version == "tls_1_3"
+    )
+    error_message = "The tls_version value must be 'tls_1_2', 'tls_1_3', or null."
+  }
+}
+
 variable "production_type" {
   default     = null
   type        = string
-  description = <<-EOF
-  Where Terraform Enterprise application data will be stored. Valid values are
-  `external`, `disk`, or `null`. Choose `external` when storing application
-  data in an external object storage service and database. Choose `disk` when
-  storing application data in a directory on the Terraform Enterprise instance
-  itself. Leave it `null` when you want Terraform Enterprise to use its own
-  default.
-  EOF
+  description = "Where Terraform Enterprise application data will be stored. Valid values are `external`, `disk`, or `null`. Choose `external` when storing application data in an external object storage service and database. Choose `disk` when storing application data in a directory on the Terraform Enterprise instance itself. Leave it `null` when you want Terraform Enterprise to use its own default."
 
   validation {
     condition = (
@@ -830,49 +921,37 @@ variable "release_sequence" {
 
 variable "iact_subnet_list" {
   default     = []
-  description = <<-EOD
-  A list of IP address ranges which will be authorized to access the IACT. The ranges must be expressed
-  in CIDR notation.
-  EOD
+  description = "A list of IP address ranges which will be authorized to access the IACT. The ranges must be expressed in CIDR notation."
   type        = list(string)
+}
+
+variable "iact_subnet_time_limit" {
+  default     = 60
+  description = "The time limit for IP addresses from iact_subnet_list to access the IACT. The value must be expressed in minutes."
+  type        = number
 }
 
 variable "metrics_endpoint_enabled" {
   default     = null
   type        = bool
-  description = <<-EOD
-  (Optional) Metrics are used to understand the behavior of Terraform Enterprise and to
-  troubleshoot and tune performance. Enable an endpoint to expose container metrics.
-  Defaults to false.
-  EOD
+  description = "(Optional) Metrics are used to understand the behavior of Terraform Enterprise and to troubleshoot and tune performance. Enable an endpoint to expose container metrics. Defaults to false."
 }
 
 variable "metrics_endpoint_port_http" {
   default     = null
   type        = number
-  description = <<-EOD
-  (Optional when metrics_endpoint_enabled is true.) Defines the TCP port on which HTTP metrics
-  requests will be handled.
-  Defaults to 9090.
-  EOD
+  description = "(Optional when metrics_endpoint_enabled is true.) Defines the TCP port on which HTTP metrics requests will be handled. Defaults to 9090."
 }
 
 variable "metrics_endpoint_port_https" {
   default     = null
   type        = string
-  description = <<-EOD
-  (Optional when metrics_endpoint_enabled is true.) Defines the TCP port on which HTTPS metrics
-  requests will be handled.
-  Defaults to 9091.
-  EOD
+  description = "(Optional when metrics_endpoint_enabled is true.) Defines the TCP port on which HTTPS metrics requests will be handled. Defaults to 9091."
 }
 
 variable "trusted_proxies" {
   default     = []
-  description = <<-EOD
-  A list of IP address ranges which will be considered safe to ignore when evaluating the IP addresses of requests like
-  those made to the IACT endpoint.
-  EOD
+  description = "A list of IP address ranges which will be considered safe to ignore when evaluating the IP addresses of requests like those made to the IACT endpoint."
   type        = list(string)
 }
 
@@ -892,11 +971,7 @@ variable "ca_certificate_secret" {
     name         = string
     value        = string
   })
-  description = <<-EOD
-  A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a
-  certificate authority (CA) to be trusted by the Virtual Machine Scale Set and the Application Gateway. This argument
-  is only required if TLS certificates in the deployment are not issued by a well-known CA.
-  EOD
+  description = "A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate of a certificate authority (CA) to be trusted by the Virtual Machine Scale Set and the Application Gateway. This argument is only required if TLS certificates in the deployment are not issued by a well-known CA."
 }
 
 variable "load_balancer_certificate" {
@@ -915,10 +990,7 @@ variable "vm_certificate_secret" {
     key_vault_id = string
     id           = string
   })
-  description = <<-EOD
-  A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate for the Virtual
-  Machine Scale Set.
-  EOD
+  description = "A Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate for the Virtual Machine Scale Set."
 }
 
 variable "vm_key_secret" {
@@ -927,10 +999,7 @@ variable "vm_key_secret" {
     key_vault_id = string
     id           = string
   })
-  description = <<-EOD
-  A Key Vault secret which contains the Base64 encoded version of a PEM encoded private key for the Virtual Machine
-  Scale Set.
-  EOD
+  description = "A Key Vault secret which contains the Base64 encoded version of a PEM encoded private key for the Virtual Machine Scale Set."
 }
 
 # Proxy
@@ -938,13 +1007,13 @@ variable "vm_key_secret" {
 variable "proxy_ip" {
   default     = null
   type        = string
-  description = "IP Address of the proxy server"
+  description = "IP Address of the proxy server."
 }
 
 variable "proxy_port" {
   default     = null
   type        = string
-  description = "Port that the proxy server will use"
+  description = "Port that the proxy server will use."
 }
 
 # Tagging
@@ -952,5 +1021,5 @@ variable "proxy_port" {
 variable "tags" {
   default     = {}
   type        = map(string)
-  description = "Map of tags for resource"
+  description = "Map of tags for resource."
 }

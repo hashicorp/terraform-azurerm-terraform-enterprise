@@ -12,10 +12,7 @@ variable "location" {
 }
 
 variable "iact_subnet_list" {
-  description = <<-EOD
-  A list of IP address ranges which will be authorized to access the IACT. The ranges must be expressed
-  in CIDR notation.
-  EOD
+  description = "A list of IP address ranges which will be authorized to access the IACT. The ranges must be expressed in CIDR notation."
   type        = list(string)
 }
 
@@ -30,8 +27,6 @@ variable "tags" {
 }
 
 variable "vm_image_id" {
-  description = <<-EOD
-  The resource ID of the base image you would like to use for the airgapped TFE installation.
-  EOD
+  description = "The resource ID of the base image you would like to use for the airgapped TFE installation."
   type        = string
 }

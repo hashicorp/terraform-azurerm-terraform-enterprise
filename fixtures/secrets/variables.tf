@@ -25,10 +25,7 @@ variable "private_key_pem" {
     name  = string
     value = string
   })
-  description = <<-EOD
-  A map that consists of the newly created secret name and its value. This secret will be used for
-  the vm_key_secret variable in the root module.
-  EOD
+  description = "A map that consists of the newly created secret name and its value. This secret will be used for the vm_key_secret variable in the root module."
 }
 
 variable "chained_certificate_pem" {
@@ -37,10 +34,7 @@ variable "chained_certificate_pem" {
     name  = string
     value = string
   })
-  description = <<-EOD
-  A map that consists of the newly created secret name and its value. This secret will be used for
-  the vm_certificate_secret variable in the root module.
-  EOD
+  description = "A map that consists of the newly created secret name and its value. This secret will be used for the vm_certificate_secret variable in the root module."
 }
 
 variable "proxy_public_key" {
@@ -49,10 +43,7 @@ variable "proxy_public_key" {
     name  = string
     value = string
   })
-  description = <<-EOD
-  A map that consists of the newly created secret name and its value. This secret will be used for
-  the SSH public_key argument when creating the proxy virtual machine.
-  EOD
+  description = "A map that consists of the newly created secret name and its value. This secret will be used for the SSH public_key argument when creating the proxy virtual machine."
 }
 
 variable "proxy_private_key" {
@@ -61,10 +52,7 @@ variable "proxy_private_key" {
     name  = string
     value = string
   })
-  description = <<-EOD
-  A map that consists of the newly created secret name and its value. This secret will be used for
-  the SSH private key of the proxy virtual machine.
-  EOD
+  description = "A map that consists of the newly created secret name and its value. This secret will be used for the SSH private key of the proxy virtual machine."
 }
 
 variable "ca_certificate" {
@@ -73,10 +61,7 @@ variable "ca_certificate" {
     name  = string
     value = string
   })
-  description = <<-EOD
-  A map that consists of the newly created secret name and its value. This secret value is the Base64
-  encoded version of a PEM encoded public certificate of a certificate authority (CA).
-  EOD
+  description = "A map that consists of the newly created secret name and its value. This secret value is the Base64 encoded version of a PEM encoded public certificate of a certificate authority (CA)."
 }
 
 variable "ca_private_key" {
@@ -85,10 +70,7 @@ variable "ca_private_key" {
     name  = string
     value = string
   })
-  description = <<-EOD
-  A map that consists of the newly created secret name and its value. This secret value is the Base64
-  encoded version of a PEM encoded private key of a certificate authority (CA).
-  EOD
+  description = "A map that consists of the newly created secret name and its value. This secret value is the Base64 encoded version of a PEM encoded private key of a certificate authority (CA)."
 }
 
 variable "bastion_public_key" {
@@ -97,11 +79,7 @@ variable "bastion_public_key" {
     name  = string
     value = string
   })
-  description = <<-EOD
-  A map that consists of the newly created secret name and its value. This secret will be used for
-  the SSH public key of the bastion virtual machine, should you choose to create one outside of the
-  root module.
-  EOD
+  description = "A map that consists of the newly created secret name and its value. This secret will be used for the SSH public key of the bastion virtual machine, should you choose to create one outside of the module."
 }
 
 variable "bastion_private_key" {
@@ -110,11 +88,7 @@ variable "bastion_private_key" {
     name  = string
     value = string
   })
-  description = <<-EOD
-  A map that consists of the newly created secret name and its value. This secret will be used for
-  the SSH private key of the bastion virtual machine, should you choose to create one outside of the
-  root module.
-  EOD
+  description = "A map that consists of the newly created secret name and its value. This secret will be used for the SSH private key of the bastion virtual machine, should you choose to create one outside of the module."
 }
 
 # Tagging

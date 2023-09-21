@@ -88,6 +88,25 @@ resource "azurerm_network_security_group" "tfe_network_private_nsg" {
     }
   }
 
+  # Allow inbound between TFE instances on port 8201 for vault cluster
+  dynamic "security_rule" {
+    for_each = var.active_active && !var.is_replicated_deployment ? [1] : []
+
+    content {
+      name      = "allow-private-inbound-vault-cluster"
+      priority  = 210
+      direction = "Inbound"
+      access    = "Allow"
+      protocol  = "Tcp"
+
+      source_address_prefix = var.network_private_subnet_cidr
+      source_port_range     = "*"
+
+      destination_port_range     = "8201"
+      destination_address_prefix = var.network_private_subnet_cidr
+    }
+  }
+
   # Allow Application Gateway traffic
   security_rule {
     name      = "allow-private-inbound-ag"
