@@ -8,7 +8,7 @@ variable "bypass_preflight_checks" {
 }
 
 variable "consolidated_services_enabled" {
-  default     = false
+  default     = true
   type        = bool
   description = "(Required) True if TFE uses consolidated services."
 }
