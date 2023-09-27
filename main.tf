@@ -223,16 +223,16 @@ module "settings" {
   count  = var.is_replicated_deployment ? 1 : 0
 
   # TFE Base Configuration
-  consolidated_services  = var.consolidated_services
-  custom_image_tag       = var.custom_image_tag
-  custom_agent_image_tag = var.custom_agent_image_tag
-  disk_path              = var.disk_path
-  hairpin_addressing     = var.hairpin_addressing
-  iact_subnet_list       = var.iact_subnet_list
-  pg_extra_params        = var.pg_extra_params
-  production_type        = var.production_type
-  release_sequence       = var.release_sequence
-  trusted_proxies        = local.trusted_proxies
+  consolidated_services_enabled = var.consolidated_services_enabled
+  custom_image_tag              = var.custom_image_tag
+  custom_agent_image_tag        = var.custom_agent_image_tag
+  disk_path                     = var.disk_path
+  hairpin_addressing            = var.hairpin_addressing
+  iact_subnet_list              = var.iact_subnet_list
+  pg_extra_params               = var.pg_extra_params
+  production_type               = var.production_type
+  release_sequence              = var.release_sequence
+  trusted_proxies               = local.trusted_proxies
 
   extra_no_proxy = [
     "127.0.0.1",
