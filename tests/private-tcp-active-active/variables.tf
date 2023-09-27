@@ -16,7 +16,7 @@ variable "ca_key_secret_name" {
   description = "The name of a Key Vault secret which contains the Base64 encoded version of a PEM encoded private key of a certificate authority (CA)."
 }
 
-variable "consolidated_services" {
+variable "consolidated_services_enabled" {
   default     = false
   type        = bool
   description = "(Required) True if TFE uses consolidated services."
