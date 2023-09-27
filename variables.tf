@@ -800,7 +800,7 @@ variable "capacity_memory" {
 }
 
 variable "consolidated_services_enabled" {
-  default     = false
+  default     = true
   type        = bool
   description = "(Required if var.is_replicated_deployment is true) True if TFE uses consolidated services."
 }
