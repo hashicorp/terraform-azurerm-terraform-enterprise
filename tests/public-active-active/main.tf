@@ -18,7 +18,7 @@ module "public_active_active" {
 
   # Bootstrapping resources
   load_balancer_certificate   = data.azurerm_key_vault_certificate.load_balancer
-  tfe_license_secret_id       = data.azurerm_key_vault_secret.tfe_license.id
+  tfe_license_secret_id       = data.azurerm_key_vault_secret.tfe_license[0].id
   vm_certificate_secret       = data.azurerm_key_vault_secret.vm_certificate
   vm_key_secret               = data.azurerm_key_vault_secret.vm_key
   tls_bootstrap_cert_pathname = "/var/lib/terraform-enterprise/certificate.pem"
