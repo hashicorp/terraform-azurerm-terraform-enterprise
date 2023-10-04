@@ -53,9 +53,6 @@ module "standalone_external" {
   create_bastion = false
   tags           = local.common_tags
 
-  release_sequence         = 733
-  metrics_endpoint_enabled = true
-
   # FDO Specific Values
   is_replicated_deployment  = var.is_replicated_deployment
   hc_license                = var.hc_license
