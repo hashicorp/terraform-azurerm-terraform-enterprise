@@ -79,6 +79,7 @@ variable "tfe_image_tag" {
 }
 
 variable "tfe_license_secret_name" {
+  default     = null
   type        = string
   description = "Name of the secret under which the Base64 encoded TFE license is stored in the Azure Key Vault"
 }
