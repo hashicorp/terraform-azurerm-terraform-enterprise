@@ -10,7 +10,7 @@ jobs:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Standalone External
-    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'standalone-external') }}
+    if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'standalone-external' }}
     with:
       test_name: Standalone External (FDO)
       is_replicated_deployment: false
@@ -34,7 +34,7 @@ jobs:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Standalone Mounted Disk
-    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'standalone-mounted-disk') }}
+    if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'standalone-mounted-disk' }}
     with:
       test_name: Standalone Mounted Disk (FDO)
       is_replicated_deployment: false
@@ -58,7 +58,7 @@ jobs:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Public Active/Active
-    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'public-active-active') }}
+    if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'public-active-active' }}
     with:
       test_name: Public Active/Active (FDO)
       is_replicated_deployment: false
@@ -75,7 +75,7 @@ jobs:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Private Active/Active
-    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'private-active-active') }}
+    if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'private-active-active' }}
     with:
       test_name: Private Active/Active (FDO)
       is_replicated_deployment: false
@@ -93,7 +93,7 @@ jobs:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Private TCP Active/Active
-    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'private-tcp-active-active') }}
+    if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'private-tcp-active-active' }}
     with:
       test_name: Private TCP Active/Active (FDO)
       is_replicated_deployment: false
@@ -111,7 +111,7 @@ jobs:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Standalone External (Replicated)
-    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'standalone-external-replicated') }}
+    if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'standalone-external-replicated' }}
     with:
       test_name: Standalone External
       is_replicated_deployment: true
@@ -135,7 +135,7 @@ jobs:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Standalone Mounted Disk (Replicated)
-    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'standalone-mounted-disk-replicated') }}
+    if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'standalone-mounted-disk-replicated' }}
     with:
       test_name: Standalone Mounted Disk
       is_replicated_deployment: true
@@ -159,7 +159,7 @@ jobs:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Public Active/Active (Replicated)
-    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'public-active-active-replicated') }}
+    if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'public-active-active-replicated' }}
     with:
       test_name: Public Active/Active
       is_replicated_deployment: true
@@ -177,7 +177,7 @@ jobs:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Private Active/Active (Replicated)
-    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'private-active-active-replicated') }}
+    if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'private-active-active-replicated' }}
     with:
       test_name: Private Active/Active
       is_replicated_deployment: true
@@ -196,7 +196,7 @@ jobs:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
     name: Run tf-test on Azure Private TCP Active/Active (Replicated)
-    if: ${{ contains(github.event.client_payload.slash_command.args.unnamed.all, 'all') || contains(github.event.client_payload.slash_command.args.unnamed.all, 'private-tcp-active-active-replicated') }}
+    if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'private-tcp-active-active-replicated' }}
     with:
       test_name: Private TCP Active/Active
       is_replicated_deployment: true
