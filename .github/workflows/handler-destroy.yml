@@ -113,7 +113,7 @@ jobs:
     with:
       cloud: Azure
       test_name: Public Active/Active (Replicated)
-      utility_test: true
+      utility_test: false
       is_replicated_deployment: true
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       pull_request_repo_name: ${{ github.event.client_payload.github.payload.repository.full_name }}
@@ -131,7 +131,7 @@ jobs:
     with:
       cloud: Azure
       test_name: Private Active/Active (Replicated)
-      utility_test: true
+      utility_test: false
       is_replicated_deployment: true
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       pull_request_repo_name: ${{ github.event.client_payload.github.payload.repository.full_name }}
@@ -149,7 +149,7 @@ jobs:
     with:
       cloud: Azure
       test_name: Private TCP Active/Active (Replicated)
-      utility_test: true
+      utility_test: false
       is_replicated_deployment: true
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       pull_request_repo_name: ${{ github.event.client_payload.github.payload.repository.full_name }}
@@ -167,7 +167,7 @@ jobs:
     with:
       cloud: Azure
       test_name: Standalone External (Replicated)
-      utility_test: true
+      utility_test: false
       is_replicated_deployment: true
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       pull_request_repo_name: ${{ github.event.client_payload.github.payload.repository.full_name }}
@@ -191,7 +191,7 @@ jobs:
     with:
       cloud: Azure
       test_name: Standalone Mounted Disk (Replicated)
-      utility_test: true
+      utility_test: false
       is_replicated_deployment: true
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       pull_request_repo_name: ${{ github.event.client_payload.github.payload.repository.full_name }}
