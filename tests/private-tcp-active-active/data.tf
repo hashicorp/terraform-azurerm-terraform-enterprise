@@ -22,6 +22,8 @@ data "azurerm_key_vault_secret" "ca_key" {
 }
 
 data "azurerm_key_vault_secret" "tfe_license" {
+  count = var.tfe_license_secret_name == null ? 0 : 1
+
   name         = var.tfe_license_secret_name
   key_vault_id = var.key_vault_id
 }
