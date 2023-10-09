@@ -112,8 +112,9 @@ module "redis" {
 # Azure postgres
 # -----------------------------------------------------------------------------
 module "database" {
-  source = "./modules/database"
-  count  = local.disk_mode == true ? 0 : 1
+  source     = "./modules/database"
+  count      = local.disk_mode == true ? 0 : 1
+  depends_on = [ module.network ]
 
   friendly_name_prefix = var.friendly_name_prefix
   resource_group_name  = module.resource_groups.resource_group_name
