@@ -61,7 +61,7 @@ module "standalone_mounted_disk" {
 
   enable_ssh     = true
   create_bastion = false
-  tags           = local.tags
+  tags           = local.common_tags
 
   # FDO Specific Values
   is_replicated_deployment  = var.is_replicated_deployment
@@ -70,10 +70,4 @@ module "standalone_mounted_disk" {
   registry_password         = var.registry_password
   registry_username         = var.registry_username
   tfe_image                 = "quay.io/hashicorp/terraform-enterprise:${var.tfe_image_tag}"
-}
-
-locals {
-  email = "annie@hashicorp.com"
-  user  = "Annie Hedgpeth"
-  tags  = merge(local.common_tags, { "Owner" = local.user, "Email" = local.email })
 }
