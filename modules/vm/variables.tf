@@ -147,6 +147,42 @@ variable "vm_vmss_scale_in_force_deletion_enabled" {
   description = "Should the virtual machines chosen for removal be force deleted when the virtual machine scale set is being scaled-in?"
 }
 
+variable "vm_cross_zone_upgrades_enabled" {
+  default     = false
+  type        = bool
+  description = "Should the Virtual Machine Scale Set be upgraded across zones in the same region when a Virtual Machine Image is updated?"
+}
+
+variable "vm_max_batch_instance_percent" {
+  default     = 20
+  type        = number
+  description = "The maximum percent of total virtual machine instances that will be upgraded simultaneously by the rolling upgrade in one batch. As this is a maximum, unhealthy instances in previous or future batches can cause the percentage of instances in a batch to decrease to ensure higher reliability."
+}
+
+variable "vm_max_unhealthy_instance_percent" {
+  default     = 20
+  type        = number
+  description = "The maximum percentage of the total virtual machine instances in the scale set that can be simultaneously unhealthy, either as a result of being upgraded, or by being found in an unhealthy state by the virtual machine health checks before the rolling upgrade aborts. This constraint will be checked prior to starting any batch."
+}
+
+variable "vm_max_unhealthy_upgraded_instance_percent" {
+  default     = 20
+  type        = number
+  description = "The maximum percentage of upgraded virtual machine instances that can be found to be in an unhealthy state. This check will happen after each batch is upgraded. If this percentage is ever exceeded, the rolling update aborts."
+}
+
+variable "vm_pause_time_between_batches" {
+  default     = "PT0S"
+  type        = string
+  description = "The wait time between completing the update for all virtual machines in one batch and starting the next batch. The time duration should be specified in ISO 8601 format."
+}
+
+variable "vm_prioritize_unhealthy_instances_enabled" {
+  default     = false
+  type        = bool
+  description = "Upgrade all unhealthy instances in a scale set before any healthy instances. Possible values are true or false."
+}
+
 variable "ca_certificate_secret" {
   type = object({
     key_vault_id = string
