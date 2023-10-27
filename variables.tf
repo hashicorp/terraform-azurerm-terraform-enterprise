@@ -1005,13 +1005,13 @@ variable "vm_key_secret" {
 # Proxy
 # -----
 variable "http_port" {
-  default     = 8080
+  default     = 80
   type        = number
   description = "(Optional if is_replicated_deployment is false) Port application listens on for HTTP. Default is 80."
 }
 
 variable "https_port" {
-  default     = 8443
+  default     = 443
   type        = number
   description = "(Optional if is_replicated_deployment is false) Port application listens on for HTTPS. Default is 443."
 }

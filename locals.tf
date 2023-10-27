@@ -50,6 +50,7 @@ locals {
   # ---------
   no_proxy = concat([
     "127.0.0.1",
+    "localhost",
     "169.254.169.254",
     ".azure.com",
     ".windows.net",
