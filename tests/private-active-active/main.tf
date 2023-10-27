@@ -65,9 +65,6 @@ module "private_active_active" {
   # Private Active / Active Scenario
   consolidated_services_enabled      = var.consolidated_services_enabled
   distribution                       = "rhel"
-  vm_node_count                      = 2
-  vm_sku                             = "Standard_D16as_v4"
-  vm_image_id                        = "rhel"
   load_balancer_public               = false
   load_balancer_type                 = "application_gateway"
   load_balancer_sku_name             = "WAF_v2"
@@ -76,6 +73,9 @@ module "private_active_active" {
   redis_use_password_auth            = true
   redis_use_tls                      = false
   production_type                    = "external"
+  vm_image_id                        = "rhel"
+  vm_node_count                      = 2
+  vm_sku                             = "Standard_D16as_v4"
 
   create_bastion = false
   tags           = local.common_tags
@@ -83,6 +83,8 @@ module "private_active_active" {
   # FDO Specific Values
   is_replicated_deployment  = var.is_replicated_deployment
   hc_license                = var.hc_license
+  http_port                 = 8080
+  https_port                = 8443
   license_reporting_opt_out = true
   registry_password         = var.registry_password
   registry_username         = var.registry_username
