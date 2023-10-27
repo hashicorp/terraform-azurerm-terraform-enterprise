@@ -865,12 +865,6 @@ variable "tls_bootstrap_key_pathname" {
   description = "The path on the TFE instance to put the key. ex. '/var/lib/terraform-enterprise/key.pem'"
 }
 
-variable "tls_ca_bundle_file" {
-  default     = null
-  type        = string
-  description = "(Not needed if is_replicated_deployment is true) Path to a file containing TLS CA certificates to be added to the OS CA certificates bundle. Leave blank to not add CA certificates to the OS CA certificates bundle. Defaults to ''."
-}
-
 variable "tls_ciphers" {
   default     = null
   type        = string
