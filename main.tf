@@ -206,11 +206,12 @@ module "docker_compose_config" {
   azure_account_name = local.object_storage.storage_account_name
   azure_container    = local.object_storage.storage_account_container_name
 
-  http_port   = var.http_port
-  https_port  = var.https_port
-  http_proxy  = var.proxy_ip != null ? "${var.proxy_ip}:${var.proxy_port}" : null
-  https_proxy = var.proxy_ip != null ? "${var.proxy_ip}:${var.proxy_port}" : null
-  no_proxy    = local.no_proxy
+  http_port       = var.http_port
+  https_port      = var.https_port
+  http_proxy      = var.proxy_ip != null ? "${var.proxy_ip}:${var.proxy_port}" : null
+  https_proxy     = var.proxy_ip != null ? "${var.proxy_ip}:${var.proxy_port}" : null
+  no_proxy        = local.no_proxy
+  trusted_proxies = local.trusted_proxies
 
   redis_host     = local.redis.hostname
   redis_user     = ""
