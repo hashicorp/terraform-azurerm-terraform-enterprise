@@ -192,7 +192,7 @@ module "docker_compose_config" {
 
   cert_file          = "/etc/ssl/private/terraform-enterprise/cert.pem"
   key_file           = "/etc/ssl/private/terraform-enterprise/key.pem"
-  tls_ca_bundle_file = var.ca_certificate_secret_id != null ? "/etc/ssl/private/terraform-enterprise/bundle.pem" : null
+  tls_ca_bundle_file = var.ca_certificate_secret != null ? "/etc/ssl/private/terraform-enterprise/bundle.pem" : null
 
   database_user       = local.database.server.administrator_login
   database_password   = local.database.server.administrator_password
