@@ -137,7 +137,7 @@ module "database" {
 # Azure user data / cloud init used to install and configure TFE on instance(s) using Flexible Deployment Options
 # ---------------------------------------------------------------------------------------------------------------
 module "tfe_init_fdo" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=main"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=ah/tf-8609-fdo-6"
   count  = var.is_replicated_deployment ? 0 : 1
 
   cloud             = "azurerm"
@@ -173,7 +173,7 @@ module "tfe_init_fdo" {
 # Docker Compose File Config for TFE on instance(s) using Flexible Deployment Options
 # ------------------------------------------------------------------------------------
 module "docker_compose_config" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/docker_compose_config?ref=main"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/docker_compose_config?ref=ah/tf-8609-fdo-6"
   count  = var.is_replicated_deployment ? 0 : 1
 
   hostname                  = module.load_balancer.fqdn
@@ -205,6 +205,12 @@ module "docker_compose_config" {
   azure_account_name = local.object_storage.storage_account_name
   azure_container    = local.object_storage.storage_account_container_name
 
+  http_port   = var.http_port
+  https_port  = var.https_port
+  http_proxy  = var.proxy_ip != null ? "${var.proxy_ip}:${var.proxy_port}" : null
+  https_proxy = var.proxy_ip != null ? "${var.proxy_ip}:${var.proxy_port}" : null
+  no_proxy    = local.no_proxy
+
   redis_host     = local.redis.hostname
   redis_user     = ""
   redis_password = local.redis.primary_access_key
@@ -222,7 +228,7 @@ module "docker_compose_config" {
 # TFE and Replicated settings to pass to the tfe_init_replicated module for Replicated deployment
 # ------------------------------------------------------------------------------------------------
 module "settings" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=main"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=ah/tf-8609-fdo-6"
   count  = var.is_replicated_deployment ? 1 : 0
 
   # TFE Base Configuration
@@ -237,15 +243,7 @@ module "settings" {
   release_sequence              = var.release_sequence
   trusted_proxies               = local.trusted_proxies
 
-  extra_no_proxy = [
-    "127.0.0.1",
-    "169.254.169.254",
-    ".azure.com",
-    ".windows.net",
-    ".microsoft.com",
-    module.load_balancer.fqdn,
-    var.network_cidr
-  ]
+  extra_no_proxy = local.no_proxy
 
   # Replicated Base Configuration
   hostname                                  = module.load_balancer.fqdn
@@ -283,7 +281,7 @@ module "settings" {
 # Azure user data / cloud init used to install and configure TFE on instance(s)
 # -----------------------------------------------------------------------------
 module "tfe_init_replicated" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init_replicated?ref=main"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init_replicated?ref=ah/tf-8609-fdo-6"
   count  = var.is_replicated_deployment ? 1 : 0
 
   # TFE & Replicated Configuration data

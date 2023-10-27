@@ -1004,6 +1004,24 @@ variable "vm_key_secret" {
 
 # Proxy
 # -----
+variable "http_port" {
+  default     = 8080
+  type        = number
+  description = "(Optional if is_replicated_deployment is false) Port application listens on for HTTP. Default is 80."
+}
+
+variable "https_port" {
+  default     = 8443
+  type        = number
+  description = "(Optional if is_replicated_deployment is false) Port application listens on for HTTPS. Default is 443."
+}
+
+variable "no_proxy" {
+  type        = list(string)
+  description = "(Optional) List of IP addresses to not proxy"
+  default     = []
+}
+
 variable "proxy_ip" {
   default     = null
   type        = string
