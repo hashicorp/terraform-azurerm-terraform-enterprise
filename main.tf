@@ -176,22 +176,23 @@ module "docker_compose_config" {
   source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/docker_compose_config?ref=main"
   count  = var.is_replicated_deployment ? 0 : 1
 
-  hostname                  = module.load_balancer.fqdn
-  tfe_license               = var.hc_license
   license_reporting_opt_out = var.license_reporting_opt_out
-  cert_file                 = "/etc/ssl/private/terraform-enterprise/cert.pem"
-  key_file                  = "/etc/ssl/private/terraform-enterprise/key.pem"
-  operational_mode          = local.active_active ? "active-active" : var.production_type
-  tfe_image                 = var.tfe_image
-  tls_ca_bundle_file        = var.tls_ca_bundle_file
-  tls_ciphers               = var.tls_ciphers
-  tls_version               = var.tls_version
-  run_pipeline_image        = var.run_pipeline_image
+  hostname                  = module.load_balancer.fqdn
   capacity_concurrency      = var.capacity_concurrency
   capacity_cpu              = var.capacity_cpu
   capacity_memory           = var.capacity_memory
   iact_subnets              = join(",", var.iact_subnet_list)
   iact_time_limit           = var.iact_subnet_time_limit
+  operational_mode          = local.active_active ? "active-active" : var.production_type
+  run_pipeline_image        = var.run_pipeline_image
+  tfe_image                 = var.tfe_image
+  tfe_license               = var.hc_license
+  tls_ciphers               = var.tls_ciphers
+  tls_version               = var.tls_version
+
+  cert_file          = "/etc/ssl/private/terraform-enterprise/cert.pem"
+  key_file           = "/etc/ssl/private/terraform-enterprise/key.pem"
+  tls_ca_bundle_file = var.ca_certificate_secret != null ? "/etc/ssl/private/terraform-enterprise/bundle.pem" : null
 
   database_user       = local.database.server.administrator_login
   database_password   = local.database.server.administrator_password
@@ -204,6 +205,13 @@ module "docker_compose_config" {
   azure_account_key  = local.object_storage.storage_account_key
   azure_account_name = local.object_storage.storage_account_name
   azure_container    = local.object_storage.storage_account_container_name
+
+  http_port       = var.http_port
+  https_port      = var.https_port
+  http_proxy      = var.proxy_ip != null ? "${var.proxy_ip}:${var.proxy_port}" : null
+  https_proxy     = var.proxy_ip != null ? "${var.proxy_ip}:${var.proxy_port}" : null
+  no_proxy        = local.no_proxy
+  trusted_proxies = local.trusted_proxies
 
   redis_host     = local.redis.hostname
   redis_user     = ""
@@ -237,15 +245,7 @@ module "settings" {
   release_sequence              = var.release_sequence
   trusted_proxies               = local.trusted_proxies
 
-  extra_no_proxy = [
-    "127.0.0.1",
-    "169.254.169.254",
-    ".azure.com",
-    ".windows.net",
-    ".microsoft.com",
-    module.load_balancer.fqdn,
-    var.network_cidr
-  ]
+  extra_no_proxy = local.no_proxy
 
   # Replicated Base Configuration
   hostname                                  = module.load_balancer.fqdn

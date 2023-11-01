@@ -865,12 +865,6 @@ variable "tls_bootstrap_key_pathname" {
   description = "The path on the TFE instance to put the key. ex. '/var/lib/terraform-enterprise/key.pem'"
 }
 
-variable "tls_ca_bundle_file" {
-  default     = null
-  type        = string
-  description = "(Not needed if is_replicated_deployment is true) Path to a file containing TLS CA certificates to be added to the OS CA certificates bundle. Leave blank to not add CA certificates to the OS CA certificates bundle. Defaults to ''."
-}
-
 variable "tls_ciphers" {
   default     = null
   type        = string
@@ -1004,6 +998,24 @@ variable "vm_key_secret" {
 
 # Proxy
 # -----
+variable "http_port" {
+  default     = 80
+  type        = number
+  description = "(Optional if is_replicated_deployment is false) Port application listens on for HTTP. Default is 80."
+}
+
+variable "https_port" {
+  default     = 443
+  type        = number
+  description = "(Optional if is_replicated_deployment is false) Port application listens on for HTTPS. Default is 443."
+}
+
+variable "no_proxy" {
+  type        = list(string)
+  description = "(Optional) List of IP addresses to not proxy"
+  default     = []
+}
+
 variable "proxy_ip" {
   default     = null
   type        = string

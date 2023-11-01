@@ -48,6 +48,17 @@ locals {
 
   # User Data
   # ---------
+  no_proxy = concat([
+    "127.0.0.1",
+    "localhost",
+    "169.254.169.254",
+    ".azure.com",
+    ".windows.net",
+    ".microsoft.com",
+    module.load_balancer.fqdn,
+    var.network_cidr,
+  ], var.no_proxy)
+
   trusted_proxies = concat(
     var.trusted_proxies,
     [var.network_frontend_subnet_cidr]
