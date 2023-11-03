@@ -9,7 +9,7 @@ jobs:
   public_active_active:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/destroy.yml@main
     secrets: inherit
-    name: Destroy resources from Azure Public Active/Active
+    name: Destroy Public Active/Active
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'public-active-active' }}
     with:
       cloud: Azure
@@ -26,7 +26,7 @@ jobs:
   private_active_active:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/destroy.yml@main
     secrets: inherit
-    name: Destroy resources from Azure Private Active/Active
+    name: Destroy Private Active/Active
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'private-active-active' }}
     with:
       cloud: Azure
@@ -43,7 +43,7 @@ jobs:
   private_tcp_active_active:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/destroy.yml@main
     secrets: inherit
-    name: Destroy resources from Azure Private TCP Active/Active
+    name: Destroy Private TCP Active/Active
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'private-tcp-active-active' }}
     with:
       cloud: Azure
@@ -60,7 +60,7 @@ jobs:
   standalone_external:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/destroy.yml@main
     secrets: inherit
-    name: Destroy resources from Azure Standalone External
+    name: Destroy Standalone External
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'standalone-external' }}
     with:
       cloud: Azure
@@ -84,7 +84,7 @@ jobs:
   standalone_mounted_disk:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/destroy.yml@main
     secrets: inherit
-    name: Destroy resources from Azure Standalone Mounted Disk
+    name: Destroy Standalone Mounted Disk
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'standalone-mounted-disk' }}
     with:
       cloud: Azure
@@ -108,11 +108,11 @@ jobs:
   public_active_active_replicated:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/destroy.yml@main
     secrets: inherit
-    name: Destroy resources from Azure Public Active/Active (Replicated)
+    name: Destroy Public Active/Active
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'public-active-active-replicated' }}
     with:
       cloud: Azure
-      test_name: Public Active/Active (Replicated)
+      test_name: Public Active/Active
       utility_test: false
       is_replicated_deployment: true
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
@@ -126,11 +126,11 @@ jobs:
   private_active_active_replicated:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/destroy.yml@main
     secrets: inherit
-    name: Destroy resources from Azure Private Active/Active (Replicated)
+    name: Destroy Private Active/Active
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'private-active-active-replicated' }}
     with:
       cloud: Azure
-      test_name: Private Active/Active (Replicated)
+      test_name: Private Active/Active
       utility_test: false
       is_replicated_deployment: true
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
@@ -144,11 +144,11 @@ jobs:
   private_tcp_active_active_replicated:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/destroy.yml@main
     secrets: inherit
-    name: Destroy resources from Azure Private TCP Active/Active (Replicated)
+    name: Destroy Private TCP Active/Active
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'private-tcp-active-active-replicated' }}
     with:
       cloud: Azure
-      test_name: Private TCP Active/Active (Replicated)
+      test_name: Private TCP Active/Active
       utility_test: false
       is_replicated_deployment: true
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
@@ -162,11 +162,11 @@ jobs:
   standalone_external_replicated:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/destroy.yml@main
     secrets: inherit
-    name: Destroy resources from Azure Standalone External (Replicated)
+    name: Destroy Standalone External
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'standalone-external-replicated' }}
     with:
       cloud: Azure
-      test_name: Standalone External (Replicated)
+      test_name: Standalone External
       utility_test: false
       is_replicated_deployment: true
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
@@ -186,11 +186,11 @@ jobs:
   standalone_mounted_disk_replicated:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/destroy.yml@main
     secrets: inherit
-    name: Destroy resources from Azure Standalone Mounted Disk (Replicated)
+    name: Destroy Standalone Mounted Disk
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'standalone-mounted-disk-replicated' }}
     with:
       cloud: Azure
-      test_name: Standalone Mounted Disk (Replicated)
+      test_name: Standalone Mounted Disk
       utility_test: false
       is_replicated_deployment: true
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
