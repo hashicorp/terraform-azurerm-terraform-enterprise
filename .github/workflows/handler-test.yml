@@ -9,10 +9,10 @@ jobs:
   standalone_external:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
-    name: Run tf-test on Azure Standalone External
+    name: Standalone External
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'standalone-external' }}
     with:
-      test_name: Standalone External (FDO)
+      test_name: Standalone External
       is_replicated_deployment: false
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       work_dir: ./tests/standalone-external
@@ -33,10 +33,10 @@ jobs:
   standalone_mounted_disk:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
-    name: Run tf-test on Azure Standalone Mounted Disk
+    name: Standalone Mounted Disk
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'standalone-mounted-disk' }}
     with:
-      test_name: Standalone Mounted Disk (FDO)
+      test_name: Standalone Mounted Disk
       is_replicated_deployment: false
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       work_dir: ./tests/standalone-mounted-disk
@@ -57,10 +57,10 @@ jobs:
   public_active_active:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
-    name: Run tf-test on Azure Public Active/Active
+    name: Public Active/Active
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'public-active-active' }}
     with:
-      test_name: Public Active/Active (FDO)
+      test_name: Public Active/Active
       is_replicated_deployment: false
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       work_dir: ./tests/public-active-active
@@ -74,10 +74,10 @@ jobs:
   private_active_active:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
-    name: Run tf-test on Azure Private Active/Active
+    name: Private Active/Active
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'private-active-active' }}
     with:
-      test_name: Private Active/Active (FDO)
+      test_name: Private Active/Active
       is_replicated_deployment: false
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       work_dir: ./tests/private-active-active
@@ -92,10 +92,10 @@ jobs:
   private_tcp_active_active:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
-    name: Run tf-test on Azure Private TCP Active/Active
+    name: Private TCP Active/Active
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'private-tcp-active-active' }}
     with:
-      test_name: Private TCP Active/Active (FDO)
+      test_name: Private TCP Active/Active
       is_replicated_deployment: false
       module_repository_id: hashicorp/terraform-azurerm-terraform-enterprise
       work_dir: ./tests/private-tcp-active-active
@@ -110,7 +110,7 @@ jobs:
   standalone_external_replicated:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
-    name: Run tf-test on Azure Standalone External (Replicated)
+    name: Standalone External
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'standalone-external-replicated' }}
     with:
       test_name: Standalone External
@@ -134,7 +134,7 @@ jobs:
   standalone_mounted_disk_replicated:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
-    name: Run tf-test on Azure Standalone Mounted Disk (Replicated)
+    name: Standalone Mounted Disk
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'standalone-mounted-disk-replicated' }}
     with:
       test_name: Standalone Mounted Disk
@@ -158,7 +158,7 @@ jobs:
   public_active_active_replicated:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
-    name: Run tf-test on Azure Public Active/Active (Replicated)
+    name: Public Active/Active
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'public-active-active-replicated' }}
     with:
       test_name: Public Active/Active
@@ -176,7 +176,7 @@ jobs:
   private_active_active_replicated:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
-    name: Run tf-test on Azure Private Active/Active (Replicated)
+    name: Private Active/Active
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'private-active-active-replicated' }}
     with:
       test_name: Private Active/Active
@@ -195,7 +195,7 @@ jobs:
   private_tcp_active_active_replicated:
     uses: hashicorp/terraform-random-tfe-utility/.github/workflows/azure-tests.yml@main
     secrets: inherit
-    name: Run tf-test on Azure Private TCP Active/Active (Replicated)
+    name: Private TCP Active/Active
     if: ${{ github.event.client_payload.slash_command.args.unnamed.all == 'all' || github.event.client_payload.slash_command.args.unnamed.all == 'private-tcp-active-active-replicated' }}
     with:
       test_name: Private TCP Active/Active
