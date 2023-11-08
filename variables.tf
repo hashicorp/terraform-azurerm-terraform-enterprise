@@ -544,6 +544,18 @@ variable "redis_minimum_tls_version" {
 
 # VM
 # --
+variable "http_port" {
+  default     = 80
+  type        = number
+  description = "(Optional if is_replicated_deployment is false) Port application listens on for HTTP. Default is 80."
+}
+
+variable "https_port" {
+  default     = 443
+  type        = number
+  description = "(Optional if is_replicated_deployment is false) Port application listens on for HTTPS. Default is 443."
+}
+
 variable "vm_node_count" {
   default     = 2
   type        = number
@@ -998,18 +1010,6 @@ variable "vm_key_secret" {
 
 # Proxy
 # -----
-variable "http_port" {
-  default     = 80
-  type        = number
-  description = "(Optional if is_replicated_deployment is false) Port application listens on for HTTP. Default is 80."
-}
-
-variable "https_port" {
-  default     = 443
-  type        = number
-  description = "(Optional if is_replicated_deployment is false) Port application listens on for HTTPS. Default is 443."
-}
-
 variable "no_proxy" {
   type        = list(string)
   description = "(Optional) List of IP addresses to not proxy"
