@@ -24,7 +24,7 @@ This module is intended to run in an Azure account with minimal preparation, how
 
 ### License file
 
-- A Terraform Enterprise license file is required, and it must be provided as a Base64 encoded secret in Azure Key Vault.
+- When `is_replicated_deployment` is `true`, a Terraform Enterprise license file is required, and it must be provided as a Base64 encoded secret in Azure Key Vault. Otherwise, the `hc_license` can be provided as a string for Flexible Deployment Options.
 
 ### Azure Resources
 
