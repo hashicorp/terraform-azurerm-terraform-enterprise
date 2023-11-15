@@ -181,6 +181,7 @@ module "docker_compose_config" {
   capacity_concurrency      = var.capacity_concurrency
   capacity_cpu              = var.capacity_cpu
   capacity_memory           = var.capacity_memory
+  disk_path                 = local.disk_mode ? var.disk_path : null
   iact_subnets              = join(",", var.iact_subnet_list)
   iact_time_limit           = var.iact_subnet_time_limit
   operational_mode          = local.active_active ? "active-active" : var.production_type
