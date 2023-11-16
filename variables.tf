@@ -36,9 +36,9 @@ variable "tfe_subdomain" {
 }
 
 variable "tfe_image" {
-  default     = "quay.io/hashicorp/terraform-enterprise:latest"
+  default     = "images.releases.hashicorp.com/hashicorp/terraform-enterprise:v202311-1"
   type        = string
-  description = "(Not needed if is_replicated_deployment is true) The registry path, image name, and image version (e.g. \"quay.io/hashicorp/terraform-enterprise:1234567\")"
+  description = "(Not needed if is_replicated_deployment is true) The registry path, image name, and image version"
 }
 
 # DNS
@@ -841,16 +841,22 @@ variable "hairpin_addressing" {
   description = "In some cloud environments, HTTP clients running on instances behind a loadbalancer cannot send requests to the public hostname of that load balancer. Use this setting to configure TFE services to redirect requests for the installation's FQDN to the instance's internal IP address. Defaults to false."
 }
 
-variable "registry_username" {
-  default     = null
+variable "registry" {
+  default     = "images.releases.hashicorp.com"
   type        = string
-  description = "(Not needed if is_replicated_deployment is true) The username for the docker registry from which to source the terraform_enterprise container images."
+  description = "(Not needed if is_replicated_deployment is true) The docker registry from which to source the terraform_enterprise container images."
 }
 
 variable "registry_password" {
   default     = null
   type        = string
-  description = "(Not needed if is_replicated_deployment is true) The password for the docker registry from which to source the terraform_enterprise container images."
+  description = "(Not needed if is_replicated_deployment is true or if registry is 'images.releases.hashicorp.com') The password for the docker registry from which to source the terraform_enterprise container images."
+}
+
+variable "registry_username" {
+  default     = "terraform"
+  type        = string
+  description = "(Not needed if is_replicated_deployment is true) The username for the docker registry from which to source the terraform_enterprise container images."
 }
 
 variable "run_pipeline_image" {
