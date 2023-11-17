@@ -7,7 +7,7 @@ output "replicated_console_password" {
 }
 
 output "replicated_console_url" {
-  value       = "${module.standalone_mounted_disk.tfe_application_url}:8800"
+  value       = module.standalone_mounted_disk.tfe_console_url
   description = "Terraform Enterprise Console URL"
 }
 

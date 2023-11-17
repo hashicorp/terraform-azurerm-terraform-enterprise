@@ -164,8 +164,10 @@ module "tfe_init_fdo" {
     var.network_cidr
   ]
 
-  registry_username   = var.registry_username
-  registry_password   = var.registry_password
+  registry          = var.registry
+  registry_password = var.registry == "images.releases.hashicorp.com" ? var.hc_license : var.registry_password
+  registry_username = var.registry_username
+
   docker_compose_yaml = module.docker_compose_config[0].docker_compose_yaml
 }
 

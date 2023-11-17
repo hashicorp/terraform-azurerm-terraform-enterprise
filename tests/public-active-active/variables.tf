@@ -45,16 +45,16 @@ variable "key_vault_id" {
   description = "The identity of the Key Vault which contains secrets and certificates."
 }
 
-variable "registry_username" {
-  default     = null
-  type        = string
-  description = "(Not needed if is_replicated_deployment is true) The username for the docker registry from which to source the terraform_enterprise container images."
-}
-
 variable "registry_password" {
   default     = null
   type        = string
   description = "(Not needed if is_replicated_deployment is true) The password for the docker registry from which to source the terraform_enterprise container images."
+}
+
+variable "registry_username" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_replicated_deployment is true) The username for the docker registry from which to source the terraform_enterprise container images."
 }
 
 variable "resource_group_name_dns" {

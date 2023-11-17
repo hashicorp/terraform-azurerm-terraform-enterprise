@@ -3,14 +3,14 @@
 
 locals {
   common_tags = {
-    Terraform   = "False"
     Environment = "${local.friendly_name_prefix}-test-standalone-external"
-    Description = "Standalone, External Services scenario deployed from CircleCI"
+    Description = "Standalone, External Services scenario"
     Repository  = "hashicorp/terraform-azurerm-terraform-enterprise"
-    Team        = "Terraform Enterprise on Prem"
+    Team        = "Terraform Enterprise"
     OkToDelete  = "True"
   }
 
-  utility_module_test  = var.license_file == null
   friendly_name_prefix = random_string.friendly_name.id
+  registry             = "quay.io"
+  utility_module_test  = var.license_file == null
 }
