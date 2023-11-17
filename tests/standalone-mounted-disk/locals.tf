@@ -6,7 +6,7 @@ locals {
     Environment = "${local.friendly_name_prefix}-test-standalone-mounted-disk"
     Description = "Standalone, Mounted Disk scenario"
     Repository  = "hashicorp/terraform-azurerm-terraform-enterprise"
-    Team        = "Terraform Enterprise on Prem"
+    Team        = "Terraform Enterprise"
     OkToDelete  = "True"
   }
   vm_image_id = (
@@ -40,8 +40,7 @@ locals {
     var.vm_image_version != null
   ) ? var.vm_image_version : null
 
-  utility_module_test  = var.license_file == null
   friendly_name_prefix = random_string.friendly_name.id
-  # registry             = "quay.io"
-  registry = "images.releases.hashicorp.com"
+  registry             = "quay.io"
+  utility_module_test  = var.license_file == null
 }
