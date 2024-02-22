@@ -124,3 +124,11 @@ output "instance_user_name" {
   value       = var.vm_user
   description = "The admin user on the TFE instance(s)"
 }
+
+output "vmss_name" {
+  value = module.vm.vmss_name
+}
+
+output "vmss_vm_ids" {
+  value = module.vm.vmss_instance_ids
+}
