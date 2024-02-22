@@ -143,7 +143,7 @@ resource "azurerm_virtual_machine_scale_set_extension" "main" {
   })
 }
 
-data "azurerm_virtual_machine_scale_set" "example" {
+data "azurerm_virtual_machine_scale_set" "tfe_vmss" {
   name                = azurerm_linux_virtual_machine_scale_set.tfe_vmss.name
   resource_group_name = var.resource_group_name
 }

@@ -127,8 +127,10 @@ output "instance_user_name" {
 
 output "vmss_name" {
   value = module.vm.vmss_name
+  description = "The name of the virtual machine scale set"
 }
 
-output "vmss_vm_ids" {
+output "vmss_instance_ids" {
   value = module.vm.vmss_instance_ids
+  description = "A list of the virual machine scale set VMs ids"
 }
