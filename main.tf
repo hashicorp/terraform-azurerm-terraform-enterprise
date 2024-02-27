@@ -85,7 +85,7 @@ module "network" {
 # -----------------------------------------------------------------------------
 module "redis" {
   source = "./modules/redis"
-  count  = var.production_type == "active-active" == true ? 1 : 0
+  count  = var.production_type == "active-active" ? 1 : 0
 
   resource_group_name = module.resource_groups.resource_group_name
   location            = var.location

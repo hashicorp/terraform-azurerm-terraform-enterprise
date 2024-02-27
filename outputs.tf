@@ -102,7 +102,7 @@ output "redis_ssl_port" {
 }
 
 output "redis_pass" {
-  value       = var.production_type == "active-active" == true ? module.redis[0].redis_cache.primary_access_key : null
+  value       = var.production_type == "active-active" ? module.redis[0].redis_cache.primary_access_key : null
   description = "The Primary Access Key for the Redis Instance"
 }
 
