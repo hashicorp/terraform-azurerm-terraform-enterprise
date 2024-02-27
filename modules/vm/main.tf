@@ -142,3 +142,8 @@ resource "azurerm_virtual_machine_scale_set_extension" "main" {
     "requestPath" : "/_health_check"
   })
 }
+
+data "azurerm_virtual_machine_scale_set" "tfe_vmss" {
+  name                = azurerm_linux_virtual_machine_scale_set.tfe_vmss.name
+  resource_group_name = var.resource_group_name
+}
