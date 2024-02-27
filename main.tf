@@ -258,7 +258,6 @@ module "settings" {
 
   # Replicated Base Configuration
   hostname                                  = module.load_balancer.fqdn
-  enable_active_active                      = var.production_type == "active-active"
   tfe_license_bootstrap_airgap_package_path = var.tfe_license_bootstrap_airgap_package_path
   tfe_license_file_location                 = var.tfe_license_file_location
   tls_bootstrap_cert_pathname               = var.tls_bootstrap_cert_pathname
