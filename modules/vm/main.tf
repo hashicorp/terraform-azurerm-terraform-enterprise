@@ -113,6 +113,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
       name      = "${var.friendly_name_prefix}-ip"
       primary   = true
       subnet_id = var.vm_subnet_id
+      version   = "IPv4"
 
       load_balancer_backend_address_pool_ids       = var.load_balancer_type == "load_balancer" ? [var.load_balancer_backend_id] : null
       application_gateway_backend_address_pool_ids = var.load_balancer_type == "application_gateway" ? [var.load_balancer_backend_id] : null
@@ -120,7 +121,8 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
       dynamic "public_ip_address" {
         for_each = var.load_balancer_public == false ? [1] : []
         content {
-          name = "${var.friendly_name_prefix}-public-ip"
+          name    = "${var.friendly_name_prefix}-public-ip"
+          version = "IPv4"
         }
       }
     }
