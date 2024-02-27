@@ -59,7 +59,7 @@ module "network" {
   resource_group_name  = module.resource_groups.resource_group_name
   location             = var.location
 
-  active_active            = local.active_active
+  active_active            = var.production_type == "active-active"
   enable_ssh               = var.enable_ssh
   is_replicated_deployment = var.is_replicated_deployment
 
@@ -85,7 +85,7 @@ module "network" {
 # -----------------------------------------------------------------------------
 module "redis" {
   source = "./modules/redis"
-  count  = local.active_active == true ? 1 : 0
+  count  = var.production_type == "active-active" == true ? 1 : 0
 
   resource_group_name = module.resource_groups.resource_group_name
   location            = var.location
@@ -144,7 +144,7 @@ module "tfe_init_fdo" {
   distribution      = var.distribution
   disk_path         = var.disk_path
   disk_device_name  = var.production_type == "disk" ? "disk/azure/scsi1/lun${var.vm_data_disk_lun}" : null
-  operational_mode  = local.active_active ? "active-active" : var.production_type
+  operational_mode  = var.production_type
   custom_image_tag  = var.custom_image_tag
   enable_monitoring = var.enable_monitoring
 
@@ -189,7 +189,7 @@ module "runtime_container_engine_config" {
   disk_path                   = local.disk_mode ? var.disk_path : null
   iact_subnets                = join(",", var.iact_subnet_list)
   iact_time_limit             = var.iact_subnet_time_limit
-  operational_mode            = local.active_active ? "active-active" : var.production_type
+  operational_mode            = var.production_type
   run_pipeline_image          = var.run_pipeline_image
   tfe_image                   = var.tfe_image
   tfe_license                 = var.hc_license
@@ -258,7 +258,7 @@ module "settings" {
 
   # Replicated Base Configuration
   hostname                                  = module.load_balancer.fqdn
-  enable_active_active                      = local.active_active
+  enable_active_active                      = var.production_type == "active-active"
   tfe_license_bootstrap_airgap_package_path = var.tfe_license_bootstrap_airgap_package_path
   tfe_license_file_location                 = var.tfe_license_file_location
   tls_bootstrap_cert_pathname               = var.tls_bootstrap_cert_pathname
@@ -343,7 +343,7 @@ module "load_balancer" {
   zones                = var.zones
 
   # General
-  active_active            = local.active_active
+  active_active            = var.production_type == "active-active"
   domain_name              = var.domain_name
   is_replicated_deployment = var.is_replicated_deployment
   tfe_subdomain            = var.tfe_subdomain
