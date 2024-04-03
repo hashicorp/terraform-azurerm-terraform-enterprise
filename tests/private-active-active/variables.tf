@@ -6,12 +6,6 @@ variable "bastion_public_ssh_key_secret_name" {
   description = "The name of the public SSH key secret for the bastion."
 }
 
-variable "consolidated_services_enabled" {
-  default     = true
-  type        = bool
-  description = "(Required) True if TFE uses consolidated services."
-}
-
 variable "domain_name" {
   type        = string
   description = "Domain to create Terraform Enterprise subdomain within"

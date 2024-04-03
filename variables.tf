@@ -821,12 +821,6 @@ variable "capacity_memory" {
   description = "The maximum amount of memory (in megabytes) that a Terraform plan or apply can use on the system; defaults to `512` for replicated mode and `2048` for FDO."
 }
 
-variable "consolidated_services_enabled" {
-  default     = true
-  type        = bool
-  description = "(Required if var.is_replicated_deployment is true) True if TFE uses consolidated services."
-}
-
 variable "custom_agent_image_tag" {
   default     = null
   type        = string

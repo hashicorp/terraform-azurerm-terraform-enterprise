@@ -25,17 +25,16 @@ module "public_active_active" {
   tls_bootstrap_key_pathname  = "/var/lib/terraform-enterprise/key.pem"
 
   # Public Active / Active Scenario
-  consolidated_services_enabled = var.consolidated_services_enabled
-  distribution                  = "ubuntu"
-  iact_subnet_list              = var.iact_subnet_list
-  load_balancer_public          = true
-  load_balancer_type            = "application_gateway"
-  production_type               = "external"
-  redis_use_password_auth       = false
-  redis_use_tls                 = false
-  vm_node_count                 = 2
-  vm_sku                        = "Standard_D4_v3"
-  vm_image_id                   = "ubuntu"
+  distribution            = "ubuntu"
+  iact_subnet_list        = var.iact_subnet_list
+  load_balancer_public    = true
+  load_balancer_type      = "application_gateway"
+  production_type         = "external"
+  redis_use_password_auth = false
+  redis_use_tls           = false
+  vm_node_count           = 2
+  vm_sku                  = "Standard_D4_v3"
+  vm_image_id             = "ubuntu"
 
   tags = local.common_tags
 
@@ -50,4 +49,3 @@ module "public_active_active" {
   registry_username         = var.registry_username
   tfe_image                 = "${local.registry}/hashicorp/terraform-enterprise:${var.tfe_image_tag}"
 }
-

@@ -63,7 +63,6 @@ module "private_active_active" {
   proxy_port = local.proxy_port
 
   # Private Active / Active Scenario
-  consolidated_services_enabled      = var.consolidated_services_enabled
   distribution                       = "rhel"
   load_balancer_public               = false
   load_balancer_type                 = "application_gateway"
