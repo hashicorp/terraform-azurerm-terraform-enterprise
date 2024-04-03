@@ -8,12 +8,6 @@ variable "bypass_preflight_checks" {
   description = "Allow the TFE application to start without preflight checks."
 }
 
-variable "consolidated_services_enabled" {
-  default     = true
-  type        = bool
-  description = "(Required) True if TFE uses consolidated services."
-}
-
 variable "distribution" {
   type        = string
   description = "(Required) What is the OS distribution of the instance on which Terraoform Enterprise will be deployed?"

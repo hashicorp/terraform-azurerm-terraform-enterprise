@@ -7,12 +7,6 @@ variable "bypass_preflight_checks" {
   description = "Allow the TFE application to start without preflight checks."
 }
 
-variable "consolidated_services_enabled" {
-  default     = true
-  type        = bool
-  description = "(Required) True if TFE uses consolidated services."
-}
-
 variable "database_version" {
   default     = 12
   type        = number

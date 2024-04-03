@@ -38,19 +38,18 @@ module "standalone_mounted_disk" {
   bypass_preflight_checks     = var.bypass_preflight_checks
 
   # Standalone Mounted Disk Mode Scenario
-  consolidated_services_enabled = var.consolidated_services_enabled
-  distribution                  = var.distribution
-  production_type               = "disk"
-  disk_path                     = "/opt/hashicorp/data"
-  load_balancer_public          = true
-  load_balancer_type            = "load_balancer"
-  vm_image_id                   = local.vm_image_id
-  vm_image_publisher            = local.vm_image_publisher
-  vm_image_offer                = local.vm_image_offer
-  vm_image_sku                  = local.vm_image_sku
-  vm_image_version              = local.vm_image_version
-  vm_node_count                 = 1
-  vm_sku                        = "Standard_D4_v3"
+  distribution         = var.distribution
+  production_type      = "disk"
+  disk_path            = "/opt/hashicorp/data"
+  load_balancer_public = true
+  load_balancer_type   = "load_balancer"
+  vm_image_id          = local.vm_image_id
+  vm_image_publisher   = local.vm_image_publisher
+  vm_image_offer       = local.vm_image_offer
+  vm_image_sku         = local.vm_image_sku
+  vm_image_version     = local.vm_image_version
+  vm_node_count        = 1
+  vm_sku               = "Standard_D4_v3"
 
   # VM Data Disk
   vm_data_disk_caching              = "ReadWrite"

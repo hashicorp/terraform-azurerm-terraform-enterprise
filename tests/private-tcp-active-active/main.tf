@@ -65,18 +65,17 @@ module "private_tcp_active_active" {
   proxy_port            = local.proxy_port
 
   # Private Active / Active Scenario
-  consolidated_services_enabled = var.consolidated_services_enabled
-  distribution                  = "rhel"
-  load_balancer_public          = false
-  load_balancer_type            = "load_balancer"
-  redis_use_password_auth       = true
-  redis_use_tls                 = true
-  redis_rdb_backup_enabled      = true
-  redis_rdb_backup_frequency    = 60
-  production_type               = "external"
-  vm_node_count                 = 2
-  vm_sku                        = "Standard_D32a_v4"
-  vm_image_id                   = "rhel"
+  distribution               = "rhel"
+  load_balancer_public       = false
+  load_balancer_type         = "load_balancer"
+  redis_use_password_auth    = true
+  redis_use_tls              = true
+  redis_rdb_backup_enabled   = true
+  redis_rdb_backup_frequency = 60
+  production_type            = "external"
+  vm_node_count              = 2
+  vm_sku                     = "Standard_D32a_v4"
+  vm_image_id                = "rhel"
 
   create_bastion = false
   tags           = local.common_tags
