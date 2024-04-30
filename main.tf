@@ -137,7 +137,7 @@ module "database" {
 # Azure user data / cloud init used to install and configure TFE on instance(s) using Flexible Deployment Options
 # ---------------------------------------------------------------------------------------------------------------
 module "tfe_init_fdo" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=main"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=enc_special_characters"
   count  = var.is_replicated_deployment ? 0 : 1
 
   cloud             = "azurerm"
@@ -178,7 +178,7 @@ module "tfe_init_fdo" {
 # Docker Compose File Config for TFE on instance(s) using Flexible Deployment Options
 # ------------------------------------------------------------------------------------
 module "runtime_container_engine_config" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/runtime_container_engine_config?ref=main"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/runtime_container_engine_config?ref=enc_special_characters"
   count  = var.is_replicated_deployment ? 0 : 1
 
   license_reporting_opt_out   = var.license_reporting_opt_out
@@ -239,7 +239,7 @@ module "runtime_container_engine_config" {
 # TFE and Replicated settings to pass to the tfe_init_replicated module for Replicated deployment
 # ------------------------------------------------------------------------------------------------
 module "settings" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=main"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/settings?ref=enc_special_characters"
   count  = var.is_replicated_deployment ? 1 : 0
 
   # TFE Base Configuration
@@ -291,7 +291,7 @@ module "settings" {
 # Azure user data / cloud init used to install and configure TFE on instance(s)
 # -----------------------------------------------------------------------------
 module "tfe_init_replicated" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init_replicated?ref=main"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init_replicated?ref=enc_special_characters"
   count  = var.is_replicated_deployment ? 1 : 0
 
   # TFE & Replicated Configuration data
