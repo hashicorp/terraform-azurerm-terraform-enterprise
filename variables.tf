@@ -97,6 +97,12 @@ variable "extern_vault_secret_id" {
   description = "(Required if var.extern_vault_enable = true) AppRole SecretId to use to authenticate with the Vault cluster."
 }
 
+variable "extern_vault_token_renew" {
+  default     = 3600
+  type        = number
+  description = "(Optional if var.extern_vault_enable = true) How often (in seconds) to renew the Vault token. Defaults to 3600."
+}
+
 # Provider
 # --------
 variable "location" {

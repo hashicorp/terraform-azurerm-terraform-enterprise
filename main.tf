@@ -228,11 +228,12 @@ module "runtime_container_engine_config" {
   redis_use_tls  = local.redis.hostname == null ? null : var.redis_use_tls
   redis_use_auth = local.redis.hostname == null ? null : var.redis_use_password_auth
 
-  vault_address   = var.extern_vault_addr
-  vault_namespace = var.extern_vault_namespace
-  vault_path      = var.extern_vault_path
-  vault_role_id   = var.extern_vault_role_id
-  vault_secret_id = var.extern_vault_secret_id
+  vault_address     = var.extern_vault_addr
+  vault_namespace   = var.extern_vault_namespace
+  vault_path        = var.extern_vault_path
+  vault_role_id     = var.extern_vault_role_id
+  vault_secret_id   = var.extern_vault_secret_id
+  vault_token_renew = var.extern_vault_token_renew
 }
 
 # ------------------------------------------------------------------------------------------------
