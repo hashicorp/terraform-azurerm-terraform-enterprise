@@ -4,7 +4,7 @@
 resource "random_string" "tfe_pg_password" {
   length           = 24
   special          = true
-  override_special = "?!%&*"
+  override_special = "!#$%&*()-_=+[]{}<>?"
 }
 
 resource "azurerm_postgresql_flexible_server" "tfe" {
