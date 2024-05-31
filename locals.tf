@@ -6,7 +6,6 @@
 locals {
   # TFE Architecture
   # ----------------
-  active_active = var.vm_node_count >= 2 || var.operational_mode == "active-active"
   disk_mode     = var.operational_mode == "disk"
 
   # Network

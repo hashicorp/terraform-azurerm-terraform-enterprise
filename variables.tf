@@ -921,7 +921,7 @@ variable "operational_mode" {
   validation {
     condition = contains(["external", "disk", "active-active", null], var.operational_mode)
 
-    error_message = "The production_type must be 'external', 'disk', `active-active` or omitted."
+    error_message = "The operational_mode must be 'external', 'disk', `active-active` or omitted."
   }
 }
 
