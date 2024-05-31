@@ -6,7 +6,7 @@
 locals {
   # TFE Architecture
   # ----------------
-  disk_mode     = var.operational_mode == "disk"
+  disk_mode = var.operational_mode == "disk"
 
   # Network
   # -------
