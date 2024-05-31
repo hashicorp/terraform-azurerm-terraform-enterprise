@@ -916,16 +916,12 @@ variable "tls_version" {
 variable "production_type" {
   default     = null
   type        = string
-  description = "Where Terraform Enterprise application data will be stored. Valid values are `external`, `disk`, or `null`. Choose `external` when storing application data in an external object storage service and database. Choose `disk` when storing application data in a directory on the Terraform Enterprise instance itself. Leave it `null` when you want Terraform Enterprise to use its own default."
+  description = "Where Terraform Enterprise application data will be stored. Valid values are `external`, `disk`, `active-active` or `null`. Choose `external` when storing application data in an external object storage service and database. Choose `disk` when storing application data in a directory on the Terraform Enterprise instance itself. Chose `active-active` when deploying more than 1 node. Leave it `null` when you want Terraform Enterprise to use its own default."
 
   validation {
-    condition = (
-      var.production_type == "external" ||
-      var.production_type == "disk" ||
-      var.production_type == null
-    )
+    condition = contains(["external", "disk", "active-active", null], var.production_type)
 
-    error_message = "The production_type must be 'external', 'disk', or omitted."
+    error_message = "The production_type must be 'external', 'disk', `active-active` or omitted."
   }
 }
 
