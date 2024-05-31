@@ -6,9 +6,8 @@
 locals {
   # TFE Architecture
   # ----------------
-  # Determine whether or not TFE in active-active mode based on node count, by default standalone is assumed
-  active_active = var.vm_node_count >= 2 ? true : false
-  disk_mode     = var.production_type == "disk" ? true : false
+  active_active = var.vm_node_count >= 2 || var.production_type == "active-active"
+  disk_mode     = var.production_type == "disk"
 
   # Network
   # -------
