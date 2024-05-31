@@ -144,7 +144,7 @@ module "tfe_init_fdo" {
   distribution      = var.distribution
   disk_path         = var.disk_path
   disk_device_name  = var.production_type == "disk" ? "disk/azure/scsi1/lun${var.vm_data_disk_lun}" : null
-  operational_mode  = local.active_active ? "active-active" : var.production_type
+  operational_mode  = var.production_type
   custom_image_tag  = var.custom_image_tag
   enable_monitoring = var.enable_monitoring
 
@@ -258,7 +258,6 @@ module "settings" {
 
   # Replicated Base Configuration
   hostname                                  = module.load_balancer.fqdn
-  enable_active_active                      = local.active_active
   tfe_license_bootstrap_airgap_package_path = var.tfe_license_bootstrap_airgap_package_path
   tfe_license_file_location                 = var.tfe_license_file_location
   tls_bootstrap_cert_pathname               = var.tls_bootstrap_cert_pathname
