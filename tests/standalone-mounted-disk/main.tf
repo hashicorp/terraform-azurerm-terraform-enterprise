@@ -39,7 +39,7 @@ module "standalone_mounted_disk" {
 
   # Standalone Mounted Disk Mode Scenario
   distribution         = var.distribution
-  production_type      = "disk"
+  operational_mode     = "disk"
   disk_path            = "/opt/hashicorp/data"
   load_balancer_public = true
   load_balancer_type   = "load_balancer"

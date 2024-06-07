@@ -29,7 +29,7 @@ module "public_active_active" {
   iact_subnet_list        = var.iact_subnet_list
   load_balancer_public    = true
   load_balancer_type      = "application_gateway"
-  production_type         = "external"
+  operational_mode        = "external"
   redis_use_password_auth = false
   redis_use_tls           = false
   vm_node_count           = 2

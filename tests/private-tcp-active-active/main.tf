@@ -72,7 +72,7 @@ module "private_tcp_active_active" {
   redis_use_tls              = true
   redis_rdb_backup_enabled   = true
   redis_rdb_backup_frequency = 60
-  production_type            = "external"
+  operational_mode           = "external"
   vm_node_count              = 2
   vm_sku                     = "Standard_D32a_v4"
   vm_image_id                = "rhel"

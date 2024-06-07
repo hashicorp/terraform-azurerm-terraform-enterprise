@@ -46,7 +46,7 @@ module "standalone_mounted_disk" {
   iact_subnet_list     = var.iact_subnet_list
   load_balancer_public = true
   load_balancer_type   = "application_gateway"
-  production_type      = "disk"
+  operational_mode     = "disk"
   vm_node_count        = 1
   vm_sku               = "Standard_D4_v3"
   vm_image_id          = "ubuntu"

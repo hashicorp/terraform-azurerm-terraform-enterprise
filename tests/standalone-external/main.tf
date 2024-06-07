@@ -43,7 +43,7 @@ module "standalone_external" {
   iact_subnet_list     = ["0.0.0.0/0"]
   load_balancer_public = true
   load_balancer_type   = "load_balancer"
-  production_type      = "external"
+  operational_mode     = "external"
   vm_node_count        = 1
   vm_sku               = "Standard_D4_v3"
   vm_image_id          = "ubuntu"
