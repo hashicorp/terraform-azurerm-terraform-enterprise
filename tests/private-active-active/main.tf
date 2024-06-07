@@ -71,7 +71,7 @@ module "private_active_active" {
   load_balancer_waf_rule_set_version = var.is_replicated_deployment ? "3.1" : "3.2"
   redis_use_password_auth            = true
   redis_use_tls                      = false
-  production_type                    = "external"
+  operational_mode                   = "external"
   vm_image_id                        = "rhel"
   vm_node_count                      = 2
   vm_sku                             = "Standard_D16as_v4"

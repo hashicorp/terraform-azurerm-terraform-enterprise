@@ -80,7 +80,7 @@ module "active_active" {
   # Private Active / Active Scenario
   create_bastion             = false
   distribution               = "rhel"
-  production_type            = "external"
+  operational_mode           = "external"
   load_balancer_public       = false
   load_balancer_type         = "load_balancer"
   redis_rdb_backup_enabled   = true

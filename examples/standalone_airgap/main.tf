@@ -28,7 +28,7 @@ module "standalone_airgap" {
   # Standalone, External Mode, Airgapped Installation Example
   distribution         = "ubuntu"
   iact_subnet_list     = var.iact_subnet_list
-  production_type      = "external"
+  operational_mode     = "external"
   load_balancer_public = true
   load_balancer_type   = "load_balancer"
   vm_node_count        = 1
