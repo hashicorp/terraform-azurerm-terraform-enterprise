@@ -92,17 +92,17 @@ output "tfe_console_password" {
 # Redis
 # -----
 output "redis_hostname" {
-  value       = local.active_active == true ? module.redis[0].redis_cache.hostname : null
+  value       = var.operational_mode == "active-active" ? module.redis[0].redis_cache.hostname : null
   description = "The Hostname of the Redis Instance"
 }
 
 output "redis_ssl_port" {
-  value       = local.active_active == true ? module.redis[0].redis_cache.ssl_port : null
+  value       = var.operational_mode == "active-active" ? module.redis[0].redis_cache.ssl_port : null
   description = "The SSL Port of the Redis Instance"
 }
 
 output "redis_pass" {
-  value       = local.active_active == true ? module.redis[0].redis_cache.primary_access_key : null
+  value       = var.operational_mode == "active-active" ? module.redis[0].redis_cache.primary_access_key : null
   description = "The Primary Access Key for the Redis Instance"
 }
 
@@ -123,4 +123,14 @@ output "load_balancer_ip" {
 output "instance_user_name" {
   value       = var.vm_user
   description = "The admin user on the TFE instance(s)"
+}
+
+output "vmss_name" {
+  value       = module.vm.vmss_name
+  description = "The name of the virtual machine scale set"
+}
+
+output "vmss_instance_ids" {
+  value       = module.vm.vmss_instance_ids
+  description = "A list of the virual machine scale set VMs ids"
 }

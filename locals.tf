@@ -6,9 +6,7 @@
 locals {
   # TFE Architecture
   # ----------------
-  # Determine whether or not TFE in active-active mode based on node count, by default standalone is assumed
-  active_active = var.vm_node_count >= 2 ? true : false
-  disk_mode     = var.production_type == "disk" ? true : false
+  disk_mode = var.operational_mode == "disk"
 
   # Network
   # -------
@@ -48,6 +46,17 @@ locals {
 
   # User Data
   # ---------
+  no_proxy = concat([
+    "127.0.0.1",
+    "localhost",
+    "169.254.169.254",
+    ".azure.com",
+    ".windows.net",
+    ".microsoft.com",
+    module.load_balancer.fqdn,
+    var.network_cidr,
+  ], var.no_proxy)
+
   trusted_proxies = concat(
     var.trusted_proxies,
     [var.network_frontend_subnet_cidr]

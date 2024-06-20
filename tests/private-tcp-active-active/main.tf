@@ -65,18 +65,17 @@ module "private_tcp_active_active" {
   proxy_port            = local.proxy_port
 
   # Private Active / Active Scenario
-  consolidated_services_enabled = var.consolidated_services_enabled
-  distribution                  = "rhel"
-  vm_node_count                 = 2
-  vm_sku                        = "Standard_D32a_v4"
-  vm_image_id                   = "rhel"
-  load_balancer_public          = false
-  load_balancer_type            = "load_balancer"
-  redis_use_password_auth       = true
-  redis_use_tls                 = true
-  redis_rdb_backup_enabled      = true
-  redis_rdb_backup_frequency    = 60
-  production_type               = "external"
+  distribution               = "rhel"
+  load_balancer_public       = false
+  load_balancer_type         = "load_balancer"
+  redis_use_password_auth    = true
+  redis_use_tls              = true
+  redis_rdb_backup_enabled   = true
+  redis_rdb_backup_frequency = 60
+  operational_mode           = "external"
+  vm_node_count              = 2
+  vm_sku                     = "Standard_D32a_v4"
+  vm_image_id                = "rhel"
 
   create_bastion = false
   tags           = local.common_tags
@@ -84,8 +83,11 @@ module "private_tcp_active_active" {
   # FDO Specific Values
   is_replicated_deployment  = var.is_replicated_deployment
   hc_license                = var.hc_license
+  http_port                 = 8080
+  https_port                = 8443
   license_reporting_opt_out = true
+  registry                  = local.registry
   registry_password         = var.registry_password
   registry_username         = var.registry_username
-  tfe_image                 = "quay.io/hashicorp/terraform-enterprise:${var.tfe_image_tag}"
+  tfe_image                 = "${local.registry}/hashicorp/terraform-enterprise:${var.tfe_image_tag}"
 }

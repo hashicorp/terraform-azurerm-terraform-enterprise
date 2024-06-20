@@ -38,16 +38,15 @@ module "standalone_external" {
   custom_agent_image_tag      = "hashicorp/tfc-agent:latest"
 
   # Standalone External Scenario
-  consolidated_services_enabled = var.consolidated_services_enabled
-  distribution                  = "ubuntu"
-  database_version              = var.database_version
-  production_type               = "external"
-  iact_subnet_list              = ["0.0.0.0/0"]
-  vm_node_count                 = 1
-  vm_sku                        = "Standard_D4_v3"
-  vm_image_id                   = "ubuntu"
-  load_balancer_public          = true
-  load_balancer_type            = "load_balancer"
+  distribution         = "ubuntu"
+  database_version     = var.database_version
+  iact_subnet_list     = ["0.0.0.0/0"]
+  load_balancer_public = true
+  load_balancer_type   = "load_balancer"
+  operational_mode     = "external"
+  vm_node_count        = 1
+  vm_sku               = "Standard_D4_v3"
+  vm_image_id          = "ubuntu"
 
   enable_ssh     = true
   create_bastion = false
@@ -56,8 +55,11 @@ module "standalone_external" {
   # FDO Specific Values
   is_replicated_deployment  = var.is_replicated_deployment
   hc_license                = var.hc_license
+  http_port                 = 8080
+  https_port                = 8443
   license_reporting_opt_out = true
+  registry                  = local.registry
   registry_password         = var.registry_password
   registry_username         = var.registry_username
-  tfe_image                 = "quay.io/hashicorp/terraform-enterprise:${var.tfe_image_tag}"
+  tfe_image                 = "${local.registry}/hashicorp/terraform-enterprise:${var.tfe_image_tag}"
 }

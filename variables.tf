@@ -14,6 +14,16 @@ variable "friendly_name_prefix" {
   description = "(Required) Name prefix used for resources"
 }
 
+variable "container_runtime_engine" {
+  default     = "docker"
+  type        = string
+  description = "The container runtime engine to run the FDO container on. Default is docker."
+  validation {
+    condition     = contains(["docker", "podman"], var.container_runtime_engine)
+    error_message = "Supported values for container_runtime_enginer are docker and podman."
+  }
+}
+
 variable "distribution" {
   type        = string
   description = "(Required) What is the OS distribution of the instance on which Terraoform Enterprise will be deployed?"
@@ -36,9 +46,9 @@ variable "tfe_subdomain" {
 }
 
 variable "tfe_image" {
-  default     = "quay.io/hashicorp/terraform-enterprise:latest"
+  default     = "images.releases.hashicorp.com/hashicorp/terraform-enterprise:v202311-1"
   type        = string
-  description = "(Not needed if is_replicated_deployment is true) The registry path, image name, and image version (e.g. \"quay.io/hashicorp/terraform-enterprise:1234567\")"
+  description = "(Not needed if is_replicated_deployment is true) The registry path, image name, and image version"
 }
 
 # DNS
@@ -85,6 +95,12 @@ variable "extern_vault_secret_id" {
   default     = null
   type        = string
   description = "(Required if var.extern_vault_enable = true) AppRole SecretId to use to authenticate with the Vault cluster."
+}
+
+variable "extern_vault_token_renew" {
+  default     = 3600
+  type        = number
+  description = "(Optional if var.extern_vault_enable = true) How often (in seconds) to renew the Vault token. Defaults to 3600."
 }
 
 # Provider
@@ -544,6 +560,18 @@ variable "redis_minimum_tls_version" {
 
 # VM
 # --
+variable "http_port" {
+  default     = 80
+  type        = number
+  description = "(Optional if is_replicated_deployment is false) Port application listens on for HTTP. Default is 80."
+}
+
+variable "https_port" {
+  default     = 443
+  type        = number
+  description = "(Optional if is_replicated_deployment is false) Port application listens on for HTTPS. Default is 443."
+}
+
 variable "vm_node_count" {
   default     = 2
   type        = number
@@ -799,12 +827,6 @@ variable "capacity_memory" {
   description = "The maximum amount of memory (in megabytes) that a Terraform plan or apply can use on the system; defaults to `512` for replicated mode and `2048` for FDO."
 }
 
-variable "consolidated_services_enabled" {
-  default     = true
-  type        = bool
-  description = "(Required if var.is_replicated_deployment is true) True if TFE uses consolidated services."
-}
-
 variable "custom_agent_image_tag" {
   default     = null
   type        = string
@@ -829,16 +851,22 @@ variable "hairpin_addressing" {
   description = "In some cloud environments, HTTP clients running on instances behind a loadbalancer cannot send requests to the public hostname of that load balancer. Use this setting to configure TFE services to redirect requests for the installation's FQDN to the instance's internal IP address. Defaults to false."
 }
 
-variable "registry_username" {
-  default     = null
+variable "registry" {
+  default     = "images.releases.hashicorp.com"
   type        = string
-  description = "(Not needed if is_replicated_deployment is true) The username for the docker registry from which to source the terraform_enterprise container images."
+  description = "(Not needed if is_replicated_deployment is true) The docker registry from which to source the terraform_enterprise container images."
 }
 
 variable "registry_password" {
   default     = null
   type        = string
-  description = "(Not needed if is_replicated_deployment is true) The password for the docker registry from which to source the terraform_enterprise container images."
+  description = "(Not needed if is_replicated_deployment is true or if registry is 'images.releases.hashicorp.com') The password for the docker registry from which to source the terraform_enterprise container images."
+}
+
+variable "registry_username" {
+  default     = "terraform"
+  type        = string
+  description = "(Not needed if is_replicated_deployment is true) The username for the docker registry from which to source the terraform_enterprise container images."
 }
 
 variable "run_pipeline_image" {
@@ -865,12 +893,6 @@ variable "tls_bootstrap_key_pathname" {
   description = "The path on the TFE instance to put the key. ex. '/var/lib/terraform-enterprise/key.pem'"
 }
 
-variable "tls_ca_bundle_file" {
-  default     = null
-  type        = string
-  description = "(Not needed if is_replicated_deployment is true) Path to a file containing TLS CA certificates to be added to the OS CA certificates bundle. Leave blank to not add CA certificates to the OS CA certificates bundle. Defaults to ''."
-}
-
 variable "tls_ciphers" {
   default     = null
   type        = string
@@ -891,19 +913,15 @@ variable "tls_version" {
   }
 }
 
-variable "production_type" {
-  default     = null
+variable "operational_mode" {
+  default     = "disk"
   type        = string
-  description = "Where Terraform Enterprise application data will be stored. Valid values are `external`, `disk`, or `null`. Choose `external` when storing application data in an external object storage service and database. Choose `disk` when storing application data in a directory on the Terraform Enterprise instance itself. Leave it `null` when you want Terraform Enterprise to use its own default."
+  description = "Where Terraform Enterprise application data will be stored. Valid values are `external`, `disk`, `active-active` or `null`. Choose `external` when storing application data in an external object storage service and database. Choose `disk` when storing application data in a directory on the Terraform Enterprise instance itself. Chose `active-active` when deploying more than 1 node. Leave it `null` when you want Terraform Enterprise to use its own default."
 
   validation {
-    condition = (
-      var.production_type == "external" ||
-      var.production_type == "disk" ||
-      var.production_type == null
-    )
+    condition = contains(["external", "disk", "active-active"], var.operational_mode)
 
-    error_message = "The production_type must be 'external', 'disk', or omitted."
+    error_message = "The operational_mode must be 'external', 'disk', `active-active` or omitted."
   }
 }
 
@@ -932,7 +950,7 @@ variable "iact_subnet_time_limit" {
 }
 
 variable "metrics_endpoint_enabled" {
-  default     = null
+  default     = false
   type        = bool
   description = "(Optional) Metrics are used to understand the behavior of Terraform Enterprise and to troubleshoot and tune performance. Enable an endpoint to expose container metrics. Defaults to false."
 }
@@ -1004,6 +1022,12 @@ variable "vm_key_secret" {
 
 # Proxy
 # -----
+variable "no_proxy" {
+  type        = list(string)
+  description = "(Optional) List of IP addresses to not proxy"
+  default     = []
+}
+
 variable "proxy_ip" {
   default     = null
   type        = string

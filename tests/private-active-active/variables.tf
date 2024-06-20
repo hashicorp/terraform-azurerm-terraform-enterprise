@@ -6,12 +6,6 @@ variable "bastion_public_ssh_key_secret_name" {
   description = "The name of the public SSH key secret for the bastion."
 }
 
-variable "consolidated_services_enabled" {
-  default     = true
-  type        = bool
-  description = "(Required) True if TFE uses consolidated services."
-}
-
 variable "domain_name" {
   type        = string
   description = "Domain to create Terraform Enterprise subdomain within"
@@ -55,16 +49,16 @@ variable "proxy_public_ssh_key_secret_name" {
   description = "The name of the public SSH key secret for the proxy."
 }
 
-variable "registry_username" {
-  default     = null
-  type        = string
-  description = "(Not needed if is_replicated_deployment is true) The username for the docker registry from which to source the terraform_enterprise container images."
-}
-
 variable "registry_password" {
   default     = null
   type        = string
   description = "(Not needed if is_replicated_deployment is true) The password for the docker registry from which to source the terraform_enterprise container images."
+}
+
+variable "registry_username" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_replicated_deployment is true) The username for the docker registry from which to source the terraform_enterprise container images."
 }
 
 variable "resource_group_name_dns" {

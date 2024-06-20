@@ -7,12 +7,6 @@ variable "bypass_preflight_checks" {
   description = "Allow the TFE application to start without preflight checks."
 }
 
-variable "consolidated_services_enabled" {
-  default     = true
-  type        = bool
-  description = "(Required) True if TFE uses consolidated services."
-}
-
 variable "database_version" {
   default     = 12
   type        = number
@@ -48,16 +42,16 @@ variable "license_file" {
   description = "The local path to the Terraform Enterprise license to be provided by CI."
 }
 
-variable "registry_username" {
-  default     = null
-  type        = string
-  description = "(Not needed if is_replicated_deployment is true) The username for the docker registry from which to source the terraform_enterprise container images."
-}
-
 variable "registry_password" {
   default     = null
   type        = string
   description = "(Not needed if is_replicated_deployment is true) The password for the docker registry from which to source the terraform_enterprise container images."
+}
+
+variable "registry_username" {
+  default     = null
+  type        = string
+  description = "(Not needed if is_replicated_deployment is true) The username for the docker registry from which to source the terraform_enterprise container images."
 }
 
 variable "resource_group_name_dns" {

@@ -59,7 +59,7 @@ module "network" {
   resource_group_name  = module.resource_groups.resource_group_name
   location             = var.location
 
-  active_active            = local.active_active
+  active_active            = var.operational_mode == "active-active"
   enable_ssh               = var.enable_ssh
   is_replicated_deployment = var.is_replicated_deployment
 
@@ -85,7 +85,7 @@ module "network" {
 # -----------------------------------------------------------------------------
 module "redis" {
   source = "./modules/redis"
-  count  = local.active_active == true ? 1 : 0
+  count  = var.operational_mode == "active-active" ? 1 : 0
 
   resource_group_name = module.resource_groups.resource_group_name
   location            = var.location
@@ -143,8 +143,8 @@ module "tfe_init_fdo" {
   cloud             = "azurerm"
   distribution      = var.distribution
   disk_path         = var.disk_path
-  disk_device_name  = var.production_type == "disk" ? "disk/azure/scsi1/lun${var.vm_data_disk_lun}" : null
-  operational_mode  = var.production_type
+  disk_device_name  = var.operational_mode == "disk" ? "disk/azure/scsi1/lun${var.vm_data_disk_lun}" : null
+  operational_mode  = var.operational_mode
   custom_image_tag  = var.custom_image_tag
   enable_monitoring = var.enable_monitoring
 
@@ -164,34 +164,44 @@ module "tfe_init_fdo" {
     var.network_cidr
   ]
 
-  registry_username   = var.registry_username
-  registry_password   = var.registry_password
-  docker_compose_yaml = module.docker_compose_config[0].docker_compose_yaml
+  registry          = var.registry
+  registry_password = var.registry == "images.releases.hashicorp.com" ? var.hc_license : var.registry_password
+  registry_username = var.registry_username
+
+  container_runtime_engine = var.container_runtime_engine
+  tfe_image                = var.tfe_image
+  podman_kube_yaml         = module.runtime_container_engine_config[0].podman_kube_yaml
+  docker_compose_yaml      = module.runtime_container_engine_config[0].docker_compose_yaml
 }
 
 # ------------------------------------------------------------------------------------
 # Docker Compose File Config for TFE on instance(s) using Flexible Deployment Options
 # ------------------------------------------------------------------------------------
-module "docker_compose_config" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/docker_compose_config?ref=main"
+module "runtime_container_engine_config" {
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/runtime_container_engine_config?ref=main"
   count  = var.is_replicated_deployment ? 0 : 1
 
-  hostname                  = module.load_balancer.fqdn
-  tfe_license               = var.hc_license
-  license_reporting_opt_out = var.license_reporting_opt_out
-  cert_file                 = "/etc/ssl/private/terraform-enterprise/cert.pem"
-  key_file                  = "/etc/ssl/private/terraform-enterprise/key.pem"
-  operational_mode          = local.active_active ? "active-active" : var.production_type
-  tfe_image                 = var.tfe_image
-  tls_ca_bundle_file        = var.tls_ca_bundle_file
-  tls_ciphers               = var.tls_ciphers
-  tls_version               = var.tls_version
-  run_pipeline_image        = var.run_pipeline_image
-  capacity_concurrency      = var.capacity_concurrency
-  capacity_cpu              = var.capacity_cpu
-  capacity_memory           = var.capacity_memory
-  iact_subnets              = join(",", var.iact_subnet_list)
-  iact_time_limit           = var.iact_subnet_time_limit
+  license_reporting_opt_out   = var.license_reporting_opt_out
+  hostname                    = module.load_balancer.fqdn
+  capacity_concurrency        = var.capacity_concurrency
+  capacity_cpu                = var.capacity_cpu
+  capacity_memory             = var.capacity_memory
+  disk_path                   = local.disk_mode ? var.disk_path : null
+  iact_subnets                = join(",", var.iact_subnet_list)
+  iact_time_limit             = var.iact_subnet_time_limit
+  operational_mode            = var.operational_mode
+  run_pipeline_image          = var.run_pipeline_image
+  tfe_image                   = var.tfe_image
+  tfe_license                 = var.hc_license
+  tls_ciphers                 = var.tls_ciphers
+  tls_version                 = var.tls_version
+  metrics_endpoint_enabled    = var.metrics_endpoint_enabled
+  metrics_endpoint_port_http  = var.metrics_endpoint_port_http
+  metrics_endpoint_port_https = var.metrics_endpoint_port_https
+
+  cert_file          = "/etc/ssl/private/terraform-enterprise/cert.pem"
+  key_file           = "/etc/ssl/private/terraform-enterprise/key.pem"
+  tls_ca_bundle_file = var.ca_certificate_secret != null ? "/etc/ssl/private/terraform-enterprise/bundle.pem" : null
 
   database_user       = local.database.server.administrator_login
   database_password   = local.database.server.administrator_password
@@ -205,17 +215,25 @@ module "docker_compose_config" {
   azure_account_name = local.object_storage.storage_account_name
   azure_container    = local.object_storage.storage_account_container_name
 
+  http_port       = var.http_port
+  https_port      = var.https_port
+  http_proxy      = var.proxy_ip != null ? "${var.proxy_ip}:${var.proxy_port}" : null
+  https_proxy     = var.proxy_ip != null ? "${var.proxy_ip}:${var.proxy_port}" : null
+  no_proxy        = local.no_proxy
+  trusted_proxies = local.trusted_proxies
+
   redis_host     = local.redis.hostname
   redis_user     = ""
   redis_password = local.redis.primary_access_key
   redis_use_tls  = local.redis.hostname == null ? null : var.redis_use_tls
   redis_use_auth = local.redis.hostname == null ? null : var.redis_use_password_auth
 
-  vault_address   = var.extern_vault_addr
-  vault_namespace = var.extern_vault_namespace
-  vault_path      = var.extern_vault_path
-  vault_role_id   = var.extern_vault_role_id
-  vault_secret_id = var.extern_vault_secret_id
+  vault_address     = var.extern_vault_addr
+  vault_namespace   = var.extern_vault_namespace
+  vault_path        = var.extern_vault_path
+  vault_role_id     = var.extern_vault_role_id
+  vault_secret_id   = var.extern_vault_secret_id
+  vault_token_renew = var.extern_vault_token_renew
 }
 
 # ------------------------------------------------------------------------------------------------
@@ -226,30 +244,20 @@ module "settings" {
   count  = var.is_replicated_deployment ? 1 : 0
 
   # TFE Base Configuration
-  consolidated_services_enabled = var.consolidated_services_enabled
-  custom_image_tag              = var.custom_image_tag
-  custom_agent_image_tag        = var.custom_agent_image_tag
-  disk_path                     = var.disk_path
-  hairpin_addressing            = var.hairpin_addressing
-  iact_subnet_list              = var.iact_subnet_list
-  pg_extra_params               = var.pg_extra_params
-  production_type               = var.production_type
-  release_sequence              = var.release_sequence
-  trusted_proxies               = local.trusted_proxies
+  custom_image_tag       = var.custom_image_tag
+  custom_agent_image_tag = var.custom_agent_image_tag
+  disk_path              = var.disk_path
+  hairpin_addressing     = var.hairpin_addressing
+  iact_subnet_list       = var.iact_subnet_list
+  pg_extra_params        = var.pg_extra_params
+  production_type        = var.operational_mode
+  release_sequence       = var.release_sequence
+  trusted_proxies        = local.trusted_proxies
 
-  extra_no_proxy = [
-    "127.0.0.1",
-    "169.254.169.254",
-    ".azure.com",
-    ".windows.net",
-    ".microsoft.com",
-    module.load_balancer.fqdn,
-    var.network_cidr
-  ]
+  extra_no_proxy = local.no_proxy
 
   # Replicated Base Configuration
   hostname                                  = module.load_balancer.fqdn
-  enable_active_active                      = local.active_active
   tfe_license_bootstrap_airgap_package_path = var.tfe_license_bootstrap_airgap_package_path
   tfe_license_file_location                 = var.tfe_license_file_location
   tls_bootstrap_cert_pathname               = var.tls_bootstrap_cert_pathname
@@ -290,7 +298,7 @@ module "tfe_init_replicated" {
   cloud                    = "azurerm"
   distribution             = var.distribution
   disk_path                = var.disk_path
-  disk_device_name         = var.production_type == "disk" ? "disk/azure/scsi1/lun${var.vm_data_disk_lun}" : null
+  disk_device_name         = var.operational_mode == "disk" ? "disk/azure/scsi1/lun${var.vm_data_disk_lun}" : null
   tfe_configuration        = module.settings[0].tfe_configuration
   replicated_configuration = module.settings[0].replicated_configuration
   airgap_url               = var.airgap_url
@@ -334,7 +342,7 @@ module "load_balancer" {
   zones                = var.zones
 
   # General
-  active_active            = local.active_active
+  active_active            = var.operational_mode == "active-active"
   domain_name              = var.domain_name
   is_replicated_deployment = var.is_replicated_deployment
   tfe_subdomain            = var.tfe_subdomain

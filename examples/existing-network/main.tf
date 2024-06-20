@@ -49,7 +49,7 @@ module "existing_network" {
 
   # Public Active / Active Scenario
   distribution            = "ubuntu"
-  production_type         = "external"
+  operational_mode        = "external"
   iact_subnet_list        = var.iact_subnet_list
   vm_node_count           = 2
   vm_sku                  = "Standard_D4_v3"

@@ -63,11 +63,7 @@ module "private_active_active" {
   proxy_port = local.proxy_port
 
   # Private Active / Active Scenario
-  consolidated_services_enabled      = var.consolidated_services_enabled
   distribution                       = "rhel"
-  vm_node_count                      = 2
-  vm_sku                             = "Standard_D16as_v4"
-  vm_image_id                        = "rhel"
   load_balancer_public               = false
   load_balancer_type                 = "application_gateway"
   load_balancer_sku_name             = "WAF_v2"
@@ -75,7 +71,10 @@ module "private_active_active" {
   load_balancer_waf_rule_set_version = var.is_replicated_deployment ? "3.1" : "3.2"
   redis_use_password_auth            = true
   redis_use_tls                      = false
-  production_type                    = "external"
+  operational_mode                   = "external"
+  vm_image_id                        = "rhel"
+  vm_node_count                      = 2
+  vm_sku                             = "Standard_D16as_v4"
 
   create_bastion = false
   tags           = local.common_tags
@@ -83,8 +82,11 @@ module "private_active_active" {
   # FDO Specific Values
   is_replicated_deployment  = var.is_replicated_deployment
   hc_license                = var.hc_license
+  http_port                 = 8080
+  https_port                = 8443
   license_reporting_opt_out = true
+  registry                  = local.registry
   registry_password         = var.registry_password
   registry_username         = var.registry_username
-  tfe_image                 = "quay.io/hashicorp/terraform-enterprise:${var.tfe_image_tag}"
+  tfe_image                 = "${local.registry}/hashicorp/terraform-enterprise:${var.tfe_image_tag}"
 }
