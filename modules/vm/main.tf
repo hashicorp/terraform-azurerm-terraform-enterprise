@@ -59,6 +59,19 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
     force_deletion_enabled = var.vm_vmss_scale_in_force_deletion_enabled
   }
 
+  dynamic "rolling_upgrade_policy" {
+    for_each = var.vm_upgrade_mode == "Rolling" ? [1] : []
+
+    content {
+      cross_zone_upgrades_enabled             = var.vm_cross_zone_upgrades_enabled
+      max_batch_instance_percent              = var.vm_max_batch_instance_percent
+      max_unhealthy_instance_percent          = var.vm_max_unhealthy_instance_percent
+      max_unhealthy_upgraded_instance_percent = var.vm_max_unhealthy_upgraded_instance_percent
+      pause_time_between_batches              = var.vm_pause_time_between_batches
+      prioritize_unhealthy_instances_enabled  = var.vm_prioritize_unhealthy_instances_enabled
+    }
+  }
+
   # Source image reference will be used if vm_image_id is 'ubuntu' or 'rhel'
   dynamic "source_image_reference" {
     for_each = var.vm_image_id == "ubuntu" || var.vm_image_id == "rhel" ? [1] : []
