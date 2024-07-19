@@ -42,6 +42,12 @@ variable "database_size_mb" {
   description = "Postgres storage size in MB"
 }
 
+variable "public_network_access_enabled" {
+  default     = "false"
+  type        = string
+  description = "Public network access with virtual network interface"
+}
+
 variable "database_version" {
   type        = string
   description = "Postgres version"
