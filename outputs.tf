@@ -18,6 +18,11 @@ output "tfe_console_url" {
   description = "Terraform Enterprise Console URL"
 }
 
+output "encryption_password" {
+  value       = module.settings.tfe_configuration.base_configs.enc_password
+  description = "Terraform Enterprise vault encryption password"
+}
+
 # General
 # -------
 output "resource_group_name" {
