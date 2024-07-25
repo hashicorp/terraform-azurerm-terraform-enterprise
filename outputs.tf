@@ -19,7 +19,7 @@ output "tfe_console_url" {
 }
 
 output "encryption_password" {
-  value       = module.settings.tfe_configuration.base_configs.enc_password
+  value       = module.settings[0].tfe_configuration.enc_password.result
   description = "Terraform Enterprise vault encryption password"
 }
 
