@@ -51,6 +51,12 @@ output "storage_account_container_name" {
   description = "The name of the container used by TFE"
 }
 
+output "storage_account_key" {
+  value       = local.object_storage.storage_account_key
+  description = "The account key of the container used by TFE"
+  sensitive = true
+}
+
 # Database
 # --------
 output "database" {
