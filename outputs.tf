@@ -113,6 +113,11 @@ output "redis_ssl_port" {
   description = "The SSL Port of the Redis Instance"
 }
 
+output "redis_port" {
+  value       = module.redis[0].redis_cache.port
+  description = "The port of the Redis Instance"
+}
+
 output "redis_pass" {
   value       = var.operational_mode == "active-active" ? module.redis[0].redis_cache.primary_access_key : null
   description = "The Primary Access Key for the Redis Instance"
