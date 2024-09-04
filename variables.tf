@@ -97,6 +97,12 @@ variable "extern_vault_secret_id" {
   description = "(Required if var.extern_vault_enable = true) AppRole SecretId to use to authenticate with the Vault cluster."
 }
 
+variable "extern_vault_token_renew" {
+  default     = 3600
+  type        = number
+  description = "(Optional if var.extern_vault_enable = true) How often (in seconds) to renew the Vault token. Defaults to 3600."
+}
+
 # Provider
 # --------
 variable "location" {
@@ -907,19 +913,15 @@ variable "tls_version" {
   }
 }
 
-variable "production_type" {
-  default     = null
+variable "operational_mode" {
+  default     = "disk"
   type        = string
-  description = "Where Terraform Enterprise application data will be stored. Valid values are `external`, `disk`, or `null`. Choose `external` when storing application data in an external object storage service and database. Choose `disk` when storing application data in a directory on the Terraform Enterprise instance itself. Leave it `null` when you want Terraform Enterprise to use its own default."
+  description = "Where Terraform Enterprise application data will be stored. Valid values are `external`, `disk`, `active-active` or `null`. Choose `external` when storing application data in an external object storage service and database. Choose `disk` when storing application data in a directory on the Terraform Enterprise instance itself. Chose `active-active` when deploying more than 1 node. Leave it `null` when you want Terraform Enterprise to use its own default."
 
   validation {
-    condition = (
-      var.production_type == "external" ||
-      var.production_type == "disk" ||
-      var.production_type == null
-    )
+    condition = contains(["external", "disk", "active-active"], var.operational_mode)
 
-    error_message = "The production_type must be 'external', 'disk', or omitted."
+    error_message = "The operational_mode must be 'external', 'disk', `active-active` or omitted."
   }
 }
 

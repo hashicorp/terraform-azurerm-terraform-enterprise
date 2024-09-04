@@ -59,7 +59,7 @@ module "network" {
   resource_group_name  = module.resource_groups.resource_group_name
   location             = var.location
 
-  active_active            = local.active_active
+  active_active            = var.operational_mode == "active-active"
   enable_ssh               = var.enable_ssh
   is_replicated_deployment = var.is_replicated_deployment
 
@@ -85,7 +85,7 @@ module "network" {
 # -----------------------------------------------------------------------------
 module "redis" {
   source = "./modules/redis"
-  count  = local.active_active == true ? 1 : 0
+  count  = var.operational_mode == "active-active" ? 1 : 0
 
   resource_group_name = module.resource_groups.resource_group_name
   location            = var.location
@@ -143,8 +143,8 @@ module "tfe_init_fdo" {
   cloud             = "azurerm"
   distribution      = var.distribution
   disk_path         = var.disk_path
-  disk_device_name  = var.production_type == "disk" ? "disk/azure/scsi1/lun${var.vm_data_disk_lun}" : null
-  operational_mode  = local.active_active ? "active-active" : var.production_type
+  disk_device_name  = var.operational_mode == "disk" ? "disk/azure/scsi1/lun${var.vm_data_disk_lun}" : null
+  operational_mode  = var.operational_mode
   custom_image_tag  = var.custom_image_tag
   enable_monitoring = var.enable_monitoring
 
@@ -189,7 +189,7 @@ module "runtime_container_engine_config" {
   disk_path                   = local.disk_mode ? var.disk_path : null
   iact_subnets                = join(",", var.iact_subnet_list)
   iact_time_limit             = var.iact_subnet_time_limit
-  operational_mode            = local.active_active ? "active-active" : var.production_type
+  operational_mode            = var.operational_mode
   run_pipeline_image          = var.run_pipeline_image
   tfe_image                   = var.tfe_image
   tfe_license                 = var.hc_license
@@ -228,11 +228,12 @@ module "runtime_container_engine_config" {
   redis_use_tls  = local.redis.hostname == null ? null : var.redis_use_tls
   redis_use_auth = local.redis.hostname == null ? null : var.redis_use_password_auth
 
-  vault_address   = var.extern_vault_addr
-  vault_namespace = var.extern_vault_namespace
-  vault_path      = var.extern_vault_path
-  vault_role_id   = var.extern_vault_role_id
-  vault_secret_id = var.extern_vault_secret_id
+  vault_address     = var.extern_vault_addr
+  vault_namespace   = var.extern_vault_namespace
+  vault_path        = var.extern_vault_path
+  vault_role_id     = var.extern_vault_role_id
+  vault_secret_id   = var.extern_vault_secret_id
+  vault_token_renew = var.extern_vault_token_renew
 }
 
 # ------------------------------------------------------------------------------------------------
@@ -249,7 +250,7 @@ module "settings" {
   hairpin_addressing     = var.hairpin_addressing
   iact_subnet_list       = var.iact_subnet_list
   pg_extra_params        = var.pg_extra_params
-  production_type        = var.production_type
+  production_type        = var.operational_mode
   release_sequence       = var.release_sequence
   trusted_proxies        = local.trusted_proxies
 
@@ -257,7 +258,6 @@ module "settings" {
 
   # Replicated Base Configuration
   hostname                                  = module.load_balancer.fqdn
-  enable_active_active                      = local.active_active
   tfe_license_bootstrap_airgap_package_path = var.tfe_license_bootstrap_airgap_package_path
   tfe_license_file_location                 = var.tfe_license_file_location
   tls_bootstrap_cert_pathname               = var.tls_bootstrap_cert_pathname
@@ -298,7 +298,7 @@ module "tfe_init_replicated" {
   cloud                    = "azurerm"
   distribution             = var.distribution
   disk_path                = var.disk_path
-  disk_device_name         = var.production_type == "disk" ? "disk/azure/scsi1/lun${var.vm_data_disk_lun}" : null
+  disk_device_name         = var.operational_mode == "disk" ? "disk/azure/scsi1/lun${var.vm_data_disk_lun}" : null
   tfe_configuration        = module.settings[0].tfe_configuration
   replicated_configuration = module.settings[0].replicated_configuration
   airgap_url               = var.airgap_url
@@ -342,7 +342,7 @@ module "load_balancer" {
   zones                = var.zones
 
   # General
-  active_active            = local.active_active
+  active_active            = var.operational_mode == "active-active"
   domain_name              = var.domain_name
   is_replicated_deployment = var.is_replicated_deployment
   tfe_subdomain            = var.tfe_subdomain
