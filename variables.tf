@@ -346,7 +346,7 @@ variable "database_size_mb" {
 }
 
 variable "database_version" {
-  default     = 12
+  default     = 16
   type        = number
   description = "Postgres version"
 }
