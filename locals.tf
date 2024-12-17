@@ -77,9 +77,10 @@ locals {
   object_storage = try(
     module.object_storage[0],
     {
-      storage_account_key            = null
-      storage_account_name           = null
-      storage_account_container_name = null
+      storage_account_key                            = null
+      storage_account_name                           = null
+      storage_account_container_name                 = null
+      storage_account_primary_blob_connection_string = null
     }
   )
 }
