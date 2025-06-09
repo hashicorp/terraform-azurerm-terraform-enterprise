@@ -8,7 +8,7 @@ installation with the following traits.
 - Standalone
 - Mounted Disk mode
 - a small VM machine type (Standard_D4_v3)
-- Ubuntu 20.04 as the VM image
+- Ubuntu 24.04 as the VM image
 - a publicly accessible HTTP load balancer with TLS termination
 
 ## Pre-requisites

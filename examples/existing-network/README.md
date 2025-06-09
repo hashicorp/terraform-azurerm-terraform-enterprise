@@ -7,14 +7,14 @@ This example for Terraform Enterprise creates a TFE installation with the follow
 - [Active/Active](https://www.terraform.io/enterprise/install/automated/active-active) architecture
 - External Services production type
 - Standard_D4_v3 virtual machine type
-- Ubuntu 20.04
+- Ubuntu 24.04
 - A publicly accessible HTTP load balancer with TLS termination
 
 ## Prerequisites
 
 This example assumes that the following resources exist:
 
-- TFE license is on a file path defined by `var.license_file` 
+- TFE license is on a file path defined by `var.license_file`
 - A DNS zone
 - Valid managed SSL certificate to use with load balancer:
   - An Azure Key Vault in which the following are stored:
@@ -22,7 +22,7 @@ This example assumes that the following resources exist:
     - Key Vault secret which contains the Base64 encoded version of a PEM encoded public certificate for the Virtual Machine Scale Set
     - Key Vault secret which contains the Base64 encoded version of a PEM encoded private key for the Virtual Machine Scale Set.
 - Existing Virtual Network (VNET)
-  
+
 ## How to Use This Module
 
 ### Deployment
