@@ -93,7 +93,7 @@ resource "azurerm_linux_virtual_machine" "proxy" {
   resource_group_name = var.resource_group_name
 
   network_interface_ids = [azurerm_network_interface.proxy.id]
-  size                  = "Standard_D1_v2"
+  size                  = "Standard_D2_v5"
   admin_username        = var.proxy_user
 
   custom_data = base64encode(local.mitmproxy_selected ? (
@@ -102,8 +102,8 @@ resource "azurerm_linux_virtual_machine" "proxy" {
 
   source_image_reference {
     publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-focal"
-    sku       = "20_04-lts"
+    offer     = "ubuntu-24_04-lts"
+    sku       = "server"
     version   = "latest"
   }
 
