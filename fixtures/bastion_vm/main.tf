@@ -72,7 +72,7 @@ resource "azurerm_linux_virtual_machine" "vm_bastion" {
   resource_group_name = var.resource_group_name
 
   network_interface_ids = [azurerm_network_interface.vm_bastion.id]
-  size                  = "Standard_D1_v2"
+  size                  = var.vm_size
   admin_username        = "bastionuser"
 
   custom_data = var.bastion_custom_data
