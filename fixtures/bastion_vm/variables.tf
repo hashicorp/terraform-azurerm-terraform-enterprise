@@ -49,7 +49,7 @@ variable "bastion_custom_data" {
 variable "vm_size" {
   type        = string
   description = "Size of the Bastion virtual machine."
-  default     = "Standard_D2_v5"
+  default     = "Standard_B2as_v2"
 }
 
 
