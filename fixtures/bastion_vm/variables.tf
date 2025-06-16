@@ -46,6 +46,13 @@ variable "bastion_custom_data" {
   default     = null
 }
 
+variable "vm_size" {
+  type        = string
+  description = "Size of the Bastion virtual machine."
+  default     = "Standard_B2as_v2"
+}
+
+
 # Tagging
 # -------
 variable "tags" {
