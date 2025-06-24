@@ -10,3 +10,8 @@ output "vmss_instance_ids" {
   value       = toset([for i in data.azurerm_virtual_machine_scale_set.tfe_vmss.instances[*] : i.instance_id])
   description = "A list of the virual machine scale set VMs ids"
 }
+
+output "user_assigned_identity" {
+  value       = azurerm_user_assigned_identity.vmss
+  description = "The user assigned identity created for the VMSS"
+}

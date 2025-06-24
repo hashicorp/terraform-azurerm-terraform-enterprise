@@ -22,10 +22,37 @@ resource "azurerm_postgresql_flexible_server" "tfe" {
   tags                          = var.tags
   version                       = var.database_version
   zone                          = var.database_availability_zone
+
+  authentication {
+    active_directory_auth_enabled = true
+    tenant_id = var.user_assigned_identity.tenant_id
+  }
+}
+
+resource "azurerm_postgresql_flexible_server_database" "tfe" {
+  name      = "tfe"
+  server_id = azurerm_postgresql_flexible_server.tfe.id
+  collation = "en_US.utf8"
+  charset   = "utf8"
+
+  depends_on = [
+    azurerm_postgresql_flexible_server_active_directory_administrator.aad_admin
+  ]
 }
 
 resource "azurerm_postgresql_flexible_server_configuration" "tfe" {
   name      = "azure.extensions"
   server_id = azurerm_postgresql_flexible_server.tfe.id
   value     = join(",", var.database_extensions)
+}
+
+resource "azurerm_postgresql_flexible_server_active_directory_administrator" "aad_admin" {
+  count = var.database_msi_auth_enabled == true ? 1 : 0
+
+  server_name         = azurerm_postgresql_flexible_server.tfe.name
+  resource_group_name = var.resource_group_name
+  tenant_id           = var.user_assigned_identity.tenant_id
+  object_id           = var.user_assigned_identity.principal_id
+  principal_name      = var.user_assigned_identity.name
+  principal_type      = "ServicePrincipal"
 }
