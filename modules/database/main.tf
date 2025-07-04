@@ -25,7 +25,7 @@ resource "azurerm_postgresql_flexible_server" "tfe" {
 
   authentication {
     active_directory_auth_enabled = true
-    tenant_id = var.user_assigned_identity.tenant_id
+    tenant_id                     = var.user_assigned_identity.tenant_id
   }
 }
 

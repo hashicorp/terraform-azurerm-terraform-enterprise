@@ -107,10 +107,10 @@ variable "database_msi_auth_enabled" {
 
 variable "user_assigned_identity" {
   type = object({
-    id            = string
-    name          = string
-    client_id     = string
-    principal_id  = string
-    tenant_id     = string
+    id           = string
+    name         = string
+    client_id    = string
+    principal_id = string
+    tenant_id    = string
   })
 }
