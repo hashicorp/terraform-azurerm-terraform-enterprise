@@ -113,5 +113,6 @@ variable "user_assigned_identity" {
     principal_id = string
     tenant_id    = string
   })
+  default = null
   description = "The user assigned identity to be used for authenticating to the PostgreSQL server."
 }
