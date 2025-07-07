@@ -106,9 +106,8 @@ variable "database_msi_auth_enabled" {
 }
 
 variable "user_assigned_identity" {
-  default = null
+  nullable = true
   type = object({
-    id           = string
     name         = string
     client_id    = string
     principal_id = string

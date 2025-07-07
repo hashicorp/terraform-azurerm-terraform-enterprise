@@ -12,6 +12,11 @@ output "vmss_instance_ids" {
 }
 
 output "user_assigned_identity" {
-  value       = azurerm_user_assigned_identity.vmss
+  value = {
+    name         = azurerm_user_assigned_identity.vmss.name
+    client_id    = azurerm_user_assigned_identity.vmss.client_id
+    tenant_id    = azurerm_user_assigned_identity.vmss.tenant_id
+    principal_id = azurerm_user_assigned_identity.vmss.principal_id
+  }
   description = "The user assigned identity created for the VMSS"
 }
