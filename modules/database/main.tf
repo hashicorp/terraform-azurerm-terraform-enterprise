@@ -23,9 +23,12 @@ resource "azurerm_postgresql_flexible_server" "tfe" {
   version                       = var.database_version
   zone                          = var.database_availability_zone
 
-  authentication {
-    active_directory_auth_enabled = true
-    tenant_id                     = var.user_assigned_identity.tenant_id
+  dynamic "authentication" {
+    for_each = var.database_msi_auth_enabled ? [1] : []
+    content {
+      active_directory_auth_enabled = true
+      tenant_id                     = var.user_assigned_identity.tenant_id
+    }
   }
 }
 
