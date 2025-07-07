@@ -106,13 +106,12 @@ variable "database_msi_auth_enabled" {
 }
 
 variable "user_assigned_identity" {
-  nullable = true
   type = object({
     name         = string
     client_id    = string
     principal_id = string
     tenant_id    = string
   })
-  default = null
+  default     = null
   description = "The user assigned identity to be used for authenticating to the PostgreSQL server."
 }
