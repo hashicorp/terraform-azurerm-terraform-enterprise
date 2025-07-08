@@ -382,6 +382,12 @@ variable "database_availability_zone" {
   }
 }
 
+variable "database_msi_auth_enabled" {
+  default     = false
+  type        = bool
+  description = "If true, Managed Identity authentication will be enabled for the PostgreSQL server. If false, password authentication will be used."
+}
+
 variable "pg_extra_params" {
   default     = null
   type        = string

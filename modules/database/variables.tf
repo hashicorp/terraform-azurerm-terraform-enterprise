@@ -98,3 +98,20 @@ variable "tags" {
   type        = map(string)
   description = "Map of tags for resource"
 }
+
+variable "database_msi_auth_enabled" {
+  default     = false
+  type        = bool
+  description = "If true, Managed Identity authentication will be enabled for the PostgreSQL server. If false, password authentication will be used."
+}
+
+variable "user_assigned_identity" {
+  type = object({
+    name         = string
+    client_id    = string
+    principal_id = string
+    tenant_id    = string
+  })
+  default     = null
+  description = "The user assigned identity to be used for authenticating to the PostgreSQL server."
+}

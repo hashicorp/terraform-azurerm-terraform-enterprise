@@ -129,6 +129,8 @@ module "database" {
   database_backup_retention_days = var.database_backup_retention_days
   database_availability_zone     = var.database_availability_zone
 
+  database_msi_auth_enabled = var.database_msi_auth_enabled
+  user_assigned_identity    = module.vm.user_assigned_identity
 
   tags = var.tags
 }
@@ -172,6 +174,12 @@ module "tfe_init_fdo" {
   tfe_image                = var.tfe_image
   podman_kube_yaml         = module.runtime_container_engine_config[0].podman_kube_yaml
   docker_compose_yaml      = module.runtime_container_engine_config[0].docker_compose_yaml
+
+  database_host                       = local.database.server.fqdn
+  database_name                       = local.database.name
+  admin_database_username             = local.database.server.administrator_login
+  admin_database_password             = local.database.server.administrator_password
+  database_passwordless_azure_use_msi = var.database_msi_auth_enabled
 }
 
 # ------------------------------------------------------------------------------------
@@ -203,11 +211,14 @@ module "runtime_container_engine_config" {
   key_file           = "/etc/ssl/private/terraform-enterprise/key.pem"
   tls_ca_bundle_file = var.ca_certificate_secret != null ? "/etc/ssl/private/terraform-enterprise/bundle.pem" : null
 
-  database_user       = local.database.server.administrator_login
-  database_password   = local.database.server.administrator_password
+  database_user       = var.database_msi_auth_enabled ? module.vm.user_assigned_identity.name : local.database.server.administrator_login
+  database_password   = var.database_msi_auth_enabled ? "" : local.database.server.administrator_password
   database_host       = local.database.address
   database_name       = local.database.name
   database_parameters = "sslmode=require"
+
+  database_passwordless_azure_use_msi   = var.database_msi_auth_enabled
+  database_passwordless_azure_client_id = module.vm.user_assigned_identity.client_id
 
   storage_type = "azure"
 
