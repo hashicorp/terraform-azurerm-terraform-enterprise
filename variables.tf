@@ -522,6 +522,12 @@ variable "redis_use_password_auth" {
   description = "If set to false, the Redis instance will be accessible without authentication. enable_authentication can only be set to false if a subnet_id is specified; and only works if there aren't existing instances within the subnet with enable_authentication set to true."
 }
 
+variable "redis_msi_auth_enabled" {
+  default     = false
+  type        = bool
+  description = "If true, Managed Identity authentication will be enabled for the Redis server."
+}
+
 variable "redis_rdb_backup_enabled" {
   default     = false
   type        = bool

@@ -20,11 +20,12 @@ resource "azurerm_redis_cache" "tfe_redis" {
   minimum_tls_version = var.redis.minimum_tls_version
 
   redis_configuration {
-    enable_authentication         = var.redis.use_password_auth
-    rdb_backup_enabled            = var.redis.rdb_backup_enabled
-    rdb_backup_frequency          = var.redis.rdb_backup_frequency
-    rdb_backup_max_snapshot_count = var.redis.rdb_backup_max_snapshot_count
-    rdb_storage_connection_string = var.redis.rdb_backup_enabled == true && var.redis.rdb_existing_storage_account == null ? azurerm_storage_account.tfe_redis_storage_account[0].primary_blob_connection_string : var.redis.rdb_existing_storage_account
+    enable_authentication                   = var.redis.use_password_auth
+    active_directory_authentication_enabled = var.redis.use_msi_auth
+    rdb_backup_enabled                      = var.redis.rdb_backup_enabled
+    rdb_backup_frequency                    = var.redis.rdb_backup_frequency
+    rdb_backup_max_snapshot_count           = var.redis.rdb_backup_max_snapshot_count
+    rdb_storage_connection_string           = var.redis.rdb_backup_enabled == true && var.redis.rdb_existing_storage_account == null ? azurerm_storage_account.tfe_redis_storage_account[0].primary_blob_connection_string : var.redis.rdb_existing_storage_account
   }
 
   lifecycle {
@@ -36,4 +37,14 @@ resource "azurerm_redis_cache" "tfe_redis" {
   }
 
   tags = var.tags
+}
+
+resource "azurerm_redis_cache_access_policy_assignment" "msi_user" {
+  count = var.redis.use_msi_auth ? 1 : 0
+
+  name               = "msi_user"
+  redis_cache_id     = azurerm_redis_cache.tfe_redis.id
+  access_policy_name = "Data Owner"
+  object_id          = var.user_assigned_identity.principal_id
+  object_id_alias    = "Managed Identity"
 }
