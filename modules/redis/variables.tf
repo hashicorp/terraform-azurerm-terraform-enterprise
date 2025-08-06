@@ -57,9 +57,9 @@ variable "tags" {
 }
 
 variable "user_assigned_identity" {
-  nullable = true
   type = object({
     principal_id = string
   })
+  default     = null
   description = "The user assigned identity to be used for authenticating to the Redis server."
 }
