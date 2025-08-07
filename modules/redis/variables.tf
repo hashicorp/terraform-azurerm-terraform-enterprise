@@ -26,6 +26,7 @@ variable "redis" {
     sku_name                      = string
     size                          = string
     use_password_auth             = bool
+    use_msi_auth                  = bool
     rdb_backup_enabled            = bool
     rdb_backup_frequency          = number
     rdb_backup_max_snapshot_count = number
@@ -53,4 +54,12 @@ variable "tags" {
   default     = {}
   type        = map(string)
   description = "Map of tags for resource"
+}
+
+variable "user_assigned_identity" {
+  type = object({
+    principal_id = string
+  })
+  default     = null
+  description = "The user assigned identity to be used for authenticating to the Redis server."
 }
