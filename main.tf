@@ -441,4 +441,6 @@ module "vm" {
   key_secret            = var.vm_key_secret
 
   tags = var.tags
+
+  depends_on = [module.load_balancer]
 }
