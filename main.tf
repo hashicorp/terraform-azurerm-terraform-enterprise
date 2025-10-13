@@ -140,7 +140,7 @@ module "database" {
 # Azure user data / cloud init used to install and configure TFE on instance(s) using Flexible Deployment Options
 # ---------------------------------------------------------------------------------------------------------------
 module "tfe_init_fdo" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=main"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=skj/retry-cmd-fix"
   count  = var.is_replicated_deployment ? 0 : 1
 
   cloud             = "azurerm"
