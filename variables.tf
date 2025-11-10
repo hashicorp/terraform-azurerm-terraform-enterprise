@@ -1141,3 +1141,25 @@ variable "pg_resource_group_name" {
   type = string
   description = "The name of the Resource Group containing the PostgreSQL Flexible Server."
 }
+
+# pg variables
+variable "pg_user" {
+  default = ""
+  type = string
+}
+
+variable "pg_password" {
+  default = ""
+  type = string
+  sensitive = true
+}
+
+variable "pg_dbname" {
+  default = ""
+  type = string
+}
+
+variable "pg_netloc" {
+  default = ""
+  type = string
+}
