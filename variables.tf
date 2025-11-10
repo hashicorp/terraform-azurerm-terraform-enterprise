@@ -1163,3 +1163,22 @@ variable "pg_netloc" {
   default = ""
   type = string
 }
+
+# some redis variable
+variable "redis_resource_group_name" {
+  default = ""
+  type = string
+  description = "The name of the Resource Group containing the Redis instance."
+}
+
+variable "az_redis_name" {
+  default = ""
+  type = string
+  description = "The name of the Redis instance."
+}
+
+variable "az_redis_sidekiq_name" {
+  default = ""
+  type = string
+  description = "The name of the Redis Sidekiq instance."
+}

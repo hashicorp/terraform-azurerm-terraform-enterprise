@@ -175,7 +175,85 @@ resource "azurerm_postgresql_flexible_server_active_directory_administrator" "aa
   principal_type      = "ServicePrincipal"
 }
 
+data "azurerm_resource_group" "redis_rg" {
+  count = var.redis_msi_auth_enabled == true ? 1 : 0
 
+  name = var.redis_resource_group_name
+}
+
+data "azapi_resource" "redis_resource" {
+  count = var.redis_msi_auth_enabled == true ? 1 : 0
+
+  type = "Microsoft.Cache/redisEnterprise@2025-04-01"
+  name = var.az_redis_name
+
+  parent_id = data.azurerm_resource_group.redis_rg[0].id
+}
+
+data "azapi_resource" "redis_database" {
+  count = var.redis_msi_auth_enabled == true ? 1 : 0
+
+  type = "Microsoft.Cache/redisEnterprise/databases@2025-04-01"
+  name = "default"
+  parent_id = data.azapi_resource.redis_resource[0].id
+}
+
+resource "azapi_resource" "redis_msi_access" {
+  count = var.redis_msi_auth_enabled == true ? 1 : 0
+
+  type = "Microsoft.Cache/redisEnterprise/databases/accessPolicyAssignments@2025-04-01"
+  name = "RedisAccessPolicy"
+  parent_id = data.azapi_resource.redis_database[0].id
+
+  body = {
+    properties = {
+      accessPolicyName = "default"
+      user = {
+        objectId = module.vm.user_assigned_identity.principal_id
+      }
+    }
+  }
+}
+
+data "azurerm_resource_group" "redis_sidekiq_rg" {
+  count = var.redis_sidekiq_msi_auth_enabled == true ? 1 : 0
+
+  name = var.redis_resource_group_name
+}
+
+data "azapi_resource" "redis_sidekiq_resource" {
+  count = var.redis_sidekiq_msi_auth_enabled == true ? 1 : 0
+
+  type = "Microsoft.Cache/redisEnterprise@2025-04-01"
+  name = var.az_redis_sidekiq_name
+
+  parent_id = data.azurerm_resource_group.redis_sidekiq_rg[0].id
+}
+
+data "azapi_resource" "redis_sidekiq_database" {
+  count = var.redis_sidekiq_msi_auth_enabled == true ? 1 : 0
+
+  type = "Microsoft.Cache/redisEnterprise/databases@2025-04-01"
+  name = "default"
+  parent_id = data.azapi_resource.redis_sidekiq_resource[0].id
+}
+
+resource "azapi_resource" "redis_sidekiq_msi_access" {
+  count = var.redis_sidekiq_msi_auth_enabled == true ? 1 : 0
+
+  type = "Microsoft.Cache/redisEnterprise/databases/accessPolicyAssignments@2025-04-01"
+  name = "RedisAccessPolicy"
+  parent_id = data.azapi_resource.redis_sidekiq_database[0].id
+
+  body = {
+    properties = {
+      accessPolicyName = "default"
+      user = {
+        objectId = module.vm.user_assigned_identity.principal_id
+      }
+    }
+  }
+}
 
 
 # ---------------------------------------------------------------------------------------------------------------
