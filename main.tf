@@ -169,9 +169,9 @@ resource "azurerm_postgresql_flexible_server_active_directory_administrator" "aa
 
   server_name         = var.pg_flexible_server_name
   resource_group_name = var.pg_resource_group_name
-  tenant_id           = var.user_assigned_identity.tenant_id
-  object_id           = var.user_assigned_identity.principal_id
-  principal_name      = var.user_assigned_identity.name
+  tenant_id           = module.vm.user_assigned_identity.tenant_id
+  object_id           = module.vm.user_assigned_identity.principal_id
+  principal_name      = module.vm.user_assigned_identity.name
   principal_type      = "ServicePrincipal"
 }
 

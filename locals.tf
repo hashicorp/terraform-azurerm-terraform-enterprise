@@ -37,13 +37,11 @@ locals {
 
   # Redis
   # -----
-  redis = try(
-    module.redis[0].redis_cache,
-    {
-      hostname           = null
-      primary_access_key = null
-    }
-  )
+  redis = {
+    hostname           = null
+    primary_access_key = null
+  }
+  
 
   # User Data
   # ---------
@@ -63,29 +61,24 @@ locals {
     [var.network_frontend_subnet_cidr]
   )
 
-  database = try(
-    module.database[0],
-    {
-      name    = null
-      address = null
-      server = {
-        administrator_login    = null
-        administrator_password = null
-      }
+  database = {
+    name    = null
+    address = null
+    server = {
+      administrator_login    = null
+      administrator_password = null
     }
-  )
+  }
 
-  explorer_database = try(
-    module.explorer_database[0],
-    {
-      name    = null
-      address = null
-      server = {
-        administrator_login    = null
-        administrator_password = null
-      }
+  explorer_database = {
+    name    = null
+    address = null
+    server = {
+      administrator_login    = null
+      administrator_password = null
     }
-  )
+  }
+  
 
   object_storage = try(
     module.object_storage[0],
