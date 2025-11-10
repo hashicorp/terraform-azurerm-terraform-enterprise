@@ -173,6 +173,18 @@ resource "azurerm_postgresql_flexible_server_active_directory_administrator" "aa
   object_id           = module.vm.user_assigned_identity.principal_id
   principal_name      = module.vm.user_assigned_identity.name
   principal_type      = "ServicePrincipal"
+  depends_on = [
+    module.vm,
+    time_sleep.wait_for_identity_propagation
+  ]
+}
+
+resource "time_sleep" "wait_for_identity_propagation" {
+  count = var.database_msi_auth_enabled == true ? 1 : 0
+
+  depends_on = [module.vm]
+
+  create_duration = "60s"
 }
 
 data "azurerm_resource_group" "redis_rg" {
