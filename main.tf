@@ -202,7 +202,7 @@ resource "azapi_resource" "redis_msi_access" {
   count = var.redis_msi_auth_enabled == true ? 1 : 0
 
   type = "Microsoft.Cache/redisEnterprise/databases/accessPolicyAssignments@2025-04-01"
-  name = "RedisAccessPolicy"
+  name = "${var.friendly_name_prefix}RedisAccessPolicy"
   parent_id = data.azapi_resource.redis_database[0].id
 
   body = {
@@ -242,7 +242,7 @@ resource "azapi_resource" "redis_sidekiq_msi_access" {
   count = var.redis_sidekiq_msi_auth_enabled == true ? 1 : 0
 
   type = "Microsoft.Cache/redisEnterprise/databases/accessPolicyAssignments@2025-04-01"
-  name = "RedisAccessPolicy"
+  name = "${var.friendly_name_prefix}RedisAccessPolicy"
   parent_id = data.azapi_resource.redis_sidekiq_database[0].id
 
   body = {
