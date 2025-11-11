@@ -324,10 +324,10 @@ module "settings" {
   pg_password = local.database.server.administrator_password
 
   # Redis
-  redis_host              = local.redis.hostname
-  redis_pass              = local.redis.primary_access_key
-  redis_use_tls           = local.redis.hostname == null ? null : var.redis_use_tls
-  redis_use_password_auth = local.redis.hostname == null ? null : var.redis_use_password_auth
+  # redis_host              = local.redis.hostname
+  # redis_pass              = local.redis.primary_access_key
+  # redis_use_tls           = local.redis.hostname == null ? null : var.redis_use_tls
+  # redis_use_password_auth = local.redis.hostname == null ? null : var.redis_use_password_auth
 
   # Azure
   azure_account_key  = local.object_storage.storage_account_key
