@@ -214,7 +214,7 @@ module "tfe_init_fdo" {
 # Docker Compose File Config for TFE on instance(s) using Flexible Deployment Options
 # ------------------------------------------------------------------------------------
 module "runtime_container_engine_config" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/runtime_container_engine_config?ref=main"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/runtime_container_engine_config?ref=tauhid_sidekiq_redis"
   count  = var.is_replicated_deployment ? 0 : 1
 
   license_reporting_opt_out   = var.license_reporting_opt_out
