@@ -1,9 +1,14 @@
 # Copyright (c) HashiCorp, Inc.
 # SPDX-License-Identifier: MPL-2.0
 
+resource "random_integer" "ip_offset" {
+  min = 10
+  max = 250
+}
+
 locals {
   # Determine private IP address based on CIDR range if not already supplied and if load balancer public is false
-  private_ip_address = var.network_private_ip == null && var.load_balancer_public == false ? cidrhost(var.network_frontend_subnet_cidr, 16) : var.network_private_ip
+  private_ip_address = var.network_private_ip == null && var.load_balancer_public == false ? cidrhost(var.network_frontend_subnet_cidr, random_integer.ip_offset.result) : var.network_private_ip
 
   # Determine the resulting TFE IP
   tfe_subdomain     = var.tfe_subdomain == null ? substr(random_pet.tfe_subdomain[0].id, 0, 24) : var.tfe_subdomain
