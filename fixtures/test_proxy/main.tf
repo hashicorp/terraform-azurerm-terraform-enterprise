@@ -1,16 +1,25 @@
 # Copyright (c) HashiCorp, Inc.
 # SPDX-License-Identifier: MPL-2.0
+# Randomize subnet index to avoid overlap
+resource "random_integer" "proxy_index" {
+  min = 1
+  max = 250
+}
+
+locals {
+  # Derive unique CIDR using index (each test gets its own /24)
+  proxy_subnet_cidr = cidrsubnet("10.0.0.0/16", 8, random_integer.proxy_index.result)
+}
 
 data "azurerm_client_config" "current" {}
 
 # Create a subnet for proxy
 # -------------------------
 resource "azurerm_subnet" "proxy" {
-  name                = "${var.friendly_name_prefix}-proxy-subnet"
-  resource_group_name = var.resource_group_name
-
-  address_prefixes     = [var.proxy_subnet_cidr]
+  name                 = "${var.friendly_name_prefix}-proxy-subnet"
+  resource_group_name  = var.resource_group_name
   virtual_network_name = var.virtual_network_name
+  address_prefixes     = [local.proxy_subnet_cidr]
 }
 
 # Create a security group for proxy
