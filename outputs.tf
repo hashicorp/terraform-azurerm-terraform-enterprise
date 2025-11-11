@@ -94,22 +94,22 @@ output "tfe_console_password" {
   description = "The password for the TFE console"
 }
 
-# Redis
-# -----
-output "redis_hostname" {
-  value       = var.operational_mode == "active-active" ? module.redis[0].redis_cache.hostname : null
-  description = "The Hostname of the Redis Instance"
-}
+# # Redis
+# # -----
+# output "redis_hostname" {
+#   value       = var.operational_mode == "active-active" ? module.redis[0].redis_cache.hostname : null
+#   description = "The Hostname of the Redis Instance"
+# }
 
-output "redis_ssl_port" {
-  value       = var.operational_mode == "active-active" ? module.redis[0].redis_cache.ssl_port : null
-  description = "The SSL Port of the Redis Instance"
-}
+# output "redis_ssl_port" {
+#   value       = var.operational_mode == "active-active" ? module.redis[0].redis_cache.ssl_port : null
+#   description = "The SSL Port of the Redis Instance"
+# }
 
-output "redis_pass" {
-  value       = var.operational_mode == "active-active" ? module.redis[0].redis_cache.primary_access_key : null
-  description = "The Primary Access Key for the Redis Instance"
-}
+# output "redis_pass" {
+#   value       = var.operational_mode == "active-active" ? module.redis[0].redis_cache.primary_access_key : null
+#   description = "The Primary Access Key for the Redis Instance"
+# }
 
 # Load balancer
 # -------------

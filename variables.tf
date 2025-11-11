@@ -554,6 +554,19 @@ variable "redis_msi_auth_enabled" {
   description = "If true, Managed Identity authentication will be enabled for the Redis server."
 }
 
+# Redis Sidekiq
+variable "redis_sidekiq_use_password_auth" {
+  default     = true
+  type        = bool
+  description = "If set to false, the Redis instance will be accessible without authentication. enable_authentication can only be set to false if a subnet_id is specified; and only works if there aren't existing instances within the subnet with enable_authentication set to true."
+}
+
+variable "redis_sidekiq_msi_auth_enabled" {
+  default     = false
+  type        = bool
+  description = "If true, Managed Identity authentication will be enabled for the Redis server."
+}
+
 variable "redis_rdb_backup_enabled" {
   default     = false
   type        = bool
@@ -588,6 +601,36 @@ variable "redis_use_tls" {
   default     = false
   type        = bool
   description = "Boolean to determine if the Redis service requires TLS."
+}
+
+variable "redis_sidekiq_use_tls" {
+  default     = false
+  type        = bool
+  description = "Boolean to determine if the Redis service requires TLS."
+}
+
+variable "redis_host" {
+  default = ""
+  type = string
+  description = "The Redis host name"
+}
+
+variable "redis_sidekiq_host" {
+  default = ""
+  type = string
+  description = "The Redis Sidekiq host name"
+}
+
+variable "redis_password" {
+  default = ""
+  type = string
+  description = "The Redis password"
+}
+
+variable "redis_sidekiq_password" {
+  default = ""
+  type = string
+  description = "The Redis Sidekiq password"
 }
 
 variable "redis_minimum_tls_version" {
@@ -1084,4 +1127,82 @@ variable "tags" {
   default     = {}
   type        = map(string)
   description = "Map of tags for resource."
+}
+
+# for MSI, testing
+variable "pg_flexible_server_name" {
+  default = ""
+  type = string
+  description = "The name of the PostgreSQL Flexible Server."
+}
+
+variable "pg_resource_group_name" {
+  default = ""
+  type = string
+  description = "The name of the Resource Group containing the PostgreSQL Flexible Server."
+}
+
+# pg variables
+variable "pg_user" {
+  default = ""
+  type = string
+}
+
+variable "pg_password" {
+  default = ""
+  type = string
+  sensitive = true
+}
+
+variable "pg_dbname" {
+  default = ""
+  type = string
+}
+
+variable "pg_netloc" {
+  default = ""
+  type = string
+}
+
+# some redis variable
+variable "redis_resource_group_name" {
+  default = ""
+  type = string
+  description = "The name of the Resource Group containing the Redis instance."
+}
+
+variable "az_redis_name" {
+  default = ""
+  type = string
+  description = "The name of the Redis instance."
+}
+
+variable "az_redis_sidekiq_name" {
+  default = ""
+  type = string
+  description = "The name of the Redis Sidekiq instance."
+}
+
+variable "redis_user" {
+  default = ""
+  type = string
+  description = "The Redis username"
+}
+
+variable "redis_passwordless_azure_use_msi" {
+  default     = false
+  type        = bool
+  description = "If true, Managed Identity authentication will be enabled for the Redis server."
+}
+
+variable "redis_sidekiq_passwordless_azure_use_msi" {
+  default     = false
+  type        = bool
+  description = "If true, Managed Identity authentication will be enabled for the Redis Sidekiq server."
+}
+
+variable "redis_sidekiq_user" {
+  default = ""
+  type = string
+  description = "The Redis Sidekiq username"
 }

@@ -80,94 +80,199 @@ module "network" {
   tags = var.tags
 }
 
-# -----------------------------------------------------------------------------
-# Azure cache
-# -----------------------------------------------------------------------------
-module "redis" {
-  source = "./modules/redis"
-  count  = var.operational_mode == "active-active" ? 1 : 0
+# # -----------------------------------------------------------------------------
+# # Azure cache
+# # -----------------------------------------------------------------------------
+# module "redis" {
+#   source = "./modules/redis"
+#   count  = var.operational_mode == "active-active" ? 1 : 0
 
-  resource_group_name    = module.resource_groups.resource_group_name
-  location               = var.location
-  redis_subnet_id        = local.network.redis_subnet.id
-  user_assigned_identity = module.vm.user_assigned_identity
+#   resource_group_name    = module.resource_groups.resource_group_name
+#   location               = var.location
+#   redis_subnet_id        = local.network.redis_subnet.id
+#   user_assigned_identity = module.vm.user_assigned_identity
 
-  redis = {
-    family                        = var.redis_family
-    sku_name                      = var.redis_sku_name
-    size                          = var.redis_size
-    use_password_auth             = var.redis_use_password_auth
-    use_msi_auth                  = var.redis_msi_auth_enabled
-    rdb_backup_enabled            = var.redis_rdb_backup_enabled
-    rdb_backup_frequency          = var.redis_rdb_backup_frequency
-    rdb_backup_max_snapshot_count = var.redis_rdb_backup_max_snapshot_count
-    rdb_existing_storage_account  = var.redis_rdb_existing_storage_account != null ? data.azurerm_storage_account.tfe_redis_existing_storage_account[0].primary_blob_connection_string : null
-    minimum_tls_version           = var.redis_minimum_tls_version
-    use_tls                       = var.redis_use_tls
+#   redis = {
+#     family                        = var.redis_family
+#     sku_name                      = var.redis_sku_name
+#     size                          = var.redis_size
+#     use_password_auth             = var.redis_use_password_auth
+#     use_msi_auth                  = var.redis_msi_auth_enabled
+#     rdb_backup_enabled            = var.redis_rdb_backup_enabled
+#     rdb_backup_frequency          = var.redis_rdb_backup_frequency
+#     rdb_backup_max_snapshot_count = var.redis_rdb_backup_max_snapshot_count
+#     rdb_existing_storage_account  = var.redis_rdb_existing_storage_account != null ? data.azurerm_storage_account.tfe_redis_existing_storage_account[0].primary_blob_connection_string : null
+#     minimum_tls_version           = var.redis_minimum_tls_version
+#     use_tls                       = var.redis_use_tls
+#   }
+
+#   tags = var.tags
+# }
+
+# # -----------------------------------------------------------------------------
+# # Azure postgres
+# # -----------------------------------------------------------------------------
+# module "database" {
+#   source = "./modules/database"
+#   count  = local.disk_mode == true ? 0 : 1
+
+#   friendly_name_prefix = var.friendly_name_prefix
+#   resource_group_name  = module.resource_groups.resource_group_name
+#   location             = var.location
+
+#   database_machine_type          = var.database_machine_type
+#   database_private_dns_zone_id   = local.network.database_private_dns_zone.id
+#   database_size_mb               = var.database_size_mb
+#   database_subnet_id             = local.network.database_subnet.id
+#   database_user                  = var.database_user
+#   database_extensions            = var.database_extensions
+#   database_version               = var.database_version
+#   database_backup_retention_days = var.database_backup_retention_days
+#   database_availability_zone     = var.database_availability_zone
+
+#   database_msi_auth_enabled = var.database_msi_auth_enabled
+#   user_assigned_identity    = module.vm.user_assigned_identity
+
+#   tags = var.tags
+# }
+
+# # -----------------------------------------------------------------------------
+# # Azure postgres explorer database
+# # -----------------------------------------------------------------------------
+# module "explorer_database" {
+#   source = "./modules/database"
+#   count  = local.enable_explorer_database_module ? 1 : 0
+
+#   friendly_name_prefix = "${var.friendly_name_prefix}-explorer"
+#   resource_group_name  = module.resource_groups.resource_group_name
+#   location             = var.location
+
+#   database_machine_type          = var.explorer_db_size
+#   database_private_dns_zone_id   = local.network.database_private_dns_zone.id
+#   database_size_mb               = var.database_size_mb
+#   database_subnet_id             = local.network.database_subnet.id
+#   database_user                  = var.explorer_db_username
+#   database_extensions            = var.database_extensions
+#   database_version               = var.database_version
+#   database_backup_retention_days = var.database_backup_retention_days
+#   database_availability_zone     = var.database_availability_zone
+
+#   database_msi_auth_enabled = var.database_msi_auth_enabled
+#   user_assigned_identity    = module.vm.user_assigned_identity
+
+#   tags = var.tags
+# }
+
+# for MSI, testing
+resource "azurerm_postgresql_flexible_server_active_directory_administrator" "aad_admin" {
+  count = var.database_msi_auth_enabled == true ? 1 : 0
+
+  server_name         = var.pg_flexible_server_name
+  resource_group_name = var.pg_resource_group_name
+  tenant_id           = module.vm.user_assigned_identity.tenant_id
+  object_id           = module.vm.user_assigned_identity.principal_id
+  principal_name      = module.vm.user_assigned_identity.name
+  principal_type      = "ServicePrincipal"
+  depends_on = [
+    module.vm,
+    time_sleep.wait_for_identity_propagation
+  ]
+}
+
+resource "time_sleep" "wait_for_identity_propagation" {
+  count = var.database_msi_auth_enabled == true ? 1 : 0
+
+  depends_on = [module.vm]
+
+  create_duration = "60s"
+}
+
+data "azurerm_resource_group" "redis_rg" {
+  count = var.redis_msi_auth_enabled == true ? 1 : 0
+
+  name = var.redis_resource_group_name
+}
+
+data "azapi_resource" "redis_resource" {
+  count = var.redis_msi_auth_enabled == true ? 1 : 0
+
+  type = "Microsoft.Cache/redisEnterprise@2025-04-01"
+  name = var.az_redis_name
+
+  parent_id = data.azurerm_resource_group.redis_rg[0].id
+}
+
+data "azapi_resource" "redis_database" {
+  count = var.redis_msi_auth_enabled == true ? 1 : 0
+
+  type = "Microsoft.Cache/redisEnterprise/databases@2025-04-01"
+  name = "default"
+  parent_id = data.azapi_resource.redis_resource[0].id
+}
+
+resource "azapi_resource" "redis_msi_access" {
+  count = var.redis_msi_auth_enabled == true ? 1 : 0
+
+  type = "Microsoft.Cache/redisEnterprise/databases/accessPolicyAssignments@2025-04-01"
+  name = "${var.friendly_name_prefix}RedisAccessPolicy"
+  parent_id = data.azapi_resource.redis_database[0].id
+
+  body = {
+    properties = {
+      accessPolicyName = "default"
+      user = {
+        objectId = module.vm.user_assigned_identity.principal_id
+      }
+    }
   }
-
-  tags = var.tags
 }
 
-# -----------------------------------------------------------------------------
-# Azure postgres
-# -----------------------------------------------------------------------------
-module "database" {
-  source = "./modules/database"
-  count  = local.disk_mode == true ? 0 : 1
+data "azurerm_resource_group" "redis_sidekiq_rg" {
+  count = var.redis_sidekiq_msi_auth_enabled == true ? 1 : 0
 
-  friendly_name_prefix = var.friendly_name_prefix
-  resource_group_name  = module.resource_groups.resource_group_name
-  location             = var.location
-
-  database_machine_type          = var.database_machine_type
-  database_private_dns_zone_id   = local.network.database_private_dns_zone.id
-  database_size_mb               = var.database_size_mb
-  database_subnet_id             = local.network.database_subnet.id
-  database_user                  = var.database_user
-  database_extensions            = var.database_extensions
-  database_version               = var.database_version
-  database_backup_retention_days = var.database_backup_retention_days
-  database_availability_zone     = var.database_availability_zone
-
-  database_msi_auth_enabled = var.database_msi_auth_enabled
-  user_assigned_identity    = module.vm.user_assigned_identity
-
-  tags = var.tags
+  name = var.redis_resource_group_name
 }
 
-# -----------------------------------------------------------------------------
-# Azure postgres explorer database
-# -----------------------------------------------------------------------------
-module "explorer_database" {
-  source = "./modules/database"
-  count  = local.enable_explorer_database_module ? 1 : 0
+data "azapi_resource" "redis_sidekiq_resource" {
+  count = var.redis_sidekiq_msi_auth_enabled == true ? 1 : 0
 
-  friendly_name_prefix = "${var.friendly_name_prefix}-explorer"
-  resource_group_name  = module.resource_groups.resource_group_name
-  location             = var.location
+  type = "Microsoft.Cache/redisEnterprise@2025-04-01"
+  name = var.az_redis_sidekiq_name
 
-  database_machine_type          = var.explorer_db_size
-  database_private_dns_zone_id   = local.network.database_private_dns_zone.id
-  database_size_mb               = var.database_size_mb
-  database_subnet_id             = local.network.database_subnet.id
-  database_user                  = var.explorer_db_username
-  database_extensions            = var.database_extensions
-  database_version               = var.database_version
-  database_backup_retention_days = var.database_backup_retention_days
-  database_availability_zone     = var.database_availability_zone
-
-  database_msi_auth_enabled = var.database_msi_auth_enabled
-  user_assigned_identity    = module.vm.user_assigned_identity
-
-  tags = var.tags
+  parent_id = data.azurerm_resource_group.redis_sidekiq_rg[0].id
 }
+
+data "azapi_resource" "redis_sidekiq_database" {
+  count = var.redis_sidekiq_msi_auth_enabled == true ? 1 : 0
+
+  type = "Microsoft.Cache/redisEnterprise/databases@2025-04-01"
+  name = "default"
+  parent_id = data.azapi_resource.redis_sidekiq_resource[0].id
+}
+
+resource "azapi_resource" "redis_sidekiq_msi_access" {
+  count = var.redis_sidekiq_msi_auth_enabled == true ? 1 : 0
+
+  type = "Microsoft.Cache/redisEnterprise/databases/accessPolicyAssignments@2025-04-01"
+  name = "${var.friendly_name_prefix}RedisAccessPolicy"
+  parent_id = data.azapi_resource.redis_sidekiq_database[0].id
+
+  body = {
+    properties = {
+      accessPolicyName = "default"
+      user = {
+        objectId = module.vm.user_assigned_identity.principal_id
+      }
+    }
+  }
+}
+
 
 # ---------------------------------------------------------------------------------------------------------------
 # Azure user data / cloud init used to install and configure TFE on instance(s) using Flexible Deployment Options
 # ---------------------------------------------------------------------------------------------------------------
 module "tfe_init_fdo" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=main"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/tfe_init?ref=skj/azure-test-1110"
   count  = var.is_replicated_deployment ? 0 : 1
 
   cloud             = "azurerm"
@@ -203,10 +308,10 @@ module "tfe_init_fdo" {
   podman_kube_yaml         = module.runtime_container_engine_config[0].podman_kube_yaml
   docker_compose_yaml      = module.runtime_container_engine_config[0].docker_compose_yaml
 
-  database_host                       = local.database.server.fqdn
-  database_name                       = local.database.name
-  admin_database_username             = local.database.server.administrator_login
-  admin_database_password             = local.database.server.administrator_password
+  database_host                       = var.pg_netloc
+  database_name                       = var.pg_dbname
+  admin_database_username             = var.pg_user
+  admin_database_password             = var.pg_password
   database_passwordless_azure_use_msi = var.database_msi_auth_enabled
 }
 
@@ -214,7 +319,7 @@ module "tfe_init_fdo" {
 # Docker Compose File Config for TFE on instance(s) using Flexible Deployment Options
 # ------------------------------------------------------------------------------------
 module "runtime_container_engine_config" {
-  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/runtime_container_engine_config?ref=main"
+  source = "git::https://github.com/hashicorp/terraform-random-tfe-utility//modules/runtime_container_engine_config?ref=skj/azure-test-1110"
   count  = var.is_replicated_deployment ? 0 : 1
 
   license_reporting_opt_out   = var.license_reporting_opt_out
@@ -270,13 +375,22 @@ module "runtime_container_engine_config" {
   no_proxy        = local.no_proxy
   trusted_proxies = local.trusted_proxies
 
-  redis_host                         = local.redis.hostname
+  redis_host                         = var.redis_host
   redis_user                         = var.redis_msi_auth_enabled ? module.vm.user_assigned_identity.principal_id : ""
-  redis_password                     = var.redis_msi_auth_enabled ? "" : local.redis.primary_access_key
-  redis_use_tls                      = local.redis.hostname == null ? null : var.redis_use_tls
-  redis_use_auth                     = local.redis.hostname == null ? null : var.redis_use_password_auth
+  redis_password                     = var.redis_msi_auth_enabled ? "" : var.redis_password
+  redis_use_tls                      = var.redis_host == null ? null : var.redis_use_tls
+  redis_use_auth                     = var.redis_host == null ? null : var.redis_use_password_auth
   redis_passwordless_azure_use_msi   = var.redis_msi_auth_enabled
   redis_passwordless_azure_client_id = module.vm.user_assigned_identity.client_id
+
+  # redis sidekiq
+  redis_sidekiq_host                         = var.redis_sidekiq_host
+  redis_sidekiq_user                         = var.redis_sidekiq_msi_auth_enabled ? module.vm.user_assigned_identity.principal_id : ""
+  redis_sidekiq_password                     = var.redis_sidekiq_msi_auth_enabled ? "" : var.redis_sidekiq_password
+  redis_sidekiq_use_tls                      = var.redis_sidekiq_host == null ? null : var.redis_sidekiq_use_tls
+  redis_sidekiq_use_auth                     = var.redis_sidekiq_host == null ? null : var.redis_sidekiq_use_password_auth
+  redis_sidekiq_passwordless_azure_use_msi   = var.redis_sidekiq_msi_auth_enabled
+  redis_sidekiq_passwordless_azure_client_id = module.vm.user_assigned_identity.client_id
 
   vault_address     = var.extern_vault_addr
   vault_namespace   = var.extern_vault_namespace
