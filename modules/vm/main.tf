@@ -40,8 +40,8 @@ resource "azurerm_linux_virtual_machine_scale_set" "tfe_vmss" {
 
   upgrade_mode = var.vm_upgrade_mode
 
-  zone_balance = var.vm_zone_balance
-  zones        = var.zones
+  zone_balance = var.vm_zone_balance == true && length(var.zones) > 0 ? true : null
+  zones        = length(var.zones) > 0 ? var.zones : null
 
   custom_data = var.vm_userdata_script
 
