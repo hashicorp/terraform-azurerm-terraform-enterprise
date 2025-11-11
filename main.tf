@@ -83,31 +83,31 @@ module "network" {
 # -----------------------------------------------------------------------------
 # Azure cache
 # -----------------------------------------------------------------------------
-module "redis" {
-  source = "./modules/redis"
-  count  = var.operational_mode == "active-active" ? 1 : 0
+# module "redis" {
+#   source = "./modules/redis"
+#   count  = var.operational_mode == "active-active" ? 1 : 0
 
-  resource_group_name    = module.resource_groups.resource_group_name
-  location               = var.location
-  redis_subnet_id        = local.network.redis_subnet.id
-  user_assigned_identity = module.vm.user_assigned_identity
+#   resource_group_name    = module.resource_groups.resource_group_name
+#   location               = var.location
+#   redis_subnet_id        = local.network.redis_subnet.id
+#   user_assigned_identity = module.vm.user_assigned_identity
 
-  redis = {
-    family                        = var.redis_family
-    sku_name                      = var.redis_sku_name
-    size                          = var.redis_size
-    use_password_auth             = var.redis_use_password_auth
-    use_msi_auth                  = var.redis_msi_auth_enabled
-    rdb_backup_enabled            = var.redis_rdb_backup_enabled
-    rdb_backup_frequency          = var.redis_rdb_backup_frequency
-    rdb_backup_max_snapshot_count = var.redis_rdb_backup_max_snapshot_count
-    rdb_existing_storage_account  = var.redis_rdb_existing_storage_account != null ? data.azurerm_storage_account.tfe_redis_existing_storage_account[0].primary_blob_connection_string : null
-    minimum_tls_version           = var.redis_minimum_tls_version
-    use_tls                       = var.redis_use_tls
-  }
+#   redis = {
+#     family                        = var.redis_family
+#     sku_name                      = var.redis_sku_name
+#     size                          = var.redis_size
+#     use_password_auth             = var.redis_use_password_auth
+#     use_msi_auth                  = var.redis_msi_auth_enabled
+#     rdb_backup_enabled            = var.redis_rdb_backup_enabled
+#     rdb_backup_frequency          = var.redis_rdb_backup_frequency
+#     rdb_backup_max_snapshot_count = var.redis_rdb_backup_max_snapshot_count
+#     rdb_existing_storage_account  = var.redis_rdb_existing_storage_account != null ? data.azurerm_storage_account.tfe_redis_existing_storage_account[0].primary_blob_connection_string : null
+#     minimum_tls_version           = var.redis_minimum_tls_version
+#     use_tls                       = var.redis_use_tls
+#   }
 
-  tags = var.tags
-}
+#   tags = var.tags
+# }
 
 # -----------------------------------------------------------------------------
 # Azure postgres
@@ -270,13 +270,16 @@ module "runtime_container_engine_config" {
   no_proxy        = local.no_proxy
   trusted_proxies = local.trusted_proxies
 
-  redis_host                         = local.redis.hostname
-  redis_user                         = var.redis_msi_auth_enabled ? module.vm.user_assigned_identity.principal_id : ""
-  redis_password                     = var.redis_msi_auth_enabled ? "" : local.redis.primary_access_key
-  redis_use_tls                      = local.redis.hostname == null ? null : var.redis_use_tls
-  redis_use_auth                     = local.redis.hostname == null ? null : var.redis_use_password_auth
-  redis_passwordless_azure_use_msi   = var.redis_msi_auth_enabled
-  redis_passwordless_azure_client_id = module.vm.user_assigned_identity.client_id
+  redis_host                         = "tfemainredistest.centralus.redis.azure.net:10000"
+  redis_user                         = ""
+  redis_password                     = var.redis_auth_token
+  redis_use_tls                      = true
+  redis_use_auth                     = true
+
+  redis_sidekiq_host = "tferedismanualsidekiqtest.centralus.redis.azure.net:10000"
+  redis_sidekiq_password = var.redis_sidekiq_auth_token
+  redis_sidekiq_use_tls  = true
+  redis_sidekiq_use_auth = true
 
   vault_address     = var.extern_vault_addr
   vault_namespace   = var.extern_vault_namespace

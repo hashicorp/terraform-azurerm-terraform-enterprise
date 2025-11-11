@@ -596,6 +596,18 @@ variable "redis_minimum_tls_version" {
   description = "The minimum TLS version. '1.2' is suggested."
 }
 
+variable "redis_auth_token" {
+  default     = null
+  type        = string
+  description = "(Optional) The authentication token for the Redis cache. If not provided, a random token will be generated."
+}
+
+variable "redis_sidekiq_auth_token" {
+  default     = null
+  type        = string
+  description = "(Optional) The Sidekiq authentication token for the Redis cache. If not provided, a random token will be generated."
+}
+
 # VM
 # --
 variable "http_port" {
