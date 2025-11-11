@@ -37,13 +37,13 @@ locals {
 
   # Redis
   # -----
-  redis = try(
-    module.redis[0].redis_cache,
-    {
-      hostname           = null
-      primary_access_key = null
-    }
-  )
+  # redis = try(
+  #   module.redis[0].redis_cache,
+  #   {
+  #     hostname           = null
+  #     primary_access_key = null
+  #   }
+  # )
 
   # User Data
   # ---------
