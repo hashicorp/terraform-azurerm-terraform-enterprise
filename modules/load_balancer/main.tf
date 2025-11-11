@@ -213,8 +213,7 @@ resource "azurerm_application_gateway" "tfe_ag" {
     content {
       name                          = local.frontend_ip_configuration_name_private
       subnet_id                     = var.network_frontend_subnet_id
-      private_ip_address_allocation = "Static"
-      private_ip_address            = local.private_ip_address
+      private_ip_address_allocation = "Dynamic"
     }
   }
 
@@ -344,8 +343,7 @@ resource "azurerm_lb" "tfe_load_balancer" {
     content {
       name                          = "${var.friendly_name_prefix}-lb-fe"
       subnet_id                     = var.network_frontend_subnet_id
-      private_ip_address_allocation = "Static"
-      private_ip_address            = local.private_ip_address
+      private_ip_address_allocation = "Dynamic"
     }
   }
 
