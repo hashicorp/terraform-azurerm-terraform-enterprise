@@ -51,34 +51,34 @@ module "object_storage" {
 # -----------------------------------------------------------------------------
 # Azure virtual network, subnet, and security group
 # -----------------------------------------------------------------------------
-module "network" {
-  source = "./modules/network"
-  count  = var.network_private_subnet_id == null ? 1 : 0
+# module "network" {
+#   source = "./modules/network"
+#   count  = var.network_private_subnet_id == null ? 1 : 0
 
-  friendly_name_prefix = var.friendly_name_prefix
-  resource_group_name  = module.resource_groups.resource_group_name
-  location             = var.location
+#   friendly_name_prefix = var.friendly_name_prefix
+#   resource_group_name  = module.resource_groups.resource_group_name
+#   location             = var.location
 
-  active_active            = var.operational_mode == "active-active"
-  enable_ssh               = var.enable_ssh
-  is_replicated_deployment = var.is_replicated_deployment
+#   active_active            = var.operational_mode == "active-active"
+#   enable_ssh               = var.enable_ssh
+#   is_replicated_deployment = var.is_replicated_deployment
 
-  network_allow_range          = var.network_allow_range
-  network_bastion_subnet_cidr  = var.network_bastion_subnet_cidr
-  network_cidr                 = var.network_cidr
-  network_database_subnet_cidr = var.network_database_subnet_cidr
-  network_frontend_subnet_cidr = var.network_frontend_subnet_cidr
-  network_private_subnet_cidr  = var.network_private_subnet_cidr
-  network_redis_subnet_cidr    = var.network_redis_subnet_cidr
+#   network_allow_range          = var.network_allow_range
+#   network_bastion_subnet_cidr  = var.network_bastion_subnet_cidr
+#   network_cidr                 = var.network_cidr
+#   network_database_subnet_cidr = var.network_database_subnet_cidr
+#   network_frontend_subnet_cidr = var.network_frontend_subnet_cidr
+#   network_private_subnet_cidr  = var.network_private_subnet_cidr
+#   network_redis_subnet_cidr    = var.network_redis_subnet_cidr
 
-  create_bastion = var.create_bastion
-  disk_mode      = local.disk_mode
+#   create_bastion = var.create_bastion
+#   disk_mode      = local.disk_mode
 
-  load_balancer_type   = var.load_balancer_type
-  load_balancer_public = var.load_balancer_public
+#   load_balancer_type   = var.load_balancer_type
+#   load_balancer_public = var.load_balancer_public
 
-  tags = var.tags
-}
+#   tags = var.tags
+# }
 
 # -----------------------------------------------------------------------------
 # Azure cache

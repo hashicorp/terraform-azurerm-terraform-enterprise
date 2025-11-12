@@ -11,29 +11,26 @@ locals {
 
   # Network
   # -------
-  network = try(
-    module.network[0],
-    {
-      bastion_subnet = {
-        id = var.network_bastion_subnet_id
-      }
-      database_private_dns_zone = {
-        id = var.network_database_private_dns_zone_id
-      }
-      database_subnet = {
-        id = var.network_database_subnet_id
-      }
-      frontend_subnet = {
-        id = var.network_frontend_subnet_id
-      }
-      private_subnet = {
-        id = var.network_private_subnet_id
-      }
-      redis_subnet = {
-        id = var.network_redis_subnet_id
-      }
-    }
-  )
+network = {
+  bastion_subnet = {
+    id = var.network_bastion_subnet_id
+  }
+  database_private_dns_zone = {
+    id = var.network_database_private_dns_zone_id
+  }
+  database_subnet = {
+    id = var.network_database_subnet_id
+  }
+  frontend_subnet = {
+    id = var.network_frontend_subnet_id
+  }
+  private_subnet = {
+    id = var.network_private_subnet_id
+  }
+  redis_subnet = {
+    id = var.network_redis_subnet_id
+  }
+}
 
   # Redis
   # -----
