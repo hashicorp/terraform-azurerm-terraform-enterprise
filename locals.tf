@@ -41,7 +41,7 @@ locals {
     hostname           = null
     primary_access_key = null
   }
-  
+
 
   # User Data
   # ---------
@@ -78,7 +78,7 @@ locals {
       administrator_password = null
     }
   }
-  
+
 
   object_storage = try(
     module.object_storage[0],

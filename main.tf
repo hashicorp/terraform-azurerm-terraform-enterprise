@@ -205,16 +205,16 @@ data "azapi_resource" "redis_resource" {
 data "azapi_resource" "redis_database" {
   count = var.redis_msi_auth_enabled == true ? 1 : 0
 
-  type = "Microsoft.Cache/redisEnterprise/databases@2025-04-01"
-  name = "default"
+  type      = "Microsoft.Cache/redisEnterprise/databases@2025-04-01"
+  name      = "default"
   parent_id = data.azapi_resource.redis_resource[0].id
 }
 
 resource "azapi_resource" "redis_msi_access" {
   count = var.redis_msi_auth_enabled == true ? 1 : 0
 
-  type = "Microsoft.Cache/redisEnterprise/databases/accessPolicyAssignments@2025-04-01"
-  name = "${var.friendly_name_prefix}RedisAccessPolicy"
+  type      = "Microsoft.Cache/redisEnterprise/databases/accessPolicyAssignments@2025-04-01"
+  name      = "${var.friendly_name_prefix}RedisAccessPolicy"
   parent_id = data.azapi_resource.redis_database[0].id
 
   body = {
@@ -245,16 +245,16 @@ data "azapi_resource" "redis_sidekiq_resource" {
 data "azapi_resource" "redis_sidekiq_database" {
   count = var.redis_sidekiq_msi_auth_enabled == true ? 1 : 0
 
-  type = "Microsoft.Cache/redisEnterprise/databases@2025-04-01"
-  name = "default"
+  type      = "Microsoft.Cache/redisEnterprise/databases@2025-04-01"
+  name      = "default"
   parent_id = data.azapi_resource.redis_sidekiq_resource[0].id
 }
 
 resource "azapi_resource" "redis_sidekiq_msi_access" {
   count = var.redis_sidekiq_msi_auth_enabled == true ? 1 : 0
 
-  type = "Microsoft.Cache/redisEnterprise/databases/accessPolicyAssignments@2025-04-01"
-  name = "${var.friendly_name_prefix}RedisAccessPolicy"
+  type      = "Microsoft.Cache/redisEnterprise/databases/accessPolicyAssignments@2025-04-01"
+  name      = "${var.friendly_name_prefix}RedisAccessPolicy"
   parent_id = data.azapi_resource.redis_sidekiq_database[0].id
 
   body = {
@@ -344,10 +344,10 @@ module "runtime_container_engine_config" {
   key_file           = "/etc/ssl/private/terraform-enterprise/key.pem"
   tls_ca_bundle_file = var.ca_certificate_secret != null ? "/etc/ssl/private/terraform-enterprise/bundle.pem" : null
 
-  database_user       = var.database_msi_auth_enabled ? module.vm.user_assigned_identity.name : local.database.server.administrator_login
-  database_password   = var.database_msi_auth_enabled ? "" : local.database.server.administrator_password
-  database_host       = local.database.address
-  database_name       = local.database.name
+  database_user       = var.database_msi_auth_enabled ? module.vm.user_assigned_identity.name : var.pg_user
+  database_password   = var.database_msi_auth_enabled ? "" : var.pg_password
+  database_host       = var.pg_netloc
+  database_name       = var.pg_dbname
   database_parameters = "sslmode=require"
 
   database_passwordless_azure_use_msi   = var.database_msi_auth_enabled

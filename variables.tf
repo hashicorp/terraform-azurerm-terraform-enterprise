@@ -610,26 +610,26 @@ variable "redis_sidekiq_use_tls" {
 }
 
 variable "redis_host" {
-  default = ""
-  type = string
+  default     = ""
+  type        = string
   description = "The Redis host name"
 }
 
 variable "redis_sidekiq_host" {
-  default = ""
-  type = string
+  default     = ""
+  type        = string
   description = "The Redis Sidekiq host name"
 }
 
 variable "redis_password" {
-  default = ""
-  type = string
+  default     = ""
+  type        = string
   description = "The Redis password"
 }
 
 variable "redis_sidekiq_password" {
-  default = ""
-  type = string
+  default     = ""
+  type        = string
   description = "The Redis Sidekiq password"
 }
 
@@ -1131,54 +1131,54 @@ variable "tags" {
 
 # for MSI, testing
 variable "pg_flexible_server_name" {
-  default = ""
-  type = string
+  default     = ""
+  type        = string
   description = "The name of the PostgreSQL Flexible Server."
 }
 
 variable "pg_resource_group_name" {
-  default = ""
-  type = string
+  default     = ""
+  type        = string
   description = "The name of the Resource Group containing the PostgreSQL Flexible Server."
 }
 
 # pg variables
 variable "pg_user" {
   default = ""
-  type = string
+  type    = string
 }
 
 variable "pg_password" {
-  default = ""
-  type = string
+  default   = ""
+  type      = string
   sensitive = true
 }
 
 variable "pg_dbname" {
   default = ""
-  type = string
+  type    = string
 }
 
 variable "pg_netloc" {
   default = ""
-  type = string
+  type    = string
 }
 
 # some redis variable
 variable "redis_resource_group_name" {
-  default = ""
-  type = string
+  default     = ""
+  type        = string
   description = "The name of the Resource Group containing the Redis instance."
 }
 
 variable "az_redis_name" {
-  default = ""
-  type = string
+  default     = ""
+  type        = string
   description = "The name of the Redis instance."
 }
 
 variable "az_redis_sidekiq_name" {
-  default = ""
-  type = string
+  default     = ""
+  type        = string
   description = "The name of the Redis Sidekiq instance."
 }
