@@ -1,5 +1,14 @@
 # Azure TFE Database Module
 
+## Deprecation Notice
+
+This module is deprecated. For authoritative guidance, see the official deployment documentation: https://developer.hashicorp.com/terraform/enterprise/deploy. Customers should only use the HashiCorp Validated Design (HVD) modules published in the Terraform Registry:
+
+- Microsoft Azure VM reference: https://registry.terraform.io/modules/hashicorp/terraform-enterprise-hvd/azurerm
+- Microsoft Azure AKS reference: https://registry.terraform.io/modules/hashicorp/terraform-enterprise-aks-hvd/azurerm
+
+No further updates will be made here. All new features, bug fixes, and security updates are delivered through the HVD modules.
+
 ## Required variables
 
 * `friendly_name_prefix` - string value to use as base for resource names
